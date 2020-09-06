@@ -65,10 +65,7 @@ const AuthProvider: React.SFC = (props) => {
   const logout = (): Promise<void> => AuthService.logout().then(reload);
 
   return (
-    <AuthContext.Provider
-      value={{ data: data ?? undefined, signup, login, logout }}
-      {...props}
-    />
+    <AuthContext.Provider value={{ data, signup, login, logout }} {...props} />
   );
 };
 

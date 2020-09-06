@@ -3,7 +3,7 @@ import humps from 'humps';
 import tokenUtils from 'utils/tokenUtils';
 
 const ApiService = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_API,
+  baseURL: `${process.env.REACT_APP_BACKEND_API}/${process.env.REACT_APP_BACKEND_VERSION}`,
   headers: { 'Content-Type': 'application/json' },
   transformResponse: [
     ...axios.defaults.transformResponse,
