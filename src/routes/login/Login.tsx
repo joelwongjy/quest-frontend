@@ -25,7 +25,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ paddingLeft: '1.5rem' }}>
       <h2>Login:</h2>
       <form onSubmit={handleLogin}>
         <p>

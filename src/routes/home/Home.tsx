@@ -9,8 +9,9 @@ const Home: React.FC = () => {
   const { name } = useUser()!;
   const { logout } = useAuth();
   return (
-    <div>
+    <div style={{ padding: '1rem' }}>
       <div>You&apos;re logged in, {name}!</div>
+      <br />
       <button type="button" onClick={logout}>
         Log out
       </button>
