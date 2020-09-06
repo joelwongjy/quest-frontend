@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from '../logo.svg';
+
+import { useUser } from 'contexts/UserContext';
+import Loading from 'components/loading';
+import { retryPromise } from 'utils/promiseUtils';
+
 import './App.scss';
 
-const App: React.FC = () => {
+// Code splitting with React.lazy and Suspense
+type ModuleType = typeof import('./AuthenticatedApp');
+
+const loadAuthenticatedApp = (): Promise<ModuleType> =>
+  import('./AuthenticatedApp');
+const AuthenticatedApp = React.lazy(
+  () => retryPromise(loadAuthenticatedApp) as Promise<ModuleType>
+);
+const UnauthenticatedApp = React.lazy(() => import('./UnauthenticatedApp'));
+
+const App: React.SFC = () => {
+  // user will be undefined when not logged in or when jwt expires
+  const user = useUser();
+
+  React.useEffect(() => {
+    loadAuthenticatedApp();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Suspense fallback={<Loading />}>
+      {/* Renders the appropriate app */}
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+    </React.Suspense>
   );
 };
 
