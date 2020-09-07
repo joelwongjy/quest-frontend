@@ -71,8 +71,8 @@ frontend
   ├─constants/
   ├─contexts/
   ├─interfaces/
-  ├─routes/
   ├─reducers/
+  ├─routes/
   ├─services/
   └─utils/
 ```
@@ -131,13 +131,13 @@ Contains contexts providing React hooks and providers that can be used by React 
 
 Contains interfaces used in the application.
 
-### `routes/` directory
-
-Contains folders containing components that are wrapped by React Router's `<Route>` in `src/app/AuthenticatedApp` or `src/app/UnauthenticatedApp`.
-
 ### `reducers/` directory
 
 Contains reducers used in the application. [Redux Toolkit](https://redux-toolkit.js.org/) is used as the redux library of choice.
+
+### `routes/` directory
+
+Contains folders containing components that are wrapped by React Router's `<Route>` in `src/app/AuthenticatedApp` or `src/app/UnauthenticatedApp`.
 
 ### `services/` directory
 
@@ -185,7 +185,7 @@ These two dependencies are a linter and formatter respectively, and they help us
 
 `lint-staged` enables us to target only the files we have changed and staged, i.e. we don't have to check the entire project when only 1 file was changed.
 
-`pretty-quick` helps to run prettier on changed files.
+`pretty-quick` helps to run `prettier` on changed files.
 
 ## React hooks exposed by the app
 
