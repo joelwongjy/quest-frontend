@@ -131,7 +131,7 @@ Contains contexts providing React hooks and providers that can be used by React 
 
 Contains interfaces used in the application.
 
-### `pages/` directory
+### `routes/` directory
 
 Contains folders containing components that are wrapped by React Router's `<Route>` in `src/app/AuthenticatedApp` or `src/app/UnauthenticatedApp`.
 
