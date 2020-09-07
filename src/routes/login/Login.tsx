@@ -18,8 +18,15 @@ const Login: React.FC = () => {
   const [loginErrMsg, setLoginErrMsg] = useState('');
   const [signUpErrMsg, setSignUpErrMsg] = useState('');
 
+  const clearError = () => {
+    setIsError(false);
+    setLoginErrMsg('');
+    setSignUpErrMsg('');
+  };
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    clearError();
     try {
       await login(loginUsername, loginPassword);
     } catch (error) {
@@ -30,18 +37,13 @@ const Login: React.FC = () => {
 
   const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    clearError();
     try {
       await signup(signUpUsername, signUpPassword, signUpName);
     } catch (error) {
       setIsError(true);
       setSignUpErrMsg(error.message);
     }
-  };
-
-  const clearError = () => {
-    setIsError(false);
-    setLoginErrMsg('');
-    setSignUpErrMsg('');
   };
 
   return (
