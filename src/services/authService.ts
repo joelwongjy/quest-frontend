@@ -3,6 +3,7 @@ import TokenUtils from 'utils/tokenUtils';
 import { setUser, clearUser } from 'reducers/miscDux';
 import ApiService from 'services/apiService';
 import User from 'interfaces/models/users';
+import { GENERAL_ERROR } from 'constants/messages';
 
 const logout = (): Promise<void> => {
   TokenUtils.removeToken();
@@ -20,13 +21,10 @@ const signup = async (
     password,
     name,
   }).catch((error) => {
-    return Promise.reject(new Error(error));
+    return Promise.reject(
+      new Error(error.response?.data?.error ?? GENERAL_ERROR)
+    );
   });
-  // if (response.data.message === 'Account already exists') {
-  //   return Promise.reject(
-  //     new Error('Account already exists! Please login instead.')
-  //   );
-  // }
   return TokenUtils.storeToken(response);
 };
 
@@ -34,9 +32,9 @@ const login = async (username: string, password: string): Promise<null> => {
   const response = await ApiService.post('auth/login', {
     username,
     password,
-  }).catch(() => {
+  }).catch((error) => {
     return Promise.reject(
-      new Error('Invalid login credentials, please try again.')
+      new Error(error.response?.data?.error ?? GENERAL_ERROR)
     );
   });
   return TokenUtils.storeToken(response);

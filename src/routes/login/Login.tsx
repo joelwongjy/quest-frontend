@@ -14,14 +14,34 @@ const Login: React.FC = () => {
   const [signUpPassword, setSignUpPassword] = useState('');
   const [signUpName, setSignUpName] = useState('');
 
+  const [isError, setIsError] = useState<boolean>(false);
+  const [loginErrMsg, setLoginErrMsg] = useState('');
+  const [signUpErrMsg, setSignUpErrMsg] = useState('');
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await login(loginUsername, loginPassword);
+    try {
+      await login(loginUsername, loginPassword);
+    } catch (error) {
+      setIsError(true);
+      setLoginErrMsg(error.message);
+    }
   };
 
   const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await signup(signUpUsername, signUpPassword, signUpName);
+    try {
+      await signup(signUpUsername, signUpPassword, signUpName);
+    } catch (error) {
+      setIsError(true);
+      setSignUpErrMsg(error.message);
+    }
+  };
+
+  const clearError = () => {
+    setIsError(false);
+    setLoginErrMsg('');
+    setSignUpErrMsg('');
   };
 
   return (
@@ -35,7 +55,11 @@ const Login: React.FC = () => {
               name="username"
               type="text"
               value={loginUsername}
-              onChange={(e) => setLoginUsername(e.target.value)}
+              onChange={(e) => {
+                clearError();
+                setLoginUsername(e.target.value);
+              }}
+              required
             />
           </label>
         </p>
@@ -46,12 +70,19 @@ const Login: React.FC = () => {
               name="password"
               type="password"
               value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
+              onChange={(e) => {
+                clearError();
+                setLoginPassword(e.target.value);
+              }}
+              required
             />
           </label>
         </p>
         <input type="submit" value="Submit" />
       </form>
+      {isError && (
+        <div style={{ color: 'red', marginTop: '0.5rem' }}>{loginErrMsg}</div>
+      )}
 
       <h2>Sign Up:</h2>
       <form onSubmit={handleSignUp}>
@@ -62,7 +93,11 @@ const Login: React.FC = () => {
               name="username"
               type="text"
               value={signUpUsername}
-              onChange={(e) => setSignUpUsername(e.target.value)}
+              onChange={(e) => {
+                clearError();
+                setSignUpUsername(e.target.value);
+              }}
+              required
             />
           </label>
         </p>
@@ -73,7 +108,11 @@ const Login: React.FC = () => {
               name="password"
               type="password"
               value={signUpPassword}
-              onChange={(e) => setSignUpPassword(e.target.value)}
+              onChange={(e) => {
+                clearError();
+                setSignUpPassword(e.target.value);
+              }}
+              required
             />
           </label>
         </p>
@@ -84,12 +123,19 @@ const Login: React.FC = () => {
               name="name"
               type="text"
               value={signUpName}
-              onChange={(e) => setSignUpName(e.target.value)}
+              onChange={(e) => {
+                clearError();
+                setSignUpName(e.target.value);
+              }}
+              required
             />
           </label>
         </p>
         <input type="submit" value="Submit" />
       </form>
+      {isError && (
+        <div style={{ color: 'red', marginTop: '0.5rem' }}>{signUpErrMsg}</div>
+      )}
     </div>
   );
 };
