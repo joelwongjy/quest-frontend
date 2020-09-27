@@ -12,12 +12,11 @@ import {
   Paper,
   Grid,
   Typography,
-  ThemeProvider,
   CssBaseline,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from 'components/loading/AppBar';
+import AppBar from 'components/menubars/AppBar';
 import { theme } from 'styles/theme';
 
 import './Login.scss';
@@ -58,18 +57,12 @@ const Login: React.FC = () => {
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
-  // const [signUpUsername, setSignUpUsername] = useState('');
-  // const [signUpPassword, setSignUpPassword] = useState('');
-  // const [signUpName, setSignUpName] = useState('');
-
   const [isError, setIsError] = useState<boolean>(false);
   const [loginErrMsg, setLoginErrMsg] = useState('');
-  // const [signUpErrMsg, setSignUpErrMsg] = useState('');
 
   const clearError = () => {
     setIsError(false);
     setLoginErrMsg('');
-    // setSignUpErrMsg('');
   };
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -83,24 +76,10 @@ const Login: React.FC = () => {
     }
   };
 
-  // const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   clearError();
-  //   try {
-  //     await signup(signUpUsername, signUpPassword, signUpName);
-  //   } catch (error) {
-  //     setIsError(true);
-  //     setSignUpErrMsg(error.message);
-  //   }
-  // };
-
   return (
     <div style={{ paddingTop: '2.9rem' }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AppBar />
-      </ThemeProvider>
-
+      <CssBaseline />
+      <AppBar />
       <Grid container component="main" className={classes.root}>
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className={classes.image} />

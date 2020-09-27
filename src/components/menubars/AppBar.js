@@ -11,7 +11,7 @@ import {
   AccountCircleOutlined as AccountsIcon,
   Menu as MenuIcon,
 } from '@material-ui/icons';
-import logo from 'assets/logo.png';
+import logo from 'assets/images/logo.png';
 import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme) => ({
