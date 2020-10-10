@@ -7,7 +7,7 @@ import RobotoBoldFont from './fonts/Roboto-Bold.woff';
 const MetropolisRegular = {
   fontFamily: 'Metropolis',
   fontStyle: 'normal',
-  fontDisplay: 'swap',
+  fontDisplay: 'swap' as const,
   fontWeight: 400,
   src: `
       local('Metrolpolis'),
@@ -19,7 +19,7 @@ const MetropolisRegular = {
 const MetropolisBold = {
   fontFamily: 'Metropolis',
   fontStyle: 'normal',
-  fontDisplay: 'swap',
+  fontDisplay: 'swap' as const,
   fontWeight: 500,
   src: `
       local('Metrolpolis'),
@@ -31,7 +31,7 @@ const MetropolisBold = {
 const RobotoRegular = {
   fontFamily: 'Roboto',
   fontStyle: 'normal',
-  fontDisplay: 'swap',
+  fontDisplay: 'swap' as const,
   fontWeight: 400,
   src: `
       local('Roboto'),
@@ -43,7 +43,7 @@ const RobotoRegular = {
 const RobotoMedium = {
   fontFamily: 'Roboto',
   fontStyle: 'normal',
-  fontDisplay: 'swap',
+  fontDisplay: 'swap' as const,
   fontWeight: 500,
   src: `
         local('Roboto'),
@@ -55,7 +55,7 @@ const RobotoMedium = {
 const RobotoBold = {
   fontFamily: 'Roboto',
   fontStyle: 'normal',
-  fontDisplay: 'swap',
+  fontDisplay: 'swap' as const,
   fontWeight: 700,
   src: `
       local('Roboto'),

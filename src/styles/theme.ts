@@ -1,6 +1,6 @@
 import { orange, red, grey } from '@material-ui/core/colors';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
-import Fonts from 'assets/fonts';
+import fonts from 'assets/fonts';
 
 const fontFamilyRoboto = {
   fontFamily: [
@@ -40,7 +40,7 @@ const muiTheme = createMuiTheme({
     },
     background: {
       default: '#FFF',
-      highlight: '#F1F3F4',
+      paper: '#F1F3F4',
     },
   },
   typography: {
@@ -51,7 +51,7 @@ const muiTheme = createMuiTheme({
     },
   },
   shape: {
-    borderRadius: '0.5rem',
+    borderRadius: 8,
   },
   zIndex: {
     appBar: 1200,
@@ -66,11 +66,11 @@ const muiTheme = createMuiTheme({
     MuiCssBaseline: {
       '@global': {
         '@font-face': [
-          Fonts.MetropolisRegular,
-          Fonts.MetropolisBold,
-          Fonts.RobotoRegular,
-          Fonts.RobotoMedium,
-          Fonts.RobotoBold,
+          fonts.MetropolisRegular,
+          fonts.MetropolisBold,
+          fonts.RobotoRegular,
+          fonts.RobotoMedium,
+          fonts.RobotoBold,
         ],
       },
     },
@@ -87,9 +87,9 @@ const muiTheme = createMuiTheme({
       roboto: fontFamilyRoboto,
       metropolis: fontFamilyMetropolis,
     },
-    palette: {
+    icon: {
       iconColor: '#5f6368',
-      itemBorderColor: '#DDDDDD',
+      iconBorderColor: '#DDDDDD',
       iconHighlight: grey[900],
     },
   },
