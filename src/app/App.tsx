@@ -16,7 +16,7 @@ const AuthenticatedApp = React.lazy(
 );
 const UnauthenticatedApp = React.lazy(() => import('./UnauthenticatedApp'));
 
-const App: React.SFC = () => {
+const App: React.FunctionComponent = () => {
   // user will be undefined when not logged in or when jwt expires
   const user = useUser();
 

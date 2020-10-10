@@ -5,7 +5,7 @@ import { useAuth } from 'contexts/AuthContext';
 
 import './Home.scss';
 
-const Home: React.FC = () => {
+const Home: React.FunctionComponent = () => {
   const { name } = useUser()!;
   const { logout } = useAuth();
   return (
