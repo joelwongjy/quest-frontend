@@ -1,5 +1,7 @@
 # Quest Frontend
 
+![CI Badge](https://github.com/dsc-team-quest/frontend/workflows/ESLint%20CI/badge.svg)&nbsp;[![Netlify Status](https://api.netlify.com/api/v1/badges/98727d91-50ba-41d9-b464-c266c5413c6a/deploy-status)](https://app.netlify.com/sites/quest-staging/deploys)
+
 To be built!
 
 ## Contents
