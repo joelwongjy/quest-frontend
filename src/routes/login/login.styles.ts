@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
+import Splash from 'assets/images/splash.jpg';
 
 export const useStyles = makeStyles((theme) => ({
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${Splash})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor: theme.palette.grey[50],
     backgroundSize: 'cover',
