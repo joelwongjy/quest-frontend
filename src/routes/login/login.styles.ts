@@ -9,10 +9,13 @@ export const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(0, 4),
+    paddingBottom: theme.spacing(6),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
   },
   avatar: {
     margin: theme.spacing(1),

@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import {
   Avatar,
   Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Paper,
   Grid,
@@ -15,17 +12,18 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useAuth } from 'contexts/AuthContext';
 import PageContainer from 'components/pageContainer';
 
+import Input from 'components/input';
 import { useStyles } from './login.styles';
 
 const Login: React.FunctionComponent = () => {
   const classes = useStyles();
   const { login } = useAuth();
 
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
+  const [loginUsername, setLoginUsername] = useState<string>('');
+  const [loginPassword, setLoginPassword] = useState<string>('');
 
   const [isError, setIsError] = useState<boolean>(false);
-  const [loginErrMsg, setLoginErrMsg] = useState('');
+  const [loginErrMsg, setLoginErrMsg] = useState<string>('');
 
   const clearError = () => {
     setIsError(false);
@@ -52,19 +50,15 @@ const Login: React.FunctionComponent = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           <form className={classes.form} onSubmit={handleLogin}>
-            <TextField
-              color="secondary"
-              variant="outlined"
-              margin="normal"
+            <Input
               required
-              fullWidth
               id="username"
               label="Username"
               name="username"
-              autoComplete="username"
+              autoComplete="on"
               autoFocus
               value={loginUsername}
               onChange={(e) => {
@@ -72,27 +66,23 @@ const Login: React.FunctionComponent = () => {
                 setLoginUsername(e.target.value);
               }}
             />
-            <TextField
-              color="secondary"
-              variant="outlined"
-              margin="normal"
+            <Input
               required
-              fullWidth
               name="password"
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
+              autoComplete="on"
               value={loginPassword}
               onChange={(e) => {
                 clearError();
                 setLoginPassword(e.target.value);
               }}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+              label="Remember Me"
+            /> */}
             <Button
               type="submit"
               value="Submit"
@@ -111,11 +101,16 @@ const Login: React.FunctionComponent = () => {
               </Grid>
             </Grid>
           </form>
-          {isError && (
-            <div style={{ color: 'red', marginTop: '0.5rem' }}>
-              {loginErrMsg}
-            </div>
-          )}
+          <div
+            style={{
+              color: 'red',
+              marginTop: '0.5rem',
+              visibility: isError ? 'visible' : 'hidden',
+              height: '2rem',
+            }}
+          >
+            {loginErrMsg}
+          </div>
         </div>
       </Grid>
     </PageContainer>
