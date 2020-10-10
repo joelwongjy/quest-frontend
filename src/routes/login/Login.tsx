@@ -45,7 +45,7 @@ const Login: React.FunctionComponent = () => {
   };
 
   return (
-    <div style={{ paddingTop: '2.9rem' }}>
+    <div>
       <CssBaseline />
       <AppBar />
       <Grid container component="main" className={classes.root}>
