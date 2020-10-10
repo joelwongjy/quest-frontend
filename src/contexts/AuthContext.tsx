@@ -10,7 +10,7 @@ const AuthContext = React.createContext<AuthContextInterface | undefined>(
   undefined
 );
 
-const AuthProvider: React.SFC = (props) => {
+const AuthProvider: React.FunctionComponent = (props) => {
   const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);
   const {
     data = null,

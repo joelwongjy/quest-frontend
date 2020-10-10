@@ -12,7 +12,7 @@ import { LOGIN, ROOT } from 'constants/routes';
 
 const redirectToLogin = (): React.ReactNode => <Redirect to={LOGIN} />;
 
-const UnauthenticatedApp: React.SFC = () => {
+const UnauthenticatedApp: React.FunctionComponent = () => {
   return (
     <Router>
       <div className="app unauth">

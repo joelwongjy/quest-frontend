@@ -12,7 +12,7 @@ import Home from 'routes/home';
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
 
-const AuthenticatedApp: React.SFC = () => {
+const AuthenticatedApp: React.FunctionComponent = () => {
   return (
     <Router>
       <div className="app">

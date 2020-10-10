@@ -6,8 +6,8 @@ import { Provider } from 'react-redux';
 
 import AppProviders from 'contexts/AppProviders';
 import store, { persistor } from 'app/store';
-import App from './app';
 
+import App from './app';
 import * as serviceWorker from './serviceWorker';
 import './index.scss';
 
