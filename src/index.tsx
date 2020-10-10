@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { CssBaseline } from '@material-ui/core';
 
 import AppProviders from 'contexts/AppProviders';
 import store, { persistor } from 'app/store';
@@ -16,9 +17,11 @@ ReactDOM.render(
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <AppProviders>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <CssBaseline>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </CssBaseline>
         </AppProviders>
       </PersistGate>
     </Provider>
