@@ -5,58 +5,51 @@ import {
 } from '@material-ui/icons';
 import {
   Box,
-  InputBase,
-  IconButton,
-  Snackbar,
   ClickAwayListener,
+  IconButton,
+  InputBase,
 } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+
+import { QuestComponentProps } from 'components';
 
 import { useStyles } from './searchBar.styles';
 
-const SearchBar: React.FunctionComponent = () => {
+interface SearchBarProps extends QuestComponentProps {
+  onSearch: (searchTerm: string) => void;
+}
+
+const SearchBar: React.FunctionComponent<SearchBarProps> = ({
+  theme,
+  onSearch,
+  ...props
+}) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [isFocused, setFocused] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isShowingToast, showToast] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const onSearchCancel = () => {
     setSearchTerm('');
     setFocused(false);
   };
 
-  const onSearch = (
-    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    setFocused(true);
-    if (event.key === 'Enter') {
-      showToast(true);
-      setFocused(false);
-    }
-  };
-
   const onFocusLoss = (): void => {
     setFocused(false);
-  };
-
-  const handleToastClose = (): void => {
-    showToast(false);
   };
 
   return (
     <ClickAwayListener onClickAway={onFocusLoss}>
       <Box
         className={classes.search}
-        borderRadius={theme.shape.borderRadius}
+        borderRadius={theme!.shape.borderRadius}
         bgcolor={
           isFocused
-            ? theme.palette.background.default
-            : theme.palette.background.paper
+            ? theme!.palette.background.default
+            : theme!.palette.background.paper
         }
         boxShadow={isFocused ? 2 : 0}
         height="3rem"
+        {...props}
       >
         <div className={classes.searchIcon}>
           <SearchIcon />
@@ -70,20 +63,23 @@ const SearchBar: React.FunctionComponent = () => {
           value={searchTerm}
           onClick={() => setFocused(true)}
           inputProps={{ 'aria-label': 'search' }}
-          onChange={(event) => setSearchTerm(event.target.value)}
-          onKeyDown={onSearch}
+          onChange={(
+            event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => setSearchTerm(event.target.value)}
+          onKeyDown={(
+            event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
+            if (event.key === 'Enter') {
+              onSearch(searchTerm);
+              setFocused(false);
+            }
+          }}
         />
         {isFocused ? (
           <IconButton hidden={!isFocused} onClick={onSearchCancel}>
-            <CloseOutlinedIcon htmlColor={theme.custom.icon.iconColor} />
+            <CloseOutlinedIcon htmlColor={theme!.custom.icon.iconColor} />
           </IconButton>
         ) : null}
-        <Snackbar
-          open={isShowingToast}
-          message="to do"
-          autoHideDuration={2000}
-          onClose={handleToastClose}
-        />
       </Box>
     </ClickAwayListener>
   );
