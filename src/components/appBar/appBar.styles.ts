@@ -34,7 +34,7 @@ export const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
     },
   },
-  searchbarContainer: {
+  childrenContainer: {
     flexGrow: 1,
     marginLeft: theme.spacing(1),
     [theme.breakpoints.up('md')]: {

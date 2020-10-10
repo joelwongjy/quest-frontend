@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { useTheme } from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,
@@ -13,8 +12,9 @@ import {
 } from '@material-ui/icons';
 
 import logo from 'assets/images/logo.png';
+import { QuestComponentProps } from 'components';
+
 import { useStyles } from './appBar.styles';
-import SearchBar from './searchBar/SearchBar';
 
 const LogoContainer: React.FunctionComponent = () => {
   const classes = useStyles();
@@ -33,19 +33,19 @@ const LogoContainer: React.FunctionComponent = () => {
   );
 };
 
-const SearchContainer: React.FunctionComponent = () => {
-  const classes = useStyles();
-  return (
-    <div className={classes.searchbarContainer}>
-      <SearchBar />
-    </div>
-  );
+const ChildrenContainer: React.FunctionComponent<QuestComponentProps> = ({
+  className = '',
+  children,
+}) => {
+  return <div className={className}>{children}</div>;
 };
 
-const CustomAppBar: React.FunctionComponent = () => {
+const CustomAppBar: React.FunctionComponent<QuestComponentProps> = ({
+  theme,
+  children,
+}) => {
   const menuId = 'primary-search-account-menu';
   const classes = useStyles();
-  const theme = useTheme();
   const profileMenuRef = useRef<HTMLButtonElement | null>(null);
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -64,10 +64,12 @@ const CustomAppBar: React.FunctionComponent = () => {
             className={classes.menuButton}
             aria-label="Open Drawer"
           >
-            <MenuIcon htmlColor={theme.custom.icon.iconColor} />
+            <MenuIcon htmlColor={theme!.custom.icon.iconColor} />
           </IconButton>
           <LogoContainer />
-          <SearchContainer />
+          <ChildrenContainer className={classes.childrenContainer}>
+            {children}
+          </ChildrenContainer>
           <div className={classes.grow} />
           <div>
             <IconButton
@@ -77,7 +79,7 @@ const CustomAppBar: React.FunctionComponent = () => {
               aria-controls={menuId}
               aria-haspopup="true"
             >
-              <AccountsIcon htmlColor={theme.custom.icon.iconColor} />
+              <AccountsIcon htmlColor={theme!.custom.icon.iconColor} />
             </IconButton>
           </div>
         </Toolbar>
