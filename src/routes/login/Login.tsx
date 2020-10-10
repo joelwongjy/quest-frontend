@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import {
-  Avatar,
-  Button,
-  Link,
-  Paper,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Link, Paper, Grid, Typography } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { useAuth } from 'contexts/AuthContext';
 import PageContainer from 'components/pageContainer';
 
 import Input from 'components/input';
+import LongButton from 'components/longButton';
 import { useStyles } from './login.styles';
 
 const Login: React.FunctionComponent = () => {
@@ -83,16 +77,9 @@ const Login: React.FunctionComponent = () => {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember Me"
             /> */}
-            <Button
-              type="submit"
-              value="Submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              className={classes.submit}
-            >
+            <LongButton type="submit" value="Submit">
               Sign In
-            </Button>
+            </LongButton>
             <Grid container>
               <Grid item xs>
                 <Link href="routes/login" variant="body2" color="secondary">
