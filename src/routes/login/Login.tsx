@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-
-import { useAuth } from 'contexts/AuthContext';
-
 import {
   Avatar,
   Button,
@@ -15,42 +12,13 @@ import {
   CssBaseline,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from 'components/menubars/AppBar';
-import { theme } from 'styles/theme';
 
-import './Login.scss';
+import { useAuth } from 'contexts/AuthContext';
+import AppBar from 'components/appBar/AppBar';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: theme.palette.grey[50],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { useStyles } from './login.styles';
 
-const Login: React.FC = () => {
+const Login: React.FunctionComponent = () => {
   const classes = useStyles();
   const { login } = useAuth();
 
