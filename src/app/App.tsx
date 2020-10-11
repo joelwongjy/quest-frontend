@@ -4,8 +4,6 @@ import { useUser } from 'contexts/UserContext';
 import Loading from 'components/loading';
 import { retryPromise } from 'utils/promiseUtils';
 
-import './App.scss';
-
 // Code splitting with React.lazy and Suspense
 type ModuleType = typeof import('./AuthenticatedApp');
 

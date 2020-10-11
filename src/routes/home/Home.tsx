@@ -6,8 +6,6 @@ import PageContainer from 'components/pageContainer';
 import Breadcrumbs from 'components/breadcrumbs';
 import { HOME } from 'constants/routes';
 
-import './Home.scss';
-
 const Home: React.FunctionComponent = () => {
   const { name } = useUser()!;
   const { logout } = useAuth();
