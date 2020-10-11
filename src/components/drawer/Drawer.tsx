@@ -14,7 +14,7 @@ import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
 import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
 
-import { QuestComponentProps } from 'components';
+import { QuestComponentProps } from 'interfaces/components/common';
 import { HOME, PROGRAMMES, QUESTIONNAIRES, STUDENTS } from 'constants/routes';
 
 import { useStyles } from './drawer.styles';

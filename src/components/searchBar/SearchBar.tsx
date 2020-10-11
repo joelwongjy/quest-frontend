@@ -10,7 +10,7 @@ import {
   InputBase,
 } from '@material-ui/core';
 
-import { QuestComponentProps } from 'components';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './searchBar.styles';
 

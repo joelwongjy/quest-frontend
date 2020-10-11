@@ -12,7 +12,7 @@ import {
 } from '@material-ui/icons';
 
 import logo from 'assets/images/logo.png';
-import { QuestComponentProps } from 'components';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './appBar.styles';
 
