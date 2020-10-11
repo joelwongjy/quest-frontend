@@ -14,7 +14,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         marginRight: theme.spacing(1),
       },
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.up('md')]: {
         display: 'none',
       },
     },
@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'none',
       height: theme.spacing(8),
       padding: theme.spacing(0, 1, 0, 0),
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.up('md')]: {
         display: 'block',
       },
     },

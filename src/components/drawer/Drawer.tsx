@@ -98,7 +98,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
 
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
-      <Hidden smUp implementation="css">
+      <Hidden mdUp implementation="css">
         <Drawer
           container={container}
           variant="temporary"
@@ -115,7 +115,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           {drawer}
         </Drawer>
       </Hidden>
-      <Hidden xsDown implementation="css">
+      <Hidden smDown implementation="css">
         <Drawer
           classes={{
             paper: classes.drawerPaper,
