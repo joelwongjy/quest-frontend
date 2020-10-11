@@ -5,6 +5,7 @@ export const useStyles = makeStyles(() =>
     root: {
       display: 'flex',
       alignItems: 'center',
+      minHeight: 60,
     },
   })
 );
