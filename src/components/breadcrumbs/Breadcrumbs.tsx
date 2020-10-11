@@ -6,7 +6,7 @@ import { Breadcrumb } from 'interfaces/components/breadcrumbs';
 
 import { useStyles } from './breadcrumbs.styles';
 
-interface QuestBreadcrumbsProps extends QuestComponentProps {
+export interface QuestBreadcrumbsProps extends QuestComponentProps {
   breadcrumbs: Breadcrumb[];
 }
 

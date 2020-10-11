@@ -1,9 +1,10 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      marginBottom: theme.spacing(2),
+      display: 'flex',
+      alignItems: 'center',
     },
   })
 );
