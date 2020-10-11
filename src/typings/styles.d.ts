@@ -47,10 +47,3 @@ declare module '@material-ui/core/styles/createMixins' {
     drawer?: CSSProperties;
   }
 }
-
-declare module '@material-ui/core/styles/defaultTheme' {
-  interface DefaultTheme {
-    type: string;
-    custom: Custom;
-  }
-}
