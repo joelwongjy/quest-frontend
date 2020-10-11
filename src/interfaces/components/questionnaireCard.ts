@@ -6,3 +6,8 @@ export interface QuestionnaireCardInfo {
   status: 'DRAFT' | 'PUBLISHED';
   id: number;
 }
+
+export interface MenuOption {
+  text: string;
+  callback: () => void;
+}
