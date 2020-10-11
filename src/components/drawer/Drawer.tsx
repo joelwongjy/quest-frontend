@@ -9,7 +9,10 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import HomeIcon from '@material-ui/icons/HomeRounded';
+import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
+import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
+import StarIcon from '@material-ui/icons/StarsRounded';
 
 import { QuestComponentProps } from 'components';
 import { HOME, PROGRAMMES, QUESTIONNAIRES, STUDENTS } from 'constants/routes';
@@ -42,7 +45,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           to={HOME}
         >
           <ListItemIcon>
-            <InboxIcon />
+            <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
@@ -54,7 +57,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           to={QUESTIONNAIRES}
         >
           <ListItemIcon>
-            <InboxIcon />
+            <QuestionIcon />
           </ListItemIcon>
           <ListItemText primary="Questionnaires" />
         </ListItem>
@@ -66,7 +69,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           to={PROGRAMMES}
         >
           <ListItemIcon>
-            <InboxIcon />
+            <StarIcon />
           </ListItemIcon>
           <ListItemText primary="Programmes" />
         </ListItem>
@@ -78,7 +81,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           to={STUDENTS}
         >
           <ListItemIcon>
-            <InboxIcon />
+            <PersonIcon />
           </ListItemIcon>
           <ListItemText primary="Students" />
         </ListItem>
