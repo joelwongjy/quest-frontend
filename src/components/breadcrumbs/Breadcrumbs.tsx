@@ -1,5 +1,6 @@
 import React from 'react';
 import { Breadcrumbs, Link, Typography } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import { Breadcrumb } from 'interfaces/components/breadcrumbs';
@@ -24,7 +25,12 @@ const QuestBreadcrumbs: React.FunctionComponent<QuestBreadcrumbsProps> = ({
       {...props}
     >
       {breadcrumbs.slice(0, breadcrumbs.length - 1).map((bc) => (
-        <Link color="inherit" href={bc.href} key={bc.text}>
+        <Link
+          color="inherit"
+          component={RouterLink}
+          to={bc.href!}
+          key={bc.text}
+        >
           {bc.text}
         </Link>
       ))}
