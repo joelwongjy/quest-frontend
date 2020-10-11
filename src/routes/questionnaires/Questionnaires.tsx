@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { isBefore, isAfter } from 'date-fns';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import PaperTabs from 'components/paperTabs';
 import QuestionnaireCard from 'components/questionnaireCard';
 import PageHeader from 'components/pageHeader';
-import ShortButton from 'components/shortButton';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
 
 import { questionnaires } from './mockData';
+import { useStyles } from './questionnaires.styles';
 
 const Questionnaires: React.FunctionComponent = () => {
   const history = useHistory();
   const [tabValue, setTabValue] = useState<number>(0);
+  const classes = useStyles();
 
   const breadcrumbs = [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
   const tabs = ['Current', 'Upcoming', 'Past'];
@@ -60,9 +61,15 @@ const Questionnaires: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <ShortButton href={`${QUESTIONNAIRES}${CREATE}`}>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            component={Link}
+            to={`${QUESTIONNAIRES}${CREATE}`}
+          >
             Create New
-          </ShortButton>
+          </Button>
         }
       />
       <PaperTabs value={tabValue} setValue={setTabValue} labels={tabs} />
