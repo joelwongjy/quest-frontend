@@ -14,9 +14,11 @@ import {
   PROGRAMMES,
   CLASSES,
   STUDENTS,
+  CREATE,
 } from 'constants/routes';
 import Home from 'routes/home';
 import Questionnaires from 'routes/questionnaires';
+import CreateQuestionnaires from 'routes/questionnaires/create';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
@@ -29,6 +31,11 @@ const AuthenticatedApp: React.FunctionComponent = () => {
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTIONNAIRES} component={Questionnaires} />
+          <Route
+            exact
+            path={`${QUESTIONNAIRES}${CREATE}`}
+            component={CreateQuestionnaires}
+          />
           <Route exact path={PROGRAMMES} component={Home} />
           <Route exact path={CLASSES} component={Home} />
           <Route exact path={STUDENTS} component={Home} />

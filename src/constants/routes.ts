@@ -10,3 +10,9 @@ export const QUESTIONNAIRES = '/questionnaires';
 export const PROGRAMMES = '/programmes';
 export const CLASSES = '/classes';
 export const STUDENTS = '/students';
+
+// Sub-routes
+export const CREATE = '/create';
+export const EDIT = '/edit';
+export const VIEW = '/view';
+export const RESPONSES = '/responses';
