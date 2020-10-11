@@ -13,6 +13,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     drawerPaper: {
       width: drawerWidth,
     },
+    listItem: {
+      '&.Mui-selected': {
+        color: theme.palette.secondary.main,
+        backgroundColor: theme.palette.secondary.light,
+      },
+      '&.Mui-selected:hover': {
+        backgroundColor: theme.palette.secondary.light,
+      },
+      '&.Mui-selected .MuiListItemIcon-root': {
+        color: theme.palette.secondary.main,
+      },
+    },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
   })

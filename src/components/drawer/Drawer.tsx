@@ -43,6 +43,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           selected={pathname === HOME}
           component={Link}
           to={HOME}
+          className={classes.listItem}
         >
           <ListItemIcon>
             <HomeIcon />
@@ -55,6 +56,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           selected={pathname === QUESTIONNAIRES}
           component={Link}
           to={QUESTIONNAIRES}
+          className={classes.listItem}
         >
           <ListItemIcon>
             <QuestionIcon />
@@ -67,6 +69,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           selected={pathname === PROGRAMMES}
           component={Link}
           to={PROGRAMMES}
+          className={classes.listItem}
         >
           <ListItemIcon>
             <StarIcon />
@@ -79,6 +82,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           selected={pathname === STUDENTS}
           component={Link}
           to={STUDENTS}
+          className={classes.listItem}
         >
           <ListItemIcon>
             <PersonIcon />

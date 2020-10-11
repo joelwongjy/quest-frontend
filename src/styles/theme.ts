@@ -33,7 +33,7 @@ const muiTheme = createMuiTheme({
     },
     secondary: {
       main: orange[500],
-      light: '#feefc3',
+      light: '#fff8e0',
     },
     error: {
       main: red.A400,
