@@ -5,7 +5,9 @@ import PageContainer from 'components/pageContainer';
 import Breadcrumbs from 'components/breadcrumbs';
 import { QUESTIONNAIRES } from 'constants/routes';
 import PaperTabs from 'components/paperTabs';
-import Card from 'components/card';
+import QuestionnaireCard from 'components/questionnaireCard';
+
+import { questionnaires } from './mockData';
 
 const Questionnaires: React.FunctionComponent = () => {
   const [tabValue, setTabValue] = useState<number>(0);
@@ -17,22 +19,12 @@ const Questionnaires: React.FunctionComponent = () => {
     <PageContainer>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
       <PaperTabs value={tabValue} setValue={setTabValue} labels={tabs} />
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6} lg={4}>
-          <Card>Test</Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Card>Test</Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Card>Test</Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Card>Test</Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Card>Test</Card>
-        </Grid>
+      <Grid container spacing={3}>
+        {questionnaires.map((q) => (
+          <Grid item xs={12} sm={6} lg={4} key={q.name}>
+            <QuestionnaireCard questionnaire={q} />
+          </Grid>
+        ))}
       </Grid>
     </PageContainer>
   );
