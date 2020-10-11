@@ -16,6 +16,7 @@ import {
   STUDENTS,
 } from 'constants/routes';
 import Home from 'routes/home';
+import Questionnaires from 'routes/questionnaires';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
@@ -27,7 +28,7 @@ const AuthenticatedApp: React.FunctionComponent = () => {
         <Switch>
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
           <Route path={HOME} component={Home} />
-          <Route exact path={QUESTIONNAIRES} component={Home} />
+          <Route exact path={QUESTIONNAIRES} component={Questionnaires} />
           <Route exact path={PROGRAMMES} component={Home} />
           <Route exact path={CLASSES} component={Home} />
           <Route exact path={STUDENTS} component={Home} />
