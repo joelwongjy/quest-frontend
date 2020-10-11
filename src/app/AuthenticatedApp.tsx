@@ -6,7 +6,15 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import { UNAUTHED_ROUTES, ROOT, HOME } from 'constants/routes';
+import {
+  UNAUTHED_ROUTES,
+  ROOT,
+  HOME,
+  QUESTIONNAIRES,
+  PROGRAMMES,
+  CLASSES,
+  STUDENTS,
+} from 'constants/routes';
 import Home from 'routes/home';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
@@ -18,8 +26,12 @@ const AuthenticatedApp: React.FunctionComponent = () => {
       <div className="app">
         <Switch>
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
-          <Route exact path={HOME} component={Home} />
-          <Route exact path="/" render={redirectToHome} />
+          <Route path={HOME} component={Home} />
+          <Route exact path={QUESTIONNAIRES} component={Home} />
+          <Route exact path={PROGRAMMES} component={Home} />
+          <Route exact path={CLASSES} component={Home} />
+          <Route exact path={STUDENTS} component={Home} />
+          <Route path="/" render={redirectToHome} />
         </Switch>
       </div>
     </Router>

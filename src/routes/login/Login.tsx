@@ -7,6 +7,8 @@ import PageContainer from 'components/pageContainer';
 
 import Input from 'components/input';
 import LongButton from 'components/longButton';
+import { LOGIN } from 'constants/routes';
+
 import { useStyles } from './login.styles';
 
 const Login: React.FunctionComponent = () => {
@@ -83,7 +85,7 @@ const Login: React.FunctionComponent = () => {
               </LongButton>
               <Grid container>
                 <Grid item xs>
-                  <Link href="routes/login" variant="body2" color="secondary">
+                  <Link href={LOGIN} variant="body2" color="secondary">
                     Forgot password?
                   </Link>
                 </Grid>

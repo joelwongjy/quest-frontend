@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import {
   Divider,
   Drawer,
@@ -9,9 +10,9 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 
 import { QuestComponentProps } from 'components';
+import { HOME, PROGRAMMES, QUESTIONNAIRES, STUDENTS } from 'constants/routes';
 
 import { useStyles } from './drawer.styles';
 
@@ -26,31 +27,61 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
   toggleDrawer,
 }) => {
   const classes = useStyles();
+  const pathname = `/${useLocation().pathname.split('/')[1]}`;
 
   const drawer = (
     <>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem
+          button
+          key="Home"
+          selected={pathname === HOME}
+          component={Link}
+          to={HOME}
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem
+          button
+          key="Questionnaires"
+          selected={pathname === QUESTIONNAIRES}
+          component={Link}
+          to={QUESTIONNAIRES}
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Questionnaires" />
+        </ListItem>
+        <ListItem
+          button
+          key="Programmes"
+          selected={pathname === PROGRAMMES}
+          component={Link}
+          to={PROGRAMMES}
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Programmes" />
+        </ListItem>
+        <ListItem
+          button
+          key="Students"
+          selected={pathname === STUDENTS}
+          component={Link}
+          to={STUDENTS}
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Students" />
+        </ListItem>
       </List>
     </>
   );
