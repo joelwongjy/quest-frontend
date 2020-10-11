@@ -40,8 +40,15 @@ const ChildrenContainer: React.FunctionComponent<QuestComponentProps> = ({
   return <div className={className}>{children}</div>;
 };
 
-const CustomAppBar: React.FunctionComponent<QuestComponentProps> = ({
+interface QuestAppBarProps extends QuestComponentProps {
+  hasDrawer: boolean;
+  toggleDrawer: () => void;
+}
+
+const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
+  hasDrawer,
   theme,
+  toggleDrawer,
   children,
 }) => {
   const menuId = 'primary-search-account-menu';
@@ -53,39 +60,41 @@ const CustomAppBar: React.FunctionComponent<QuestComponentProps> = ({
   });
 
   return (
-    <div className={classes.grow}>
-      <AppBar
-        elevation={trigger ? 4 : 0}
-        className={trigger ? '' : classes.containerBorder}
-      >
-        <Toolbar>
+    <AppBar
+      elevation={trigger ? 4 : 0}
+      className={classes.appBar}
+      position="fixed"
+    >
+      <Toolbar>
+        {hasDrawer && (
           <IconButton
             edge="start"
             className={classes.menuButton}
             aria-label="Open Drawer"
+            onClick={toggleDrawer}
           >
             <MenuIcon htmlColor={theme!.custom.icon.iconColor} />
           </IconButton>
-          <LogoContainer />
-          <ChildrenContainer className={classes.childrenContainer}>
-            {children}
-          </ChildrenContainer>
-          <div className={classes.grow} />
-          <div>
-            <IconButton
-              edge="end"
-              ref={profileMenuRef}
-              aria-label="User Profile Picture"
-              aria-controls={menuId}
-              aria-haspopup="true"
-            >
-              <AccountsIcon htmlColor={theme!.custom.icon.iconColor} />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
+        )}
+        <LogoContainer />
+        <ChildrenContainer className={classes.childrenContainer}>
+          {children}
+        </ChildrenContainer>
+        <div className={classes.grow} />
+        <div>
+          <IconButton
+            edge="end"
+            ref={profileMenuRef}
+            aria-label="User Profile Picture"
+            aria-controls={menuId}
+            aria-haspopup="true"
+          >
+            <AccountsIcon htmlColor={theme!.custom.icon.iconColor} />
+          </IconButton>
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 
-export default CustomAppBar;
+export default QuestAppBar;
