@@ -10,7 +10,6 @@ const MetropolisRegular = {
   fontDisplay: 'swap' as const,
   fontWeight: 400,
   src: `
-      local('Metrolpolis'),
       local('Metrolpolis-Medium'),
       url(${MetropolisMediumFont}) format('woff')
     `,
@@ -22,7 +21,6 @@ const MetropolisBold = {
   fontDisplay: 'swap' as const,
   fontWeight: 500,
   src: `
-      local('Metrolpolis'),
       local('Metrolpolis-Bold'),
       url(${MetropolisBoldFont}) format('woff')
     `,
@@ -34,7 +32,6 @@ const RobotoRegular = {
   fontDisplay: 'swap' as const,
   fontWeight: 400,
   src: `
-      local('Roboto'),
       local('Roboto-Regular'),
       url(${RobotoRegularFont}) format('woff')
     `,
@@ -46,7 +43,6 @@ const RobotoMedium = {
   fontDisplay: 'swap' as const,
   fontWeight: 500,
   src: `
-        local('Roboto'),
         local('Roboto-Medium'),
         url(${RobotoMediumFont}) format('woff')
       `,
@@ -58,7 +54,6 @@ const RobotoBold = {
   fontDisplay: 'swap' as const,
   fontWeight: 700,
   src: `
-      local('Roboto'),
       local('Roboto-Bold'),
       url(${RobotoBoldFont}) format('woff')
     `,
