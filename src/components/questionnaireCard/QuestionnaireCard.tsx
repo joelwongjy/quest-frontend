@@ -9,7 +9,7 @@ import {
   MenuItem,
   Typography,
 } from '@material-ui/core';
-import { formatDistance } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { QuestComponentProps } from 'interfaces/components/common';
@@ -50,30 +50,22 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
   return (
     <>
       <Typography className={classes.dates} color="textSecondary" gutterBottom>
-        Last Edited:{' '}
-        {formatDistance(questionnaire.lastEdited, new Date(), {
-          addSuffix: true,
-        })}
+        Last edited:{' '}
+        {formatDistanceToNow(questionnaire.lastEdited, { addSuffix: true })}
       </Typography>
       <Card>
         <CardHeader
           title={
             <>
               <Typography className={classes.dates} color="textSecondary">
-                Start:{' '}
-                {formatDistance(questionnaire.startDate, new Date(), {
-                  addSuffix: true,
-                })}
+                Start: {format(questionnaire.startDate, 'd MMM y')}
               </Typography>
               <Typography
                 className={classes.dates}
                 color="textSecondary"
                 gutterBottom
               >
-                End:{' '}
-                {formatDistance(questionnaire.endDate, new Date(), {
-                  addSuffix: true,
-                })}
+                End: {format(questionnaire.endDate, 'd MMM y')}
               </Typography>
             </>
           }
