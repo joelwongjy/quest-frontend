@@ -61,13 +61,9 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             <>
               <Typography className={classes.dates} color="textSecondary">
                 Start:{' '}
-                {formatDistance(
-                  subDays(questionnaire.startDate, 3),
-                  new Date(),
-                  {
-                    addSuffix: true,
-                  }
-                )}
+                {formatDistance(questionnaire.startDate, new Date(), {
+                  addSuffix: true,
+                })}
               </Typography>
               <Typography
                 className={classes.dates}
@@ -75,7 +71,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
                 gutterBottom
               >
                 End:{' '}
-                {formatDistance(addDays(questionnaire.endDate, 3), new Date(), {
+                {formatDistance(questionnaire.endDate, new Date(), {
                   addSuffix: true,
                 })}
               </Typography>
