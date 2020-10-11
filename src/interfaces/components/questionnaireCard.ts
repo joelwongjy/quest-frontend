@@ -1,4 +1,4 @@
-export interface Questionnaire {
+export interface QuestionnaireCardInfo {
   startDate: Date;
   endDate: Date;
   lastEdited: Date;
