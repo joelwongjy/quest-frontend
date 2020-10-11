@@ -3,10 +3,11 @@ import { Grid } from '@material-ui/core';
 import { isBefore, isAfter } from 'date-fns';
 
 import PageContainer from 'components/pageContainer';
-import Breadcrumbs from 'components/breadcrumbs';
 import { QUESTIONNAIRES } from 'constants/routes';
 import PaperTabs from 'components/paperTabs';
 import QuestionnaireCard from 'components/questionnaireCard';
+import PageHeader from 'components/pageHeader';
+import ShortButton from 'components/shortButton';
 
 import { questionnaires } from './mockData';
 
@@ -39,7 +40,10 @@ const Questionnaires: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <PageHeader
+        breadcrumbs={breadcrumbs}
+        action={<ShortButton>Create New</ShortButton>}
+      />
       <PaperTabs value={tabValue} setValue={setTabValue} labels={tabs} />
       <Grid container spacing={3}>
         {renderedQuestionnaires.map((q) => (
