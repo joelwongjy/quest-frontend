@@ -4,7 +4,7 @@ import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 
-const Questionnaires: React.FunctionComponent = () => {
+const CreateQuestionnaire: React.FunctionComponent = () => {
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     { text: 'Create New', href: `${QUESTIONNAIRES}/${CREATE}` },
@@ -17,4 +17,4 @@ const Questionnaires: React.FunctionComponent = () => {
   );
 };
 
-export default Questionnaires;
+export default CreateQuestionnaire;
