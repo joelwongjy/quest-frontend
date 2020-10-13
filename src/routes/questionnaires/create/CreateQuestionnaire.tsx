@@ -3,14 +3,15 @@ import React from 'react';
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import McqQuestion from 'components/mcqQuestion/view/McqQuestion';
-import EditMcqQuestion from 'components/mcqQuestion/edit/McqQuestion';
+import McqQuestion from 'components/mcqQuestion/view/ViewMcqQuestion';
+import EditMcqQuestion from 'components/mcqQuestion/edit';
 import ShortAnswerQuestion from 'components/shortAnswerQuestion/view/ShortAnswerQuestion';
 import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit/ShortAnswerQuestion';
 import LongAnswerQuestion from 'components/longAnswerQuestion/view/LongAnswerQuestion';
 import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit/LongAnswerQuestion';
 import MoodQuestion from 'components/moodQuestion/view/MoodQuestion';
 import EditMoodQuestion from 'components/moodQuestion/edit/MoodQuestion';
+import Accordion from 'components/accordion';
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
   const breadcrumbs = [
@@ -21,6 +22,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
+      <Accordion heading="Step 1: Set the duration">TestTestTest</Accordion>
+      <Accordion heading="Step 2: Assign the questionnaire">
+        TestTestTest
+      </Accordion>
       <McqQuestion question="test" options={['test', '23223']} />
       <EditMcqQuestion />
       <ShortAnswerQuestion question="How many mods do I need to SU" />

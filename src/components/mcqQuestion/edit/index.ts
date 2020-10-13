@@ -1,1 +1,1 @@
-export { default } from './McqQuestion';
+export { default } from './EditMcqQuestion';
