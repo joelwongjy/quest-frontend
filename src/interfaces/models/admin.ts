@@ -1,19 +1,17 @@
 /* eslint-disable no-use-before-define */
-export default interface Program {
+export default interface QuestProgram {
   id: number;
   name: string;
   classes: QuestClass[];
 }
 
-export interface Student {
+export interface QuestStudent {
   id: number;
   name: string;
-  classes: QuestClass[];
 }
 
 export interface QuestClass {
   id: number;
   name: string;
-  role: string;
-  students: Student[];
+  students: QuestStudent[];
 }

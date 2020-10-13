@@ -13,7 +13,9 @@ import MoodQuestion from 'components/moodQuestion/view/MoodQuestion';
 import EditMoodQuestion from 'components/moodQuestion/edit/MoodQuestion';
 import Accordion from 'components/accordion';
 import QuestDatePicker from 'components/questDatePicker';
-import Program, { QuestClass } from 'interfaces/models/admin';
+import QuestProgram, { QuestClass } from 'interfaces/models/admin';
+import ProgramClassPicker from 'components/programClassPicker';
+import { programs } from '../mockData';
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
   const breadcrumbs = [
@@ -23,8 +25,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
 
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const [program, setProgram] = useState<Program | null>(null);
-  const [questClass, setQuestClass] = useState<QuestClass | null>(null);
+  const [questPrograms, setQuestProgrames] = useState<QuestProgram[]>(programs);
+  const [questClasses, setQuestClasses] = useState<QuestClass[]>([]);
+  const [questProgramId, setQuestProgramId] = useState<number>(1);
+  const [questClassId, setQuestClassId] = useState<number>(1);
 
   const startDateCallback = (start: Date) => {
     setStartDate(start);
@@ -34,12 +38,12 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     setEndDate(end);
   };
 
-  const programCallback = (input: Program) => {
-    setProgram(program);
+  const programCallback = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setQuestProgramId(event.target.value as number);
   };
 
-  const questClassCallback = (input: QuestClass) => {
-    setQuestClass(questClass);
+  const questClassCallback = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setQuestClassId(event.target.value as number);
   };
 
   return (
@@ -54,7 +58,13 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
         />
       </Accordion>
       <Accordion heading="Step 2: Assign the questionnaire">
-        TestTestTest
+        <ProgramClassPicker
+          programs={questPrograms}
+          selectedQuestProgramId={questProgramId}
+          selectedQuestClassId={questClassId}
+          programCallback={programCallback}
+          questClassCallback={questClassCallback}
+        />
       </Accordion>
       <McqQuestion question="test" options={['test', '23223']} />
       <EditMcqQuestion />
