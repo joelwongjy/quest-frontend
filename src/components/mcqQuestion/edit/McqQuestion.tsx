@@ -2,18 +2,22 @@ import React, { useState } from 'react';
 import { FormGroup, TextField, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import QuestionBuilder from 'components/questions/QuestionBuilder';
+import QuestionBuilder from 'components/questionBuilder/QuestionBuilder';
 import ShortButton from 'components/shortButton/ShortButton';
 
 import { QuestComponentProps } from 'interfaces/components/common';
+import { McqQuestionOption } from 'interfaces/components/mcqQuestion';
 
 const EditMcqQuestion: React.FunctionComponent<QuestComponentProps> = () => {
-  const [lines, setNewLine] = useState(1);
-  const [options, setOptions] = useState(['']);
+  const firstOption: McqQuestionOption = { id: 0, option: '' };
+  const [options, setOptions] = useState([firstOption]);
+
+  let nextId = 1;
 
   const addOption = () => {
-    setOptions([...options, '']);
-    setNewLine(lines + 1);
+    const newOption: McqQuestionOption = { id: nextId, option: '' };
+    setOptions([...options, newOption]);
+    nextId += 1;
   };
 
   const deleteOption = (index: number) => {
@@ -22,9 +26,17 @@ const EditMcqQuestion: React.FunctionComponent<QuestComponentProps> = () => {
     setOptions(newOptions);
   };
 
-  const updateOption = (option: string, index: number) => {
+  const updateOption = (
+    oldOption: McqQuestionOption,
+    newOption: string,
+    index: number
+  ) => {
     const newOptions = [...options];
-    newOptions[index] = option;
+    const updatedOption: McqQuestionOption = {
+      id: oldOption.id,
+      option: newOption,
+    };
+    newOptions[index] = updatedOption;
     setOptions(newOptions);
   };
 
@@ -32,14 +44,14 @@ const EditMcqQuestion: React.FunctionComponent<QuestComponentProps> = () => {
     <FormGroup>
       <QuestionBuilder />
       {options.map((option, index) => (
-        <div key={index}>
+        <div key={option.id}>
           <TextField
             required
             placeholder={`Option ${index + 1}`}
-            value={option}
-            onChange={(e) => updateOption(e.target.value, index)}
+            value={option.option}
+            onChange={(e) => updateOption(option, e.target.value, index)}
           />
-          {options.length !== 1 && (
+          {option.id !== 0 && (
             <IconButton aria-label="delete" onClick={() => deleteOption(index)}>
               <DeleteIcon />
             </IconButton>
