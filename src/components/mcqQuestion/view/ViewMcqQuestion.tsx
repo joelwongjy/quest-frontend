@@ -14,7 +14,7 @@ export interface QuestMcqProps extends QuestComponentProps {
   options: string[];
 }
 
-const McqQuestion: React.FunctionComponent<QuestMcqProps> = ({
+const ViewMcqQuestion: React.FunctionComponent<QuestMcqProps> = ({
   question,
   options,
 }) => {
@@ -46,4 +46,4 @@ const McqQuestion: React.FunctionComponent<QuestMcqProps> = ({
   );
 };
 
-export default McqQuestion;
+export default ViewMcqQuestion;

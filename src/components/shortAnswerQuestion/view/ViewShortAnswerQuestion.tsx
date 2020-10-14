@@ -8,7 +8,7 @@ export interface QuestShortAnswerProps extends QuestComponentProps {
   question: string;
 }
 
-const ShortAnswerQuestion: React.FunctionComponent<QuestShortAnswerProps> = ({
+const ViewShortAnswerQuestion: React.FunctionComponent<QuestShortAnswerProps> = ({
   question,
 }) => {
   return (
@@ -19,4 +19,4 @@ const ShortAnswerQuestion: React.FunctionComponent<QuestShortAnswerProps> = ({
   );
 };
 
-export default ShortAnswerQuestion;
+export default ViewShortAnswerQuestion;

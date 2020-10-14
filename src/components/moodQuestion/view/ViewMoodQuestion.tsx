@@ -22,7 +22,7 @@ export interface QuestMoodProps extends QuestComponentProps {
   question: string;
 }
 
-const MoodQuestion: React.FunctionComponent<QuestMoodProps> = ({
+const ViewMoodQuestion: React.FunctionComponent<QuestMoodProps> = ({
   question,
 }) => {
   const [mood, setMood] = useState<number>();
@@ -70,4 +70,4 @@ const MoodQuestion: React.FunctionComponent<QuestMoodProps> = ({
   );
 };
 
-export default MoodQuestion;
+export default ViewMoodQuestion;

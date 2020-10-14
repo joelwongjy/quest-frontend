@@ -8,7 +8,11 @@ import ShortButton from 'components/shortButton/ShortButton';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { McqQuestionOption } from 'interfaces/components/mcqQuestion';
 
+import { useStyles } from './editMcqQustion.styles';
+
 const EditMcqQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+  const classes = useStyles();
+
   const firstOption: McqQuestionOption = { id: 0, option: '' };
   const [options, setOptions] = useState([firstOption]);
 
@@ -41,7 +45,7 @@ const EditMcqQuestion: React.FunctionComponent<QuestComponentProps> = () => {
   };
 
   return (
-    <FormGroup>
+    <FormGroup className={classes.card}>
       <QuestionBuilder />
       {options.map((option, index) => (
         <div key={option.id}>

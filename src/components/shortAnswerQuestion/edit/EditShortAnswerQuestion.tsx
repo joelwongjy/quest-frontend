@@ -6,13 +6,17 @@ import QuestionBuilder from 'components/questionBuilder/QuestionBuilder';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
-const ShortAnswerQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+import { useStyles } from './editShortAnswerQuestion.styles';
+
+const EditShortAnswerQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+  const classes = useStyles();
+
   return (
-    <FormGroup>
+    <FormGroup className={classes.card}>
       <QuestionBuilder />
       <TextField disabled id="disabled" defaultValue="Short answer text" />
     </FormGroup>
   );
 };
 
-export default ShortAnswerQuestion;
+export default EditShortAnswerQuestion;

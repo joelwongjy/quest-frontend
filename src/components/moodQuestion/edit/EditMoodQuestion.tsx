@@ -12,6 +12,8 @@ import QuestionBuilder from 'components/questionBuilder/QuestionBuilder';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
+import { useStyles } from './editMoodQuestion.styles';
+
 // const moods = [
 //   'SentimentVerySatisfied',
 //   'SentimentSatisfiedAlt',
@@ -21,8 +23,9 @@ import { QuestComponentProps } from 'interfaces/components/common';
 // ];
 
 const EditMoodQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+  const classes = useStyles();
   return (
-    <FormGroup>
+    <FormGroup className={classes.card}>
       <QuestionBuilder />
       <div>
         <IconButton aria-label="verydissatisfied">

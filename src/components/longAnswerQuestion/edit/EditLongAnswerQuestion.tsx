@@ -6,13 +6,17 @@ import QuestionBuilder from 'components/questionBuilder/QuestionBuilder';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
-const LongAnswerQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+import { useStyles } from './editLongAnswerQuestion.styles';
+
+const EditLongAnswerQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+  const classes = useStyles();
+
   return (
-    <FormGroup>
+    <FormGroup className={classes.card}>
       <QuestionBuilder />
       <TextField disabled id="disabled" defaultValue="Long answer text" />
     </FormGroup>
   );
 };
 
-export default LongAnswerQuestion;
+export default EditLongAnswerQuestion;
