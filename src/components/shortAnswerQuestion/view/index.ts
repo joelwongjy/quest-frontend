@@ -1,1 +1,1 @@
-export { default } from './ShortAnswerQuestion';
+export { default } from './ViewShortAnswerQuestion';

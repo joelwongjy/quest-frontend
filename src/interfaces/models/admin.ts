@@ -15,3 +15,15 @@ export interface QuestClass {
   name: string;
   students: QuestStudent[];
 }
+
+export interface Question {
+  id: number;
+  questionText: string;
+  questionType: string;
+  options: Option[];
+}
+
+export interface Option {
+  id: number;
+  option: string;
+}

@@ -3,18 +3,20 @@ import React, { useState } from 'react';
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import McqQuestion from 'components/mcqQuestion/view/ViewMcqQuestion';
 import EditMcqQuestion from 'components/mcqQuestion/edit';
-import ShortAnswerQuestion from 'components/shortAnswerQuestion/view/ShortAnswerQuestion';
-import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit/ShortAnswerQuestion';
-import LongAnswerQuestion from 'components/longAnswerQuestion/view/LongAnswerQuestion';
-import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit/LongAnswerQuestion';
-import MoodQuestion from 'components/moodQuestion/view/MoodQuestion';
-import EditMoodQuestion from 'components/moodQuestion/edit/MoodQuestion';
+import ShortAnswerQuestion from 'components/shortAnswerQuestion/view/ViewShortAnswerQuestion';
+import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit/EditShortAnswerQuestion';
+import LongAnswerQuestion from 'components/longAnswerQuestion/view/ViewLongAnswerQuestion';
+import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit/EditLongAnswerQuestion';
+import MoodQuestion from 'components/moodQuestion/view/ViewMoodQuestion';
+import EditMoodQuestion from 'components/moodQuestion/edit/EditMoodQuestion';
 import Accordion from 'components/accordion';
 import QuestDatePicker from 'components/questDatePicker';
-import QuestProgram, { QuestClass } from 'interfaces/models/admin';
+import QuestProgram, { QuestClass, Question } from 'interfaces/models/admin';
 import ProgramClassPicker from 'components/programClassPicker';
+import { Button, Grid, Paper } from '@material-ui/core';
+import QuestionCard from 'components/questionCard';
+import ShortButton from 'components/shortButton';
 import { programs } from '../mockData';
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
@@ -29,6 +31,13 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const [questClasses, setQuestClasses] = useState<QuestClass[]>([]);
   const [questProgramId, setQuestProgramId] = useState<number>(1);
   const [questClassId, setQuestClassId] = useState<number>(1);
+  const [createdSharedQuestions, setCreatedSharedQuestions] = useState<
+    Question[]
+  >([]);
+  const [createdSpecialQuestions, setCreatedSpecialQuestions] = useState<
+    Question[]
+  >([]);
+  const [newQuestion, setNewQuestion] = useState<Question | null>(null);
 
   const startDateCallback = (start: Date) => {
     setStartDate(start);
@@ -49,31 +58,82 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Accordion heading="Step 1: Set the duration">
-        <QuestDatePicker
-          startDate={startDate}
-          endDate={endDate}
-          startDateCallback={startDateCallback}
-          endDateCallback={endDateCallback}
-        />
-      </Accordion>
-      <Accordion heading="Step 2: Assign the questionnaire">
-        <ProgramClassPicker
-          programs={questPrograms}
-          selectedQuestProgramId={questProgramId}
-          selectedQuestClassId={questClassId}
-          programCallback={programCallback}
-          questClassCallback={questClassCallback}
-        />
-      </Accordion>
-      <McqQuestion question="test" options={['test', '23223']} />
-      <EditMcqQuestion />
-      <ShortAnswerQuestion question="How many mods do I need to SU" />
-      <EditShortAnswerQuestion />
-      <LongAnswerQuestion question="Will I tank the bell curve?" />
-      <EditLongAnswerQuestion />
-      <MoodQuestion question="testing123?" />
-      <EditMoodQuestion />
+      <Paper elevation={0} style={{ background: 'white' }}>
+        <Accordion heading="Step 1: Set the duration">
+          <QuestDatePicker
+            startDate={startDate}
+            endDate={endDate}
+            startDateCallback={startDateCallback}
+            endDateCallback={endDateCallback}
+          />
+        </Accordion>
+        <Accordion heading="Step 2: Assign the questionnaire">
+          <ProgramClassPicker
+            programs={questPrograms}
+            selectedQuestProgramId={questProgramId}
+            selectedQuestClassId={questClassId}
+            programCallback={programCallback}
+            questClassCallback={questClassCallback}
+          />
+        </Accordion>
+        <Accordion heading="Step 3: Create the shared questions">
+          <Grid container spacing={3}>
+            <Grid item xs={12} alignItems="flex-end">
+              <ShortButton
+                onClick={() => {
+                  const createdSharedQuestionsCopy = createdSharedQuestions.slice();
+                  createdSharedQuestionsCopy.push({
+                    id: createdSharedQuestions.length + 1,
+                    questionText: '',
+                    questionType: 'MCQ',
+                    options: [],
+                  });
+                  setCreatedSharedQuestions(createdSharedQuestionsCopy);
+                }}
+              >
+                New Question
+              </ShortButton>
+            </Grid>
+            {createdSharedQuestions.map((q: Question) => {
+              return (
+                <Grid item xs={12} key={q.id}>
+                  <QuestionCard question={q} questionIndex={q.id} mode="new" />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Accordion>
+        <Accordion heading="Step 4: Create the special questions">
+          <Grid container spacing={3}>
+            <Grid item xs={12} alignItems="flex-end">
+              <ShortButton
+                onClick={() => {
+                  const createdSpecialQuestionsCopy = createdSpecialQuestions.slice();
+                  createdSpecialQuestionsCopy.push({
+                    id:
+                      createdSharedQuestions.length +
+                      createdSpecialQuestions.length +
+                      1,
+                    questionText: '',
+                    questionType: 'MCQ',
+                    options: [],
+                  });
+                  setCreatedSpecialQuestions(createdSpecialQuestionsCopy);
+                }}
+              >
+                New Question
+              </ShortButton>
+            </Grid>
+            {createdSpecialQuestions.map((q: Question) => {
+              return (
+                <Grid item xs={12} key={q.id}>
+                  <QuestionCard question={q} questionIndex={q.id} mode="new" />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Accordion>
+      </Paper>
     </PageContainer>
   );
 };

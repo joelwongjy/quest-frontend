@@ -8,7 +8,7 @@ export interface QuestLongAnswerProps extends QuestComponentProps {
   question: string;
 }
 
-const LongAnswerQuestion: React.FunctionComponent<QuestLongAnswerProps> = ({
+const ViewLongAnswerQuestion: React.FunctionComponent<QuestLongAnswerProps> = ({
   question,
 }) => {
   return (
@@ -19,4 +19,4 @@ const LongAnswerQuestion: React.FunctionComponent<QuestLongAnswerProps> = ({
   );
 };
 
-export default LongAnswerQuestion;
+export default ViewLongAnswerQuestion;

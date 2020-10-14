@@ -1,1 +1,1 @@
-export { default } from './LongAnswerQuestion';
+export { default } from './EditLongAnswerQuestion';

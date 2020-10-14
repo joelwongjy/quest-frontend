@@ -1,1 +1,1 @@
-export { default } from './MoodQuestion';
+export { default } from './ViewMoodQuestion';
