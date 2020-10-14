@@ -1,5 +1,4 @@
 import EditMcqQuestion from 'components/mcqQuestion/edit';
-import McqQuestion from 'components/mcqQuestion/view';
 import React, { useRef, useState } from 'react';
 
 import { QuestComponentProps } from 'interfaces/components/common';
@@ -10,6 +9,7 @@ import {
   ClickAwayListener,
   Grid,
   Grow,
+  IconButton,
   MenuItem,
   MenuList,
   Paper,
@@ -17,6 +17,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { Question } from 'interfaces/models/admin';
 import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit';
@@ -28,12 +29,14 @@ interface QuestionCardProps extends QuestComponentProps {
   question: Question;
   questionIndex: number;
   mode: string;
+  handleDelete: () => void;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   questionIndex,
   mode,
+  handleDelete,
 }) => {
   const classes = useStyles();
 
@@ -94,12 +97,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   return (
     <Card>
       <Grid container justify="space-around">
-        <Grid item xs={8}>
+        <Grid item xs={7}>
           <Typography
             className={classes.order}
           >{`Question ${questionIndex}:`}</Typography>
         </Grid>
-        <Grid item xs alignItems="flex-end">
+        <Grid item xs={4} alignItems="flex-end">
           <ButtonGroup
             variant="contained"
             color="primary"
@@ -160,6 +163,15 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               </Grow>
             )}
           </Popper>
+        </Grid>
+        <Grid item xs={1} className={classes.bin}>
+          <IconButton
+            aria-label="delete"
+            onClick={handleDelete}
+            style={{ color: 'red' }}
+          >
+            <DeleteIcon />
+          </IconButton>
         </Grid>
       </Grid>
 

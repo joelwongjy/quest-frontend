@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 
+import nextId from 'react-id-generator';
+
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import EditMcqQuestion from 'components/mcqQuestion/edit';
-import ShortAnswerQuestion from 'components/shortAnswerQuestion/view/ViewShortAnswerQuestion';
-import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit/EditShortAnswerQuestion';
-import LongAnswerQuestion from 'components/longAnswerQuestion/view/ViewLongAnswerQuestion';
-import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit/EditLongAnswerQuestion';
-import MoodQuestion from 'components/moodQuestion/view/ViewMoodQuestion';
-import EditMoodQuestion from 'components/moodQuestion/edit/EditMoodQuestion';
 import Accordion from 'components/accordion';
 import QuestDatePicker from 'components/questDatePicker';
 import QuestProgram, { QuestClass, Question } from 'interfaces/models/admin';
 import ProgramClassPicker from 'components/programClassPicker';
-import { Button, Grid, Paper } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
 import ShortButton from 'components/shortButton';
+import LongButton from 'components/longButton';
 import { programs } from '../mockData';
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
@@ -37,7 +33,6 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const [createdSpecialQuestions, setCreatedSpecialQuestions] = useState<
     Question[]
   >([]);
-  const [newQuestion, setNewQuestion] = useState<Question | null>(null);
 
   const startDateCallback = (start: Date) => {
     setStartDate(start);
@@ -83,7 +78,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                 onClick={() => {
                   const createdSharedQuestionsCopy = createdSharedQuestions.slice();
                   createdSharedQuestionsCopy.push({
-                    id: createdSharedQuestions.length + 1,
+                    id: nextId(),
                     questionText: '',
                     questionType: 'MCQ',
                     options: [],
@@ -94,10 +89,21 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                 New Question
               </ShortButton>
             </Grid>
-            {createdSharedQuestions.map((q: Question) => {
+            {createdSharedQuestions.map((q: Question, index: number) => {
               return (
                 <Grid item xs={12} key={q.id}>
-                  <QuestionCard question={q} questionIndex={q.id} mode="new" />
+                  <QuestionCard
+                    question={q}
+                    questionIndex={index + 1}
+                    mode="new"
+                    handleDelete={() => {
+                      let createdSharedQuestionsCopy = createdSharedQuestions.slice();
+                      createdSharedQuestionsCopy = createdSharedQuestionsCopy.filter(
+                        (question) => question.id !== q.id
+                      );
+                      setCreatedSharedQuestions(createdSharedQuestionsCopy);
+                    }}
+                  />
                 </Grid>
               );
             })}
@@ -110,10 +116,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                 onClick={() => {
                   const createdSpecialQuestionsCopy = createdSpecialQuestions.slice();
                   createdSpecialQuestionsCopy.push({
-                    id:
-                      createdSharedQuestions.length +
-                      createdSpecialQuestions.length +
-                      1,
+                    id: nextId(),
                     questionText: '',
                     questionType: 'MCQ',
                     options: [],
@@ -124,15 +127,29 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                 New Question
               </ShortButton>
             </Grid>
-            {createdSpecialQuestions.map((q: Question) => {
+            {createdSpecialQuestions.map((q: Question, index: number) => {
               return (
                 <Grid item xs={12} key={q.id}>
-                  <QuestionCard question={q} questionIndex={q.id} mode="new" />
+                  <QuestionCard
+                    question={q}
+                    questionIndex={index}
+                    mode="new"
+                    handleDelete={() => {
+                      let createdSpecialQuestionsCopy = createdSpecialQuestions.slice();
+                      createdSpecialQuestionsCopy = createdSpecialQuestionsCopy.filter(
+                        (question) => question.id !== q.id
+                      );
+                      setCreatedSpecialQuestions(createdSpecialQuestionsCopy);
+                    }}
+                  />
                 </Grid>
               );
             })}
           </Grid>
         </Accordion>
+        <Grid container justify="flex-end">
+          <LongButton>Finish</LongButton>
+        </Grid>
       </Paper>
     </PageContainer>
   );

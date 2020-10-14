@@ -17,7 +17,7 @@ export interface QuestClass {
 }
 
 export interface Question {
-  id: number;
+  id: number | string;
   questionText: string;
   questionType: string;
   options: Option[];

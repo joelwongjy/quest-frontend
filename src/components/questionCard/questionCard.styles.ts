@@ -13,5 +13,8 @@ export const useStyles = makeStyles(() =>
       marginTop: 16,
       fontSize: 24,
     },
+    bin: {
+      marginTop: 10,
+    },
   })
 );
