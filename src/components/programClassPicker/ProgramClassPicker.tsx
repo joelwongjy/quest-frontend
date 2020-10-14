@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Program, { QuestClass } from 'interfaces/models/admin';
+import Program from 'interfaces/models/admin';
 
 import {
   FormControl,
