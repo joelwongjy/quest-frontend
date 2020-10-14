@@ -9,7 +9,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { useStyles } from './ProgramClassPicker.styles';
+import { useStyles } from './programClassPicker.styles';
 
 export interface ProgramClassPickerProps {
   programs: Program[];

@@ -33,6 +33,7 @@ interface QuestionCardProps extends QuestComponentProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   question,
   questionIndex,
   mode,
