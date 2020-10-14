@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers';
 
-import MomentUtils from '@material-ui/pickers/adapter/moment';
+import DateFnsUtils from '@material-ui/pickers/adapter/date-fns';
 import { Grid, TextField } from '@material-ui/core';
 
 export interface DatePickerProps {
@@ -16,7 +16,7 @@ const QuestDatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
   const { startDate, endDate, startDateCallback, endDateCallback } = props;
 
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={DateFnsUtils}>
       <Grid container justify="space-around">
         <DateTimePicker
           renderInput={(p) => <TextField {...p} />}
