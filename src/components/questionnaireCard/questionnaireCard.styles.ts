@@ -20,5 +20,9 @@ export const useStyles = makeStyles(() =>
     button: {
       padding: '0.6rem',
     },
+    buttonHidden: {
+      padding: '0.6rem',
+      visibility: 'hidden',
+    },
   })
 );
