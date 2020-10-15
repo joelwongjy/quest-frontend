@@ -44,14 +44,32 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
     setAnchorEle(null);
   };
 
-  const renderStatus = (status: QuestionnaireStatus): string => {
+  const renderStatus = (status: QuestionnaireStatus) => {
     switch (status) {
       case QuestionnaireStatus.DRAFT:
-        return 'Saved As Draft';
+        return (
+          <Typography
+            className={classes.statusDraft}
+            color="textSecondary"
+            variant="body2"
+            component="p"
+          >
+            Saved As Draft
+          </Typography>
+        );
       case QuestionnaireStatus.PUBLISHED:
-        return 'Published';
+        return (
+          <Typography
+            className={classes.statusPublished}
+            color="textSecondary"
+            variant="body2"
+            component="p"
+          >
+            Published
+          </Typography>
+        );
       default:
-        return 'Recently Created';
+        return null;
     }
   };
 
@@ -120,14 +138,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           >
             {questionnaire.name}
           </Typography>
-          <Typography
-            className={classes.status}
-            color="textSecondary"
-            variant="body2"
-            component="p"
-          >
-            {renderStatus(questionnaire.status)}
-          </Typography>
+          {renderStatus(questionnaire.status)}
         </CardContent>
         <CardActions className={classes.actions}>
           {questionnaire.status === QuestionnaireStatus.PUBLISHED ? (

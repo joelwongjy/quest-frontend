@@ -45,7 +45,7 @@ const QuestionnaireCardGhost: React.FunctionComponent = () => {
             <Skeleton />
           </Typography>
           <Typography
-            className={classes.status}
+            className={classes.statusDraft}
             color="textSecondary"
             variant="body2"
             component="p"
