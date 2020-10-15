@@ -24,7 +24,7 @@ export interface QuestionnaireListData extends DiscardableData {
   status: QuestionnaireStatus;
 }
 
-export interface OptionData extends DiscardableData {
+export interface OptionData {
   optionText: string;
 }
 
