@@ -1,6 +1,6 @@
 import React from 'react';
 import { DateTimePicker } from '@material-ui/pickers';
-import { TextField } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, TextField } from '@material-ui/core';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
@@ -12,6 +12,14 @@ export interface QuestDateTimePickerProps extends QuestComponentProps {
   label: string;
 }
 
+const InputMuiTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#044682',
+    },
+  },
+});
+
 const QuestDateTimePicker: React.FC<QuestDateTimePickerProps> = ({
   date,
   callback,
@@ -22,14 +30,16 @@ const QuestDateTimePicker: React.FC<QuestDateTimePickerProps> = ({
   const classes = useStyles();
 
   return (
-    <DateTimePicker
-      className={`${classes.root} ${className}`}
-      renderInput={(p) => <TextField {...p} />}
-      value={date}
-      onChange={(newDate) => callback(newDate!)}
-      label={label}
-      {...props}
-    />
+    <MuiThemeProvider theme={InputMuiTheme}>
+      <DateTimePicker
+        className={`${classes.root} ${className}`}
+        renderInput={(p) => <TextField {...p} />}
+        value={date}
+        onChange={(newDate) => callback(newDate!)}
+        label={label}
+        {...props}
+      />
+    </MuiThemeProvider>
   );
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
-  Divider,
   Drawer,
   Hidden,
   List,
@@ -35,7 +34,6 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
   const drawer = (
     <>
       <div className={classes.toolbar} />
-      <Divider />
       <List>
         <ListItem
           button
@@ -46,7 +44,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           className={classes.listItem}
         >
           <ListItemIcon>
-            <HomeIcon />
+            <HomeIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
@@ -59,7 +57,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           className={classes.listItem}
         >
           <ListItemIcon>
-            <QuestionIcon />
+            <QuestionIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Questionnaires" />
         </ListItem>
@@ -72,7 +70,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           className={classes.listItem}
         >
           <ListItemIcon>
-            <StarIcon />
+            <StarIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Programmes" />
         </ListItem>
@@ -85,7 +83,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           className={classes.listItem}
         >
           <ListItemIcon>
-            <PersonIcon />
+            <PersonIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Students" />
         </ListItem>

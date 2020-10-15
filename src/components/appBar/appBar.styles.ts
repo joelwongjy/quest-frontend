@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { drawerWidth } from 'constants/components';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -9,6 +10,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderBottomStyle: 'solid',
       borderBottomWidth: '1px',
       borderBottomColor: theme.palette.divider,
+    },
+    appBarShorten: {
+      [theme.breakpoints.up('md')]: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+      },
     },
     menuButton: {
       [theme.breakpoints.up('md')]: {
@@ -23,12 +30,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'stretch',
     },
     logo: {
-      display: 'none',
       height: theme.spacing(8),
       padding: theme.spacing(0, 1, 0, 0),
-      [theme.breakpoints.up('md')]: {
-        display: 'block',
-      },
     },
     title: {
       ...theme.custom.fontFamily.metropolis!,
@@ -46,6 +49,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(90),
         marginLeft: theme.spacing(9),
       },
+    },
+    account: {
+      marginLeft: theme.spacing(1),
+      fontWeight: 'bold',
+      color: theme.custom.icon.iconColor,
     },
   })
 );

@@ -21,7 +21,8 @@ const QuestBreadcrumbs: React.FunctionComponent<QuestBreadcrumbsProps> = ({
   return (
     <Breadcrumbs
       aria-label="breadcrumb"
-      className={`${classes.root} ${className}`}
+      className={`${classes.root} ${className} ${classes.bold}`}
+      separator="›"
       {...props}
     >
       {breadcrumbs.slice(0, breadcrumbs.length - 1).map((bc) => (
@@ -34,7 +35,7 @@ const QuestBreadcrumbs: React.FunctionComponent<QuestBreadcrumbsProps> = ({
           {bc.text}
         </Link>
       ))}
-      <Typography color="textPrimary">
+      <Typography color="textPrimary" className={classes.bold}>
         {breadcrumbs[breadcrumbs.length - 1].text}
       </Typography>
     </Breadcrumbs>

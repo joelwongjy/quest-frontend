@@ -5,6 +5,7 @@ import {
   IconButton,
   Typography,
   useScrollTrigger,
+  Button,
 } from '@material-ui/core';
 import {
   AccountCircleOutlined as AccountsIcon,
@@ -21,14 +22,6 @@ const LogoContainer: React.FunctionComponent = () => {
   return (
     <div className={classes.logoContainer}>
       <img className={classes.logo} src={logo} alt="logo" />
-      <Typography
-        color="textSecondary"
-        className={classes.title}
-        variant="h6"
-        noWrap
-      >
-        Quest
-      </Typography>
     </div>
   );
 };
@@ -62,7 +55,7 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
   return (
     <AppBar
       elevation={trigger ? 4 : 0}
-      className={classes.appBar}
+      className={`${classes.appBar} ${hasDrawer ? classes.appBarShorten : ''}`}
       position="fixed"
     >
       <Toolbar>
@@ -82,15 +75,17 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
         </ChildrenContainer>
         <div className={classes.grow} />
         <div>
-          <IconButton
-            edge="end"
+          <Button
             ref={profileMenuRef}
             aria-label="User Profile Picture"
             aria-controls={menuId}
             aria-haspopup="true"
           >
             <AccountsIcon htmlColor={theme!.custom.icon.iconColor} />
-          </IconButton>
+            <Typography variant="body2" className={classes.account}>
+              Account
+            </Typography>
+          </Button>
         </div>
       </Toolbar>
     </AppBar>

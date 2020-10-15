@@ -1,7 +1,11 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      '& .MuiFormLabel-root.MuiInputLabel-root.Mui-focused': {
+        color: theme.palette.secondary.main,
+      },
+    },
   })
 );
