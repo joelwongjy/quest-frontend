@@ -1,43 +1,121 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { isBefore, isAfter } from 'date-fns';
 import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import PaperTabs from 'components/paperTabs';
 import QuestionnaireCard from 'components/questionnaireCard';
+import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import PageHeader from 'components/pageHeader';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
+import ApiService from 'services/apiService';
+import { RouteState } from 'interfaces/routes/common';
+import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 
+interface QuestionnairesState extends RouteState {
+  questionnaires: QuestionnaireListData[];
+}
+
 const Questionnaires: React.FunctionComponent = () => {
+  const [state, setState] = useReducer(
+    (s: QuestionnairesState, a: Partial<QuestionnairesState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      questionnaires,
+      isLoading: true,
+      isError: false,
+    }
+  );
+  const dispatch = useDispatch();
   const history = useHistory();
   const [tabValue, setTabValue] = useState<number>(0);
   const classes = useStyles();
 
+  useEffect(() => {
+    let didCancel = false;
+
+    const fetchData = async () => {
+      try {
+        const response = await ApiService.get('questionnaires');
+        if (!didCancel) {
+          setState({ questionnaires: response.data, isLoading: false });
+          // dispatch(updateSecurities(securitiesResponse.data));
+        }
+      } catch (error) {
+        if (!didCancel) {
+          setState({ isError: true, isLoading: false });
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      didCancel = true;
+    };
+  }, [dispatch]);
+
   const breadcrumbs = [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
   const tabs = ['Current', 'Upcoming', 'Past'];
+
+  if (state.isLoading) {
+    return (
+      <PageContainer>
+        <PageHeader
+          breadcrumbs={breadcrumbs}
+          action={
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`${QUESTIONNAIRES}${CREATE}`}
+            >
+              Create New
+            </Button>
+          }
+        />
+        <PaperTabs value={tabValue} setValue={setTabValue} labels={tabs} />
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} lg={4}>
+            <QuestionnaireCardGhost />
+          </Grid>
+          <Grid item xs={12} sm={6} lg={4}>
+            <QuestionnaireCardGhost />
+          </Grid>
+          <Grid item xs={12} sm={6} lg={4}>
+            <QuestionnaireCardGhost />
+          </Grid>
+        </Grid>
+      </PageContainer>
+    );
+  }
 
   const now = new Date();
   let renderedQuestionnaires;
   switch (tabValue) {
     case 1:
-      renderedQuestionnaires = questionnaires.filter((q) =>
-        isAfter(q.startDate, now)
+      renderedQuestionnaires = state.questionnaires.filter((q) =>
+        isAfter(q.startAt, now)
       );
       break;
     case 2:
-      renderedQuestionnaires = questionnaires.filter((q) =>
-        isBefore(q.endDate, now)
+      renderedQuestionnaires = state.questionnaires.filter((q) =>
+        isBefore(q.endAt, now)
       );
       break;
     case 0:
     default:
-      renderedQuestionnaires = questionnaires.filter(
-        (q) => isBefore(q.startDate, now) && isAfter(q.endDate, now)
+      renderedQuestionnaires = state.questionnaires.filter(
+        (q) => isBefore(q.startAt, now) && isAfter(q.endAt, now)
       );
       break;
   }
