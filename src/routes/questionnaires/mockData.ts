@@ -1,6 +1,6 @@
 import { subDays, addDays } from 'date-fns';
 
-import { QuestStudent } from 'interfaces/models/admin';
+import { Student } from 'interfaces/models/students';
 import {
   QuestionnaireListData,
   QuestionnaireStatus,
@@ -68,14 +68,26 @@ export const questionnaires: QuestionnaireListData[] = [
   },
 ];
 
-export const students: QuestStudent[] = [
+export const students: Student[] = [
   {
     id: 0,
-    name: 'Hanming',
+    name: 'Nick Fury',
   },
   {
     id: 1,
-    name: 'Wang Luo',
+    name: 'Steve Rogers',
+  },
+  {
+    id: 2,
+    name: 'Natasha Romanoff',
+  },
+  {
+    id: 3,
+    name: 'Stephen Strange',
+  },
+  {
+    id: 4,
+    name: 'Tony Stark',
   },
 ];
 
@@ -89,6 +101,11 @@ export const programmes: ProgrammeListData[] = [
     ...mockBaseData,
     id: 2,
     name: 'Memory Management',
+  },
+  {
+    ...mockBaseData,
+    id: 3,
+    name: 'Process Management',
   },
 ];
 
