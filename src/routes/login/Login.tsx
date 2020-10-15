@@ -15,25 +15,25 @@ const Login: React.FunctionComponent = () => {
   const classes = useStyles();
   const { login } = useAuth();
 
-  const [loginUsername, setLoginUsername] = useState<string>('');
-  const [loginPassword, setLoginPassword] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const [isError, setIsError] = useState<boolean>(false);
-  const [loginErrMsg, setLoginErrMsg] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const clearError = () => {
     setIsError(false);
-    setLoginErrMsg('');
+    setErrorMessage('');
   };
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     clearError();
     try {
-      await login(loginUsername, loginPassword);
+      await login({ username, password });
     } catch (error) {
       setIsError(true);
-      setLoginErrMsg(error.message);
+      setErrorMessage(error.message);
     }
   };
 
@@ -57,10 +57,10 @@ const Login: React.FunctionComponent = () => {
                 name="username"
                 autoComplete="on"
                 autoFocus
-                value={loginUsername}
+                value={username}
                 onChange={(e) => {
                   clearError();
-                  setLoginUsername(e.target.value);
+                  setUsername(e.target.value);
                 }}
               />
               <Input
@@ -70,10 +70,10 @@ const Login: React.FunctionComponent = () => {
                 type="password"
                 id="password"
                 autoComplete="on"
-                value={loginPassword}
+                value={password}
                 onChange={(e) => {
                   clearError();
-                  setLoginPassword(e.target.value);
+                  setPassword(e.target.value);
                 }}
               />
               {/* <FormControlLabel
@@ -99,7 +99,7 @@ const Login: React.FunctionComponent = () => {
                 height: '2rem',
               }}
             >
-              {loginErrMsg}
+              {errorMessage}
             </div>
           </div>
         </Grid>

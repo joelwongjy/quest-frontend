@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import LoginData from 'interfaces/api/login';
+import LoginData from 'interfaces/api/auth';
 
 export const ACCESS_TOKEN_KEY = 'accessToken';
 

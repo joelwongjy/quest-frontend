@@ -2,7 +2,8 @@ import store from 'app/store';
 import TokenUtils from 'utils/tokenUtils';
 import { setUser, clearUser } from 'reducers/miscDux';
 import ApiService from 'services/apiService';
-import User from 'interfaces/models/users';
+import { UserData } from 'interfaces/models/users';
+import { UserPostData } from 'interfaces/api/auth';
 import { GENERAL_ERROR } from 'constants/messages';
 
 const logout = (): Promise<void> => {
@@ -11,16 +12,8 @@ const logout = (): Promise<void> => {
   return Promise.resolve();
 };
 
-const signup = async (
-  username: string,
-  password: string,
-  name: string
-): Promise<null> => {
-  const response = await ApiService.post('users', {
-    username,
-    password,
-    name,
-  }).catch((error) => {
+const signup = async (data: UserPostData): Promise<null> => {
+  const response = await ApiService.post('users', data).catch((error) => {
     return Promise.reject(
       new Error(error.response?.data?.error ?? GENERAL_ERROR)
     );
@@ -28,11 +21,8 @@ const signup = async (
   return TokenUtils.storeToken(response);
 };
 
-const login = async (username: string, password: string): Promise<null> => {
-  const response = await ApiService.post('auth/login', {
-    username,
-    password,
-  }).catch((error) => {
+const login = async (data: UserPostData): Promise<null> => {
+  const response = await ApiService.post('auth/login', data).catch((error) => {
     return Promise.reject(
       new Error(error.response?.data?.error ?? GENERAL_ERROR)
     );
@@ -40,7 +30,7 @@ const login = async (username: string, password: string): Promise<null> => {
   return TokenUtils.storeToken(response);
 };
 
-const getUser = async (): Promise<User | null> => {
+const getUser = async (): Promise<UserData | null> => {
   const token = TokenUtils.getToken();
   if (!token) {
     return Promise.resolve(null);

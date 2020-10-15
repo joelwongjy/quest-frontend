@@ -1,20 +1,20 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import User from 'interfaces/models/users';
+import { UserData } from 'interfaces/models/users';
 
-export interface IMiscDux {
-  user?: User;
+export interface MiscDux {
+  user?: UserData;
   lastRetrieved?: number;
 }
 
-const initialState: IMiscDux = {};
+const initialState: MiscDux = {};
 
 // Contains user information, theme, view selected and fun fact of the day
 const misc = createSlice({
   name: 'misc',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>): void => {
+    setUser: (state, action: PayloadAction<UserData>): void => {
       state.user = { ...action.payload };
       state.lastRetrieved = Date.now();
     },

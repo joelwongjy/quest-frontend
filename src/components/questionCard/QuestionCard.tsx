@@ -19,14 +19,14 @@ import {
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { Question } from 'interfaces/models/admin';
+import { QuestionData } from 'interfaces/models/questionnaires';
 import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit';
 import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
 import EditMoodQuestion from 'components/moodQuestion/edit';
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
-  question: Question;
+  question: QuestionData;
   questionIndex: number;
   mode: string;
   handleDelete: () => void;

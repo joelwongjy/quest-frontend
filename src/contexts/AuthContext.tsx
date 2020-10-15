@@ -5,6 +5,7 @@ import { useAsync } from 'react-async';
 import AuthContextInterface from 'interfaces/contexts/authContext';
 import AuthService from 'services/authService';
 import Loading from 'components/loading';
+import { UserPostData } from 'interfaces/api/auth';
 
 const AuthContext = React.createContext<AuthContextInterface | undefined>(
   undefined
@@ -44,19 +45,15 @@ const AuthProvider: React.FunctionComponent = (props) => {
     }
   }
 
-  const signup = (
-    username: string,
-    password: string,
-    name: string
-  ): Promise<void> =>
-    AuthService.signup(username, password, name)
+  const signup = (signupData: UserPostData): Promise<void> =>
+    AuthService.signup(signupData)
       .then(reload)
       .catch((e: Error) => {
         return Promise.reject(new Error(e.message));
       });
 
-  const login = (username: string, password: string): Promise<void> =>
-    AuthService.login(username, password)
+  const login = (loginData: UserPostData): Promise<void> =>
+    AuthService.login(loginData)
       .then(reload)
       .catch((e: Error) => {
         return Promise.reject(new Error(e.message));

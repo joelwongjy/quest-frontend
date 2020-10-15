@@ -1,59 +1,70 @@
 import { subDays, addDays } from 'date-fns';
 
-import { QuestionnaireCardInfo } from 'interfaces/components/questionnaireCard';
-import QuestProgram, {
-  QuestClass,
-  QuestStudent,
-} from 'interfaces/models/admin';
+import { QuestStudent } from 'interfaces/models/admin';
+import {
+  QuestionnaireListData,
+  QuestionnaireStatus,
+} from 'interfaces/models/questionnaires';
+import { ClassListData } from 'interfaces/models/classes';
+import { ProgrammeListData } from 'interfaces/models/programmes';
+import { DiscardableData } from 'interfaces/models/base';
+import { ClassUserRole } from 'interfaces/models/classUsers';
 
-export const questionnaires: QuestionnaireCardInfo[] = [
+const mockBaseData: DiscardableData = {
+  id: 0,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  discardedAt: null,
+};
+
+export const questionnaires: QuestionnaireListData[] = [
   {
-    startDate: subDays(new Date(), 3),
-    endDate: addDays(new Date(), 3),
-    lastEdited: new Date(),
-    name: 'Test Questionnaire',
-    status: 'DRAFT',
+    ...mockBaseData,
     id: 1,
+    startAt: subDays(new Date(), 3),
+    endAt: addDays(new Date(), 3),
+    name: 'Test Questionnaire',
+    status: QuestionnaireStatus.DRAFT,
   },
   {
-    startDate: addDays(new Date(), 2),
-    endDate: addDays(new Date(), 3),
-    lastEdited: new Date(),
-    name: 'Quest Quest Quest',
-    status: 'PUBLISHED',
+    ...mockBaseData,
     id: 2,
+    name: 'Quest Quest Quest',
+    startAt: addDays(new Date(), 2),
+    endAt: addDays(new Date(), 3),
+    status: QuestionnaireStatus.PUBLISHED,
   },
   {
-    startDate: subDays(new Date(), 1),
-    endDate: addDays(new Date(), 15),
-    lastEdited: new Date(),
-    name: 'SUPER LONG NAME TESTEST TEST TESt',
-    status: 'DRAFT',
+    ...mockBaseData,
     id: 3,
+    name: 'SUPER LONG NAME TESTEST TEST TESt',
+    startAt: subDays(new Date(), 1),
+    endAt: addDays(new Date(), 15),
+    status: QuestionnaireStatus.DRAFT,
   },
   {
-    startDate: subDays(new Date(), 10),
-    endDate: subDays(new Date(), 6),
-    lastEdited: new Date(),
-    name: 'Trial Five',
-    status: 'PUBLISHED',
+    ...mockBaseData,
     id: 4,
+    name: 'Trial Five',
+    startAt: subDays(new Date(), 10),
+    endAt: subDays(new Date(), 6),
+    status: QuestionnaireStatus.PUBLISHED,
   },
   {
-    startDate: subDays(new Date(), 10),
-    endDate: addDays(new Date(), 6),
-    lastEdited: new Date(),
-    name: "Don't do this questionnaire!",
-    status: 'DRAFT',
+    ...mockBaseData,
     id: 5,
+    name: "Don't do this questionnaire!",
+    startAt: subDays(new Date(), 10),
+    endAt: addDays(new Date(), 6),
+    status: QuestionnaireStatus.DRAFT,
   },
   {
-    startDate: subDays(new Date(), 3),
-    endDate: addDays(new Date(), 6),
-    lastEdited: new Date(),
-    name: 'Hahaha',
-    status: 'PUBLISHED',
+    ...mockBaseData,
     id: 6,
+    name: 'Hahaha',
+    startAt: subDays(new Date(), 3),
+    endAt: addDays(new Date(), 6),
+    status: QuestionnaireStatus.PUBLISHED,
   },
 ];
 
@@ -68,51 +79,63 @@ export const students: QuestStudent[] = [
   },
 ];
 
-export const classes1: QuestClass[] = [
+export const programmes: ProgrammeListData[] = [
   {
-    id: 0,
-    name: 'Semaphores',
-    students,
-  },
-  {
-    id: 1,
-    name: 'Pipes',
-    students,
-  },
-  {
-    id: 2,
-    name: 'Signals',
-    students,
-  },
-];
-
-export const classes2: QuestClass[] = [
-  {
-    id: 3,
-    name: 'Buddy System',
-    students,
-  },
-  {
-    id: 4,
-    name: 'Fixed Size Partitioning',
-    students,
-  },
-  {
-    id: 5,
-    name: 'Dynamic Partitioning',
-    students,
-  },
-];
-
-export const programs: QuestProgram[] = [
-  {
+    ...mockBaseData,
     id: 1,
     name: 'Synchronisation',
-    classes: classes1,
   },
   {
+    ...mockBaseData,
     id: 2,
     name: 'Memory Management',
-    classes: classes2,
+  },
+];
+
+export const classes1: ClassListData[] = [
+  {
+    ...mockBaseData,
+    id: 1,
+    name: 'Semaphores',
+    role: ClassUserRole.ADMIN,
+    programme: programmes[0],
+  },
+  {
+    ...mockBaseData,
+    id: 2,
+    name: 'Pipes',
+    role: ClassUserRole.ADMIN,
+    programme: programmes[0],
+  },
+  {
+    ...mockBaseData,
+    id: 3,
+    name: 'Signals',
+    role: ClassUserRole.ADMIN,
+    programme: programmes[0],
+  },
+];
+
+export const classes2: ClassListData[] = [
+  {
+    ...mockBaseData,
+    id: 4,
+    name: 'Buddy System',
+    role: ClassUserRole.ADMIN,
+    programme: programmes[0],
+  },
+  {
+    ...mockBaseData,
+    id: 5,
+    name: 'Fixed Size Partitioning',
+    role: ClassUserRole.ADMIN,
+    programme: programmes[0],
+  },
+  {
+    ...mockBaseData,
+    id: 6,
+    name: 'Dynamic Partitioning',
+    role: ClassUserRole.ADMIN,
+    programme: programmes[0],
   },
 ];
