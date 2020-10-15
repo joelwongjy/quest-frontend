@@ -1,6 +1,7 @@
 import React from 'react';
 
-import Program from 'interfaces/models/admin';
+import { ProgrammeListData } from 'interfaces/models/programmes';
+import { ClassListData } from 'interfaces/models/classes';
 
 import {
   FormControl,
@@ -9,25 +10,25 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { useStyles } from './programClassPicker.styles';
+import { useStyles } from './programmeClassPicker.styles';
 
-export interface ProgramClassPickerProps {
-  programs: Program[];
-  selectedQuestProgramId: number;
-  selectedQuestClassId: number;
+export interface ProgrammeClassPickerProps {
+  programmes: ProgrammeListData[];
+  questClasses: ClassListData[];
+  selectedProgrammeId: number;
+  selectedClassId: number;
   programCallback: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  questClassCallback: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  classCallback: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
-const ProgramClassPicker: React.FC<ProgramClassPickerProps> = (
-  props: ProgramClassPickerProps
-) => {
+const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
   const {
-    programs,
-    selectedQuestProgramId,
-    selectedQuestClassId,
+    programmes,
+    questClasses,
+    selectedProgrammeId,
+    selectedClassId,
     programCallback,
-    questClassCallback,
+    classCallback,
   } = props;
   const classes = useStyles();
 
@@ -38,10 +39,10 @@ const ProgramClassPicker: React.FC<ProgramClassPickerProps> = (
         <Select
           labelId="program-select-label"
           id="program-select"
-          value={selectedQuestProgramId}
+          value={selectedProgrammeId}
           onChange={programCallback}
         >
-          {programs.map((p) => {
+          {programmes.map((p) => {
             return (
               <MenuItem value={p.id} key={p.id}>
                 {p.name}
@@ -55,12 +56,12 @@ const ProgramClassPicker: React.FC<ProgramClassPickerProps> = (
         <Select
           labelId="program-select-label"
           id="program-select"
-          value={selectedQuestClassId}
-          onChange={questClassCallback}
+          value={selectedClassId}
+          onChange={classCallback}
         >
-          {programs
-            .find((p) => p.id === selectedQuestProgramId)
-            ?.classes.map((c) => {
+          {questClasses
+            .filter((c) => c.programme.id === selectedProgrammeId)
+            .map((c) => {
               return (
                 <MenuItem value={c.id} key={c.id}>
                   {c.name}
@@ -73,4 +74,4 @@ const ProgramClassPicker: React.FC<ProgramClassPickerProps> = (
   );
 };
 
-export default ProgramClassPicker;
+export default ProgrammeClassPicker;
