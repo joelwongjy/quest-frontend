@@ -1,4 +1,4 @@
-import { orange, red, grey } from '@material-ui/core/colors';
+import { red, grey } from '@material-ui/core/colors';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import fonts from 'assets/fonts';
 
@@ -29,18 +29,18 @@ const muiTheme = createMuiTheme({
   type: 'light',
   palette: {
     primary: {
-      main: '#FFF',
+      main: '#FFF9E8',
     },
     secondary: {
-      main: orange[500],
-      light: '#fff8e0',
+      main: '#044682',
+      light: '#6ba3d6',
     },
     error: {
       main: red.A400,
     },
     background: {
-      default: '#FFF',
-      paper: '#F1F3F4',
+      default: '#FBFBFA',
+      paper: '#FFF',
     },
   },
   typography: {
@@ -51,7 +51,7 @@ const muiTheme = createMuiTheme({
     },
   },
   shape: {
-    borderRadius: 8,
+    borderRadius: 2,
   },
   zIndex: {
     appBar: 1200,
@@ -88,8 +88,8 @@ const muiTheme = createMuiTheme({
       metropolis: fontFamilyMetropolis,
     },
     icon: {
-      iconColor: '#5f6368',
-      iconBorderColor: '#DDDDDD',
+      iconColor: '#695F5F',
+      iconBorderColor: '#FFF2E5',
       iconHighlight: grey[900],
     },
   },
