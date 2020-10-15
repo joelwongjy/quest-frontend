@@ -30,6 +30,7 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
   postEndDateCallback,
 }) => {
   const [preErrorMessage, setPreErrorMessage] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [postErrorMessage, setPostErrorMessage] = useState<string>('');
 
   const handlePreEndTime = (end: Date) => {
