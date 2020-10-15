@@ -8,5 +8,19 @@ export const useStyles = makeStyles(() =>
       marginRight: 16,
       marginBottom: 8,
     },
+    top: {
+      display: 'flex',
+    },
+    textfield: {
+      flex: 1,
+    },
+    option: {
+      flex: 1,
+      paddingTop: '0.5rem',
+      paddingBottom: '1rem',
+    },
+    button: {
+      color: 'white',
+    },
   })
 );

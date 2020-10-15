@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, IconButton } from '@material-ui/core';
+import { FormGroup, IconButton, TextField } from '@material-ui/core';
 import {
   SentimentVerySatisfied,
   SentimentSatisfiedAlt,
@@ -8,25 +8,41 @@ import {
   SentimentVeryDissatisfied,
 } from '@material-ui/icons/';
 
-import QuestionBuilder from 'components/questionBuilder/QuestionBuilder';
-
-import { QuestComponentProps } from 'interfaces/components/common';
+import { QuestionOrder } from 'interfaces/models/questionnaires';
 
 import { useStyles } from './editMoodQuestion.styles';
 
-// const moods = [
-//   'SentimentVerySatisfied',
-//   'SentimentSatisfiedAlt',
-//   'SentimentSatisfied',
-//   'SentimentDissatisfied',
-//   'SentimentVeryDissatisfied',
-// ];
+interface EditMoodQuestionProps {
+  question: QuestionOrder;
+  updateQuestion: (newQuestion: QuestionOrder) => void;
+  dropdown: React.ReactNode;
+}
 
-const EditMoodQuestion: React.FunctionComponent<QuestComponentProps> = () => {
+const EditMoodQuestion: React.FunctionComponent<EditMoodQuestionProps> = ({
+  question,
+  updateQuestion,
+  dropdown,
+}) => {
   const classes = useStyles();
+
+  const updateText = (newText: string) => {
+    const newQuestion = { ...question, questionText: newText };
+    updateQuestion(newQuestion);
+  };
+
   return (
     <FormGroup className={classes.card}>
-      <QuestionBuilder />
+      <div className={classes.top}>
+        <TextField
+          required
+          className={classes.textfield}
+          label="Question"
+          variant="filled"
+          value={question.questionText}
+          onChange={(e) => updateText(e.target.value)}
+        />
+        {dropdown}
+      </div>
       <div>
         <IconButton aria-label="verydissatisfied">
           <SentimentVeryDissatisfied fontSize="large" />

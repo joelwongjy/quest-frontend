@@ -1,182 +1,139 @@
-import EditMcqQuestion from 'components/mcqQuestion/edit';
-import React, { useRef, useState } from 'react';
-
-import { QuestComponentProps } from 'interfaces/components/common';
+import React, { useState } from 'react';
 import {
-  Button,
-  ButtonGroup,
   Card,
-  ClickAwayListener,
+  createMuiTheme,
+  FormControl,
   Grid,
-  Grow,
   IconButton,
+  InputLabel,
   MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-  Typography,
+  MuiThemeProvider,
+  Select,
 } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { QuestionData } from 'interfaces/models/questionnaires';
+import EditMcqQuestion from 'components/mcqQuestion/edit';
+import { QuestComponentProps } from 'interfaces/components/common';
+import { QuestionOrder, QuestionType } from 'interfaces/models/questionnaires';
 import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit';
 import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
 import EditMoodQuestion from 'components/moodQuestion/edit';
+
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
-  question: QuestionData;
-  questionIndex: number;
+  question: QuestionOrder;
   mode: string;
   handleDelete: () => void;
+  updateQuestion: (newQuestion: QuestionOrder) => void;
 }
+
+const InputMuiTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#044682',
+    },
+  },
+});
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   question,
-  questionIndex,
   mode,
   handleDelete,
+  updateQuestion,
+  className,
 }) => {
   const classes = useStyles();
 
-  const questionTypeOptions = [
-    'Multiple Choice Question',
-    'Short Answer Question',
-    'Long Answer Question',
-    'Mood Question',
-  ];
-
-  const questionTypes = ['MCQ', 'SA', 'LA', 'MQ'];
-
   const [open, setOpen] = useState<boolean>(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [type, setType] = useState<string>('MCQ');
 
-  const handleMenuItemClick = (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number
-  ) => {
-    setSelectedIndex(index);
-    setOpen(false);
-    setType(questionTypes[index]);
-  };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event: React.MouseEvent<Document, MouseEvent>) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-
-    setOpen(false);
-  };
+  const dropdown = (
+    <FormControl className={classes.formControl}>
+      <InputLabel id="demo-controlled-open-select-label">Age</InputLabel>
+      <Select
+        labelId="demo-controlled-open-select-label"
+        id="demo-controlled-open-select"
+        open={open}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        value={question.questionType}
+        onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+          updateQuestion({
+            ...question,
+            questionType: event.target.value as QuestionType,
+          });
+        }}
+      >
+        <MenuItem value={QuestionType.MULTIPLE_CHOICE}>
+          Multiple Choice Question
+        </MenuItem>
+        <MenuItem value={QuestionType.SHORT_ANSWER}>
+          Short Answer Question
+        </MenuItem>
+        <MenuItem value={QuestionType.LONG_ANSWER}>
+          Long Answer Question
+        </MenuItem>
+        <MenuItem value={QuestionType.MOOD}>Mood Question</MenuItem>
+      </Select>
+    </FormControl>
+  );
 
   const renderQuestion = () => {
     if (mode === 'edit' || mode === 'new') {
-      if (type === 'MCQ') {
-        return <EditMcqQuestion />;
+      switch (question.questionType) {
+        case QuestionType.SHORT_ANSWER:
+          return (
+            <EditShortAnswerQuestion
+              dropdown={dropdown}
+              question={question}
+              updateQuestion={updateQuestion}
+            />
+          );
+        case QuestionType.LONG_ANSWER:
+          return (
+            <EditLongAnswerQuestion
+              dropdown={dropdown}
+              question={question}
+              updateQuestion={updateQuestion}
+            />
+          );
+        case QuestionType.MOOD:
+          return (
+            <EditMoodQuestion
+              dropdown={dropdown}
+              question={question}
+              updateQuestion={updateQuestion}
+            />
+          );
+        case QuestionType.MULTIPLE_CHOICE:
+        default:
+          return (
+            <EditMcqQuestion
+              dropdown={dropdown}
+              question={question}
+              updateQuestion={updateQuestion}
+            />
+          );
       }
-      if (type === 'SA') {
-        return <EditShortAnswerQuestion />;
-      }
-      if (type === 'LA') {
-        return <EditLongAnswerQuestion />;
-      }
-      return <EditMoodQuestion />;
     }
     return <></>;
   };
 
   return (
-    <Card>
-      <Grid container justify="space-around">
-        <Grid item xs={7}>
-          <Typography
-            className={classes.order}
-          >{`Question ${questionIndex}:`}</Typography>
-        </Grid>
-        <Grid item xs={4} alignItems="flex-end">
-          <ButtonGroup
-            variant="contained"
-            color="primary"
-            ref={anchorRef}
-            aria-label="split button"
-            className={classes.card}
-          >
-            <Button>{questionTypeOptions[selectedIndex]}</Button>
-            <Button
-              color="primary"
-              size="small"
-              aria-controls={open ? 'split-button-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-label="select merge strategy"
-              aria-haspopup="menu"
-              onClick={handleToggle}
-            >
-              <ArrowDropDownIcon />
-            </Button>
-          </ButtonGroup>
-          <Popper
-            open={open}
-            anchorEl={anchorRef.current}
-            role={undefined}
-            transition
-            disablePortal
-          >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin:
-                    placement === 'bottom' ? 'center top' : 'center bottom',
-                }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList id="split-button-menu">
-                      {questionTypeOptions.map(
-                        (
-                          option: string | number | null | undefined,
-                          index: number
-                        ) => (
-                          <MenuItem
-                            key={option}
-                            selected={index === selectedIndex}
-                            onClick={(
-                              event: React.MouseEvent<HTMLLIElement, MouseEvent>
-                            ) => handleMenuItemClick(event, index)}
-                          >
-                            {option}
-                          </MenuItem>
-                        )
-                      )}
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-        </Grid>
-        <Grid item xs={1} className={classes.bin}>
-          <IconButton
-            aria-label="delete"
-            onClick={handleDelete}
-            style={{ color: 'red' }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Grid>
+    <Card className={className}>
+      <MuiThemeProvider theme={InputMuiTheme}>
+        {renderQuestion()}
+      </MuiThemeProvider>
+      <Grid item xs={1} className={classes.bin} alignItems="flex-end">
+        <IconButton
+          aria-label="delete"
+          onClick={handleDelete}
+          style={{ color: 'red' }}
+        >
+          <DeleteIcon />
+        </IconButton>
       </Grid>
-
-      {renderQuestion()}
     </Card>
   );
 };

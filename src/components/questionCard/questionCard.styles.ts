@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       marginLeft: 16,
@@ -15,6 +15,10 @@ export const useStyles = makeStyles(() =>
     },
     bin: {
       marginTop: 10,
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 225,
     },
   })
 );
