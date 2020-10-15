@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { ClassListData } from 'interfaces/models/classes';
 
 import {
-  FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid,
   InputLabel,
   MenuItem,
   Select,
+  Checkbox,
 } from '@material-ui/core';
+import { FormatListBulletedTwoTone } from '@material-ui/icons';
 import { useStyles } from './programmeClassPicker.styles';
 
 export interface ProgrammeClassPickerProps {
@@ -33,44 +36,32 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
   const classes = useStyles();
 
   return (
-    <Grid container justify="space-around">
-      <FormControl className={classes.formControl}>
-        <InputLabel id="program-select-label">Program</InputLabel>
-        <Select
-          labelId="program-select-label"
-          id="program-select"
-          value={selectedProgrammeId}
-          onChange={programCallback}
-        >
-          {programmes.map((p) => {
-            return (
-              <MenuItem value={p.id} key={p.id}>
-                {p.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="class-select-label">Class</InputLabel>
-        <Select
-          labelId="program-select-label"
-          id="program-select"
-          value={selectedClassId}
-          onChange={classCallback}
-        >
-          {questClasses
-            .filter((c) => c.programme.id === selectedProgrammeId)
-            .map((c) => {
-              return (
-                <MenuItem value={c.id} key={c.id}>
-                  {c.name}
-                </MenuItem>
-              );
-            })}
-        </Select>
-      </FormControl>
-    </Grid>
+    <FormGroup>
+      {programmes.map((p) => {
+        return (
+          <FormGroup key={p.id}>
+            <FormControlLabel
+              value={p.id}
+              control={<Checkbox onChange={programCallback} />}
+              label={p.name}
+            />
+            {questClasses
+              .filter((c) => c.programme.id === p.id)
+              .map((c) => {
+                return (
+                  <FormControlLabel
+                    value={c.id}
+                    key={c.id}
+                    control={<Checkbox onChange={classCallback} />}
+                    label={c.name}
+                    style={{ paddingLeft: '20px' }}
+                  />
+                );
+              })}
+          </FormGroup>
+        );
+      })}
+    </FormGroup>
   );
 };
 
