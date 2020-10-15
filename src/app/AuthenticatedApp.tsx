@@ -23,6 +23,8 @@ import Questionnaires from 'routes/questionnaires';
 import CreateQuestionnaires from 'routes/questionnaires/create';
 import EditQuestionnaire from 'routes/questionnaires/edit';
 import Responses from 'routes/questionnaires/responses';
+import Programme from 'routes/programmes';
+import Studnets from 'routes/students';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
@@ -46,9 +48,9 @@ const AuthenticatedApp: React.FunctionComponent = () => {
           <Route path={`${QUESTIONNAIRES}/:id${RESPONSES}`}>
             <Responses />
           </Route>
-          <Route exact path={PROGRAMMES} component={Home} />
+          <Route exact path={PROGRAMMES} component={Programme} />
           <Route exact path={CLASSES} component={Home} />
-          <Route exact path={STUDENTS} component={Home} />
+          <Route exact path={STUDENTS} component={Studnets} />
           <Route path="/" render={redirectToHome} />
         </Switch>
       </div>

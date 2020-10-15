@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-export interface QuestStudent {
+export interface Student {
   id: number;
   name: string;
 }
