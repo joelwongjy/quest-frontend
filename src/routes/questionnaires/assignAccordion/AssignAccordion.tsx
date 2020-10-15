@@ -6,16 +6,16 @@ import { UserData } from 'interfaces/models/users';
 
 interface AssignAccordionProps {
   user: UserData;
-  programmeId: number;
-  classId: number;
-  programmeCallback: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  classCallback: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  programmeIds: number[];
+  classIds: number[];
+  programmeCallback: (newProgrammes: number[]) => void;
+  classCallback: (newClasses: number[]) => void;
 }
 
 const AssignAccordion: React.FC<AssignAccordionProps> = ({
   user,
-  programmeId,
-  classId,
+  programmeIds,
+  classIds,
   programmeCallback,
   classCallback,
 }) => {
@@ -24,9 +24,9 @@ const AssignAccordion: React.FC<AssignAccordionProps> = ({
       <ProgrammeClassPicker
         programmes={user!.programmes}
         questClasses={user!.classes}
-        selectedProgrammeId={programmeId}
-        selectedClassId={classId}
-        programCallback={programmeCallback}
+        selectedProgrammeIds={programmeIds}
+        selectedClassIds={classIds}
+        programmeCallback={programmeCallback}
         classCallback={classCallback}
       />
     </Accordion>

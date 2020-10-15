@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Grid, Paper } from '@material-ui/core';
-import nextId from 'react-id-generator';
 import { useSelector, useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import Accordion from 'components/accordion';
-import QuestionCard from 'components/questionCard';
-import ShortButton from 'components/shortButton';
 import LongButton from 'components/longButton';
 import { useUser } from 'contexts/UserContext';
 import { RootState } from 'reducers/rootReducer';
@@ -23,11 +19,14 @@ import {
 
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
+import EditAccordion from '../editAccordion';
+import { useStyles } from './createQuestionnaire.styles';
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
   const user = useUser();
-  const [programmeId, setProgrammeId] = useState<number>(1);
-  const [classId, setClassId] = useState<number>(1);
+  const classes = useStyles();
+  const [programmeIds, setProgrammeIds] = useState<number[]>([]);
+  const [classIds, setClassIds] = useState<number[]>([]);
 
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
@@ -38,88 +37,62 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
-    { text: 'Create New', href: `${QUESTIONNAIRES}/${CREATE}` },
+    { text: 'Create', href: `${QUESTIONNAIRES}/${CREATE}` },
   ];
 
-  const programmeCallback = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setProgrammeId(event.target.value as number);
+  const programmeCallback = (newProgrammes: number[]) => {
+    setProgrammeIds(newProgrammes);
   };
 
-  const questClassCallback = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setClassId(event.target.value as number);
+  const questClassCallback = (newClasses: number[]) => {
+    setClassIds(newClasses);
   };
 
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Paper elevation={0} style={{ background: 'white' }}>
-        <DateAccordion
-          type={type}
-          preStartDate={questionWindows[0].startAt}
-          preStartDateCallback={(date: Date) => dispatch(setPreStartTime(date))}
-          preEndDate={questionWindows[0].endAt}
-          preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
-          postStartDate={
-            questionWindows.length > 1 ? questionWindows[1].startAt : undefined
-          }
-          postStartDateCallback={(date: Date) =>
-            dispatch(setPostStartTime(date))
-          }
-          postEndDate={
-            questionWindows.length > 1 ? questionWindows[1].startAt : undefined
-          }
-          postEndDateCallback={(date: Date) => dispatch(setPostEndTime(date))}
-        />
-        <AssignAccordion
-          user={user!}
-          programmeId={programmeId}
-          programmeCallback={programmeCallback}
-          classId={classId}
-          classCallback={questClassCallback}
-        />
-        {/* <Accordion heading="Step 3: Create the shared questions">
-          <Grid container spacing={3}>
-            <Grid item xs={12} alignItems="flex-end">
-              <ShortButton
-                onClick={() => {
-                  const createdSharedQuestionsCopy = createdSharedQuestions.slice();
-                  createdSharedQuestionsCopy.push({
-                    id: nextId(),
-                    questionText: '',
-                    questionType: 'MCQ',
-                    options: [],
-                  });
-                  setCreatedSharedQuestions(createdSharedQuestionsCopy);
-                }}
-              >
-                New Question
-              </ShortButton>
-            </Grid>
-            {createdSharedQuestions.map((q: Question, index: number) => {
-              return (
-                <Grid item xs={12} key={q.id}>
-                  <QuestionCard
-                    question={q}
-                    questionIndex={index + 1}
-                    mode="new"
-                    handleDelete={() => {
-                      let createdSharedQuestionsCopy = createdSharedQuestions.slice();
-                      createdSharedQuestionsCopy = createdSharedQuestionsCopy.filter(
-                        (question) => question.id !== q.id
-                      );
-                      setCreatedSharedQuestions(createdSharedQuestionsCopy);
-                    }}
-                  />
-                </Grid>
-              );
-            })}
+      <div className={classes.paperContainer}>
+        <Paper
+          className={classes.paper}
+          elevation={0}
+          style={{ background: 'white' }}
+        >
+          <DateAccordion
+            type={type}
+            preStartDate={new Date(questionWindows[0].startAt)}
+            preStartDateCallback={(date: Date) =>
+              dispatch(setPreStartTime(date))
+            }
+            preEndDate={new Date(questionWindows[0].endAt)}
+            preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
+            postStartDate={
+              questionWindows.length > 1
+                ? new Date(questionWindows[1].startAt)
+                : undefined
+            }
+            postStartDateCallback={(date: Date) =>
+              dispatch(setPostStartTime(date))
+            }
+            postEndDate={
+              questionWindows.length > 1
+                ? new Date(questionWindows[1].startAt)
+                : undefined
+            }
+            postEndDateCallback={(date: Date) => dispatch(setPostEndTime(date))}
+          />
+          <AssignAccordion
+            user={user!}
+            programmeIds={programmeIds}
+            programmeCallback={programmeCallback}
+            classIds={classIds}
+            classCallback={questClassCallback}
+          />
+          <EditAccordion questionnaire={questionnaire} />
+          <Grid container justify="flex-end">
+            <LongButton>Finish</LongButton>
           </Grid>
-        </Accordion> */}
-
-        <Grid container justify="flex-end">
-          <LongButton>Finish</LongButton>
-        </Grid>
-      </Paper>
+        </Paper>
+      </div>
     </PageContainer>
   );
 };

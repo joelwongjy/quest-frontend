@@ -79,11 +79,14 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
               callback={postStartDateCallback!}
               label="Start Date & Time for Post Survey"
             />
-            <DateTimePicker
-              date={postEndDate!}
-              callback={handlePostEndTime}
-              label="End Date & Time for Post Survey"
-            />
+            <div>
+              <DateTimePicker
+                date={postEndDate!}
+                callback={handlePostEndTime}
+                label="End Date & Time for Post Survey"
+              />
+            </div>
+            {postErrorMessage && <div>{postErrorMessage}</div>}
           </Grid>
         </>
       )}

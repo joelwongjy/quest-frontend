@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
-import PaperTabs from 'components/paperTabs';
 import QuestionnaireCard from 'components/questionnaireCard';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import PageHeader from 'components/pageHeader';
@@ -17,6 +16,7 @@ import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
+import QuestionnaireTabs from './questionnaireTabs';
 
 interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
@@ -83,7 +83,30 @@ const Questionnaires: React.FunctionComponent = () => {
             </Button>
           }
         />
-        <PaperTabs value={tabValue} setValue={setTabValue} labels={tabs} />
+        <QuestionnaireTabs
+          value={tabValue}
+          setValue={setTabValue}
+          labels={tabs}
+          buttonRight={
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+            >
+              Create New
+            </Button>
+          }
+          buttonLeft={
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              disabled
+            >
+              Manage Sample Questions
+            </Button>
+          }
+        />
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} lg={4}>
             <QuestionnaireCardGhost />
@@ -136,9 +159,12 @@ const Questionnaires: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <PageHeader
-        breadcrumbs={breadcrumbs}
-        action={
+      <PageHeader breadcrumbs={breadcrumbs} />
+      <QuestionnaireTabs
+        value={tabValue}
+        setValue={setTabValue}
+        labels={tabs}
+        buttonRight={
           <Button
             variant="contained"
             color="secondary"
@@ -146,12 +172,21 @@ const Questionnaires: React.FunctionComponent = () => {
             component={Link}
             to={`${QUESTIONNAIRES}${CREATE}`}
           >
-            Create New
+            Create Questionnaire
+          </Button>
+        }
+        buttonLeft={
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            disabled
+          >
+            Manage Sample Questions
           </Button>
         }
       />
-      <PaperTabs value={tabValue} setValue={setTabValue} labels={tabs} />
-      <Grid container spacing={3}>
+      <Grid container spacing={6}>
         {renderedQuestionnaires.map((q) => {
           const menuOptions = getMenuOptions(q.id);
           return (
