@@ -13,11 +13,11 @@ import SharedEdit from './SharedEdit';
 import UniqueEdit from './UniqueEdit';
 import { useStyles } from './editAccordion.styles';
 
-interface EditAccordion {
+interface EditAccordionProps {
   questionnaire: QuestionnairePostData;
 }
 
-const EditAccordion: React.FC<EditAccordion> = ({ questionnaire }) => {
+const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { type, questionWindows, sharedQuestions } = questionnaire;

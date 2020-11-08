@@ -1,8 +1,6 @@
 import React from 'react';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
-import './Loading.scss';
-
 const Loading: React.FunctionComponent = () => {
   return (
     <Backdrop open color="primary">
