@@ -43,7 +43,7 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
       case QuestionMode.EDIT || QuestionMode.NEW:
         return (
           <div className={classes.top}>
-            <div>
+            <div className={classes.textfieldContainer}>
               <TextField
                 required
                 className={classes.textfield}
@@ -54,20 +54,20 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
               />
               {dropdown}
             </div>
-            <div>
-              <IconButton aria-label="verydissatisfied">
+            <div className={classes.emojiContainer}>
+              <IconButton aria-label="Very Dissatisfied">
                 <SentimentVeryDissatisfied fontSize="large" />
               </IconButton>
-              <IconButton aria-label="dissatisfied">
+              <IconButton aria-label="Sissatisfied">
                 <SentimentDissatisfied fontSize="large" />
               </IconButton>
-              <IconButton aria-label="satisfied">
+              <IconButton aria-label="Neutral">
                 <SentimentSatisfied fontSize="large" />
               </IconButton>
-              <IconButton aria-label="satisfiedalt">
+              <IconButton aria-label="Satisfied">
                 <SentimentSatisfiedAlt fontSize="large" />
               </IconButton>
-              <IconButton aria-label="verysatisfied">
+              <IconButton aria-label="Very Satisfied">
                 <SentimentVerySatisfied fontSize="large" />
               </IconButton>
             </div>
@@ -77,9 +77,9 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <div>
+            <div className={classes.emojiContainer}>
               <IconButton
-                aria-label="verysatisfied"
+                aria-label="Very Dissatisfied"
                 onClick={() => selectMood(0)}
               >
                 <SentimentVeryDissatisfied
@@ -88,7 +88,7 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
                 />
               </IconButton>
               <IconButton
-                aria-label="verysatisfied"
+                aria-label="Dissatisfied"
                 onClick={() => selectMood(1)}
               >
                 <SentimentDissatisfied
@@ -96,26 +96,20 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
                   color={mood === 1 ? 'secondary' : 'inherit'}
                 />
               </IconButton>
-              <IconButton
-                aria-label="verysatisfied"
-                onClick={() => selectMood(2)}
-              >
+              <IconButton aria-label="Neutral" onClick={() => selectMood(2)}>
                 <SentimentSatisfied
                   fontSize="large"
                   color={mood === 2 ? 'secondary' : 'inherit'}
                 />
               </IconButton>
-              <IconButton
-                aria-label="verysatisfied"
-                onClick={() => selectMood(3)}
-              >
+              <IconButton aria-label="Satisfied" onClick={() => selectMood(3)}>
                 <SentimentSatisfiedAlt
                   fontSize="large"
                   color={mood === 3 ? 'secondary' : 'inherit'}
                 />
               </IconButton>
               <IconButton
-                aria-label="verysatisfied"
+                aria-label="Very Satisfied"
                 onClick={() => selectMood(4)}
               >
                 <SentimentVerySatisfied
@@ -127,7 +121,6 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
           </div>
         );
     }
-    return <></>;
   };
 
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
