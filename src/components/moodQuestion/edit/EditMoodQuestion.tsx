@@ -43,7 +43,13 @@ const EditMoodQuestion: React.FunctionComponent<EditMoodQuestionProps> = ({
         />
         {dropdown}
       </div>
-      <div>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-around',
+        }}
+      >
         <IconButton aria-label="verydissatisfied">
           <SentimentVeryDissatisfied fontSize="large" />
         </IconButton>
