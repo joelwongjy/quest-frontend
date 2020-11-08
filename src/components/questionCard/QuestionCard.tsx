@@ -12,18 +12,22 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import EditMcqQuestion from 'components/mcqQuestion/edit';
+import McqQuestion from 'components/mcqQuestion';
 import { QuestComponentProps } from 'interfaces/components/common';
-import { QuestionOrder, QuestionType } from 'interfaces/models/questionnaires';
-import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit';
-import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
-import EditMoodQuestion from 'components/moodQuestion/edit';
+import {
+  QuestionOrder,
+  QuestionType,
+  QuestionMode,
+} from 'interfaces/models/questionnaires';
+import ShortAnswerQuestion from 'components/shortAnswerQuestion';
+import LongAnswerQuestion from 'components/longAnswerQuestion';
+import MoodQuestion from 'components/moodQuestion';
 
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
   question: QuestionOrder;
-  mode: string;
+  mode: QuestionMode;
   handleDelete: () => void;
   updateQuestion: (newQuestion: QuestionOrder) => void;
 }
@@ -80,11 +84,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   );
 
   const renderQuestion = () => {
-    if (mode === 'edit' || mode === 'new') {
+    if (mode === QuestionMode.EDIT || mode === QuestionMode.NEW) {
       switch (question.questionType) {
         case QuestionType.SHORT_ANSWER:
           return (
-            <EditShortAnswerQuestion
+            <ShortAnswerQuestion
+              mode={mode}
               dropdown={dropdown}
               question={question}
               updateQuestion={updateQuestion}
@@ -92,7 +97,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           );
         case QuestionType.LONG_ANSWER:
           return (
-            <EditLongAnswerQuestion
+            <LongAnswerQuestion
+              mode={mode}
               dropdown={dropdown}
               question={question}
               updateQuestion={updateQuestion}
@@ -100,7 +106,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           );
         case QuestionType.MOOD:
           return (
-            <EditMoodQuestion
+            <MoodQuestion
+              mode={mode}
               dropdown={dropdown}
               question={question}
               updateQuestion={updateQuestion}
@@ -109,7 +116,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         case QuestionType.MULTIPLE_CHOICE:
         default:
           return (
-            <EditMcqQuestion
+            <McqQuestion
+              mode={mode}
               dropdown={dropdown}
               question={question}
               updateQuestion={updateQuestion}

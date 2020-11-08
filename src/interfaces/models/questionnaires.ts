@@ -17,6 +17,12 @@ export enum QuestionnaireType {
   PRE_POST = 'PRE POST',
 }
 
+export enum QuestionMode {
+  EDIT = 'EDIT',
+  VIEW = 'VIEW',
+  NEW = 'NEW',
+}
+
 export interface QuestionnaireListData extends DiscardableData {
   name: string;
   startAt: Date;
