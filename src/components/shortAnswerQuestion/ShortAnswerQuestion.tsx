@@ -30,31 +30,28 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
       case QuestionMode.EDIT || QuestionMode.NEW:
         return (
           <div className={classes.top}>
-            <TextField
-              required
-              className={classes.textfield}
-              label="Question"
-              variant="filled"
-              value={question.questionText}
-              onChange={(e) => updateText(e.target.value)}
-            />
-            {dropdown}
-            <TextField
-              disabled
-              id="disabled"
-              defaultValue="Short answer text"
-            />
+            <div className={classes.textfieldContainer}>
+              <TextField
+                required
+                className={classes.textfield}
+                label="Question"
+                variant="filled"
+                value={question.questionText}
+                onChange={(e) => updateText(e.target.value)}
+              />
+              {dropdown}
+            </div>
+            <TextField disabled id="disabled" defaultValue="Short Answer" />
           </div>
         );
       default:
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <TextField placeholder="Short answer text" />
+            <TextField placeholder="Short Answer" />
           </div>
         );
     }
-    return <></>;
   };
 
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
