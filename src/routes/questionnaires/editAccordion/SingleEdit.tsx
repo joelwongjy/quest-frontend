@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
-import { QuestionOrder } from 'interfaces/models/questionnaires';
+import { QuestionMode, QuestionOrder } from 'interfaces/models/questionnaires';
 import {
   addQuestionToPre,
   deleteQuestionInPre,
@@ -30,7 +30,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
           <QuestionCard
             key={`question-${order}-${question.id}`}
             question={q}
-            mode="edit"
+            mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPre(order))}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPre(newQuestion))
