@@ -31,32 +31,33 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
       case QuestionMode.EDIT || QuestionMode.NEW:
         return (
           <div className={classes.top}>
-            <TextField
-              required
-              className={classes.textfield}
-              label="Question"
-              variant="filled"
-              value={question.questionText}
-              onChange={(e) => updateText(e.target.value)}
-            />
+            <div className={classes.textfieldContainer}>
+              <TextField
+                required
+                className={classes.textfield}
+                label="Question"
+                variant="filled"
+                value={question.questionText}
+                onChange={(e) => updateText(e.target.value)}
+              />
+              {dropdown}
+            </div>
             <TextField
               disabled
               id="disabled"
-              defaultValue="Long answer text"
+              defaultValue="Long Answer"
               rows={3}
             />
-            {dropdown}
           </div>
         );
       default:
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <TextField placeholder="Long answer text" />
+            <TextField placeholder="Long Answer" />
           </div>
         );
     }
-    return <></>;
   };
 
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;

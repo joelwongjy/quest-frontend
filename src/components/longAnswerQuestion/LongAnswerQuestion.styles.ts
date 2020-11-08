@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       marginLeft: 16,
@@ -10,9 +10,14 @@ export const useStyles = makeStyles(() =>
     },
     top: {
       display: 'flex',
+      flexDirection: 'column',
     },
     textfield: {
       flex: 1,
+    },
+    textfieldContainer: {
+      display: 'flex',
+      marginBottom: theme.spacing(2),
     },
   })
 );
