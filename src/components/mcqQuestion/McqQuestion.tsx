@@ -68,7 +68,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
       case QuestionMode.EDIT || QuestionMode.NEW:
         return (
           <div className={classes.top}>
-            <div>
+            <div className={classes.textfieldContainer}>
               <TextField
                 required
                 className={classes.textfield}
@@ -129,7 +129,6 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
           </div>
         );
     }
-    return <></>;
   };
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
