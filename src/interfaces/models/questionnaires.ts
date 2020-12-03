@@ -10,6 +10,7 @@ export enum QuestionType {
   MOOD = 'MOOD',
   SHORT_ANSWER = 'SHORT ANSWER',
   LONG_ANSWER = 'LONG ANSWER',
+  SCALE = 'SCALE',
 }
 
 export enum QuestionnaireType {
