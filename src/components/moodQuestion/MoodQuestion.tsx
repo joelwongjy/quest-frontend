@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormGroup, FormLabel, IconButton, TextField } from '@material-ui/core';
+import { FormGroup, IconButton, TextField } from '@material-ui/core';
 import {
   SentimentVerySatisfied,
   SentimentSatisfiedAlt,
@@ -55,29 +55,6 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
               {dropdown}
             </div>
             <div className={classes.emojiContainer}>
-              <IconButton aria-label="Very Dissatisfied">
-                <SentimentVeryDissatisfied fontSize="large" />
-              </IconButton>
-              <IconButton aria-label="Sissatisfied">
-                <SentimentDissatisfied fontSize="large" />
-              </IconButton>
-              <IconButton aria-label="Neutral">
-                <SentimentSatisfied fontSize="large" />
-              </IconButton>
-              <IconButton aria-label="Satisfied">
-                <SentimentSatisfiedAlt fontSize="large" />
-              </IconButton>
-              <IconButton aria-label="Very Satisfied">
-                <SentimentVerySatisfied fontSize="large" />
-              </IconButton>
-            </div>
-          </div>
-        );
-      default:
-        return (
-          <div className={classes.top}>
-            <FormLabel component="legend">{question}</FormLabel>
-            <div className={classes.emojiContainer}>
               <IconButton
                 aria-label="Very Dissatisfied"
                 onClick={() => selectMood(0)}
@@ -116,6 +93,39 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
                   fontSize="large"
                   color={mood === 4 ? 'secondary' : 'inherit'}
                 />
+              </IconButton>
+            </div>
+          </div>
+        );
+      default:
+        return (
+          <div className={classes.top}>
+            <div className={classes.textfieldContainer}>
+              <TextField
+                required
+                className={classes.textfield}
+                label="Question"
+                variant="filled"
+                value={question.questionText}
+                onChange={(e) => updateText(e.target.value)}
+              />
+              {dropdown}
+            </div>
+            <div className={classes.emojiContainer}>
+              <IconButton aria-label="Very Dissatisfied">
+                <SentimentVeryDissatisfied fontSize="large" />
+              </IconButton>
+              <IconButton aria-label="Sissatisfied">
+                <SentimentDissatisfied fontSize="large" />
+              </IconButton>
+              <IconButton aria-label="Neutral">
+                <SentimentSatisfied fontSize="large" />
+              </IconButton>
+              <IconButton aria-label="Satisfied">
+                <SentimentSatisfiedAlt fontSize="large" />
+              </IconButton>
+              <IconButton aria-label="Very Satisfied">
+                <SentimentVerySatisfied fontSize="large" />
               </IconButton>
             </div>
           </div>
