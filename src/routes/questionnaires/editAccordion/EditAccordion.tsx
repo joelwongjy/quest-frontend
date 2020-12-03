@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  Grid,
-  Paper,
-  Switch,
-  Tab,
-  Tabs,
-  Typography,
-} from '@material-ui/core';
+import { Grid, Tab, Tabs, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import Accordion from 'components/accordion';
@@ -15,7 +7,7 @@ import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import Input from 'components/input';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 
-import { addQuestionToPre, setTitle, setType } from 'reducers/questionnaireDux';
+import { setTitle, setType } from 'reducers/questionnaireDux';
 import SingleEdit from './SingleEdit';
 import SharedEdit from './SharedEdit';
 import UniqueEdit from './UniqueEdit';
@@ -29,8 +21,10 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { type, questionWindows, sharedQuestions } = questionnaire;
-  const [tabValue, setTabValue] = useState<number>(0);
-  const [pre, isPre] = useState<boolean>(true);
+  const [tabValue, setTabValue] = useState<number>(
+    type === QuestionnaireType.ONE_TIME ? 0 : 1
+  );
+  const [isPre, setIsPre] = useState<boolean>(true);
 
   const updateTitle = (newTitle: string) => {
     dispatch(setTitle(newTitle));
@@ -80,7 +74,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
             <Grid item xs={12}>
               <SharedEdit questionSet={sharedQuestions.questions} />
             </Grid>
-            {pre ? (
+            {isPre ? (
               <Typography variant="h6" className={classes.typography}>
                 Pre-Program Questions
               </Typography>
