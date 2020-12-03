@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Grid, Paper, Switch, Tab, Tabs } from '@material-ui/core';
+import {
+  Card,
+  Grid,
+  Paper,
+  Switch,
+  Tab,
+  Tabs,
+  Typography,
+} from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import Accordion from 'components/accordion';
@@ -7,7 +15,7 @@ import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import Input from 'components/input';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 
-import { setTitle, setType } from 'reducers/questionnaireDux';
+import { addQuestionToPre, setTitle, setType } from 'reducers/questionnaireDux';
 import SingleEdit from './SingleEdit';
 import SharedEdit from './SharedEdit';
 import UniqueEdit from './UniqueEdit';
@@ -21,7 +29,8 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { type, questionWindows, sharedQuestions } = questionnaire;
-  const [tabValue, setTabValue] = useState<number>(1);
+  const [tabValue, setTabValue] = useState<number>(0);
+  const [pre, isPre] = useState<boolean>(true);
 
   const updateTitle = (newTitle: string) => {
     dispatch(setTitle(newTitle));
@@ -62,14 +71,30 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
           />
         </div>
         {type === QuestionnaireType.ONE_TIME ? (
-          <SingleEdit questionSet={questionWindows[0].questions} />
+          <SingleEdit questionSet={sharedQuestions.questions} />
         ) : (
           <>
-            <SharedEdit questionSet={sharedQuestions.questions} />
-            <UniqueEdit
-              preQuestionSet={questionWindows[0].questions}
-              postQuestionSet={questionWindows[1].questions}
-            />
+            <Typography variant="h6" className={classes.typography}>
+              Shared Questions
+            </Typography>
+            <Grid item xs={12}>
+              <SharedEdit questionSet={sharedQuestions.questions} />
+            </Grid>
+            {pre ? (
+              <Typography variant="h6" className={classes.typography}>
+                Pre-Program Questions
+              </Typography>
+            ) : (
+              <Typography variant="h6" className={classes.typography}>
+                Post-Program Questions
+              </Typography>
+            )}
+            <Grid item xs={12}>
+              <UniqueEdit
+                preQuestionSet={questionWindows[0].questions}
+                postQuestionSet={questionWindows[1].questions}
+              />
+            </Grid>
           </>
         )}
       </Grid>

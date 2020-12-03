@@ -54,7 +54,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
   const dropdown = (
     <FormControl className={classes.formControl}>
-      <InputLabel id="demo-controlled-open-select-label">Age</InputLabel>
+      <InputLabel id="demo-controlled-open-select-label">
+        Question Type
+      </InputLabel>
       <Select
         labelId="demo-controlled-open-select-label"
         id="demo-controlled-open-select"

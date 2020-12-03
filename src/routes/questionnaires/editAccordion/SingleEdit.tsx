@@ -5,9 +5,9 @@ import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
 import { QuestionMode, QuestionOrder } from 'interfaces/models/questionnaires';
 import {
-  addQuestionToPre,
-  deleteQuestionInPre,
-  updateQuestionInPre,
+  addQuestionToShared,
+  deleteQuestionInShared,
+  updateQuestionInShared,
 } from 'reducers/questionnaireDux';
 
 import { useStyles } from './editAccordion.styles';
@@ -31,9 +31,9 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInPre(order))}
+            handleDelete={() => dispatch(deleteQuestionInShared(order))}
             updateQuestion={(newQuestion: QuestionOrder) =>
-              dispatch(updateQuestionInPre(newQuestion))
+              dispatch(updateQuestionInShared(newQuestion))
             }
             className={classes.card}
           />
@@ -41,7 +41,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
       })}
       <Card
         className={classes.addCard}
-        onClick={() => dispatch(addQuestionToPre())}
+        onClick={() => dispatch(addQuestionToShared())}
       >
         Add a question
       </Card>
