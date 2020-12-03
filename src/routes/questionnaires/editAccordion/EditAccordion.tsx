@@ -1,5 +1,5 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Grid, Paper, Switch, Tab, Tabs } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import Accordion from 'components/accordion';
@@ -7,7 +7,7 @@ import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import Input from 'components/input';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 
-import { setTitle } from 'reducers/questionnaireDux';
+import { setTitle, setType } from 'reducers/questionnaireDux';
 import SingleEdit from './SingleEdit';
 import SharedEdit from './SharedEdit';
 import UniqueEdit from './UniqueEdit';
@@ -21,6 +21,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { type, questionWindows, sharedQuestions } = questionnaire;
+  const [tabValue, setTabValue] = useState<number>(1);
 
   const updateTitle = (newTitle: string) => {
     dispatch(setTitle(newTitle));
@@ -29,6 +30,28 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   return (
     <Accordion heading="Step 3: Create the questionnaire">
       <Grid container>
+        <div className={classes.tab}>
+          <Tabs
+            value={tabValue}
+            onChange={(
+              // eslint-disable-next-line @typescript-eslint/ban-types
+              event: React.ChangeEvent<{}>,
+              newTabValue: number
+            ) => {
+              setTabValue(newTabValue);
+              dispatch(
+                setType(
+                  newTabValue === 0
+                    ? QuestionnaireType.ONE_TIME
+                    : QuestionnaireType.PRE_POST
+                )
+              );
+            }}
+          >
+            <Tab label="One Time" />
+            <Tab label="Before After" />
+          </Tabs>
+        </div>
         <div className={classes.inputContainer}>
           <Input
             className={classes.input}

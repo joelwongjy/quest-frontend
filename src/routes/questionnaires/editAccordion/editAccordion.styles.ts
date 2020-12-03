@@ -5,6 +5,13 @@ export const useStyles = makeStyles((theme) =>
     root: {
       flex: 1,
     },
+    tab: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: '10px',
+    },
     input: {
       '& input': {
         textAlign: 'center',
