@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
-  QuestionAssessibility,
+  QuestionAccessibility,
   QuestionMode,
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
@@ -41,21 +41,21 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPre(newQuestion))
             }
-            assessibility={QuestionAssessibility.POST}
-            updateAssessibility={(assessibility: QuestionAssessibility) => {
-              switch (assessibility) {
-                case QuestionAssessibility.PRE:
+            accessibility={QuestionAccessibility.POST}
+            updateAccessibility={(accessibility: QuestionAccessibility) => {
+              switch (accessibility) {
+                case QuestionAccessibility.PRE:
                   dispatch(transferQuestionToPre(q));
                   dispatch(deleteQuestionInPost(q.order));
                   break;
-                case QuestionAssessibility.SHARED:
+                case QuestionAccessibility.SHARED:
                   dispatch(transferQuestionToShared(q));
                   dispatch(deleteQuestionInPost(q.order));
                   break;
                 default:
               }
             }}
-            assessibilityEnabled
+            accessibilityEnabled
             className={classes.postCard}
           />
         );

@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
-  QuestionAssessibility,
+  QuestionAccessibility,
   QuestionMode,
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
@@ -39,21 +39,21 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPre(newQuestion))
             }
-            assessibility={QuestionAssessibility.PRE}
-            updateAssessibility={(assessibility: QuestionAssessibility) => {
-              switch (assessibility) {
-                case QuestionAssessibility.POST:
+            accessibility={QuestionAccessibility.PRE}
+            updateAccessibility={(accessibility: QuestionAccessibility) => {
+              switch (accessibility) {
+                case QuestionAccessibility.POST:
                   dispatch(transferQuestionToPost(q));
                   dispatch(deleteQuestionInPre(q.order));
                   break;
-                case QuestionAssessibility.SHARED:
+                case QuestionAccessibility.SHARED:
                   dispatch(transferQuestionToShared(q));
                   dispatch(deleteQuestionInPre(q.order));
                   break;
                 default:
               }
             }}
-            assessibilityEnabled
+            accessibilityEnabled
             className={classes.preCard}
           />
         );

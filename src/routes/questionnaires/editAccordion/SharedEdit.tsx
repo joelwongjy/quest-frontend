@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
-  QuestionAssessibility,
+  QuestionAccessibility,
   QuestionMode,
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
@@ -41,21 +41,21 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInShared(newQuestion))
             }
-            assessibility={QuestionAssessibility.SHARED}
-            updateAssessibility={(assessibility: QuestionAssessibility) => {
-              switch (assessibility) {
-                case QuestionAssessibility.PRE:
+            accessibility={QuestionAccessibility.SHARED}
+            updateAccessibility={(accessibility: QuestionAccessibility) => {
+              switch (accessibility) {
+                case QuestionAccessibility.PRE:
                   dispatch(transferQuestionToPre(q));
                   dispatch(deleteQuestionInShared(q.order));
                   break;
-                case QuestionAssessibility.POST:
+                case QuestionAccessibility.POST:
                   dispatch(transferQuestionToPost(q));
                   dispatch(deleteQuestionInShared(q.order));
                   break;
                 default:
               }
             }}
-            assessibilityEnabled
+            accessibilityEnabled
             className={classes.card}
           />
         );

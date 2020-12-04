@@ -18,7 +18,7 @@ import {
   QuestionOrder,
   QuestionType,
   QuestionMode,
-  QuestionAssessibility,
+  QuestionAccessibility,
 } from 'interfaces/models/questionnaires';
 import ShortAnswerQuestion from 'components/shortAnswerQuestion';
 import LongAnswerQuestion from 'components/longAnswerQuestion';
@@ -31,9 +31,9 @@ interface QuestionCardProps extends QuestComponentProps {
   mode: QuestionMode;
   handleDelete: () => void;
   updateQuestion: (newQuestion: QuestionOrder) => void;
-  assessibility: QuestionAssessibility;
-  updateAssessibility: (newAssessibility: QuestionAssessibility) => void;
-  assessibilityEnabled: boolean;
+  accessibility: QuestionAccessibility;
+  updateAccessibility: (newAccessibility: QuestionAccessibility) => void;
+  accessibilityEnabled: boolean;
 }
 
 const InputMuiTheme = createMuiTheme({
@@ -44,14 +44,14 @@ const InputMuiTheme = createMuiTheme({
   },
 });
 
-const assessibilityOptions = ['Shared', 'Pre-Program', 'Post-Program'];
-const mapAssessibilityToIndex = (assessibility: QuestionAssessibility) => {
-  switch (assessibility) {
-    case QuestionAssessibility.PRE:
+const accessibilityOptions = ['Shared', 'Pre-Program', 'Post-Program'];
+const mapAccessibilityToIndex = (accessibility: QuestionAccessibility) => {
+  switch (accessibility) {
+    case QuestionAccessibility.PRE:
       return 1;
-    case QuestionAssessibility.POST:
+    case QuestionAccessibility.POST:
       return 2;
-    case QuestionAssessibility.SHARED:
+    case QuestionAccessibility.SHARED:
     default:
       return 0;
   }
@@ -63,30 +63,30 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   mode,
   handleDelete,
   updateQuestion,
-  assessibility,
-  updateAssessibility,
-  assessibilityEnabled,
+  accessibility,
+  updateAccessibility,
+  accessibilityEnabled,
   className,
 }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(
-    mapAssessibilityToIndex(assessibility)
+    mapAccessibilityToIndex(accessibility)
   );
-  const handleUpdateAssessibility = (
+  const handleUpdateAccessibility = (
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
     setSelectedIndex(event.target.value as number);
     switch (event.target.value as number) {
       case 0:
-        updateAssessibility(QuestionAssessibility.SHARED);
+        updateAccessibility(QuestionAccessibility.SHARED);
         break;
       case 1:
-        updateAssessibility(QuestionAssessibility.PRE);
+        updateAccessibility(QuestionAccessibility.PRE);
         break;
       case 2:
-        updateAssessibility(QuestionAssessibility.POST);
+        updateAccessibility(QuestionAccessibility.POST);
         break;
       default:
     }
@@ -184,16 +184,16 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         >
           <DeleteIcon />
         </IconButton>
-        {assessibilityEnabled && (
+        {accessibilityEnabled && (
           <FormControl variant="outlined" size="small">
             <Select
-              id={`assessibility-select-${assessibility}`}
+              id={`accessibility-select-${accessibility}`}
               value={selectedIndex}
-              onChange={handleUpdateAssessibility}
+              onChange={handleUpdateAccessibility}
             >
-              <MenuItem value={0}>{assessibilityOptions[0]}</MenuItem>
-              <MenuItem value={1}>{assessibilityOptions[1]}</MenuItem>
-              <MenuItem value={2}>{assessibilityOptions[2]}</MenuItem>
+              <MenuItem value={0}>{accessibilityOptions[0]}</MenuItem>
+              <MenuItem value={1}>{accessibilityOptions[1]}</MenuItem>
+              <MenuItem value={2}>{accessibilityOptions[2]}</MenuItem>
             </Select>
           </FormControl>
         )}

@@ -12,7 +12,7 @@ export enum QuestionType {
   LONG_ANSWER = 'LONG ANSWER',
 }
 
-export enum QuestionAssessibility {
+export enum QuestionAccessibility {
   SHARED = 'SHARED',
   PRE = 'PRE',
   POST = 'POST',
