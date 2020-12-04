@@ -108,6 +108,54 @@ const questionnaire = createSlice({
         discardedAt: null,
       });
     },
+    transferQuestionToPre: (
+      state,
+      action: PayloadAction<QuestionOrder>
+    ): void => {
+      const { length } = state.questionWindows[0].questions;
+      state.questionWindows[0].questions.push({
+        order: length,
+        questionText: action.payload.questionText,
+        questionType: action.payload.questionType,
+        options: action.payload.options,
+        id: length,
+        createdAt: action.payload.createdAt,
+        updatedAt: new Date(),
+        discardedAt: null,
+      });
+    },
+    transferQuestionToPost: (
+      state,
+      action: PayloadAction<QuestionOrder>
+    ): void => {
+      const { length } = state.questionWindows[1].questions;
+      state.questionWindows[1].questions.push({
+        order: length,
+        questionText: action.payload.questionText,
+        questionType: action.payload.questionType,
+        options: action.payload.options,
+        id: length,
+        createdAt: action.payload.createdAt,
+        updatedAt: new Date(),
+        discardedAt: null,
+      });
+    },
+    transferQuestionToShared: (
+      state,
+      action: PayloadAction<QuestionOrder>
+    ): void => {
+      const { length } = state.sharedQuestions.questions;
+      state.sharedQuestions.questions.push({
+        order: length,
+        questionText: action.payload.questionText,
+        questionType: action.payload.questionType,
+        options: action.payload.options,
+        id: length,
+        createdAt: action.payload.createdAt,
+        updatedAt: new Date(),
+        discardedAt: null,
+      });
+    },
     updateQuestionInPre: (
       state,
       action: PayloadAction<QuestionOrder>
@@ -253,6 +301,9 @@ export const {
   addQuestionToPre,
   addQuestionToPost,
   addQuestionToShared,
+  transferQuestionToPre,
+  transferQuestionToPost,
+  transferQuestionToShared,
   updateQuestionInPre,
   updateQuestionInPost,
   updateQuestionInShared,

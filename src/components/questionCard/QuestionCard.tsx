@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {
+  Button,
+  ButtonGroup,
   Card,
   createMuiTheme,
   FormControl,
@@ -18,6 +20,7 @@ import {
   QuestionOrder,
   QuestionType,
   QuestionMode,
+  QuestionAssessibility,
 } from 'interfaces/models/questionnaires';
 import ShortAnswerQuestion from 'components/shortAnswerQuestion';
 import LongAnswerQuestion from 'components/longAnswerQuestion';
@@ -30,6 +33,8 @@ interface QuestionCardProps extends QuestComponentProps {
   mode: QuestionMode;
   handleDelete: () => void;
   updateQuestion: (newQuestion: QuestionOrder) => void;
+  assessibility: QuestionAssessibility;
+  updateAssessibility: (newAssessibility: QuestionAssessibility) => void;
 }
 
 const InputMuiTheme = createMuiTheme({
@@ -40,17 +45,52 @@ const InputMuiTheme = createMuiTheme({
   },
 });
 
+const assessibilityOptions = ['Shared', 'Pre-Program', 'Post-Program'];
+const mapAssessibilityToIndex = (assessibility: QuestionAssessibility) => {
+  switch (assessibility) {
+    case QuestionAssessibility.PRE:
+      return 1;
+    case QuestionAssessibility.POST:
+      return 2;
+    case QuestionAssessibility.SHARED:
+    default:
+      return 0;
+  }
+};
+
 const QuestionCard: React.FC<QuestionCardProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   question,
   mode,
   handleDelete,
   updateQuestion,
+  assessibility,
+  updateAssessibility,
   className,
 }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState<boolean>(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>(
+    mapAssessibilityToIndex(assessibility)
+  );
+  const handleUpdateAssessibility = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    setSelectedIndex(event.target.value as number);
+    switch (event.target.value as number) {
+      case 0:
+        updateAssessibility(QuestionAssessibility.SHARED);
+        break;
+      case 1:
+        updateAssessibility(QuestionAssessibility.PRE);
+        break;
+      case 2:
+        updateAssessibility(QuestionAssessibility.POST);
+        break;
+      default:
+    }
+  };
 
   const dropdown = (
     <FormControl className={classes.formControl}>
@@ -130,19 +170,41 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
     return <></>;
   };
 
+  const renderAssessibilityButton = () => {
+    if (assessibility === QuestionAssessibility.PRE) {
+      return 'Pre';
+    }
+    if (assessibility === QuestionAssessibility.POST) {
+      return 'Post';
+    }
+    return 'Shared';
+  };
+
   return (
     <Card className={className}>
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
-      <Grid item xs={1} className={classes.bin} alignItems="flex-end">
+      <Grid item xs={12} className={classes.actions} alignItems="flex-end">
         <IconButton
           aria-label="delete"
           onClick={handleDelete}
           style={{ color: 'red' }}
+          disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
         >
           <DeleteIcon />
         </IconButton>
+        <FormControl variant="outlined" size="small">
+          <Select
+            id={`assessibility-select-${assessibility}`}
+            value={selectedIndex}
+            onChange={handleUpdateAssessibility}
+          >
+            <MenuItem value={0}>{assessibilityOptions[0]}</MenuItem>
+            <MenuItem value={1}>{assessibilityOptions[1]}</MenuItem>
+            <MenuItem value={2}>{assessibilityOptions[2]}</MenuItem>
+          </Select>
+        </FormControl>
       </Grid>
     </Card>
   );

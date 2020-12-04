@@ -12,6 +12,12 @@ export enum QuestionType {
   LONG_ANSWER = 'LONG ANSWER',
 }
 
+export enum QuestionAssessibility {
+  SHARED = 'SHARED',
+  PRE = 'PRE',
+  POST = 'POST',
+}
+
 export enum QuestionnaireType {
   ONE_TIME = 'ONE TIME',
   PRE_POST = 'PRE POST',

@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux';
 
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
-import { QuestionMode, QuestionOrder } from 'interfaces/models/questionnaires';
+import {
+  QuestionAssessibility,
+  QuestionMode,
+  QuestionOrder,
+} from 'interfaces/models/questionnaires';
 import {
   addQuestionToShared,
   deleteQuestionInShared,
@@ -35,6 +39,9 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInShared(newQuestion))
             }
+            assessibility={QuestionAssessibility.SHARED}
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            updateAssessibility={() => {}}
             className={classes.card}
           />
         );

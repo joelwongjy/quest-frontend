@@ -10,8 +10,9 @@ import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import { setTitle, setType } from 'reducers/questionnaireDux';
 import SingleEdit from './SingleEdit';
 import SharedEdit from './SharedEdit';
-import UniqueEdit from './UniqueEdit';
+import PreEdit from './PreEdit';
 import { useStyles } from './editAccordion.styles';
+import PostEdit from './PostEdit';
 
 interface EditAccordionProps {
   questionnaire: QuestionnairePostData;
@@ -74,20 +75,18 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
             <Grid item xs={12}>
               <SharedEdit questionSet={sharedQuestions.questions} />
             </Grid>
-            {isPre ? (
-              <Typography variant="h6" className={classes.typography}>
-                Pre-Program Questions
-              </Typography>
-            ) : (
-              <Typography variant="h6" className={classes.typography}>
-                Post-Program Questions
-              </Typography>
-            )}
+            <Typography variant="h6" className={classes.typography}>
+              Pre-Program Questions
+            </Typography>
+
             <Grid item xs={12}>
-              <UniqueEdit
-                preQuestionSet={questionWindows[0].questions}
-                postQuestionSet={questionWindows[1].questions}
-              />
+              <PreEdit preQuestionSet={questionWindows[0].questions} />
+            </Grid>
+            <Typography variant="h6" className={classes.typography}>
+              Post-Program Questions
+            </Typography>
+            <Grid item xs={12}>
+              <PostEdit postQuestionSet={questionWindows[1].questions} />
             </Grid>
           </>
         )}
