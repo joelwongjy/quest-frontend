@@ -24,6 +24,7 @@ import ShortAnswerQuestion from 'components/shortAnswerQuestion';
 import LongAnswerQuestion from 'components/longAnswerQuestion';
 import MoodQuestion from 'components/moodQuestion';
 
+import ScaleQuestion from 'components/scaleQuestion';
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
@@ -121,6 +122,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           Long Answer Question
         </MenuItem>
         <MenuItem value={QuestionType.MOOD}>Mood Question</MenuItem>
+        <MenuItem value={QuestionType.SCALE}>Scale Question</MenuItem>
       </Select>
     </FormControl>
   );
@@ -149,6 +151,15 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         case QuestionType.MOOD:
           return (
             <MoodQuestion
+              mode={mode}
+              dropdown={dropdown}
+              question={question}
+              updateQuestion={updateQuestion}
+            />
+          );
+        case QuestionType.SCALE:
+          return (
+            <ScaleQuestion
               mode={mode}
               dropdown={dropdown}
               question={question}
