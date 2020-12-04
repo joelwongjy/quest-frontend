@@ -5,6 +5,12 @@ export const useStyles = makeStyles((theme) =>
     root: {
       flex: 1,
     },
+    tab: {
+      display: 'flex',
+      justifyContent: 'center',
+      width: '100%',
+      marginBottom: '10px',
+    },
     input: {
       '& input': {
         textAlign: 'center',
@@ -46,6 +52,25 @@ export const useStyles = makeStyles((theme) =>
       boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
       margin: '1.5rem',
       padding: '1.5rem',
+    },
+    preCard: {
+      backgroundColor: '#CBE1EE',
+      boxShadow: 'rgba(203, 225, 238, 0.2) 0px 8px 24px;',
+      margin: '1.5rem',
+      padding: '1.5rem',
+    },
+    postCard: {
+      backgroundColor: '#E1CEC9',
+      boxShadow: 'rgba(225, 206, 201, 0.2) 0px 8px 24px;',
+      margin: '1.5rem',
+      padding: '1.5rem',
+    },
+    typography: {
+      marginTop: '1rem',
+      marginLeft: '0.5rem',
+    },
+    modeSwitch: {
+      marginRight: '1rem',
     },
   })
 );
