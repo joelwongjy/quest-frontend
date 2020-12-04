@@ -9,10 +9,8 @@ import {
 
 import {
   addQuestionToPre,
-  deleteQuestionInPre,
   updateQuestionInPre,
   transferQuestionToPre,
-  deleteQuestionInShared,
   transferQuestionToShared,
   deleteQuestionInPost,
 } from 'reducers/questionnaireDux';
@@ -57,6 +55,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
                 default:
               }
             }}
+            assessibilityEnabled
             className={classes.card}
           />
         );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Tab, Tabs, Typography } from '@material-ui/core';
+import { Grid, Switch, Tab, Tabs, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import Accordion from 'components/accordion';
@@ -65,8 +65,36 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
             onChange={(e) => updateTitle(e.target.value)}
           />
         </div>
-        {type === QuestionnaireType.ONE_TIME ? (
+        {type === QuestionnaireType.ONE_TIME && (
           <SingleEdit questionSet={sharedQuestions.questions} />
+        )}
+        {isPre ? (
+          <>
+            <Typography variant="h6" className={classes.typography}>
+              Shared Questions
+            </Typography>
+            <Grid item xs={12}>
+              <SharedEdit questionSet={sharedQuestions.questions} />
+            </Grid>
+
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6">Pre-Program Questions</Typography>
+              <div className={classes.modeSwitch}>
+                Pre
+                <Switch onChange={() => setIsPre(!isPre)} />
+                Post
+              </div>
+            </Grid>
+
+            <Grid item xs={12}>
+              <PreEdit preQuestionSet={questionWindows[0].questions} />
+            </Grid>
+          </>
         ) : (
           <>
             <Typography variant="h6" className={classes.typography}>
@@ -75,16 +103,21 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
             <Grid item xs={12}>
               <SharedEdit questionSet={sharedQuestions.questions} />
             </Grid>
-            <Typography variant="h6" className={classes.typography}>
-              Pre-Program Questions
-            </Typography>
 
-            <Grid item xs={12}>
-              <PreEdit preQuestionSet={questionWindows[0].questions} />
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6">Post-Program Questions</Typography>
+              <div className={classes.modeSwitch}>
+                Pre
+                <Switch onChange={() => setIsPre(!isPre)} />
+                Post
+              </div>
             </Grid>
-            <Typography variant="h6" className={classes.typography}>
-              Post-Program Questions
-            </Typography>
+
             <Grid item xs={12}>
               <PostEdit postQuestionSet={questionWindows[1].questions} />
             </Grid>

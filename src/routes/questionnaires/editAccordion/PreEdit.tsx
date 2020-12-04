@@ -11,7 +11,6 @@ import {
   addQuestionToPre,
   deleteQuestionInPre,
   updateQuestionInPre,
-  deleteQuestionInShared,
   transferQuestionToPost,
   transferQuestionToShared,
 } from 'reducers/questionnaireDux';
@@ -54,6 +53,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
                 default:
               }
             }}
+            assessibilityEnabled
             className={classes.card}
           />
         );

@@ -35,6 +35,7 @@ interface QuestionCardProps extends QuestComponentProps {
   updateQuestion: (newQuestion: QuestionOrder) => void;
   assessibility: QuestionAssessibility;
   updateAssessibility: (newAssessibility: QuestionAssessibility) => void;
+  assessibilityEnabled: boolean;
 }
 
 const InputMuiTheme = createMuiTheme({
@@ -66,6 +67,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   updateQuestion,
   assessibility,
   updateAssessibility,
+  assessibilityEnabled,
   className,
 }) => {
   const classes = useStyles();
@@ -170,16 +172,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
     return <></>;
   };
 
-  const renderAssessibilityButton = () => {
-    if (assessibility === QuestionAssessibility.PRE) {
-      return 'Pre';
-    }
-    if (assessibility === QuestionAssessibility.POST) {
-      return 'Post';
-    }
-    return 'Shared';
-  };
-
   return (
     <Card className={className}>
       <MuiThemeProvider theme={InputMuiTheme}>
@@ -194,17 +186,19 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         >
           <DeleteIcon />
         </IconButton>
-        <FormControl variant="outlined" size="small">
-          <Select
-            id={`assessibility-select-${assessibility}`}
-            value={selectedIndex}
-            onChange={handleUpdateAssessibility}
-          >
-            <MenuItem value={0}>{assessibilityOptions[0]}</MenuItem>
-            <MenuItem value={1}>{assessibilityOptions[1]}</MenuItem>
-            <MenuItem value={2}>{assessibilityOptions[2]}</MenuItem>
-          </Select>
-        </FormControl>
+        {assessibilityEnabled && (
+          <FormControl variant="outlined" size="small">
+            <Select
+              id={`assessibility-select-${assessibility}`}
+              value={selectedIndex}
+              onChange={handleUpdateAssessibility}
+            >
+              <MenuItem value={0}>{assessibilityOptions[0]}</MenuItem>
+              <MenuItem value={1}>{assessibilityOptions[1]}</MenuItem>
+              <MenuItem value={2}>{assessibilityOptions[2]}</MenuItem>
+            </Select>
+          </FormControl>
+        )}
       </Grid>
     </Card>
   );

@@ -8,14 +8,10 @@ import {
 } from 'interfaces/models/questionnaires';
 
 import {
-  addQuestionToPre,
   addQuestionToShared,
-  deleteQuestionInPre,
   deleteQuestionInShared,
-  setType,
   transferQuestionToPost,
   transferQuestionToPre,
-  updateQuestionInPre,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
@@ -59,6 +55,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
                 default:
               }
             }}
+            assessibilityEnabled
             className={classes.card}
           />
         );

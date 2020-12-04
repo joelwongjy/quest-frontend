@@ -69,5 +69,8 @@ export const useStyles = makeStyles((theme) =>
       marginTop: '1rem',
       marginLeft: '0.5rem',
     },
+    modeSwitch: {
+      marginRight: '1rem',
+    },
   })
 );

@@ -42,6 +42,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             assessibility={QuestionAssessibility.SHARED}
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             updateAssessibility={() => {}}
+            assessibilityEnabled={false}
             className={classes.card}
           />
         );
