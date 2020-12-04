@@ -56,7 +56,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
               }
             }}
             assessibilityEnabled
-            className={classes.card}
+            className={classes.postCard}
           />
         );
       })}

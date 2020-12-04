@@ -68,7 +68,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
         {type === QuestionnaireType.ONE_TIME && (
           <SingleEdit questionSet={sharedQuestions.questions} />
         )}
-        {isPre ? (
+        {type === QuestionnaireType.PRE_POST && isPre ? (
           <>
             <Typography variant="h6" className={classes.typography}>
               Shared Questions
@@ -96,32 +96,35 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
             </Grid>
           </>
         ) : (
-          <>
-            <Typography variant="h6" className={classes.typography}>
-              Shared Questions
-            </Typography>
-            <Grid item xs={12}>
-              <SharedEdit questionSet={sharedQuestions.questions} />
-            </Grid>
+          type === QuestionnaireType.PRE_POST &&
+          !isPre && (
+            <>
+              <Typography variant="h6" className={classes.typography}>
+                Shared Questions
+              </Typography>
+              <Grid item xs={12}>
+                <SharedEdit questionSet={sharedQuestions.questions} />
+              </Grid>
 
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-            >
-              <Typography variant="h6">Post-Program Questions</Typography>
-              <div className={classes.modeSwitch}>
-                Pre
-                <Switch onChange={() => setIsPre(!isPre)} />
-                Post
-              </div>
-            </Grid>
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+              >
+                <Typography variant="h6">Post-Program Questions</Typography>
+                <div className={classes.modeSwitch}>
+                  Pre
+                  <Switch onChange={() => setIsPre(!isPre)} />
+                  Post
+                </div>
+              </Grid>
 
-            <Grid item xs={12}>
-              <PostEdit postQuestionSet={questionWindows[1].questions} />
-            </Grid>
-          </>
+              <Grid item xs={12}>
+                <PostEdit postQuestionSet={questionWindows[1].questions} />
+              </Grid>
+            </>
+          )
         )}
       </Grid>
     </Accordion>

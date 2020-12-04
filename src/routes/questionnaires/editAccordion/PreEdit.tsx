@@ -54,7 +54,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
               }
             }}
             assessibilityEnabled
-            className={classes.card}
+            className={classes.preCard}
           />
         );
       })}
