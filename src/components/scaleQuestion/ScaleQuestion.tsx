@@ -5,6 +5,7 @@ import {
   Grid,
   Slider,
   TextField,
+  withStyles,
 } from '@material-ui/core';
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
@@ -41,6 +42,61 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
     updateQuestion(newQuestion);
   };
 
+  const customBoxShadow =
+    '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
+
+  const CustomSlider = withStyles({
+    root: {
+      color: '#034682',
+      height: 2,
+      padding: '15px 0',
+    },
+    thumb: {
+      height: 28,
+      width: 28,
+      backgroundColor: '#fff',
+      boxShadow: customBoxShadow,
+      marginTop: -14,
+      marginLeft: -14,
+      '&:focus, &:hover, &$active': {
+        boxShadow:
+          '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          boxShadow: customBoxShadow,
+        },
+      },
+    },
+    active: {},
+    valueLabel: {
+      left: 'calc(-50% + 12px)',
+      top: -20,
+      fontSize: '16px',
+      '& *': {
+        background: 'transparent',
+        color: '#000',
+      },
+    },
+    track: {
+      height: 4,
+    },
+    rail: {
+      height: 4,
+      opacity: 0.5,
+      backgroundColor: '#bfbfbf',
+    },
+    mark: {
+      backgroundColor: '#bfbfbf',
+      height: 11,
+      width: 2,
+      marginTop: -3,
+    },
+    markActive: {
+      opacity: 1,
+      backgroundColor: 'currentColor',
+    },
+  })(Slider);
+
   const renderQuestion = () => {
     switch (mode) {
       case QuestionMode.EDIT || QuestionMode.NEW:
@@ -58,10 +114,10 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
               {dropdown}
             </div>
             <Grid container alignItems="center" justify="space-around">
-              <Slider
+              <CustomSlider
                 defaultValue={3}
                 aria-labelledby="discrete-slider"
-                valueLabelDisplay="auto"
+                valueLabelDisplay="on"
                 step={1}
                 marks
                 min={1}
