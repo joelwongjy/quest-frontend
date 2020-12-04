@@ -8,61 +8,61 @@ import {
 } from 'interfaces/models/questionnaires';
 
 import {
-  addQuestionToShared,
-  deleteQuestionInShared,
-  transferQuestionToPost,
+  addQuestionToPre,
+  updateQuestionInPre,
   transferQuestionToPre,
-  updateQuestionInShared,
+  transferQuestionToShared,
+  deleteQuestionInPost,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
 import { useStyles } from './editAccordion.styles';
 
-interface SharedEditProps {
-  questionSet: QuestionOrder[];
+interface PostEditProps {
+  postQuestionSet: QuestionOrder[];
 }
 
-const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
-  questionSet,
+const PostEdit: React.FunctionComponent<PostEditProps> = ({
+  postQuestionSet,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   return (
     <div className={classes.root}>
-      {questionSet.map((q) => {
+      {postQuestionSet.map((q) => {
         const { order, ...question } = q;
         return (
           <QuestionCard
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInShared(order))}
+            handleDelete={() => dispatch(deleteQuestionInPost(order))}
             updateQuestion={(newQuestion: QuestionOrder) =>
-              dispatch(updateQuestionInShared(newQuestion))
+              dispatch(updateQuestionInPre(newQuestion))
             }
-            accessibility={QuestionAccessibility.SHARED}
+            accessibility={QuestionAccessibility.POST}
             updateAccessibility={(accessibility: QuestionAccessibility) => {
               switch (accessibility) {
                 case QuestionAccessibility.PRE:
                   dispatch(transferQuestionToPre(q));
-                  dispatch(deleteQuestionInShared(q.order));
+                  dispatch(deleteQuestionInPost(q.order));
                   break;
-                case QuestionAccessibility.POST:
-                  dispatch(transferQuestionToPost(q));
-                  dispatch(deleteQuestionInShared(q.order));
+                case QuestionAccessibility.SHARED:
+                  dispatch(transferQuestionToShared(q));
+                  dispatch(deleteQuestionInPost(q.order));
                   break;
                 default:
               }
             }}
             accessibilityEnabled
-            className={classes.card}
+            className={classes.postCard}
           />
         );
       })}
       <Card
         className={classes.addCard}
-        onClick={() => dispatch(addQuestionToShared())}
+        onClick={() => dispatch(addQuestionToPre())}
       >
         Add a question
       </Card>
@@ -70,4 +70,4 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
   );
 };
 
-export default SharedEdit;
+export default PostEdit;

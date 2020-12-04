@@ -3,11 +3,15 @@ import { useDispatch } from 'react-redux';
 
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
-import { QuestionMode, QuestionOrder } from 'interfaces/models/questionnaires';
 import {
-  addQuestionToPre,
-  deleteQuestionInPre,
-  updateQuestionInPre,
+  QuestionAccessibility,
+  QuestionMode,
+  QuestionOrder,
+} from 'interfaces/models/questionnaires';
+import {
+  addQuestionToShared,
+  deleteQuestionInShared,
+  updateQuestionInShared,
 } from 'reducers/questionnaireDux';
 
 import { useStyles } from './editAccordion.styles';
@@ -31,17 +35,21 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInPre(order))}
+            handleDelete={() => dispatch(deleteQuestionInShared(order))}
             updateQuestion={(newQuestion: QuestionOrder) =>
-              dispatch(updateQuestionInPre(newQuestion))
+              dispatch(updateQuestionInShared(newQuestion))
             }
+            accessibility={QuestionAccessibility.SHARED}
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            updateAccessibility={() => {}}
+            accessibilityEnabled={false}
             className={classes.card}
           />
         );
       })}
       <Card
         className={classes.addCard}
-        onClick={() => dispatch(addQuestionToPre())}
+        onClick={() => dispatch(addQuestionToShared())}
       >
         Add a question
       </Card>

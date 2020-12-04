@@ -13,8 +13,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: 16,
       fontSize: 24,
     },
-    bin: {
+    actions: {
       marginTop: 10,
+      display: 'flex',
+      justifyContent: 'space-between',
     },
     formControl: {
       margin: theme.spacing(1),
