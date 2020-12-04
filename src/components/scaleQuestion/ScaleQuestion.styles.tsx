@@ -20,8 +20,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     scale: {
-      display: 'flex',
-      justifyContent: 'space-around',
+      marginTop: '0.5rem',
+      width: '100%',
     },
   })
 );

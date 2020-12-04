@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import {
-  FormControlLabel,
   FormGroup,
   FormLabel,
-  Radio,
-  RadioGroup,
+  Grid,
+  Slider,
   TextField,
 } from '@material-ui/core';
 
@@ -29,34 +28,17 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
 
   const [scale, setScale] = useState<number>();
 
-  const selectScale = (index: number) => {
-    setScale(index);
+  const handleSliderChange = (
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    event: React.ChangeEvent<{}>,
+    newValue: number | number[]
+  ) => {
+    setScale(newValue as number);
   };
 
   const updateText = (newText: string) => {
     const newQuestion = { ...question, questionText: newText };
     updateQuestion(newQuestion);
-  };
-
-  const renderScale = (scaleSize: number) => {
-    const radios = [];
-    for (let i = 0; i < scaleSize; i += 1) {
-      radios.push(
-        <FormControlLabel
-          value="top"
-          control={
-            <Radio
-              checked={scale === i}
-              value={i}
-              onClick={() => selectScale(i)}
-            />
-          }
-          label={i}
-          labelPlacement="top"
-        />
-      );
-    }
-    return radios;
   };
 
   const renderQuestion = () => {
@@ -75,11 +57,20 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
               />
               {dropdown}
             </div>
-            <div className={classes.scale}>
-              <RadioGroup row aria-label="scale" name="scale">
-                {renderScale(10)}
-              </RadioGroup>
-            </div>
+            <Grid container alignItems="center" justify="space-around">
+              <Slider
+                defaultValue={3}
+                aria-labelledby="discrete-slider"
+                valueLabelDisplay="auto"
+                step={1}
+                marks
+                min={1}
+                max={5}
+                value={scale}
+                className={classes.scale}
+                onChange={handleSliderChange}
+              />
+            </Grid>
           </div>
         );
       default:
