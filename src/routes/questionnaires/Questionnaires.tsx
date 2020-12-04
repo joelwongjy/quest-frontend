@@ -46,8 +46,10 @@ const Questionnaires: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get('questionnaires');
         if (!didCancel) {
-          setState({ questionnaires: response.data, isLoading: false });
-          // dispatch(updateSecurities(securitiesResponse.data));
+          setState({
+            questionnaires: response.data.questionnaireListData,
+            isLoading: false,
+          });
         }
       } catch (error) {
         if (!didCancel) {
@@ -187,14 +189,18 @@ const Questionnaires: React.FunctionComponent = () => {
         }
       />
       <Grid container spacing={6}>
-        {renderedQuestionnaires.map((q) => {
-          const menuOptions = getMenuOptions(q.id);
-          return (
-            <Grid item xs={12} sm={6} lg={4} key={q.name}>
-              <QuestionnaireCard questionnaire={q} menuOptions={menuOptions} />
-            </Grid>
-          );
-        })}
+        {renderedQuestionnaires.length > 0 &&
+          renderedQuestionnaires.map((q) => {
+            const menuOptions = getMenuOptions(q.id);
+            return (
+              <Grid item xs={12} sm={6} lg={4} key={q.name}>
+                <QuestionnaireCard
+                  questionnaire={q}
+                  menuOptions={menuOptions}
+                />
+              </Grid>
+            );
+          })}
       </Grid>
     </PageContainer>
   );
