@@ -12,6 +12,7 @@ import {
   deleteQuestionInShared,
   transferQuestionToPost,
   transferQuestionToPre,
+  transferQuestionToShared,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
@@ -38,6 +39,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInShared(order))}
+            handleDuplicate={() => dispatch(transferQuestionToShared(q))}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInShared(newQuestion))
             }

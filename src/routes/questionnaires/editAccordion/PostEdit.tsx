@@ -13,6 +13,7 @@ import {
   transferQuestionToPre,
   transferQuestionToShared,
   deleteQuestionInPost,
+  transferQuestionToPost,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
@@ -38,6 +39,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPost(order))}
+            handleDuplicate={() => dispatch(transferQuestionToPost(q))}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPre(newQuestion))
             }

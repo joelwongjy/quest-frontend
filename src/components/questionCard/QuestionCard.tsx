@@ -11,6 +11,7 @@ import {
   Select,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DuplicateIcon from '@material-ui/icons/AddToPhotos';
 
 import McqQuestion from 'components/mcqQuestion';
 import { QuestComponentProps } from 'interfaces/components/common';
@@ -31,6 +32,7 @@ interface QuestionCardProps extends QuestComponentProps {
   question: QuestionOrder;
   mode: QuestionMode;
   handleDelete: () => void;
+  handleDuplicate: () => void;
   updateQuestion: (newQuestion: QuestionOrder) => void;
   accessibility: QuestionAccessibility;
   updateAccessibility: (newAccessibility: QuestionAccessibility) => void;
@@ -63,6 +65,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   mode,
   handleDelete,
+  handleDuplicate,
   updateQuestion,
   accessibility,
   updateAccessibility,
@@ -187,14 +190,24 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         {renderQuestion()}
       </MuiThemeProvider>
       <Grid item xs={12} className={classes.actions} alignItems="flex-end">
-        <IconButton
-          aria-label="delete"
-          onClick={handleDelete}
-          style={{ color: 'red' }}
-          disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <div>
+          <IconButton
+            aria-label="delete"
+            onClick={handleDelete}
+            style={{ color: 'red' }}
+            disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            aria-label="duplicate"
+            onClick={handleDuplicate}
+            style={{ color: 'grey' }}
+            disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
+          >
+            <DuplicateIcon />
+          </IconButton>
+        </div>
         {accessibilityEnabled && (
           <FormControl variant="outlined" size="small">
             <Select

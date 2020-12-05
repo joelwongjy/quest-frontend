@@ -13,6 +13,7 @@ import {
   updateQuestionInPre,
   transferQuestionToPost,
   transferQuestionToShared,
+  transferQuestionToPre,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
@@ -36,6 +37,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPre(order))}
+            handleDuplicate={() => dispatch(transferQuestionToPre(q))}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPre(newQuestion))
             }
