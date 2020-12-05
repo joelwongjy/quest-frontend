@@ -6,7 +6,6 @@ import {
   QuestionMode,
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
-
 import {
   addQuestionToPre,
   deleteQuestionInPre,
@@ -14,8 +13,9 @@ import {
   transferQuestionToPost,
   transferQuestionToShared,
 } from 'reducers/questionnaireDux';
-import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
+import QuestCard from 'componentWrappers/questCard';
+
 import { useStyles } from './editAccordion.styles';
 
 interface PreEditProps {
@@ -58,12 +58,12 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
           />
         );
       })}
-      <Card
+      <QuestCard
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPre())}
       >
         Add a question
-      </Card>
+      </QuestCard>
     </div>
   );
 };

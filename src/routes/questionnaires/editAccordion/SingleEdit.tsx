@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
 import {
   QuestionAccessibility,
@@ -13,6 +12,7 @@ import {
   deleteQuestionInShared,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
+import QuestCard from 'componentWrappers/questCard';
 
 import { useStyles } from './editAccordion.styles';
 
@@ -47,12 +47,12 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
           />
         );
       })}
-      <Card
+      <QuestCard
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToShared())}
       >
         Add a question
-      </Card>
+      </QuestCard>
     </div>
   );
 };

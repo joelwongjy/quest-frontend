@@ -6,7 +6,6 @@ import {
   QuestionMode,
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
-
 import {
   transferQuestionToPre,
   transferQuestionToShared,
@@ -14,8 +13,9 @@ import {
   addQuestionToPost,
   updateQuestionInPost,
 } from 'reducers/questionnaireDux';
-import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
+import QuestCard from 'componentWrappers/questCard';
+
 import { useStyles } from './editAccordion.styles';
 
 interface PostEditProps {
@@ -60,12 +60,12 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
           />
         );
       })}
-      <Card
+      <QuestCard
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPost())}
       >
         Add a question
-      </Card>
+      </QuestCard>
     </div>
   );
 };

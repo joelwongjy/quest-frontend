@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import LongButton from 'components/longButton';
+import QuestButton from 'componentWrappers/questButton';
 import { useUser } from 'contexts/UserContext';
 import { RootState } from 'reducers/rootReducer';
 import {
@@ -89,7 +89,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           />
           <EditAccordion questionnaire={questionnaire} />
           <Grid container justify="flex-end">
-            <LongButton>Finish</LongButton>
+            <QuestButton fullWidth>Finish</QuestButton>
           </Grid>
         </Paper>
       </div>

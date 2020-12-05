@@ -13,6 +13,7 @@ import { MenuOption } from 'interfaces/components/questionnaireCard';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
+import QuestButton from 'componentWrappers/questButton';
 
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
@@ -71,42 +72,31 @@ const Questionnaires: React.FunctionComponent = () => {
   if (state.isLoading) {
     return (
       <PageContainer>
-        <PageHeader
-          breadcrumbs={breadcrumbs}
-          action={
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              component={Link}
-              to={`${QUESTIONNAIRES}${CREATE}`}
-            >
-              Create New
-            </Button>
-          }
-        />
+        <PageHeader breadcrumbs={breadcrumbs} />
         <QuestionnaireTabs
           value={tabValue}
           setValue={setTabValue}
           labels={tabs}
           buttonRight={
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-            >
-              Create New
-            </Button>
-          }
-          buttonLeft={
+            // Cannot use QuestButton because of the `component` attribute later
             <Button
               variant="contained"
               color="secondary"
               className={classes.button}
               disabled
             >
-              Manage Sample Questions
+              Create Questionnaire
             </Button>
+          }
+          buttonLeft={
+            <QuestButton
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              disabled
+            >
+              Manage Sample Questions
+            </QuestButton>
           }
         />
         <Grid container spacing={3}>
@@ -167,6 +157,7 @@ const Questionnaires: React.FunctionComponent = () => {
         setValue={setTabValue}
         labels={tabs}
         buttonRight={
+          // Cannot use QuestButton because of the `component` attribute
           <Button
             variant="contained"
             color="secondary"
@@ -178,14 +169,14 @@ const Questionnaires: React.FunctionComponent = () => {
           </Button>
         }
         buttonLeft={
-          <Button
+          <QuestButton
             variant="contained"
             color="secondary"
             className={classes.button}
             disabled
           >
             Manage Sample Questions
-          </Button>
+          </QuestButton>
         }
       />
       <Grid container spacing={6}>

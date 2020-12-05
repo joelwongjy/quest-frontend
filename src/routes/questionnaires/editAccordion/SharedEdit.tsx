@@ -6,7 +6,6 @@ import {
   QuestionMode,
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
-
 import {
   addQuestionToShared,
   deleteQuestionInShared,
@@ -14,8 +13,9 @@ import {
   transferQuestionToPre,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
-import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
+import QuestCard from 'componentWrappers/questCard';
+
 import { useStyles } from './editAccordion.styles';
 
 interface SharedEditProps {
@@ -60,12 +60,12 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
           />
         );
       })}
-      <Card
+      <QuestCard
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToShared())}
       >
         Add a question
-      </Card>
+      </QuestCard>
     </div>
   );
 };

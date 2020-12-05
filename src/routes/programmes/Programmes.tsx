@@ -1,16 +1,17 @@
 import React, { useEffect, useReducer } from 'react';
+import { Grid } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { programmes } from 'routes/questionnaires/mockData';
-import { useDispatch } from 'react-redux';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import { PROGRAMMES } from 'constants/routes';
-import { Button, Grid } from '@material-ui/core';
 import ProgrammeCard from 'components/programmeCard';
+import QuestButton from 'componentWrappers/questButton';
 
 import { useStyles } from './programmes.styles';
 
@@ -40,7 +41,7 @@ const Programme: React.FC<QuestComponentProps> = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('questionnaires');
+        const response = await ApiService.get('programmes');
         if (!didCancel) {
           setState({ programmes: response.data, isLoading: false });
           // dispatch(updateSecurities(securitiesResponse.data));
@@ -66,13 +67,13 @@ const Programme: React.FC<QuestComponentProps> = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <Button
+          <QuestButton
             variant="contained"
             color="secondary"
             className={classes.button}
           >
             Create New
-          </Button>
+          </QuestButton>
         }
       />
       <Grid container spacing={3}>

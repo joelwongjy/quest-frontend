@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Grid, Switch, Tab, Tabs, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
-import Accordion from 'components/accordion';
+import QuestAccordion from 'componentWrappers/questAccordion';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
-import Input from 'components/input';
+import QuestTextField from 'componentWrappers/questTextField';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 
 import { setTitle, setType } from 'reducers/questionnaireDux';
@@ -32,7 +32,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   };
 
   return (
-    <Accordion heading="Step 3: Create the questionnaire">
+    <QuestAccordion heading="Step 3: Create the questionnaire">
       <Grid container>
         <div className={classes.tab}>
           <Tabs
@@ -57,11 +57,12 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
           </Tabs>
         </div>
         <div className={classes.inputContainer}>
-          <Input
+          <QuestTextField
             className={classes.input}
             placeholder="Enter Title of Questionnaire"
             variant="outlined"
             value={questionnaire.title}
+            margin="normal"
             onChange={(e) => updateTitle(e.target.value)}
           />
         </div>
@@ -127,7 +128,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
           )
         )}
       </Grid>
-    </Accordion>
+    </QuestAccordion>
   );
 };
 

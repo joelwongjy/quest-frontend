@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Tabs from 'components/tabs';
-import { QuestTabsProps } from 'components/tabs/Tabs';
+import QuestTabs from 'componentWrappers/questTabs';
+import { QuestTabsProps } from 'componentWrappers/questTabs/QuestTabs';
 
 import { useStyles } from './questionnaireTabs.styles';
 
@@ -18,7 +18,7 @@ const QuestionnaireTabs: React.FunctionComponent<QuestionnaireTabsProps> = ({
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Tabs {...props} />
+      <QuestTabs {...props} />
       <div>
         {buttonLeft}
         {buttonRight}
