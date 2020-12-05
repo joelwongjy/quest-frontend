@@ -85,7 +85,7 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={10} style={{ marginBottom: '1rem' }}>
           {type === QuestionnaireType.PRE_POST && (
             <Grid container justify="space-around">
               <Grid item style={{ marginTop: '1.5rem' }}>
