@@ -189,7 +189,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
-      <Grid item xs={12} className={classes.actions} alignItems="flex-end">
+      <Grid item xs={12} className={classes.actions}>
         <div>
           <IconButton
             aria-label="delete"
