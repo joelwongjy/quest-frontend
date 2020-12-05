@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid } from '@material-ui/core';
+import { Chip, Grid } from '@material-ui/core';
 
 import DateTimePicker from 'components/dateTimePicker';
 import Accordion from 'components/accordion';
@@ -54,43 +54,69 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
   return (
     <Accordion heading="Step 1: Set the duration">
       <Grid container justify="space-around">
-        <DateTimePicker
-          date={preStartDate}
-          callback={preStartDateCallback}
-          label={`Start Date & Time${
-            type === QuestionnaireType.PRE_POST ? ' for Pre Survey' : ''
-          }`}
-        />
-        <div>
-          <DateTimePicker
-            date={preEndDate}
-            callback={handlePreEndTime}
-            label={`End Date & Time${
-              type === QuestionnaireType.PRE_POST ? ' for Pre Survey' : ''
-            }`}
-          />
-          {preErrorMessage && <div>{preErrorMessage}</div>}
-        </div>
-      </Grid>
-      {type === QuestionnaireType.PRE_POST && (
-        <>
+        <Grid item xs={10}>
           <Grid container justify="space-around">
-            <DateTimePicker
-              date={postStartDate!}
-              callback={postStartDateCallback!}
-              label="Start Date & Time for Post Survey"
-            />
-            <div>
-              <DateTimePicker
-                date={postEndDate!}
-                callback={handlePostEndTime}
-                label="End Date & Time for Post Survey"
-              />
-            </div>
-            {postErrorMessage && <div>{postErrorMessage}</div>}
+            {type === QuestionnaireType.PRE_POST && (
+              <Grid item>
+                <Chip
+                  label="Pre-Program"
+                  variant="outlined"
+                  color="secondary"
+                  style={{ border: '1px solid' }}
+                />
+              </Grid>
+            )}
+            <Grid container justify="space-around">
+              <div style={{ marginTop: '1rem' }}>
+                <DateTimePicker
+                  date={preStartDate}
+                  callback={preStartDateCallback}
+                  label="Start Date & Time"
+                />
+              </div>
+              <div style={{ marginTop: '1rem' }}>
+                <DateTimePicker
+                  date={preEndDate}
+                  callback={handlePreEndTime}
+                  label="End Date & Time"
+                />
+                {preErrorMessage && <div>{preErrorMessage}</div>}
+              </div>
+            </Grid>
           </Grid>
-        </>
-      )}
+        </Grid>
+        <Grid item xs={10} style={{ marginBottom: '1rem' }}>
+          {type === QuestionnaireType.PRE_POST && (
+            <Grid container justify="space-around">
+              <Grid item style={{ marginTop: '1.5rem' }}>
+                <Chip
+                  label="Post-Program"
+                  variant="outlined"
+                  style={{ color: '#AB6978', border: '1px solid #AB6978' }}
+                />
+              </Grid>
+
+              <Grid container justify="space-around">
+                <div style={{ marginTop: '1rem' }}>
+                  <DateTimePicker
+                    date={postStartDate!}
+                    callback={postStartDateCallback!}
+                    label="Start Date & Time"
+                  />
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <DateTimePicker
+                    date={postEndDate!}
+                    callback={handlePostEndTime}
+                    label="End Date & Time"
+                  />
+                </div>
+                {postErrorMessage && <div>{postErrorMessage}</div>}
+              </Grid>
+            </Grid>
+          )}
+        </Grid>
+      </Grid>
     </Accordion>
   );
 };

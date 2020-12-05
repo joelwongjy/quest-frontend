@@ -8,11 +8,11 @@ import {
 } from 'interfaces/models/questionnaires';
 
 import {
-  addQuestionToPre,
-  updateQuestionInPre,
   transferQuestionToPre,
   transferQuestionToShared,
   deleteQuestionInPost,
+  addQuestionToPost,
+  updateQuestionInPost,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
@@ -39,7 +39,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPost(order))}
             updateQuestion={(newQuestion: QuestionOrder) =>
-              dispatch(updateQuestionInPre(newQuestion))
+              dispatch(updateQuestionInPost(newQuestion))
             }
             accessibility={QuestionAccessibility.POST}
             updateAccessibility={(accessibility: QuestionAccessibility) => {
@@ -62,7 +62,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
       })}
       <Card
         className={classes.addCard}
-        onClick={() => dispatch(addQuestionToPre())}
+        onClick={() => dispatch(addQuestionToPost())}
       >
         Add a question
       </Card>
