@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  ButtonGroup,
   Card,
   createMuiTheme,
   FormControl,
@@ -12,6 +13,8 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DuplicateIcon from '@material-ui/icons/AddToPhotos';
+import UpIcon from '@material-ui/icons/ArrowUpward';
+import DownIcon from '@material-ui/icons/ArrowDownward';
 
 import McqQuestion from 'components/mcqQuestion';
 import { QuestComponentProps } from 'interfaces/components/common';
@@ -33,6 +36,10 @@ interface QuestionCardProps extends QuestComponentProps {
   mode: QuestionMode;
   handleDelete: () => void;
   handleDuplicate: () => void;
+  handleMoveUp: () => void;
+  handleMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
   updateQuestion: (newQuestion: QuestionOrder) => void;
   accessibility: QuestionAccessibility;
   updateAccessibility: (newAccessibility: QuestionAccessibility) => void;
@@ -66,6 +73,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   mode,
   handleDelete,
   handleDuplicate,
+  handleMoveUp,
+  handleMoveDown,
+  isFirst,
+  isLast,
   updateQuestion,
   accessibility,
   updateAccessibility,
@@ -185,7 +196,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   return (
-    <Card className={className}>
+    <Card className={className} key={question.id}>
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
@@ -208,6 +219,18 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             <DuplicateIcon />
           </IconButton>
         </div>
+        <ButtonGroup variant="outlined">
+          {!isFirst && (
+            <IconButton aria-label="up" onClick={handleMoveUp}>
+              <UpIcon />
+            </IconButton>
+          )}
+          {!isLast && (
+            <IconButton aria-label="up" onClick={handleMoveDown}>
+              <DownIcon />
+            </IconButton>
+          )}
+        </ButtonGroup>
         {accessibilityEnabled && (
           <FormControl variant="outlined" size="small">
             <Select

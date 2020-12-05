@@ -10,6 +10,7 @@ import {
 import {
   addQuestionToShared,
   deleteQuestionInShared,
+  shiftQuestionInShared,
   transferQuestionToPost,
   transferQuestionToPre,
   transferQuestionToShared,
@@ -39,7 +40,21 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInShared(order))}
-            handleDuplicate={() => dispatch(transferQuestionToShared(q))}
+            handleDuplicate={() => {
+              dispatch(transferQuestionToShared(q));
+            }}
+            handleMoveUp={() =>
+              dispatch(
+                shiftQuestionInShared({ direction: 'UP', order: q.order })
+              )
+            }
+            handleMoveDown={() =>
+              dispatch(
+                shiftQuestionInShared({ direction: 'DOWN', order: q.order })
+              )
+            }
+            isFirst={order === 0}
+            isLast={order === questionSet.length - 1}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInShared(newQuestion))
             }
@@ -48,11 +63,11 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
               switch (accessibility) {
                 case QuestionAccessibility.PRE:
                   dispatch(transferQuestionToPre(q));
-                  dispatch(deleteQuestionInShared(q.order));
+                  dispatch(deleteQuestionInShared(order));
                   break;
                 case QuestionAccessibility.POST:
                   dispatch(transferQuestionToPost(q));
-                  dispatch(deleteQuestionInShared(q.order));
+                  dispatch(deleteQuestionInShared(order));
                   break;
                 default:
               }

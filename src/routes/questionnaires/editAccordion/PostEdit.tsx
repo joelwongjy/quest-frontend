@@ -14,6 +14,7 @@ import {
   transferQuestionToPost,
   addQuestionToPost,
   updateQuestionInPost,
+  shiftQuestionInPost,
 } from 'reducers/questionnaireDux';
 import { Card } from '@material-ui/core';
 import QuestionCard from 'components/questionCard';
@@ -40,6 +41,16 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPost(order))}
             handleDuplicate={() => dispatch(transferQuestionToPost(q))}
+            handleMoveUp={() =>
+              dispatch(shiftQuestionInPost({ direction: 'UP', order: q.order }))
+            }
+            handleMoveDown={() =>
+              dispatch(
+                shiftQuestionInPost({ direction: 'DOWN', order: q.order })
+              )
+            }
+            isFirst={order === 0}
+            isLast={order === postQuestionSet.length - 1}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPost(newQuestion))
             }
@@ -48,11 +59,11 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
               switch (accessibility) {
                 case QuestionAccessibility.PRE:
                   dispatch(transferQuestionToPre(q));
-                  dispatch(deleteQuestionInPost(q.order));
+                  dispatch(deleteQuestionInPost(order));
                   break;
                 case QuestionAccessibility.SHARED:
                   dispatch(transferQuestionToShared(q));
-                  dispatch(deleteQuestionInPost(q.order));
+                  dispatch(deleteQuestionInPost(order));
                   break;
                 default:
               }

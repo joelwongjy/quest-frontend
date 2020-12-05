@@ -102,7 +102,11 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
                 )}
               </div>
             ))}
-            <ShortButton onClick={addOption} className={classes.button}>
+            <ShortButton
+              onClick={addOption}
+              className={classes.button}
+              style={{ marginBottom: '0.5rem' }}
+            >
               Add Option
             </ShortButton>
           </div>
