@@ -57,7 +57,7 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
         <Grid item xs={10}>
           <Grid container justify="space-around">
             {type === QuestionnaireType.PRE_POST && (
-              <Grid item style={{ marginBottom: '1rem' }}>
+              <Grid item>
                 <Chip
                   label="Pre-Program"
                   variant="outlined"
@@ -67,12 +67,14 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
               </Grid>
             )}
             <Grid container justify="space-around">
-              <DateTimePicker
-                date={preStartDate}
-                callback={preStartDateCallback}
-                label="Start Date & Time"
-              />
-              <div>
+              <div style={{ marginTop: '1rem' }}>
+                <DateTimePicker
+                  date={preStartDate}
+                  callback={preStartDateCallback}
+                  label="Start Date & Time"
+                />
+              </div>
+              <div style={{ marginTop: '1rem' }}>
                 <DateTimePicker
                   date={preEndDate}
                   callback={handlePreEndTime}
@@ -83,10 +85,10 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={10} style={{ marginBottom: '1rem' }}>
+        <Grid item xs={10}>
           {type === QuestionnaireType.PRE_POST && (
             <Grid container justify="space-around">
-              <Grid item style={{ marginBottom: '1rem', marginTop: '1rem' }}>
+              <Grid item style={{ marginTop: '1.5rem' }}>
                 <Chip
                   label="Post-Program"
                   variant="outlined"
@@ -95,12 +97,14 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
               </Grid>
 
               <Grid container justify="space-around">
-                <DateTimePicker
-                  date={postStartDate!}
-                  callback={postStartDateCallback!}
-                  label="Start Date & Time"
-                />
-                <div>
+                <div style={{ marginTop: '1rem' }}>
+                  <DateTimePicker
+                    date={postStartDate!}
+                    callback={postStartDateCallback!}
+                    label="Start Date & Time"
+                  />
+                </div>
+                <div style={{ marginTop: '1rem' }}>
                   <DateTimePicker
                     date={postEndDate!}
                     callback={handlePostEndTime}
