@@ -12,6 +12,8 @@ import {
   updateQuestionInPre,
   transferQuestionToPost,
   transferQuestionToShared,
+  transferQuestionToPre,
+  shiftQuestionInPre,
 } from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
@@ -36,6 +38,17 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPre(order))}
+            handleDuplicate={() => dispatch(transferQuestionToPre(q))}
+            handleMoveUp={() =>
+              dispatch(shiftQuestionInPre({ direction: 'UP', order: q.order }))
+            }
+            handleMoveDown={() =>
+              dispatch(
+                shiftQuestionInPre({ direction: 'DOWN', order: q.order })
+              )
+            }
+            isFirst={order === 0}
+            isLast={order === preQuestionSet.length - 1}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInPre(newQuestion))
             }
@@ -44,11 +57,11 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
               switch (accessibility) {
                 case QuestionAccessibility.POST:
                   dispatch(transferQuestionToPost(q));
-                  dispatch(deleteQuestionInPre(q.order));
+                  dispatch(deleteQuestionInPre(order));
                   break;
                 case QuestionAccessibility.SHARED:
                   dispatch(transferQuestionToShared(q));
-                  dispatch(deleteQuestionInPre(q.order));
+                  dispatch(deleteQuestionInPre(order));
                   break;
                 default:
               }

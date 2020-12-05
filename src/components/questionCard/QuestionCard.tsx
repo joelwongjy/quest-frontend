@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  ButtonGroup,
   createMuiTheme,
   FormControl,
   Grid,
@@ -10,6 +11,9 @@ import {
   Select,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DuplicateIcon from '@material-ui/icons/AddToPhotos';
+import UpIcon from '@material-ui/icons/ArrowUpward';
+import DownIcon from '@material-ui/icons/ArrowDownward';
 
 import QuestCard from 'componentWrappers/questCard';
 import McqQuestion from 'components/mcqQuestion';
@@ -31,6 +35,11 @@ interface QuestionCardProps extends QuestComponentProps {
   question: QuestionOrder;
   mode: QuestionMode;
   handleDelete: () => void;
+  handleDuplicate: () => void;
+  handleMoveUp: () => void;
+  handleMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
   updateQuestion: (newQuestion: QuestionOrder) => void;
   accessibility: QuestionAccessibility;
   updateAccessibility: (newAccessibility: QuestionAccessibility) => void;
@@ -63,6 +72,11 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   mode,
   handleDelete,
+  handleDuplicate,
+  handleMoveUp,
+  handleMoveDown,
+  isFirst,
+  isLast,
   updateQuestion,
   accessibility,
   updateAccessibility,
@@ -182,19 +196,41 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   return (
-    <QuestCard className={className}>
+    <QuestCard className={className} key={question.id}>
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
       <Grid item xs={12} className={classes.actions}>
-        <IconButton
-          aria-label="delete"
-          onClick={handleDelete}
-          style={{ color: 'red' }}
-          disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <div>
+          <IconButton
+            aria-label="delete"
+            onClick={handleDelete}
+            style={{ color: 'red' }}
+            disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            aria-label="duplicate"
+            onClick={handleDuplicate}
+            style={{ color: 'grey' }}
+            disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
+          >
+            <DuplicateIcon />
+          </IconButton>
+        </div>
+        <ButtonGroup variant="outlined">
+          {!isFirst && (
+            <IconButton aria-label="up" onClick={handleMoveUp}>
+              <UpIcon />
+            </IconButton>
+          )}
+          {!isLast && (
+            <IconButton aria-label="up" onClick={handleMoveDown}>
+              <DownIcon />
+            </IconButton>
+          )}
+        </ButtonGroup>
         {accessibilityEnabled && (
           <FormControl variant="outlined" size="small">
             <Select

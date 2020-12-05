@@ -26,6 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       color: 'white',
+      marginBottom: '0.5rem',
     },
   })
 );
