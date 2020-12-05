@@ -1,12 +1,8 @@
 import React from 'react';
+import { CardActions, CardContent, Typography } from '@material-ui/core';
 
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@material-ui/core';
+import QuestCard from 'componentWrappers/questCard';
+import QuestButton from 'componentWrappers/questButton';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 
@@ -20,25 +16,23 @@ const ProgrammeCard: React.FC<ProgrammeCardProps> = ({ programme }) => {
   const classes = useStyles();
 
   return (
-    <>
-      <Card>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            variant="h5"
-            component="h2"
-            noWrap
-          >
-            {programme.name}
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions}>
-          <Button size="small" className={classes.button}>
-            View Details
-          </Button>
-        </CardActions>
-      </Card>
-    </>
+    <QuestCard>
+      <CardContent>
+        <Typography
+          className={classes.title}
+          variant="h5"
+          component="h2"
+          noWrap
+        >
+          {programme.name}
+        </Typography>
+      </CardContent>
+      <CardActions className={classes.actions}>
+        <QuestButton size="small" className={classes.button} variant="text">
+          View Details
+        </QuestButton>
+      </CardActions>
+    </QuestCard>
   );
 };
 

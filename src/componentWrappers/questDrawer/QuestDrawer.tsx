@@ -16,7 +16,7 @@ import StarIcon from '@material-ui/icons/StarsRounded';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { HOME, PROGRAMMES, QUESTIONNAIRES, STUDENTS } from 'constants/routes';
 
-import { useStyles } from './drawer.styles';
+import { useStyles } from './questDrawer.styles';
 
 interface QuestDrawerProps extends QuestComponentProps {
   isDrawerOpen: boolean;

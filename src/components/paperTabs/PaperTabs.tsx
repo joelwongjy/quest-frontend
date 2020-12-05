@@ -1,8 +1,8 @@
 import React from 'react';
 import { Paper } from '@material-ui/core';
 
-import { QuestTabsProps } from 'components/tabs/Tabs';
-import Tabs from 'components/tabs';
+import { QuestTabsProps } from 'componentWrappers/questTabs/QuestTabs';
+import QuestTabs from 'componentWrappers/questTabs';
 
 import { useStyles } from './paperTabs.styles';
 
@@ -12,7 +12,7 @@ const PaperTabs: React.FunctionComponent<PaperTabsProps> = (props) => {
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
-      <Tabs {...props} />
+      <QuestTabs {...props} />
     </Paper>
   );
 };

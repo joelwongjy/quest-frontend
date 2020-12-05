@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Card,
   createMuiTheme,
   FormControl,
   Grid,
@@ -12,6 +11,7 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import QuestCard from 'componentWrappers/questCard';
 import McqQuestion from 'components/mcqQuestion';
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
@@ -182,7 +182,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   return (
-    <Card className={className}>
+    <QuestCard className={className}>
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
@@ -209,7 +209,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           </FormControl>
         )}
       </Grid>
-    </Card>
+    </QuestCard>
   );
 };
 

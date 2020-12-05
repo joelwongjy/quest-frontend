@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   FormGroup,
-  TextField,
   IconButton,
   FormLabel,
   FormControlLabel,
@@ -10,7 +9,8 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import ShortButton from 'components/shortButton/ShortButton';
+import QuestButton from 'componentWrappers/questButton';
+import QuestTextField from 'componentWrappers/questTextField';
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
 
 import { useStyles } from './McqQuestion.styles';
@@ -69,7 +69,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <TextField
+              <QuestTextField
                 required
                 className={classes.textfield}
                 label="Question"
@@ -85,7 +85,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
                 key={`option-${question.id}-${index}`}
                 style={{ width: '100%', display: 'flex' }}
               >
-                <TextField
+                <QuestTextField
                   required
                   placeholder={`Option ${index + 1}`}
                   value={option.optionText}
@@ -102,9 +102,9 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
                 )}
               </div>
             ))}
-            <ShortButton onClick={addOption} className={classes.button}>
+            <QuestButton onClick={addOption} className={classes.button}>
               Add Option
-            </ShortButton>
+            </QuestButton>
           </div>
         );
       default:

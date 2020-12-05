@@ -1,11 +1,11 @@
 import React from 'react';
-import { Card } from '@material-ui/core';
+import { Card, CardProps } from '@material-ui/core';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
-import { useStyles } from './card.styles';
+import { useStyles } from './questCard.styles';
 
-const QuestCard: React.FunctionComponent<QuestComponentProps> = ({
+const QuestCard: React.FunctionComponent<QuestComponentProps & CardProps> = ({
   className,
   children,
 }) => {

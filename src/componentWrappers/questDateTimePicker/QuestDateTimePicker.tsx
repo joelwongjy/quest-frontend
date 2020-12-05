@@ -4,7 +4,7 @@ import { createMuiTheme, MuiThemeProvider, TextField } from '@material-ui/core';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
-import { useStyles } from './dateTimePicker.styles';
+import { useStyles } from './questDateTimePicker.styles';
 
 export interface QuestDateTimePickerProps extends QuestComponentProps {
   date: Date;

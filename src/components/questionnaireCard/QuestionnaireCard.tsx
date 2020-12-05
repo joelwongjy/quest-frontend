@@ -14,7 +14,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
 
 import { QuestComponentProps } from 'interfaces/components/common';
-import Card from 'components/card';
+import QuestCard from 'componentWrappers/questCard';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
 import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
 import {
@@ -79,7 +79,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
         Last edited:{' '}
         {formatDistanceToNow(questionnaire.updatedAt, { addSuffix: true })}
       </Typography>
-      <Card>
+      <QuestCard>
         <CardHeader
           title={
             <>
@@ -156,7 +156,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             </Button>
           )}
         </CardActions>
-      </Card>
+      </QuestCard>
     </>
   );
 };

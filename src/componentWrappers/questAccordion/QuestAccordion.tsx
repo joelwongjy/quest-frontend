@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { useStyles } from './accordion.styles';
+import { useStyles } from './questAccordion.styles';
 
 interface QuestAccordionProps {
   heading: string;
