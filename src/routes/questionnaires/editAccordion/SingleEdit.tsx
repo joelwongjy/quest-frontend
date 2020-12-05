@@ -11,6 +11,8 @@ import {
 import {
   addQuestionToShared,
   deleteQuestionInShared,
+  shiftQuestionInShared,
+  transferQuestionToShared,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
 
@@ -36,6 +38,19 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInShared(order))}
+            handleDuplicate={() => dispatch(transferQuestionToShared(q))}
+            handleMoveUp={() =>
+              dispatch(
+                shiftQuestionInShared({ direction: 'UP', order: q.order })
+              )
+            }
+            handleMoveDown={() =>
+              dispatch(
+                shiftQuestionInShared({ direction: 'DOWN', order: q.order })
+              )
+            }
+            isFirst={order === 0}
+            isLast={order === questionSet.length - 1}
             updateQuestion={(newQuestion: QuestionOrder) =>
               dispatch(updateQuestionInShared(newQuestion))
             }
