@@ -4,8 +4,6 @@ import { withStyles } from '@material-ui/styles';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 
-import { useStyles } from './questTabs.styles';
-
 export interface QuestTabsProps extends QuestComponentProps {
   value: number;
   setValue: (newValue: number) => void;
