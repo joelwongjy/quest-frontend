@@ -7,13 +7,13 @@ import { useStyles } from './questCard.styles';
 
 const QuestCard: React.FunctionComponent<QuestComponentProps & CardProps> = ({
   className,
-  onClick,
   children,
+  ...props
 }) => {
   const classes = useStyles();
 
   return (
-    <Card className={`${classes.root} ${className}`} onClick={onClick}>
+    <Card className={`${classes.root} ${className}`} {...props}>
       {children}
     </Card>
   );

@@ -44,6 +44,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
     updateQuestion(newQuestion);
   };
 
+  // TODO: Need to add alert for confirmation
   const deleteOption = (index: number) => {
     const newOptions = [...question.options];
     newOptions.splice(index, 1);
@@ -83,7 +84,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={`option-${question.id}-${index}`}
-                style={{ width: '100%', display: 'flex' }}
+                style={{ width: '100%', display: 'flex', alignItems: 'center' }}
               >
                 <QuestTextField
                   required
@@ -96,6 +97,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
                   <IconButton
                     aria-label="delete"
                     onClick={() => deleteOption(index)}
+                    style={{ marginLeft: '0.5rem' }}
                   >
                     <DeleteIcon />
                   </IconButton>
