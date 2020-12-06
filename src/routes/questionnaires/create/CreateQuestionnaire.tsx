@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Paper, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
@@ -19,12 +19,13 @@ import {
   setPreEndTime,
   setPreStartTime,
   setType,
+  clearQuestionnaire,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
-
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
+
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -68,6 +69,14 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     setIsTypeSelected(true);
   };
 
+  const clearQuestionnairePromise = (
+    myDispatch: Dispatch<{ payload: undefined; type: string }>
+  ) =>
+    new Promise((resolve, _reject) => {
+      myDispatch(clearQuestionnaire());
+      resolve();
+    });
+
   const handleComplete = async () => {
     const data: QuestionnairePostData = {
       ...questionnaire,
@@ -76,7 +85,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     };
     const response = await ApiService.post('questionnaires/create', data);
     if (response.status === 200) {
-      history.push(QUESTIONNAIRES);
+      clearQuestionnairePromise(dispatch).then(() =>
+        history.push(QUESTIONNAIRES)
+      );
     }
   };
 

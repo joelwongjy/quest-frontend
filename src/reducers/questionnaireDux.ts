@@ -431,7 +431,13 @@ const questionnaire = createSlice({
     clearQuestionnaire: (state): void => {
       state.title = '';
       state.type = QuestionnaireType.ONE_TIME;
-      state.questionWindows = [];
+      state.questionWindows = [
+        {
+          startAt: new Date(),
+          endAt: new Date(),
+          questions: [],
+        },
+      ];
       state.sharedQuestions = { questions: [] };
     },
   },
