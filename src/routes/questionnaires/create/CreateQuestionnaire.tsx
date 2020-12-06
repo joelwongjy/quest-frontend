@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Grid, Paper } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { Grid, Paper, Typography } from '@material-ui/core';
+import SingleIcon from '@material-ui/icons/DescriptionOutlined';
+import PostIcon from '@material-ui/icons/Description';
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
@@ -15,8 +17,11 @@ import {
   setPostStartTime,
   setPreEndTime,
   setPreStartTime,
+  setType,
 } from 'reducers/questionnaireDux';
 
+import QuestCard from 'componentWrappers/questCard';
+import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -27,6 +32,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const classes = useStyles();
   const [programmeIds, setProgrammeIds] = useState<number[]>([]);
   const [classIds, setClassIds] = useState<number[]>([]);
+  const [isTypeSelected, setIsTypeSelected] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
@@ -48,51 +54,109 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     setClassIds(newClasses);
   };
 
+  const handleSelectSingle = () => {
+    dispatch(setType(QuestionnaireType.ONE_TIME));
+    setIsTypeSelected(true);
+  };
+
+  const handleSelectPrePost = () => {
+    dispatch(setType(QuestionnaireType.PRE_POST));
+    setIsTypeSelected(true);
+  };
+
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div className={classes.paperContainer}>
-        <Paper
-          className={classes.paper}
-          elevation={0}
-          style={{ background: 'white' }}
-        >
-          <DateAccordion
-            type={type}
-            preStartDate={new Date(questionWindows[0].startAt)}
-            preStartDateCallback={(date: Date) =>
-              dispatch(setPreStartTime(date))
-            }
-            preEndDate={new Date(questionWindows[0].endAt)}
-            preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
-            postStartDate={
-              questionWindows.length > 1
-                ? new Date(questionWindows[1].startAt)
-                : undefined
-            }
-            postStartDateCallback={(date: Date) =>
-              dispatch(setPostStartTime(date))
-            }
-            postEndDate={
-              questionWindows.length > 1
-                ? new Date(questionWindows[1].startAt)
-                : undefined
-            }
-            postEndDateCallback={(date: Date) => dispatch(setPostEndTime(date))}
-          />
-          <AssignAccordion
-            user={user!}
-            programmeIds={programmeIds}
-            programmeCallback={programmeCallback}
-            classIds={classIds}
-            classCallback={questClassCallback}
-          />
-          <EditAccordion questionnaire={questionnaire} />
-          <Grid container justify="flex-end">
-            <QuestButton fullWidth>Finish</QuestButton>
+      {!isTypeSelected ? (
+        <>
+          <Grid
+            container
+            justify="center"
+            style={{ marginTop: '3rem', marginBottom: '2rem' }}
+          >
+            <Typography
+              style={{ fontSize: 24, fontWeight: 'bold', color: 'grey' }}
+            >
+              What type of questionnaire would you like to create?
+            </Typography>
           </Grid>
-        </Paper>
-      </div>
+
+          <Grid container justify="center" alignItems="center">
+            <Grid item>
+              <QuestCard
+                className={classes.typeCard}
+                onClick={handleSelectSingle}
+              >
+                <Grid container direction="column" alignItems="center">
+                  <Grid item>
+                    <SingleIcon style={{ fontSize: 72 }} />
+                  </Grid>
+                  <Grid item>Single</Grid>
+                </Grid>
+              </QuestCard>
+            </Grid>
+            <Grid item>
+              <QuestCard
+                className={classes.typeCard}
+                onClick={handleSelectPrePost}
+              >
+                <Grid container direction="column" alignItems="center">
+                  <Grid item>
+                    <SingleIcon style={{ fontSize: 72 }} />
+                    <PostIcon style={{ fontSize: 72 }} />
+                  </Grid>
+                  <Grid item>Pre-Post Set</Grid>
+                </Grid>
+              </QuestCard>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <div className={classes.paperContainer}>
+          <Paper
+            className={classes.paper}
+            elevation={0}
+            style={{ background: 'white' }}
+          >
+            <DateAccordion
+              type={type}
+              preStartDate={new Date(questionWindows[0].startAt)}
+              preStartDateCallback={(date: Date) =>
+                dispatch(setPreStartTime(date))
+              }
+              preEndDate={new Date(questionWindows[0].endAt)}
+              preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
+              postStartDate={
+                questionWindows.length > 1
+                  ? new Date(questionWindows[1].startAt)
+                  : undefined
+              }
+              postStartDateCallback={(date: Date) =>
+                dispatch(setPostStartTime(date))
+              }
+              postEndDate={
+                questionWindows.length > 1
+                  ? new Date(questionWindows[1].startAt)
+                  : undefined
+              }
+              postEndDateCallback={(date: Date) =>
+                dispatch(setPostEndTime(date))
+              }
+            />
+            <AssignAccordion
+              user={user!}
+              programmeIds={programmeIds}
+              programmeCallback={programmeCallback}
+              classIds={classIds}
+              classCallback={questClassCallback}
+            />
+            <EditAccordion questionnaire={questionnaire} />
+            <Grid container justify="flex-end">
+              <QuestButton fullWidth>Finish</QuestButton>
+            </Grid>
+          </Paper>
+        </div>
+      )}
     </PageContainer>
   );
 };
