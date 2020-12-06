@@ -9,10 +9,10 @@ const ApiService = axios.create({
     ...axios.defaults.transformResponse,
     (data) => humps.camelizeKeys(data), // takes care of case issues
   ],
-  transformRequest: [
-    (data) => humps.decamelizeKeys(data), // takes care of case issues
-    ...axios.defaults.transformRequest,
-  ],
+  // transformRequest: [
+  //   (data) => humps.decamelizeKeys(data), // takes care of case issues
+  //   ...axios.defaults.transformRequest,
+  // ],
 });
 
 ApiService.interceptors.request.use(
