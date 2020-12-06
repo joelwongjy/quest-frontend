@@ -79,7 +79,9 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
       })}
       <QuestCard
         className={classes.addCard}
-        onClick={() => dispatch(addQuestionToShared())}
+        onClick={() => {
+          dispatch(addQuestionToShared());
+        }}
       >
         Add a question
       </QuestCard>
