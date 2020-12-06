@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { Grid, Paper, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
 import PostIcon from '@material-ui/icons/Description';
+import { useHistory } from 'react-router-dom';
+
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
@@ -18,10 +19,13 @@ import {
   setPreEndTime,
   setPreStartTime,
   setType,
+  clearQuestionnaire,
 } from 'reducers/questionnaireDux';
-
 import QuestCard from 'componentWrappers/questCard';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
+import ApiService from 'services/apiService';
+import { QuestionnairePostData } from 'interfaces/api/questionnaires';
+
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -30,6 +34,7 @@ import { useStyles } from './createQuestionnaire.styles';
 const CreateQuestionnaire: React.FunctionComponent = () => {
   const user = useUser();
   const classes = useStyles();
+  const history = useHistory();
   const [programmeIds, setProgrammeIds] = useState<number[]>([]);
   const [classIds, setClassIds] = useState<number[]>([]);
   const [isTypeSelected, setIsTypeSelected] = useState<boolean>(false);
@@ -38,7 +43,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
 
-  const questionnaire = useSelector(selectQuestionnaire);
+  const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
   const { type, questionWindows } = questionnaire;
 
   const breadcrumbs = [
@@ -62,6 +67,28 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const handleSelectPrePost = () => {
     dispatch(setType(QuestionnaireType.PRE_POST));
     setIsTypeSelected(true);
+  };
+
+  const clearQuestionnairePromise = (
+    myDispatch: Dispatch<{ payload: undefined; type: string }>
+  ) =>
+    new Promise((resolve, _reject) => {
+      myDispatch(clearQuestionnaire());
+      resolve();
+    });
+
+  const handleComplete = async () => {
+    const data: QuestionnairePostData = {
+      ...questionnaire,
+      classes: classIds,
+      programmes: programmeIds,
+    };
+    const response = await ApiService.post('questionnaires/create', data);
+    if (response.status === 200) {
+      clearQuestionnairePromise(dispatch).then(() =>
+        history.push(QUESTIONNAIRES)
+      );
+    }
   };
 
   return (
@@ -152,7 +179,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
             />
             <EditAccordion questionnaire={questionnaire} />
             <Grid container justify="flex-end">
-              <QuestButton fullWidth>Finish</QuestButton>
+              <QuestButton onClick={handleComplete} fullWidth>
+                Finish
+              </QuestButton>
             </Grid>
           </Paper>
         </div>

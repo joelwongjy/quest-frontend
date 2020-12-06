@@ -8,11 +8,11 @@ import {
   QuestionOrder,
 } from 'interfaces/models/questionnaires';
 import {
-  addQuestionToShared,
-  deleteQuestionInShared,
-  shiftQuestionInShared,
-  transferQuestionToShared,
-  updateQuestionInShared,
+  addQuestionToPre,
+  deleteQuestionInPre,
+  shiftQuestionInPre,
+  transferQuestionToPre,
+  updateQuestionInPre,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
 
@@ -37,22 +37,20 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInShared(order))}
-            handleDuplicate={() => dispatch(transferQuestionToShared(q))}
+            handleDelete={() => dispatch(deleteQuestionInPre(order))}
+            handleDuplicate={() => dispatch(transferQuestionToPre(q))}
             handleMoveUp={() =>
-              dispatch(
-                shiftQuestionInShared({ direction: 'UP', order: q.order })
-              )
+              dispatch(shiftQuestionInPre({ direction: 'UP', order: q.order }))
             }
             handleMoveDown={() =>
               dispatch(
-                shiftQuestionInShared({ direction: 'DOWN', order: q.order })
+                shiftQuestionInPre({ direction: 'DOWN', order: q.order })
               )
             }
             isFirst={order === 0}
             isLast={order === questionSet.length - 1}
             updateQuestion={(newQuestion: QuestionOrder) =>
-              dispatch(updateQuestionInShared(newQuestion))
+              dispatch(updateQuestionInPre(newQuestion))
             }
             accessibility={QuestionAccessibility.SHARED}
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -64,7 +62,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
       })}
       <QuestCard
         className={classes.addCard}
-        onClick={() => dispatch(addQuestionToShared())}
+        onClick={() => dispatch(addQuestionToPre())}
       >
         Add a question
       </QuestCard>
