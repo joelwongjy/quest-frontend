@@ -46,9 +46,19 @@ const Questionnaires: React.FunctionComponent = () => {
     const fetchData = async () => {
       try {
         const response = await ApiService.get('questionnaires');
+        const questionnaires = (response.data
+          .questionnaires as QuestionnaireListData[]).map(
+          (q: QuestionnaireListData) => ({
+            ...q,
+            createdAt: new Date(q.createdAt),
+            startAt: new Date(q.startAt),
+            endAt: new Date(q.endAt),
+            updatedAt: new Date(q.updatedAt),
+          })
+        );
         if (!didCancel) {
           setState({
-            questionnaires: response.data.questionnaireListData,
+            questionnaires,
             isLoading: false,
           });
         }
