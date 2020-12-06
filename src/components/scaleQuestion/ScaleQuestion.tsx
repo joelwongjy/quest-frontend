@@ -4,11 +4,11 @@ import {
   FormLabel,
   Grid,
   Slider,
-  TextField,
   withStyles,
 } from '@material-ui/core';
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
+import QuestTextField from 'componentWrappers/questTextField';
 
 import { useStyles } from './ScaleQuestion.styles';
 
@@ -103,7 +103,7 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <TextField
+              <QuestTextField
                 required
                 className={classes.textfield}
                 label="Question"

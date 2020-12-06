@@ -1,6 +1,7 @@
 import React from 'react';
-import { FormGroup, FormLabel, TextField } from '@material-ui/core';
+import { FormGroup, FormLabel } from '@material-ui/core';
 
+import QuestTextField from 'componentWrappers/questTextField';
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
 
 import { useStyles } from './ShortAnswerQuestion.styles';
@@ -31,7 +32,7 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <TextField
+              <QuestTextField
                 required
                 className={classes.textfield}
                 label="Question"
@@ -41,14 +42,18 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
               />
               {dropdown}
             </div>
-            <TextField disabled id="disabled" defaultValue="Short Answer" />
+            <QuestTextField
+              disabled
+              id="disabled"
+              defaultValue="Short Answer"
+            />
           </div>
         );
       default:
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <TextField placeholder="Short Answer" />
+            <QuestTextField placeholder="Short Answer" />
           </div>
         );
     }

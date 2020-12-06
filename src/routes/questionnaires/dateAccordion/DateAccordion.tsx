@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Chip, Grid } from '@material-ui/core';
 
-import DateTimePicker from 'components/dateTimePicker';
-import Accordion from 'components/accordion';
+import QuestDateTimePicker from 'componentWrappers/questDateTimePicker';
+import QuestAccordion from 'componentWrappers/questAccordion';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import { isBefore } from 'date-fns';
 
@@ -52,7 +52,7 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
   };
 
   return (
-    <Accordion heading="Step 1: Set the duration">
+    <QuestAccordion heading="Step 1: Set the duration">
       <Grid container justify="space-around">
         <Grid item xs={10}>
           <Grid container justify="space-around">
@@ -68,14 +68,14 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
             )}
             <Grid container justify="space-around">
               <div style={{ marginTop: '1rem' }}>
-                <DateTimePicker
+                <QuestDateTimePicker
                   date={preStartDate}
                   callback={preStartDateCallback}
                   label="Start Date & Time"
                 />
               </div>
               <div style={{ marginTop: '1rem' }}>
-                <DateTimePicker
+                <QuestDateTimePicker
                   date={preEndDate}
                   callback={handlePreEndTime}
                   label="End Date & Time"
@@ -98,14 +98,14 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
 
               <Grid container justify="space-around">
                 <div style={{ marginTop: '1rem' }}>
-                  <DateTimePicker
+                  <QuestDateTimePicker
                     date={postStartDate!}
                     callback={postStartDateCallback!}
                     label="Start Date & Time"
                   />
                 </div>
                 <div style={{ marginTop: '1rem' }}>
-                  <DateTimePicker
+                  <QuestDateTimePicker
                     date={postEndDate!}
                     callback={handlePostEndTime}
                     label="End Date & Time"
@@ -117,7 +117,7 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
           )}
         </Grid>
       </Grid>
-    </Accordion>
+    </QuestAccordion>
   );
 };
 

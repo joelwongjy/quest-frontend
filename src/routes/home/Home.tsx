@@ -1,37 +1,40 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
 
 import { useUser } from 'contexts/UserContext';
 import { useAuth } from 'contexts/AuthContext';
 import PageContainer from 'components/pageContainer';
-import Breadcrumbs from 'components/breadcrumbs';
+import QuestBreadcrumbs from 'componentWrappers/questBreadcrumbs';
+import QuestButton from 'componentWrappers/questButton';
 import { HOME } from 'constants/routes';
 import ApiService from 'services/apiService';
+
+import { useStyles } from './home.styles';
 
 const Home: React.FunctionComponent = () => {
   const { name } = useUser()!;
   const { logout } = useAuth();
+  const classes = useStyles();
 
   const breadcrumbs = [{ text: 'Home', href: HOME }];
 
   return (
     <PageContainer>
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <QuestBreadcrumbs breadcrumbs={breadcrumbs} />
       <div>You&apos;re logged in, {name}!</div>
       <br />
-      <Button type="button" onClick={logout}>
+      <QuestButton onClick={logout} className={classes.button}>
         Log out
-      </Button>
-      <Button
-        type="button"
+      </QuestButton>
+      <QuestButton
         onClick={async () => {
           const response = await ApiService.get('seed');
           // eslint-disable-next-line no-console
           console.log(response.data.message);
         }}
+        className={classes.button}
       >
         Seed
-      </Button>
+      </QuestButton>
     </PageContainer>
   );
 };

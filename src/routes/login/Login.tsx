@@ -5,8 +5,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useAuth } from 'contexts/AuthContext';
 import PageContainer from 'components/pageContainer';
 
-import Input from 'components/input';
-import LongButton from 'components/longButton';
+import QuestTextField from 'componentWrappers/questTextField';
+import QuestButton from 'componentWrappers/questButton';
 import { LOGIN } from 'constants/routes';
 
 import { useStyles } from './login.styles';
@@ -50,12 +50,13 @@ const Login: React.FunctionComponent = () => {
               Login
             </Typography>
             <form className={classes.form} onSubmit={handleLogin}>
-              <Input
+              <QuestTextField
                 required
                 id="username"
                 label="Username"
                 name="username"
                 autoComplete="on"
+                margin="normal"
                 autoFocus
                 value={username}
                 onChange={(e) => {
@@ -63,12 +64,13 @@ const Login: React.FunctionComponent = () => {
                   setUsername(e.target.value);
                 }}
               />
-              <Input
+              <QuestTextField
                 required
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
+                margin="normal"
                 autoComplete="on"
                 value={password}
                 onChange={(e) => {
@@ -80,9 +82,9 @@ const Login: React.FunctionComponent = () => {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember Me"
             /> */}
-              <LongButton type="submit" value="Submit">
+              <QuestButton type="submit" value="Submit" fullWidth>
                 Sign In
-              </LongButton>
+              </QuestButton>
               <Grid container>
                 <Grid item xs>
                   <Link href={LOGIN} variant="body2" color="secondary">

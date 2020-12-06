@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTheme } from '@material-ui/core';
 
-import AppBar from 'components/appBar/AppBar';
-import Drawer from 'components/drawer';
+import QuestAppBar from 'componentWrappers/questAppBar/QuestAppBar';
+import QuestDrawer from 'componentWrappers/questDrawer';
 
 import { useStyles } from './pageContainer.styles';
 
@@ -30,11 +30,15 @@ const PageContainer: React.FunctionComponent<PageContainerProps> = ({
 
   return (
     <div className={classes.root}>
-      <AppBar theme={theme} hasDrawer={hasDrawer} toggleDrawer={toggleDrawer}>
+      <QuestAppBar
+        theme={theme}
+        hasDrawer={hasDrawer}
+        toggleDrawer={toggleDrawer}
+      >
         {appBarChildren}
-      </AppBar>
+      </QuestAppBar>
       {hasDrawer && (
-        <Drawer
+        <QuestDrawer
           theme={theme}
           isDrawerOpen={isDrawerOpen}
           toggleDrawer={toggleDrawer}

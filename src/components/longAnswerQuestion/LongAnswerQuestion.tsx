@@ -1,8 +1,8 @@
 import React from 'react';
-
-import { FormGroup, FormLabel, TextField } from '@material-ui/core';
+import { FormGroup, FormLabel } from '@material-ui/core';
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
+import QuestTextField from 'componentWrappers/questTextField';
 
 import { useStyles } from './LongAnswerQuestion.styles';
 
@@ -32,7 +32,7 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <TextField
+              <QuestTextField
                 required
                 className={classes.textfield}
                 label="Question"
@@ -42,7 +42,7 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
               />
               {dropdown}
             </div>
-            <TextField
+            <QuestTextField
               disabled
               id="disabled"
               defaultValue="Long Answer"
@@ -54,7 +54,7 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <TextField placeholder="Long Answer" />
+            <QuestTextField placeholder="Long Answer" />
           </div>
         );
     }

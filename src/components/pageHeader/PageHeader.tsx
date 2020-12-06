@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Breadcrumbs from 'components/breadcrumbs';
-import { QuestBreadcrumbsProps } from 'components/breadcrumbs/Breadcrumbs';
+import QuestBreadcrumbs from 'componentWrappers/questBreadcrumbs';
+import { QuestBreadcrumbsProps } from 'componentWrappers/questBreadcrumbs/QuestBreadcrumbs';
 
 import { useStyles } from './pageHeader.styles';
 
@@ -18,7 +18,7 @@ const PageHeader: React.FunctionComponent<PageHeaderProps> = ({
 
   return (
     <div {...props} className={classes.root}>
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <QuestBreadcrumbs breadcrumbs={breadcrumbs} />
       {action}
     </div>
   );

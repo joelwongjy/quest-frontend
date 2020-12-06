@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { Button, CardContent, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -8,10 +8,10 @@ import { CREATE, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
-
 import { Student } from 'interfaces/models/students';
-import { students } from './mockData';
+import QuestCard from 'componentWrappers/questCard';
 
+import { students } from './mockData';
 import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
@@ -71,7 +71,7 @@ const Students: React.FunctionComponent = () => {
             component={Link}
             to={`${STUDENTS}${CREATE}`}
           >
-            Create New
+            Create Student
           </Button>
         }
       />
@@ -79,7 +79,7 @@ const Students: React.FunctionComponent = () => {
         {state.students.map((s) => {
           return (
             <Grid item xs={12} sm={6} lg={4} key={s.name}>
-              <Card>
+              <QuestCard>
                 <CardContent>
                   <Typography
                     className={classes.title}
@@ -90,7 +90,7 @@ const Students: React.FunctionComponent = () => {
                     {s.name}
                   </Typography>
                 </CardContent>
-              </Card>
+              </QuestCard>
             </Grid>
           );
         })}

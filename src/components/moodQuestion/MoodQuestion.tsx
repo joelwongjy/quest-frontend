@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormGroup, IconButton, TextField } from '@material-ui/core';
+import { FormGroup, IconButton } from '@material-ui/core';
 import {
   SentimentVerySatisfied,
   SentimentSatisfiedAlt,
@@ -9,6 +9,7 @@ import {
 } from '@material-ui/icons/';
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
+import QuestTextField from 'componentWrappers/questTextField';
 
 import { useStyles } from './MoodQuestion.styles';
 
@@ -44,7 +45,7 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <TextField
+              <QuestTextField
                 required
                 className={classes.textfield}
                 label="Question"
@@ -101,7 +102,7 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <TextField
+              <QuestTextField
                 required
                 className={classes.textfield}
                 label="Question"

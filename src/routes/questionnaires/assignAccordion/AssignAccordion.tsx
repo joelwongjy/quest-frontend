@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Accordion from 'components/accordion';
+import QuestAccordion from 'componentWrappers/questAccordion';
 import ProgrammeClassPicker from 'components/programmeClassPicker';
 import { UserData } from 'interfaces/models/users';
 
@@ -20,7 +20,7 @@ const AssignAccordion: React.FC<AssignAccordionProps> = ({
   classCallback,
 }) => {
   return (
-    <Accordion heading="Step 2: Assign the questionnaire">
+    <QuestAccordion heading="Step 2: Assign the questionnaire">
       <ProgrammeClassPicker
         programmes={user!.programmes}
         questClasses={user!.classes}
@@ -29,7 +29,7 @@ const AssignAccordion: React.FC<AssignAccordionProps> = ({
         programmeCallback={programmeCallback}
         classCallback={classCallback}
       />
-    </Accordion>
+    </QuestAccordion>
   );
 };
 

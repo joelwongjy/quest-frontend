@@ -15,7 +15,7 @@ import {
 import logo from 'assets/images/logo.png';
 import { QuestComponentProps } from 'interfaces/components/common';
 
-import { useStyles } from './appBar.styles';
+import { useStyles } from './questAppBar.styles';
 
 const LogoContainer: React.FunctionComponent = () => {
   const classes = useStyles();

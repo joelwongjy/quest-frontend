@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { Breadcrumb } from 'interfaces/components/breadcrumbs';
 
-import { useStyles } from './breadcrumbs.styles';
+import { useStyles } from './questBreadcrumbs.styles';
 
 export interface QuestBreadcrumbsProps extends QuestComponentProps {
   breadcrumbs: Breadcrumb[];

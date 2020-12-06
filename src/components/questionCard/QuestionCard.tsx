@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   ButtonGroup,
-  Card,
   createMuiTheme,
   FormControl,
   Grid,
@@ -16,6 +15,7 @@ import DuplicateIcon from '@material-ui/icons/AddToPhotos';
 import UpIcon from '@material-ui/icons/ArrowUpward';
 import DownIcon from '@material-ui/icons/ArrowDownward';
 
+import QuestCard from 'componentWrappers/questCard';
 import McqQuestion from 'components/mcqQuestion';
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
@@ -196,7 +196,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   return (
-    <Card className={className} key={question.id}>
+    <QuestCard className={className} key={question.id}>
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
@@ -245,7 +245,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           </FormControl>
         )}
       </Grid>
-    </Card>
+    </QuestCard>
   );
 };
 
