@@ -21,3 +21,5 @@ const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
 }) => {
   return <></>;
 };
+
+export default QuestDialog;
