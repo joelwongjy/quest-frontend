@@ -163,7 +163,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
               }
               postEndDate={
                 questionWindows.length > 1
-                  ? new Date(questionWindows[1].startAt)
+                  ? new Date(questionWindows[1].endAt)
                   : undefined
               }
               postEndDateCallback={(date: Date) =>
