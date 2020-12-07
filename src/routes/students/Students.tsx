@@ -9,7 +9,6 @@ import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
 import { Student } from 'interfaces/models/students';
-import QuestCard from 'componentWrappers/questCard';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
