@@ -15,6 +15,7 @@ import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
+import QuestDialog from 'componentWrappers/questDialog';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
@@ -38,6 +39,7 @@ const Questionnaires: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [tabValue, setTabValue] = useState<number>(0);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -203,6 +205,14 @@ const Questionnaires: React.FunctionComponent = () => {
             );
           })}
       </Grid>
+      <QuestDialog
+        isDialogOpen={isDialogOpen}
+        hasConfirm={false}
+        dialogHeader="This is a header"
+        dialogContent="This is the content of the dialog"
+        closeHandler={() => setIsDialogOpen(false)}
+        confirmHandler={() => setIsDialogOpen(false)}
+      />
     </PageContainer>
   );
 };

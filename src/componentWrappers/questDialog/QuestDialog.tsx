@@ -18,7 +18,7 @@ interface QuestDialogProps extends QuestComponentProps {
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
-  cancelHandler: () => void;
+  cancelHandler?: () => void;
 }
 
 const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
@@ -48,12 +48,14 @@ const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
         </DialogContent>
         {hasConfirm ? (
           <DialogActions>
-            <Button onClick={cancelHandler}>Cancel</Button>
-            <Button onClick={confirmHandler}>Confirm</Button>
+            {cancelHandler && <Button onClick={cancelHandler}>Cancel</Button>}
+            {confirmHandler && (
+              <Button onClick={confirmHandler}>Confirm</Button>
+            )}
           </DialogActions>
         ) : (
           <DialogActions>
-            <Button onClick={cancelHandler}>Okay</Button>
+            <Button onClick={confirmHandler}>Okay</Button>
           </DialogActions>
         )}
       </Dialog>
