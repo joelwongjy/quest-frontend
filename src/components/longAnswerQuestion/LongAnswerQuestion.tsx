@@ -1,8 +1,14 @@
 import React from 'react';
-import { FormGroup, FormLabel } from '@material-ui/core';
+import {
+  FormControl,
+  FormGroup,
+  FormHelperText,
+  FormLabel,
+} from '@material-ui/core';
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './LongAnswerQuestion.styles';
 
@@ -20,11 +26,14 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
   dropdown,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
 
   const updateText = (newText: string) => {
     const newQuestion = { ...question, questionText: newText };
     updateQuestion(newQuestion);
   };
+
+  const hasQuestionTextError = hasError && question.questionText === '';
 
   const renderQuestion = () => {
     switch (mode) {
@@ -32,14 +41,22 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <QuestTextField
-                required
-                className={classes.textfield}
-                label="Question"
-                variant="filled"
-                value={question.questionText}
-                onChange={(e) => updateText(e.target.value)}
-              />
+              <FormControl
+                style={{ width: '100%' }}
+                error={hasQuestionTextError}
+              >
+                <QuestTextField
+                  required
+                  className={classes.textfield}
+                  label="Question"
+                  variant="filled"
+                  value={question.questionText}
+                  onChange={(e) => updateText(e.target.value)}
+                />
+                {hasQuestionTextError && (
+                  <FormHelperText>The question cannot be blank!</FormHelperText>
+                )}
+              </FormControl>
               {dropdown}
             </div>
             <QuestTextField

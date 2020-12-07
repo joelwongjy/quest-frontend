@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { FormGroup, IconButton } from '@material-ui/core';
+import {
+  FormControl,
+  FormGroup,
+  FormHelperText,
+  IconButton,
+} from '@material-ui/core';
 import {
   SentimentVerySatisfied,
   SentimentSatisfiedAlt,
@@ -10,6 +15,7 @@ import {
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './MoodQuestion.styles';
 
@@ -27,6 +33,7 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
   dropdown,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
 
   const [mood, setMood] = useState<number>();
 
@@ -39,20 +46,30 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
     updateQuestion(newQuestion);
   };
 
+  const hasQuestionTextError = hasError && question.questionText === '';
+
   const renderQuestion = () => {
     switch (mode) {
       case QuestionMode.EDIT || QuestionMode.NEW:
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <QuestTextField
-                required
-                className={classes.textfield}
-                label="Question"
-                variant="filled"
-                value={question.questionText}
-                onChange={(e) => updateText(e.target.value)}
-              />
+              <FormControl
+                style={{ width: '100%' }}
+                error={hasQuestionTextError}
+              >
+                <QuestTextField
+                  required
+                  className={classes.textfield}
+                  label="Question"
+                  variant="filled"
+                  value={question.questionText}
+                  onChange={(e) => updateText(e.target.value)}
+                />
+                {hasQuestionTextError && (
+                  <FormHelperText>The question cannot be blank!</FormHelperText>
+                )}
+              </FormControl>
               {dropdown}
             </div>
             <div className={classes.emojiContainer}>
