@@ -16,13 +16,13 @@ import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
 import QuestDialog from 'componentWrappers/questDialog';
-import Alert from '@material-ui/lab/Alert/Alert';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { RootState } from 'reducers/rootReducer';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
 } from 'reducers/questionnaireDux';
+import QuestAlert from 'componentWrappers/questAlert';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
@@ -196,22 +196,15 @@ const Questionnaires: React.FunctionComponent = () => {
   return (
     <PageContainer>
       {hasIncompleteQuestionnaire && (
-        <Alert
+        <QuestAlert
           severity="warning"
-          action={
-            <Button
-              color="inherit"
-              size="small"
-              onClick={() => {
-                history.push(`${QUESTIONNAIRES}${CREATE}`);
-              }}
-            >
-              Continue
-            </Button>
-          }
-        >
-          You have an incomplete questionnaire
-        </Alert>
+          hasAction
+          action={() => {
+            history.push(`${QUESTIONNAIRES}${CREATE}`);
+          }}
+          actionMessage="Continue"
+          alertMessage="You have an incomplete questionnaire"
+        />
       )}
       <PageHeader breadcrumbs={breadcrumbs} />
       <QuestionnaireTabs
