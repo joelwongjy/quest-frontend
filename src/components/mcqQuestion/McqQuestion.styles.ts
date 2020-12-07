@@ -22,7 +22,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     option: {
       flex: 1,
       paddingTop: '1rem',
-      // paddingBottom: '1rem',
     },
     button: {
       color: 'white',
