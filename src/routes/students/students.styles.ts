@@ -16,6 +16,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     item: {
       color: '#044682',
       marginBottom: '1.5rem',
+      border: 0,
+      outline: 0,
+      borderRadius: 12,
       display: 'flex',
       justifyContent: 'left',
       alignItems: 'center',
