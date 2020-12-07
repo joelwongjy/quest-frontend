@@ -12,8 +12,8 @@ import {
   updateQuestionInPre,
   transferQuestionToPost,
   transferQuestionToShared,
-  transferQuestionToPre,
   shiftQuestionInPre,
+  duplicateQuestionInPre,
 } from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
@@ -38,7 +38,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPre(order))}
-            handleDuplicate={() => dispatch(transferQuestionToPre(q))}
+            handleDuplicate={() => dispatch(duplicateQuestionInPre(order))}
             handleMoveUp={() =>
               dispatch(shiftQuestionInPre({ direction: 'UP', order: q.order }))
             }
