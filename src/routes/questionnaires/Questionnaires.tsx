@@ -194,7 +194,7 @@ const Questionnaires: React.FunctionComponent = () => {
           renderedQuestionnaires.map((q) => {
             const menuOptions = getMenuOptions(q.id);
             return (
-              <Grid item xs={12} sm={6} lg={4} key={q.name}>
+              <Grid item xs={12} sm={6} lg={4} key={`${q.name}-${q.id}`}>
                 <QuestionnaireCard
                   questionnaire={q}
                   menuOptions={menuOptions}
