@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import nextId from 'react-id-generator';
+import { addDays } from 'date-fns';
 
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import {
@@ -37,7 +38,7 @@ const questionnaire = createSlice({
         state.questionWindows = [
           {
             startAt: new Date(),
-            endAt: new Date(),
+            endAt: addDays(new Date(), 7),
             questions: [],
           },
         ];
@@ -45,12 +46,12 @@ const questionnaire = createSlice({
         state.questionWindows = [
           {
             startAt: new Date(),
-            endAt: new Date(),
+            endAt: addDays(new Date(), 2),
             questions: [],
           },
           {
-            startAt: new Date(),
-            endAt: new Date(),
+            startAt: addDays(new Date(), 3),
+            endAt: addDays(new Date(), 5),
             questions: [],
           },
         ];
