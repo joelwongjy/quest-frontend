@@ -12,7 +12,6 @@ import {
   deleteQuestionInPre,
   duplicateQuestionInPre,
   shiftQuestionInPre,
-  transferQuestionToPre,
   updateQuestionInPre,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
