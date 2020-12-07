@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button, CardContent, Grid, Typography } from '@material-ui/core';
+import { Button, Paper, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -85,28 +85,51 @@ const Students: React.FunctionComponent = () => {
           </Button>
         }
       />
-      <List dense={false}>
-        {state.students.map((s) => {
-          return (
-            <ListItem key={s.name}>
-              <ListItemAvatar>
-                <Avatar>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={s.name} secondary="Program 1 - Class 1" />
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="edit">
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
-      </List>
+      <div className={classes.paperContainer}>
+        <Paper
+          className={classes.paper}
+          elevation={0}
+          style={{ background: 'white' }}
+        >
+          <List className={classes.list}>
+            {state.students.map((s) => {
+              return (
+                <ListItem key={s.name} className={classes.item}>
+                  <ListItemAvatar style={{ paddingLeft: '0.5rem' }}>
+                    <Avatar>
+                      <PersonIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={s.name}
+                    secondary={
+                      <List dense>
+                        <ListItem>
+                          <Typography>Class 1 - Program 1</Typography>
+                        </ListItem>
+                        <ListItem>
+                          <Typography>Class 2 - Program 2</Typography>
+                        </ListItem>
+                        <ListItem>
+                          <Typography>Class 3 - Program 3</Typography>
+                        </ListItem>
+                      </List>
+                    }
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="edit">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })}
+          </List>
+        </Paper>
+      </div>
     </PageContainer>
   );
 };
