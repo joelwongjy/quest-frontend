@@ -9,8 +9,6 @@ import {
 import { QuestComponentProps } from 'interfaces/components/common';
 import React from 'react';
 
-import { useStyles } from './questDialog.styles';
-
 interface QuestDialogProps extends QuestComponentProps {
   isDialogOpen: boolean;
   dialogHeader: string;
@@ -30,8 +28,6 @@ const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
   confirmHandler,
   cancelHandler,
 }) => {
-  const classes = useStyles();
-
   return (
     <div>
       <Dialog

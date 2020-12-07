@@ -34,12 +34,14 @@ const Questionnaires: React.FunctionComponent = () => {
       questionnaires,
       isLoading: true,
       isError: false,
+      isDialogOpen: false,
+      errorHeader: '',
+      errorMessage: '',
     }
   );
   const dispatch = useDispatch();
   const history = useHistory();
   const [tabValue, setTabValue] = useState<number>(0);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -206,12 +208,12 @@ const Questionnaires: React.FunctionComponent = () => {
           })}
       </Grid>
       <QuestDialog
-        isDialogOpen={isDialogOpen}
+        isDialogOpen={state.isDialogOpen!}
         hasConfirm={false}
-        dialogHeader="This is a header"
-        dialogContent="This is the content of the dialog"
-        closeHandler={() => setIsDialogOpen(false)}
-        confirmHandler={() => setIsDialogOpen(false)}
+        dialogHeader={state.errorHeader!}
+        dialogContent={state.errorMessage!}
+        closeHandler={() => setState({ isDialogOpen: false })}
+        confirmHandler={() => setState({ isDialogOpen: false })}
       />
     </PageContainer>
   );
