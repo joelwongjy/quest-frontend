@@ -21,12 +21,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     option: {
       flex: 1,
-      paddingTop: '0.5rem',
-      paddingBottom: '1rem',
+      paddingTop: '1rem',
     },
     button: {
       color: 'white',
       marginBottom: '0.5rem',
+    },
+    optionButton: {
+      color: 'white',
+      marginBottom: '0.5rem',
+      marginTop: '1rem',
     },
   })
 );

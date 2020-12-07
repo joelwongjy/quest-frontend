@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {
+  FormControl,
   FormGroup,
+  FormHelperText,
   FormLabel,
   Grid,
   Slider,
@@ -9,6 +11,7 @@ import {
 
 import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './ScaleQuestion.styles';
 
@@ -26,6 +29,7 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
   dropdown,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
 
   const [scale, setScale] = useState<number>();
 
@@ -41,6 +45,8 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
     const newQuestion = { ...question, questionText: newText };
     updateQuestion(newQuestion);
   };
+
+  const hasQuestionTextError = hasError && question.questionText === '';
 
   const customBoxShadow =
     '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
@@ -103,14 +109,22 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
         return (
           <div className={classes.top}>
             <div className={classes.textfieldContainer}>
-              <QuestTextField
-                required
-                className={classes.textfield}
-                label="Question"
-                variant="filled"
-                value={question.questionText}
-                onChange={(e) => updateText(e.target.value)}
-              />
+              <FormControl
+                style={{ width: '100%' }}
+                error={hasQuestionTextError}
+              >
+                <QuestTextField
+                  required
+                  className={classes.textfield}
+                  label="Question"
+                  variant="filled"
+                  value={question.questionText}
+                  onChange={(e) => updateText(e.target.value)}
+                />
+                {hasQuestionTextError && (
+                  <FormHelperText>The question cannot be blank!</FormHelperText>
+                )}
+              </FormControl>
               {dropdown}
             </div>
             <Grid container alignItems="center" justify="space-around">

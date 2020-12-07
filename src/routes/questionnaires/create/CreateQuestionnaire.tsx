@@ -22,9 +22,16 @@ import {
   clearQuestionnaire,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
-import { QuestionnaireType } from 'interfaces/models/questionnaires';
+import {
+  QuestionnaireType,
+  QuestionWindow,
+  QuestionOrder,
+  OptionData,
+} from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
+import { useError } from 'contexts/ErrorContext';
+import { validateQuestionnaire } from 'utils/questionnaireUtils';
 
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
@@ -35,6 +42,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const user = useUser();
   const classes = useStyles();
   const history = useHistory();
+  const { setHasError } = useError();
   const [programmeIds, setProgrammeIds] = useState<number[]>([]);
   const [classIds, setClassIds] = useState<number[]>([]);
   const [isTypeSelected, setIsTypeSelected] = useState<boolean>(false);
@@ -78,11 +86,32 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     });
 
   const handleComplete = async () => {
-    const data: QuestionnairePostData = {
+    if (!validateQuestionnaire(questionnaire)) {
+      setHasError(true);
+      return;
+    }
+    setHasError(false);
+    const filteredQuestionnaire = {
       ...questionnaire,
+      questionWindows: questionnaire.questionWindows.map(
+        (q: QuestionWindow) => ({
+          ...q,
+          questions: q.questions.map((q2: QuestionOrder) => ({
+            ...q2,
+            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
+          })),
+        })
+      ),
+    };
+    const data: QuestionnairePostData = {
+      ...filteredQuestionnaire,
       classes: classIds,
       programmes: programmeIds,
     };
+    if (data.type === QuestionnaireType.ONE_TIME) {
+      data.sharedQuestions = { questions: [] };
+      data.questionWindows = [data.questionWindows[0]];
+    }
     const response = await ApiService.post('questionnaires/create', data);
     if (response.status === 200) {
       clearQuestionnairePromise(dispatch).then(() =>

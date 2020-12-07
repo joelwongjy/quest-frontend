@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { Grid, Switch, Typography } from '@material-ui/core';
+import {
+  FormControl,
+  FormHelperText,
+  Grid,
+  Switch,
+  Typography,
+} from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import QuestAccordion from 'componentWrappers/questAccordion';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
-
 import { setTitle } from 'reducers/questionnaireDux';
+import { useError } from 'contexts/ErrorContext';
+
 import SingleEdit from './SingleEdit';
 import SharedEdit from './SharedEdit';
 import PreEdit from './PreEdit';
@@ -21,6 +28,7 @@ interface EditAccordionProps {
 const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { hasError } = useError();
   const { type, questionWindows, sharedQuestions } = questionnaire;
   const [isPre, setIsPre] = useState<boolean>(true);
 
@@ -28,10 +36,12 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
     dispatch(setTitle(newTitle));
   };
 
+  const hasTitleError = hasError && questionnaire.title === '';
+
   return (
     <QuestAccordion heading="Step 3: Create the questionnaire">
       <Grid container>
-        <div className={classes.inputContainer}>
+        <FormControl error={hasTitleError} className={classes.inputContainer}>
           <QuestTextField
             className={classes.input}
             placeholder="Enter Title of Questionnaire"
@@ -39,8 +49,12 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
             value={questionnaire.title}
             margin="normal"
             onChange={(e) => updateTitle(e.target.value)}
+            error={hasError && questionnaire.title === ''}
           />
-        </div>
+          {hasTitleError && (
+            <FormHelperText>The title cannot be empty!</FormHelperText>
+          )}
+        </FormControl>
         {type === QuestionnaireType.ONE_TIME && (
           <SingleEdit questionSet={questionWindows[0].questions} />
         )}

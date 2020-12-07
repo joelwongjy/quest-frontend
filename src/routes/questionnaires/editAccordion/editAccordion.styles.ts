@@ -30,6 +30,7 @@ export const useStyles = makeStyles((theme) =>
       width: '100%',
       display: 'flex',
       justifyContent: 'center',
+      alignItems: 'center',
     },
     addCard: {
       marginTop: '1rem',
