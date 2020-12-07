@@ -34,12 +34,12 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
   const [postErrorMessage, setPostErrorMessage] = useState<string>('');
 
   const handlePreEndTime = (end: Date) => {
-    if (isBefore(end, preStartDate)) {
+    if (isBefore(end, preStartDate!)) {
       setPreErrorMessage('The end date must be after the start date!');
       return;
     }
     setPreErrorMessage('');
-    preEndDateCallback(end);
+    preEndDateCallback!(end);
   };
 
   const handlePostEndTime = (end: Date) => {
