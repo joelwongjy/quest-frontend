@@ -35,6 +35,7 @@ const QuestDateTimePicker: React.FC<QuestDateTimePickerProps> = ({
         className={`${classes.root} ${className}`}
         renderInput={(p) => <TextField {...p} />}
         value={date}
+        minutesStep={5}
         onChange={(newDate) => callback(newDate!)}
         label={label}
         {...props}

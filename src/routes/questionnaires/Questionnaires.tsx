@@ -15,6 +15,7 @@ import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
+import QuestDialog from 'componentWrappers/questDialog';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
@@ -33,6 +34,9 @@ const Questionnaires: React.FunctionComponent = () => {
       questionnaires,
       isLoading: true,
       isError: false,
+      isDialogOpen: false,
+      errorHeader: '',
+      errorMessage: '',
     }
   );
   const dispatch = useDispatch();
@@ -203,6 +207,14 @@ const Questionnaires: React.FunctionComponent = () => {
             );
           })}
       </Grid>
+      <QuestDialog
+        isDialogOpen={state.isDialogOpen!}
+        hasConfirm={false}
+        dialogHeader={state.errorHeader!}
+        dialogContent={state.errorMessage!}
+        closeHandler={() => setState({ isDialogOpen: false })}
+        confirmHandler={() => setState({ isDialogOpen: false })}
+      />
     </PageContainer>
   );
 };
