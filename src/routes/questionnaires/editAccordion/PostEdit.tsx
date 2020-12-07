@@ -10,10 +10,10 @@ import {
   transferQuestionToPre,
   transferQuestionToShared,
   deleteQuestionInPost,
-  transferQuestionToPost,
   addQuestionToPost,
   updateQuestionInPost,
   shiftQuestionInPost,
+  duplicateQuestionInPost,
 } from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
@@ -40,7 +40,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPost(order))}
-            handleDuplicate={() => dispatch(transferQuestionToPost(q))}
+            handleDuplicate={() => dispatch(duplicateQuestionInPost(order))}
             handleMoveUp={() =>
               dispatch(shiftQuestionInPost({ direction: 'UP', order: q.order }))
             }

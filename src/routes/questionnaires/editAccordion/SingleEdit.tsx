@@ -10,6 +10,7 @@ import {
 import {
   addQuestionToPre,
   deleteQuestionInPre,
+  duplicateQuestionInPre,
   shiftQuestionInPre,
   transferQuestionToPre,
   updateQuestionInPre,
@@ -38,7 +39,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInPre(order))}
-            handleDuplicate={() => dispatch(transferQuestionToPre(q))}
+            handleDuplicate={() => dispatch(duplicateQuestionInPre(order))}
             handleMoveUp={() =>
               dispatch(shiftQuestionInPre({ direction: 'UP', order: q.order }))
             }

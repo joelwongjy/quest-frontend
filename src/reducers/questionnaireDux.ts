@@ -329,104 +329,80 @@ const questionnaire = createSlice({
       }
     },
     // The following three dup functions are buggy, TODO
-    duplicateQuestionInPre: (
-      state,
-      action: PayloadAction<QuestionOrder>
-    ): void => {
+    duplicateQuestionInPre: (state, action: PayloadAction<number>): void => {
+      const index = action.payload;
       const { length } = state.questionWindows[0].questions;
-      const index = state.questionWindows[0].questions.indexOf(action.payload);
-      const dup = {
+      const questionToDuplicate = state.questionWindows[0].questions[index];
+      state.questionWindows[0].questions.push({
         order: length,
-        questionText: action.payload.questionText,
-        questionType: action.payload.questionType,
-        options: action.payload.options,
+        questionText: questionToDuplicate.questionText,
+        questionType: questionToDuplicate.questionType,
+        options: questionToDuplicate.options,
         id: parseInt(nextId().slice(2), 10),
-        createdAt: action.payload.createdAt,
+        createdAt: new Date(),
         updatedAt: new Date(),
         discardedAt: null,
-      };
-      const front = state.questionWindows[0].questions.slice(0, index + 1);
-      const back = state.questionWindows[0].questions.slice(index + 1);
-      front.push(dup);
-      back.map((q) => {
-        return {
-          order: q.order + 1,
-          questionText: q.questionText,
-          questionType: q.questionType,
-          options: q.options,
-          id: q.id,
-          createdAt: q.createdAt,
-          updatedAt: q.updatedAt,
-          discardedAt: null,
-        };
       });
-      state.questionWindows[0].questions = front.concat(back);
+
+      // Bubble all the way up
+      for (let i = length; i > index; i -= 1) {
+        const currQuestion = state.questionWindows[0].questions[i];
+        const otherQuestion = state.questionWindows[0].questions[i - 1];
+        currQuestion.order -= 1;
+        otherQuestion.order += 1;
+        state.questionWindows[0].questions[i] = otherQuestion;
+        state.questionWindows[0].questions[i - 1] = currQuestion;
+      }
     },
-    duplicateQuestionInPost: (
-      state,
-      action: PayloadAction<QuestionOrder>
-    ): void => {
+    duplicateQuestionInPost: (state, action: PayloadAction<number>): void => {
+      const index = action.payload;
       const { length } = state.questionWindows[1].questions;
-      const index = state.questionWindows[1].questions.indexOf(action.payload);
-      const dup = {
+      const questionToDuplicate = state.questionWindows[1].questions[index];
+      state.questionWindows[1].questions.push({
         order: length,
-        questionText: action.payload.questionText,
-        questionType: action.payload.questionType,
-        options: action.payload.options,
+        questionText: questionToDuplicate.questionText,
+        questionType: questionToDuplicate.questionType,
+        options: questionToDuplicate.options,
         id: parseInt(nextId().slice(2), 10),
-        createdAt: action.payload.createdAt,
+        createdAt: new Date(),
         updatedAt: new Date(),
         discardedAt: null,
-      };
-      const front = state.questionWindows[1].questions.slice(0, index + 1);
-      const back = state.questionWindows[1].questions.slice(index + 1);
-      front.push(dup);
-      back.map((q) => {
-        return {
-          order: q.order + 1,
-          questionText: q.questionText,
-          questionType: q.questionType,
-          options: q.options,
-          id: q.id,
-          createdAt: q.createdAt,
-          updatedAt: q.updatedAt,
-          discardedAt: null,
-        };
       });
-      state.questionWindows[1].questions = front.concat(back);
+
+      // Bubble all the way up
+      for (let i = length; i > index; i -= 1) {
+        const currQuestion = state.questionWindows[1].questions[i];
+        const otherQuestion = state.questionWindows[1].questions[i - 1];
+        currQuestion.order -= 1;
+        otherQuestion.order += 1;
+        state.questionWindows[1].questions[i] = otherQuestion;
+        state.questionWindows[1].questions[i - 1] = currQuestion;
+      }
     },
-    duplicateQuestionInShared: (
-      state,
-      action: PayloadAction<QuestionOrder>
-    ): void => {
+    duplicateQuestionInShared: (state, action: PayloadAction<number>): void => {
+      const index = action.payload;
       const { length } = state.sharedQuestions.questions;
-      const index = state.sharedQuestions.questions.indexOf(action.payload);
-      const dup = {
+      const questionToDuplicate = state.sharedQuestions.questions[index];
+      state.sharedQuestions.questions.push({
         order: length,
-        questionText: action.payload.questionText,
-        questionType: action.payload.questionType,
-        options: action.payload.options,
+        questionText: questionToDuplicate.questionText,
+        questionType: questionToDuplicate.questionType,
+        options: questionToDuplicate.options,
         id: parseInt(nextId().slice(2), 10),
-        createdAt: action.payload.createdAt,
+        createdAt: new Date(),
         updatedAt: new Date(),
         discardedAt: null,
-      };
-      const front = state.sharedQuestions.questions.slice(0, index + 1);
-      const back = state.sharedQuestions.questions.slice(index + 1);
-      front.push(dup);
-      back.map((q) => {
-        return {
-          order: q.order + 1,
-          questionText: q.questionText,
-          questionType: q.questionType,
-          options: q.options,
-          id: q.id,
-          createdAt: q.createdAt,
-          updatedAt: q.updatedAt,
-          discardedAt: null,
-        };
       });
-      state.sharedQuestions.questions = front.concat(back);
+
+      // Bubble all the way up
+      for (let i = length; i > index; i -= 1) {
+        const currQuestion = state.sharedQuestions.questions[i];
+        const otherQuestion = state.sharedQuestions.questions[i - 1];
+        currQuestion.order -= 1;
+        otherQuestion.order += 1;
+        state.sharedQuestions.questions[i] = otherQuestion;
+        state.sharedQuestions.questions[i - 1] = currQuestion;
+      }
     },
     clearQuestionnaire: (state): void => {
       state.title = '';
