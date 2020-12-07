@@ -9,10 +9,10 @@ import {
 import {
   addQuestionToShared,
   deleteQuestionInShared,
+  duplicateQuestionInShared,
   shiftQuestionInShared,
   transferQuestionToPost,
   transferQuestionToPre,
-  transferQuestionToShared,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard';
@@ -41,7 +41,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             mode={QuestionMode.EDIT}
             handleDelete={() => dispatch(deleteQuestionInShared(order))}
             handleDuplicate={() => {
-              dispatch(transferQuestionToShared(q));
+              dispatch(duplicateQuestionInShared(order));
             }}
             handleMoveUp={() =>
               dispatch(
