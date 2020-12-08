@@ -22,9 +22,20 @@ import { useStyles } from './editAccordion.styles';
 
 interface PreEditProps {
   preQuestionSet: QuestionOrder[];
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => void;
 }
 
-const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
+const PreEdit: React.FunctionComponent<PreEditProps> = ({
+  preQuestionSet,
+  alertCallback,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -37,7 +48,16 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({ preQuestionSet }) => {
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInPre(order))}
+            handleDelete={() => {
+              alertCallback(
+                true,
+                true,
+                'Are you sure?',
+                'You will not be able to retrieve deleted questions.',
+                () => dispatch(deleteQuestionInPre(order)),
+                undefined
+              );
+            }}
             handleDuplicate={() => dispatch(duplicateQuestionInPre(order))}
             handleMoveUp={() =>
               dispatch(shiftQuestionInPre({ direction: 'UP', order: q.order }))

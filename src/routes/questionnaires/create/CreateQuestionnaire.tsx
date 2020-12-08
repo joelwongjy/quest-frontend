@@ -43,7 +43,7 @@ import { useStyles } from './createQuestionnaire.styles';
 interface CreateQuestionnaireState extends RouteState {
   hasConfirm: boolean;
   closeHandler: () => void;
-  confirmHandler: () => void;
+  confirmHandler: undefined | (() => void);
   cancelHandler: undefined | (() => void);
   programmeIds: number[];
   classIds: number[];
@@ -104,19 +104,35 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     hasConfirm: boolean,
     alertHeader: string,
     alertMessage: string,
-    closeHandler: () => void,
-    confirmHandler: () => void,
-    cancelHandler: () => void
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
   ) => {
     setState({
       isAlertOpen,
       hasConfirm,
       alertHeader,
       alertMessage,
-      closeHandler,
-      confirmHandler,
-      cancelHandler,
     });
+    if (confirmHandler) {
+      setState({
+        confirmHandler: () => {
+          confirmHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
+    }
+    if (cancelHandler) {
+      setState({
+        cancelHandler: () => {
+          cancelHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
+    }
   };
 
   const programmeCallback = (newProgrammes: number[]) => {
@@ -283,7 +299,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
         hasConfirm={state.hasConfirm}
         alertHeader={state.alertHeader!}
         alertMessage={state.alertMessage!}
-        closeHandler={state.confirmHandler}
+        closeHandler={state.closeHandler}
         confirmHandler={state.confirmHandler}
         cancelHandler={state.cancelHandler}
       />

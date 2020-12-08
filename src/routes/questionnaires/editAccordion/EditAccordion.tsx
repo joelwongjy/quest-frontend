@@ -28,13 +28,15 @@ interface EditAccordionProps {
     hasConfirm: boolean,
     alertHeader: string,
     alertMessage: string,
-    closeHandler: () => void,
-    confirmHandler: () => void,
-    cancelHandler: () => void
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
   ) => void;
 }
 
-const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
+const EditAccordion: React.FC<EditAccordionProps> = ({
+  questionnaire,
+  alertCallback,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { hasError } = useError();
@@ -65,7 +67,10 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
           )}
         </FormControl>
         {type === QuestionnaireType.ONE_TIME && (
-          <SingleEdit questionSet={questionWindows[0].questions} />
+          <SingleEdit
+            questionSet={questionWindows[0].questions}
+            alertCallback={alertCallback}
+          />
         )}
         {type === QuestionnaireType.PRE_POST && (
           <>
@@ -73,7 +78,10 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
               Shared Questions
             </Typography>
             <Grid item xs={12}>
-              <SharedEdit questionSet={sharedQuestions.questions} />
+              <SharedEdit
+                questionSet={sharedQuestions.questions}
+                alertCallback={alertCallback}
+              />
             </Grid>
             <Grid
               container
@@ -93,9 +101,15 @@ const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
 
             <Grid item xs={12}>
               {isPre ? (
-                <PreEdit preQuestionSet={questionWindows[0].questions} />
+                <PreEdit
+                  preQuestionSet={questionWindows[0].questions}
+                  alertCallback={alertCallback}
+                />
               ) : (
-                <PostEdit postQuestionSet={questionWindows[1].questions} />
+                <PostEdit
+                  postQuestionSet={questionWindows[1].questions}
+                  alertCallback={alertCallback}
+                />
               )}
             </Grid>
           </>

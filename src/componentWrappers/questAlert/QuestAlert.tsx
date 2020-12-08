@@ -16,7 +16,7 @@ interface QuestAlertProps extends QuestComponentProps {
   alertMessage: string;
   hasConfirm: boolean;
   closeHandler: () => void;
-  confirmHandler: () => void;
+  confirmHandler?: () => void;
   cancelHandler?: () => void;
 }
 
@@ -52,7 +52,7 @@ const QuestAlert: React.FunctionComponent<QuestAlertProps> = ({
           </DialogActions>
         ) : (
           <DialogActions>
-            <Button onClick={confirmHandler}>Okay</Button>
+            <Button onClick={closeHandler}>Okay</Button>
           </DialogActions>
         )}
       </Dialog>
