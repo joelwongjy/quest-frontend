@@ -57,9 +57,19 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       questionnaire,
       isLoading: true,
       isError: false,
-      isDialogOpen: false,
-      errorHeader: '',
-      errorMessage: '',
+      isAlertOpen: false,
+      alertHeader: '',
+      alertMessage: '',
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
     }
   );
 
@@ -130,6 +140,42 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       myDispatch(clearQuestionnaire());
       resolve();
     });
+
+  const alertCallback = (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => {
+    setState({
+      isAlertOpen,
+      hasConfirm,
+      alertHeader,
+      alertMessage,
+    });
+    if (confirmHandler) {
+      setState({
+        confirmHandler: () => {
+          confirmHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
+    }
+    if (cancelHandler) {
+      setState({
+        cancelHandler: () => {
+          cancelHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
+    }
+  };
 
   const handleComplete = async () => {
     if (!validateQuestionnaire(questionnaire)) {
@@ -205,7 +251,10 @@ const EditQuestionnaire: React.FunctionComponent = () => {
             classIds={classIds}
             classCallback={questClassCallback}
           />
-          <EditAccordion questionnaire={state.questionnaire} />
+          <EditAccordion
+            questionnaire={state.questionnaire}
+            alertCallback={alertCallback}
+          />
           <Grid container justify="flex-end">
             <QuestButton onClick={handleComplete} fullWidth>
               Finish
