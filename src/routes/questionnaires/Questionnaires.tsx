@@ -29,10 +29,6 @@ import QuestionnaireTabs from './questionnaireTabs';
 
 export interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
-  hasConfirm: boolean;
-  closeHandler: () => void;
-  confirmHandler: () => void;
-  cancelHandler: undefined | (() => void);
 }
 
 const Questionnaires: React.FunctionComponent = () => {
@@ -276,10 +272,10 @@ const Questionnaires: React.FunctionComponent = () => {
       </Grid>
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
-        hasConfirm={state.hasConfirm}
+        hasConfirm={state.hasConfirm!}
         alertHeader={state.alertHeader!}
         alertMessage={state.alertMessage!}
-        closeHandler={state.closeHandler}
+        closeHandler={state.closeHandler!}
         confirmHandler={state.confirmHandler}
         cancelHandler={state.cancelHandler}
       />
