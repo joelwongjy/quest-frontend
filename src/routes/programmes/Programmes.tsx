@@ -13,10 +13,15 @@ import { PROGRAMMES } from 'constants/routes';
 import ProgrammeCard from 'components/programmeCard';
 import QuestButton from 'componentWrappers/questButton';
 
+import QuestAlert from 'componentWrappers/questAlert';
 import { useStyles } from './programmes.styles';
 
 interface ProgrammesState extends RouteState {
   programmes: ProgrammeListData[];
+  hasConfirm: boolean;
+  closeHandler: () => void;
+  confirmHandler: () => void;
+  cancelHandler: undefined | (() => void);
 }
 
 const Programme: React.FC<QuestComponentProps> = () => {
@@ -29,6 +34,16 @@ const Programme: React.FC<QuestComponentProps> = () => {
       programmes,
       isLoading: true,
       isError: false,
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
     }
   );
 
@@ -48,7 +63,14 @@ const Programme: React.FC<QuestComponentProps> = () => {
         }
       } catch (error) {
         if (!didCancel) {
-          setState({ isError: true, isLoading: false });
+          setState({
+            isError: true,
+            isLoading: false,
+            isAlertOpen: true,
+            hasConfirm: false,
+            alertHeader: 'Something went wrong',
+            alertMessage: 'Please refresh the page and try again',
+          });
         }
       }
     };
@@ -85,6 +107,15 @@ const Programme: React.FC<QuestComponentProps> = () => {
           );
         })}
       </Grid>
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
