@@ -59,9 +59,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const { type, questionWindows, sharedQuestions } = questionnaire;
 
   const hasIncompleteQuestionnaire =
-    (questionWindows[0] && questionWindows[0].questions.length !== 0) ||
-    (questionWindows[1] && questionWindows[1].questions.length !== 0) ||
-    (sharedQuestions && sharedQuestions.questions.length !== 0);
+    (((questionWindows[0]?.questions?.length !== 0 ?? false) ||
+      questionWindows[1]?.questions?.length !== 0) ??
+      false) ||
+    (sharedQuestions?.questions?.length !== 0 ?? false);
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },

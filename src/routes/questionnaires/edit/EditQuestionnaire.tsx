@@ -56,7 +56,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     state.questionnaire;
   const questionnaire: QuestionnaireData = useSelector(selectQuestionnaire);
   const user = useUser();
-  const style = useStyles();
+  const classes = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
 
@@ -215,9 +215,9 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div className={style.paperContainer}>
+      <div className={classes.paperContainer}>
         <Paper
-          className={style.paper}
+          className={classes.paper}
           elevation={0}
           style={{ background: 'white' }}
         >
