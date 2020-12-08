@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button, CardContent, Grid, Typography } from '@material-ui/core';
+import { Button, Paper, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -9,7 +9,16 @@ import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
 import { Student } from 'interfaces/models/students';
-import QuestCard from 'componentWrappers/questCard';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import PersonIcon from '@material-ui/icons/Person';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { students } from './mockData';
 import { useStyles } from './students.styles';
@@ -75,26 +84,51 @@ const Students: React.FunctionComponent = () => {
           </Button>
         }
       />
-      <Grid container spacing={3}>
-        {state.students.map((s) => {
-          return (
-            <Grid item xs={12} sm={6} lg={4} key={s.name}>
-              <QuestCard>
-                <CardContent>
-                  <Typography
-                    className={classes.title}
-                    variant="h5"
-                    component="h2"
-                    noWrap
-                  >
-                    {s.name}
-                  </Typography>
-                </CardContent>
-              </QuestCard>
-            </Grid>
-          );
-        })}
-      </Grid>
+      <div className={classes.paperContainer}>
+        <Paper
+          className={classes.paper}
+          elevation={0}
+          style={{ background: 'white' }}
+        >
+          <List className={classes.list}>
+            {state.students.map((s) => {
+              return (
+                <ListItem key={s.name} className={classes.item}>
+                  <ListItemAvatar style={{ paddingLeft: '0.5rem' }}>
+                    <Avatar>
+                      <PersonIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={s.name}
+                    secondary={
+                      <List dense>
+                        <ListItem>
+                          <Typography>Class 1 - Program 1</Typography>
+                        </ListItem>
+                        <ListItem>
+                          <Typography>Class 2 - Program 2</Typography>
+                        </ListItem>
+                        <ListItem>
+                          <Typography>Class 3 - Program 3</Typography>
+                        </ListItem>
+                      </List>
+                    }
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="edit">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })}
+          </List>
+        </Paper>
+      </div>
     </PageContainer>
   );
 };
