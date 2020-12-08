@@ -13,3 +13,5 @@ export interface QuestionnairePostData {
   classes?: number[];
   programmes?: number[];
 }
+
+export type QuestionnaireData = QuestionnairePostData;

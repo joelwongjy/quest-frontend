@@ -29,10 +29,6 @@ import QuestionnaireTabs from './questionnaireTabs';
 
 export interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
-  hasConfirm: boolean;
-  closeHandler: () => void;
-  confirmHandler: () => void;
-  cancelHandler: undefined | (() => void);
 }
 
 const Questionnaires: React.FunctionComponent = () => {
@@ -72,9 +68,10 @@ const Questionnaires: React.FunctionComponent = () => {
     hasIncompleteQuestionnaire,
     setHasIncompleteQuestionnare,
   ] = useState<boolean>(
-    (questionWindows[0] && questionWindows[0].questions.length !== 0) ||
-      (questionWindows[1] && questionWindows[1].questions.length !== 0) ||
-      (sharedQuestions && sharedQuestions.questions.length !== 0)
+    (((questionWindows[0]?.questions?.length !== 0 ?? false) ||
+      questionWindows[1]?.questions?.length !== 0) ??
+      false) ||
+      (sharedQuestions?.questions?.length !== 0 ?? false)
   );
   const classes = useStyles();
 
@@ -276,10 +273,10 @@ const Questionnaires: React.FunctionComponent = () => {
       </Grid>
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
-        hasConfirm={state.hasConfirm}
+        hasConfirm={state.hasConfirm!}
         alertHeader={state.alertHeader!}
         alertMessage={state.alertMessage!}
-        closeHandler={state.closeHandler}
+        closeHandler={state.closeHandler!}
         confirmHandler={state.confirmHandler}
         cancelHandler={state.cancelHandler}
       />

@@ -4,4 +4,8 @@ export interface RouteState {
   isAlertOpen?: boolean;
   alertHeader?: string;
   alertMessage?: string;
+  hasConfirm?: boolean;
+  closeHandler?: () => void;
+  confirmHandler?: () => void;
+  cancelHandler?: () => void;
 }
