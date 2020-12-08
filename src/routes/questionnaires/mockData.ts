@@ -4,17 +4,63 @@ import { Student } from 'interfaces/models/students';
 import {
   QuestionnaireListData,
   QuestionnaireStatus,
+  QuestionnaireType,
+  QuestionSet,
+  QuestionType,
 } from 'interfaces/models/questionnaires';
 import { ClassListData } from 'interfaces/models/classes';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { DiscardableData } from 'interfaces/models/base';
 import { ClassUserRole } from 'interfaces/models/classUsers';
+import { QuestionnaireData } from 'interfaces/api/questionnaires';
 
 const mockBaseData: DiscardableData = {
   id: 0,
   createdAt: new Date(),
   updatedAt: new Date(),
   discardedAt: null,
+};
+
+export const questionSet: QuestionSet = {
+  questions: [],
+};
+
+export const questionnaire: QuestionnaireData = {
+  title: 'testing123',
+  type: QuestionnaireType.ONE_TIME,
+  questionWindows: [
+    {
+      startAt: new Date(),
+      endAt: new Date(),
+      questions: [
+        {
+          ...mockBaseData,
+          id: 1,
+          order: 1,
+          questionText: 'i love dsc',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: [
+            {
+              optionText: 'nil',
+            },
+          ],
+        },
+        {
+          ...mockBaseData,
+          id: 2,
+          order: 2,
+          questionText: 'test',
+          questionType: QuestionType.LONG_ANSWER,
+          options: [],
+        },
+      ],
+    },
+  ],
+  sharedQuestions: {
+    questions: [],
+  },
+  classes: [1],
+  programmes: [2],
 };
 
 export const questionnaires: QuestionnaireListData[] = [
