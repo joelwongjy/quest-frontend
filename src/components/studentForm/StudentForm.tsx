@@ -1,13 +1,8 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import {
   FormControl,
-  FormGroup,
   FormHelperText,
-  FormLabel,
   Grid,
-  Button,
-  Paper,
   Typography,
   List,
   ListItem,
@@ -36,6 +31,8 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 
   const updateText = (newText: string) => {
     const dummy = newText;
+    dummy.replaceAll('', '');
+    // dunno how to code this part but doesnt allow empty fn
   };
 
   const hasNameTextError = hasError && name === '';
