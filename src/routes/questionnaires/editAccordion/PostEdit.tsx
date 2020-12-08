@@ -18,6 +18,7 @@ import {
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
 
+import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface PostEditProps {
@@ -49,14 +50,18 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
-              alertCallback(
-                true,
-                true,
-                'Are you sure?',
-                'You will not be able to retrieve deleted questions.',
-                () => dispatch(deleteQuestionInPost(order)),
-                undefined
-              );
+              if (isEmptyQuestion(q)) {
+                dispatch(deleteQuestionInPost(order));
+              } else {
+                alertCallback(
+                  true,
+                  true,
+                  'Are you sure?',
+                  'You will not be able to retrieve deleted questions.',
+                  () => dispatch(deleteQuestionInPost(order)),
+                  undefined
+                );
+              }
             }}
             handleDuplicate={() => dispatch(duplicateQuestionInPost(order))}
             handleMoveUp={() =>

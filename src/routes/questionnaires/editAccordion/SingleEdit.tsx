@@ -16,6 +16,7 @@ import {
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
 
+import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface SingleEditProps {
@@ -47,14 +48,18 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
-              alertCallback(
-                true,
-                true,
-                'Are you sure?',
-                'You will not be able to retrieve deleted questions.',
-                () => dispatch(deleteQuestionInPre(order)),
-                undefined
-              );
+              if (isEmptyQuestion(q)) {
+                dispatch(deleteQuestionInPre(order));
+              } else {
+                alertCallback(
+                  true,
+                  true,
+                  'Are you sure?',
+                  'You will not be able to retrieve deleted questions.',
+                  () => dispatch(deleteQuestionInPre(order)),
+                  undefined
+                );
+              }
             }}
             handleDuplicate={() => dispatch(duplicateQuestionInPre(order))}
             handleMoveUp={() =>

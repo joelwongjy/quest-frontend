@@ -18,6 +18,7 @@ import {
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
 
+import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface SharedEditProps {
@@ -49,14 +50,18 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
-              alertCallback(
-                true,
-                true,
-                'Are you sure?',
-                'You will not be able to retrieve deleted questions.',
-                () => dispatch(deleteQuestionInShared(order)),
-                undefined
-              );
+              if (isEmptyQuestion(q)) {
+                dispatch(deleteQuestionInShared(order));
+              } else {
+                alertCallback(
+                  true,
+                  true,
+                  'Are you sure?',
+                  'You will not be able to retrieve deleted questions.',
+                  () => dispatch(deleteQuestionInShared(order)),
+                  undefined
+                );
+              }
             }}
             handleDuplicate={() => {
               dispatch(duplicateQuestionInShared(order));

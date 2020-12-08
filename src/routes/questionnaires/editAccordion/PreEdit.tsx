@@ -18,6 +18,7 @@ import {
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
 
+import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface PreEditProps {
@@ -49,14 +50,18 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
-              alertCallback(
-                true,
-                true,
-                'Are you sure?',
-                'You will not be able to retrieve deleted questions.',
-                () => dispatch(deleteQuestionInPre(order)),
-                undefined
-              );
+              if (isEmptyQuestion(q)) {
+                dispatch(deleteQuestionInPre(order));
+              } else {
+                alertCallback(
+                  true,
+                  true,
+                  'Are you sure?',
+                  'You will not be able to retrieve deleted questions.',
+                  () => dispatch(deleteQuestionInPre(order)),
+                  undefined
+                );
+              }
             }}
             handleDuplicate={() => dispatch(duplicateQuestionInPre(order))}
             handleMoveUp={() =>
