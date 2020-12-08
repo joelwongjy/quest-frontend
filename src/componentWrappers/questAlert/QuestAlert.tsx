@@ -10,20 +10,20 @@ import {
 } from '@material-ui/core';
 import { QuestComponentProps } from 'interfaces/components/common';
 
-interface QuestDialogProps extends QuestComponentProps {
-  isDialogOpen: boolean;
-  dialogHeader: string;
-  dialogContent: string;
+interface QuestAlertProps extends QuestComponentProps {
+  isAlertOpen: boolean;
+  alertHeader: string;
+  alertMessage: string;
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler?: () => void;
 }
 
-const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
-  isDialogOpen,
-  dialogHeader,
-  dialogContent,
+const QuestAlert: React.FunctionComponent<QuestAlertProps> = ({
+  isAlertOpen,
+  alertHeader,
+  alertMessage,
   hasConfirm,
   closeHandler,
   confirmHandler,
@@ -32,15 +32,15 @@ const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
   return (
     <div>
       <Dialog
-        open={isDialogOpen}
+        open={isAlertOpen}
         onClose={closeHandler}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{dialogHeader}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{alertHeader}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-content">
-            {dialogContent}
+            {alertMessage}
           </DialogContentText>
         </DialogContent>
         {hasConfirm ? (
@@ -60,4 +60,4 @@ const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
   );
 };
 
-export default QuestDialog;
+export default QuestAlert;
