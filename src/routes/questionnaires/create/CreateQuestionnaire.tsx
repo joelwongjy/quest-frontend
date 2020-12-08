@@ -43,16 +43,23 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
-  const [programmeIds, setProgrammeIds] = useState<number[]>([]);
-  const [classIds, setClassIds] = useState<number[]>([]);
-  const [isTypeSelected, setIsTypeSelected] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const { type, questionWindows } = questionnaire;
+  const { type, questionWindows, sharedQuestions } = questionnaire;
+
+  const hasIncompleteQuestionnaire =
+    (questionWindows[0] && questionWindows[0].questions.length !== 0) ||
+    (questionWindows[1] && questionWindows[1].questions.length !== 0) ||
+    (sharedQuestions && sharedQuestions.questions.length !== 0);
+
+  const [programmeIds, setProgrammeIds] = useState<number[]>([]);
+  const [classIds, setClassIds] = useState<number[]>([]);
+  const [isTypeSelected, setIsTypeSelected] = useState<boolean>(
+    hasIncompleteQuestionnaire ?? false
+  );
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },

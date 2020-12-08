@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Button,
   Dialog,
@@ -7,7 +9,6 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { QuestComponentProps } from 'interfaces/components/common';
-import React from 'react';
 
 interface QuestDialogProps extends QuestComponentProps {
   isDialogOpen: boolean;
