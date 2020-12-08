@@ -38,26 +38,11 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const [alertHeader, setAlertHeader] = useState<string>('');
   const [alertMessage, setAlertMessage] = useState<string>('');
-  const [closeHandler, setCloseHandler] = useState<() => void>(() =>
-    setIsAlertOpen(false)
-  );
-  const [confirmHandler, setConfirmHandler] = useState<() => void>(() =>
-    setIsAlertOpen(false)
-  );
-  const [cancelHandler, setCancelHandler] = useState<() => void>(() =>
-    setIsAlertOpen(false)
-  );
 
   const handleLogOut = () => {
-    setIsAlertOpen(true);
     setAlertHeader('Log Out');
     setAlertMessage('You are attempting to log out, are you sure?');
-    setCloseHandler(() => setIsAlertOpen(false));
-    setConfirmHandler(() => {
-      setIsAlertOpen(false);
-      logout();
-    });
-    setCancelHandler(() => setIsAlertOpen(false));
+    setIsAlertOpen(true);
   };
 
   const drawer = (
@@ -169,9 +154,12 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
         hasConfirm
         alertHeader={alertHeader}
         alertMessage={alertMessage}
-        closeHandler={closeHandler}
-        confirmHandler={confirmHandler}
-        cancelHandler={cancelHandler}
+        closeHandler={() => setIsAlertOpen(false)}
+        confirmHandler={() => {
+          setIsAlertOpen(false);
+          logout();
+        }}
+        cancelHandler={() => setIsAlertOpen(false)}
       />
     </nav>
   );

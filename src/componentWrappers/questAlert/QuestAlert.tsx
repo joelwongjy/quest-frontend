@@ -30,33 +30,29 @@ const QuestAlert: React.FunctionComponent<QuestAlertProps> = ({
   cancelHandler,
 }) => {
   return (
-    <div>
-      <Dialog
-        open={isAlertOpen}
-        onClose={closeHandler}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{alertHeader}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-content">
-            {alertMessage}
-          </DialogContentText>
-        </DialogContent>
-        {hasConfirm ? (
-          <DialogActions>
-            {cancelHandler && <Button onClick={cancelHandler}>Cancel</Button>}
-            {confirmHandler && (
-              <Button onClick={confirmHandler}>Confirm</Button>
-            )}
-          </DialogActions>
-        ) : (
-          <DialogActions>
-            <Button onClick={closeHandler}>Okay</Button>
-          </DialogActions>
-        )}
-      </Dialog>
-    </div>
+    <Dialog
+      open={isAlertOpen}
+      onClose={closeHandler}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{alertHeader}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-content">
+          {alertMessage}
+        </DialogContentText>
+      </DialogContent>
+      {hasConfirm ? (
+        <DialogActions>
+          {cancelHandler && <Button onClick={cancelHandler}>Cancel</Button>}
+          {confirmHandler && <Button onClick={confirmHandler}>Confirm</Button>}
+        </DialogActions>
+      ) : (
+        <DialogActions>
+          <Button onClick={closeHandler}>Okay</Button>
+        </DialogActions>
+      )}
+    </Dialog>
   );
 };
 
