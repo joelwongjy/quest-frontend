@@ -102,7 +102,13 @@ const Questionnaires: React.FunctionComponent = () => {
         }
       } catch (error) {
         if (!didCancel) {
-          setState({ isError: true, isLoading: false });
+          setState({
+            isError: true,
+            isLoading: false,
+            isAlertOpen: true,
+            alertHeader: 'Something went wrong',
+            alertMessage: 'Please refresh the page and try again',
+          });
         }
       }
     };
