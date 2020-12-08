@@ -15,14 +15,14 @@ import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
-import QuestDialog from 'componentWrappers/questDialog';
+import QuestDialog from 'componentWrappers/questAlert';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { RootState } from 'reducers/rootReducer';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
 } from 'reducers/questionnaireDux';
-import QuestAlert from 'componentWrappers/questAlert';
+import QuestAlert from 'componentWrappers/questBanner';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
