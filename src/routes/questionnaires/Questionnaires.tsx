@@ -27,7 +27,7 @@ import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
 
-interface QuestionnairesState extends RouteState {
+export interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
   hasConfirm: boolean;
   confirmHandler: () => void;
