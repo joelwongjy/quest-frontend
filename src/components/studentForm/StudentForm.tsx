@@ -54,11 +54,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
           </Grid>
         );
       default:
-        return (
-          <div>
-            <p> dunno what to put here</p>
-          </div>
-        );
+        return <></>;
     }
   };
 
