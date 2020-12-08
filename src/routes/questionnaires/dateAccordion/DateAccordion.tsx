@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Chip, Grid } from '@material-ui/core';
+import { Chip, FormControl, FormHelperText, Grid } from '@material-ui/core';
+import { addMinutes, isAfter, isBefore } from 'date-fns';
+import { differenceInMinutes } from 'date-fns/esm';
 
 import QuestDateTimePicker from 'componentWrappers/questDateTimePicker';
 import QuestAccordion from 'componentWrappers/questAccordion';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
-import { isBefore } from 'date-fns';
+
+import { useStyles } from './dateAccordion.styles';
 
 interface DateAccordionProps {
   type: QuestionnaireType;
@@ -29,26 +32,49 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
   postEndDate,
   postEndDateCallback,
 }) => {
-  const [preErrorMessage, setPreErrorMessage] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [postErrorMessage, setPostErrorMessage] = useState<string>('');
+  const [hasPreError, setHasPreError] = useState<boolean>(false);
+  const [hasPostStartError, setHasPostStartError] = useState<boolean>(false);
+  const [hasPostEndError, setHasPostEndError] = useState<boolean>(false);
+  const classes = useStyles();
 
   const handlePreEndTime = (end: Date) => {
-    if (isBefore(end, preStartDate!)) {
-      setPreErrorMessage('The end date must be after the start date!');
-      return;
+    if (isBefore(end, preStartDate)) {
+      setHasPreError(true);
+      preEndDateCallback(end);
+    } else {
+      setHasPreError(false);
     }
-    setPreErrorMessage('');
-    preEndDateCallback!(end);
+    preEndDateCallback(end);
   };
 
   const handlePostEndTime = (end: Date) => {
     if (isBefore(end, postStartDate!)) {
-      setPostErrorMessage('The end date must be after the start date!');
-      return;
+      setHasPostEndError(true);
+    } else {
+      setHasPostEndError(false);
     }
-    setPostErrorMessage('');
     postEndDateCallback!(end);
+  };
+
+  const handlePreStartTime = (start: Date) => {
+    if (isAfter(start, preStartDate)) {
+      const difference = differenceInMinutes(start, preStartDate);
+      preEndDateCallback(addMinutes(preEndDate, difference));
+    }
+    preStartDateCallback(start);
+  };
+
+  const handlePostStartTime = (start: Date) => {
+    if (isAfter(start, postStartDate!)) {
+      const difference = differenceInMinutes(start, postStartDate!);
+      postEndDateCallback!(addMinutes(postEndDate!, difference));
+    }
+    if (isBefore(start, preEndDate)) {
+      setHasPostStartError(true);
+    } else {
+      setHasPostStartError(false);
+    }
+    postStartDateCallback!(start);
   };
 
   return (
@@ -67,20 +93,28 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
               </Grid>
             )}
             <Grid container justify="space-around">
-              <div style={{ marginTop: '1rem' }}>
-                <QuestDateTimePicker
-                  date={preStartDate}
-                  callback={preStartDateCallback}
-                  label="Start Date & Time"
-                />
+              <div className={classes.container}>
+                <FormControl>
+                  <QuestDateTimePicker
+                    date={preStartDate}
+                    callback={handlePreStartTime}
+                    label="Start Date & Time"
+                  />
+                </FormControl>
               </div>
-              <div style={{ marginTop: '1rem' }}>
-                <QuestDateTimePicker
-                  date={preEndDate}
-                  callback={handlePreEndTime}
-                  label="End Date & Time"
-                />
-                {preErrorMessage && <div>{preErrorMessage}</div>}
+              <div className={classes.container}>
+                <FormControl error={hasPreError}>
+                  <QuestDateTimePicker
+                    date={preEndDate}
+                    callback={handlePreEndTime}
+                    label="End Date & Time"
+                  />
+                  {hasPreError && (
+                    <FormHelperText className={classes.errorMessage}>
+                      The end date must be after the start date!
+                    </FormHelperText>
+                  )}
+                </FormControl>
               </div>
             </Grid>
           </Grid>
@@ -97,21 +131,34 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
               </Grid>
 
               <Grid container justify="space-around">
-                <div style={{ marginTop: '1rem' }}>
-                  <QuestDateTimePicker
-                    date={postStartDate!}
-                    callback={postStartDateCallback!}
-                    label="Start Date & Time"
-                  />
+                <div className={classes.container}>
+                  <FormControl error={hasPostStartError}>
+                    <QuestDateTimePicker
+                      date={postStartDate!}
+                      callback={handlePostStartTime}
+                      label="Start Date & Time"
+                    />
+                    {hasPostStartError && (
+                      <FormHelperText className={classes.errorMessage}>
+                        The post start date must be after the pre end date!
+                      </FormHelperText>
+                    )}
+                  </FormControl>
                 </div>
-                <div style={{ marginTop: '1rem' }}>
-                  <QuestDateTimePicker
-                    date={postEndDate!}
-                    callback={handlePostEndTime}
-                    label="End Date & Time"
-                  />
+                <div className={classes.container}>
+                  <FormControl error={hasPostEndError}>
+                    <QuestDateTimePicker
+                      date={postEndDate!}
+                      callback={handlePostEndTime}
+                      label="End Date & Time"
+                    />
+                    {hasPostEndError && (
+                      <FormHelperText className={classes.errorMessage}>
+                        The end date must be after the start date!
+                      </FormHelperText>
+                    )}
+                  </FormControl>
                 </div>
-                {postErrorMessage && <div>{postErrorMessage}</div>}
               </Grid>
             </Grid>
           )}
