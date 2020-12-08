@@ -42,6 +42,7 @@ import { useStyles } from './createQuestionnaire.styles';
 
 interface CreateQuestionnaireState extends RouteState {
   hasConfirm: boolean;
+  closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
   programmeIds: number[];
@@ -83,6 +84,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
       alertHeader: '',
       alertMessage: '',
       hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
       confirmHandler: () => {
         setState({ isAlertOpen: false });
       },
@@ -95,33 +99,23 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     }
   );
 
-  const openAlertCallback = (
+  const alertCallback = (
+    isAlertOpen: boolean,
     hasConfirm: boolean,
     alertHeader: string,
     alertMessage: string,
+    closeHandler: () => void,
     confirmHandler: () => void,
     cancelHandler: () => void
   ) => {
     setState({
+      isAlertOpen,
       hasConfirm,
       alertHeader,
       alertMessage,
+      closeHandler,
       confirmHandler,
       cancelHandler,
-    });
-  };
-
-  const closeAlertCallback = () => {
-    setState({
-      hasConfirm: false,
-      alertHeader: '',
-      alertMessage: '',
-      confirmHandler: () => {
-        setState({ isAlertOpen: false });
-      },
-      cancelHandler: () => {
-        setState({ isAlertOpen: false });
-      },
     });
   };
 
@@ -272,7 +266,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
               classIds={state.classIds}
               classCallback={questClassCallback}
             />
-            <EditAccordion questionnaire={questionnaire} />
+            <EditAccordion
+              questionnaire={questionnaire}
+              alertCallback={alertCallback}
+            />
             <Grid container justify="flex-end">
               <QuestButton onClick={handleComplete} fullWidth>
                 Finish

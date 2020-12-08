@@ -30,6 +30,7 @@ import QuestionnaireTabs from './questionnaireTabs';
 export interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
   hasConfirm: boolean;
+  closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
 }
@@ -48,6 +49,9 @@ const Questionnaires: React.FunctionComponent = () => {
       alertHeader: '',
       alertMessage: '',
       hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
       confirmHandler: () => {
         setState({ isAlertOpen: false });
       },
@@ -269,7 +273,7 @@ const Questionnaires: React.FunctionComponent = () => {
         hasConfirm={state.hasConfirm}
         alertHeader={state.alertHeader!}
         alertMessage={state.alertMessage!}
-        closeHandler={state.confirmHandler}
+        closeHandler={state.closeHandler}
         confirmHandler={state.confirmHandler}
         cancelHandler={state.cancelHandler}
       />

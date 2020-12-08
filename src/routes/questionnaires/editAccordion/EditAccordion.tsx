@@ -23,6 +23,15 @@ import PostEdit from './PostEdit';
 
 interface EditAccordionProps {
   questionnaire: QuestionnairePostData;
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    closeHandler: () => void,
+    confirmHandler: () => void,
+    cancelHandler: () => void
+  ) => void;
 }
 
 const EditAccordion: React.FC<EditAccordionProps> = ({ questionnaire }) => {
