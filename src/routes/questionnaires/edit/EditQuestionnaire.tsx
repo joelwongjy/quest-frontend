@@ -1,6 +1,6 @@
-import React, { Dispatch, useEffect, useReducer, useState } from 'react';
+import React, { Dispatch, useEffect, useReducer } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
@@ -14,14 +14,16 @@ import {
   setPostStartTime,
   setPostEndTime,
   clearQuestionnaire,
+  QuestionnaireDux,
+  setQuestionnaire,
 } from 'reducers/questionnaireDux';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
-import { QuestionnairePostData } from 'interfaces/api/questionnaires';
-// import QuestButton from 'componentWrappers/questButton';
-
+import {
+  QuestionnaireData,
+  QuestionnairePostData,
+} from 'interfaces/api/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
-
 import {
   QuestionWindow,
   QuestionOrder,
@@ -29,7 +31,8 @@ import {
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
 import { validateQuestionnaire } from 'utils/questionnaireUtils';
-import { questionnaire } from '../mockData';
+import { RootState } from 'reducers/rootReducer';
+
 import { useStyles } from './editQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
@@ -40,13 +43,24 @@ interface RouteParams {
 }
 
 interface EditQuestionnaireState extends RouteState {
-  questionnaire: QuestionnairePostData;
+  classIds: number[];
+  programmeIds: number[];
 }
 
 const EditQuestionnaire: React.FunctionComponent = () => {
   const { id } = useRouteMatch<RouteParams>({
     path: `${QUESTIONNAIRES}/:id${EDIT}`,
   })!.params;
+  const dispatch = useDispatch();
+  const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
+    state.questionnaire;
+  const questionnaire: QuestionnaireData = useSelector(selectQuestionnaire);
+  const user = useUser();
+  const style = useStyles();
+  const history = useHistory();
+  const { setHasError } = useError();
+
+  const { title, type, questionWindows } = questionnaire;
 
   const [state, setState] = useReducer(
     (s: EditQuestionnaireState, a: Partial<EditQuestionnaireState>) => ({
@@ -54,7 +68,8 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      questionnaire,
+      classIds: [],
+      programmeIds: [],
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -73,18 +88,18 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     }
   );
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     let didCancel = false;
 
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
-        const questionnaire = response.data as QuestionnairePostData;
+        const questionnaire = response.data as QuestionnaireData;
         if (!didCancel) {
+          dispatch(setQuestionnaire(questionnaire));
           setState({
-            questionnaire,
+            classIds: questionnaire.classes ?? [],
+            programmeIds: questionnaire.programmes ?? [],
             isLoading: false,
           });
         }
@@ -102,21 +117,6 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const {
-    title,
-    type,
-    questionWindows,
-    classes,
-    programmes,
-  } = state.questionnaire;
-
-  const user = useUser();
-  const style = useStyles();
-  const history = useHistory();
-  const { setHasError } = useError();
-  const [programmeIds, setProgrammeIds] = useState<number[]>(programmes!);
-  const [classIds, setClassIds] = useState<number[]>(classes!);
-
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     {
@@ -126,11 +126,11 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   ];
 
   const programmeCallback = (newProgrammes: number[]) => {
-    setProgrammeIds(newProgrammes);
+    setState({ programmeIds: newProgrammes });
   };
 
   const questClassCallback = (newClasses: number[]) => {
-    setClassIds(newClasses);
+    setState({ classIds: newClasses });
   };
 
   const clearQuestionnairePromise = (
@@ -146,8 +146,8 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     hasConfirm: boolean,
     alertHeader: string,
     alertMessage: string,
-    confirmHandler: undefined | (() => void),
-    cancelHandler: undefined | (() => void)
+    confirmHandler?: () => void,
+    cancelHandler?: () => void
   ) => {
     setState({
       isAlertOpen,
@@ -197,8 +197,8 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     };
     const data: QuestionnairePostData = {
       ...filteredQuestionnaire,
-      classes: classIds,
-      programmes: programmeIds,
+      classes: state.classIds,
+      programmes: state.programmeIds,
     };
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
@@ -246,13 +246,13 @@ const EditQuestionnaire: React.FunctionComponent = () => {
           />
           <AssignAccordion
             user={user!}
-            programmeIds={programmeIds}
+            programmeIds={state.programmeIds}
             programmeCallback={programmeCallback}
-            classIds={classIds}
+            classIds={state.classIds}
             classCallback={questClassCallback}
           />
           <EditAccordion
-            questionnaire={state.questionnaire}
+            questionnaire={questionnaire}
             alertCallback={alertCallback}
           />
           <Grid container justify="flex-end">
