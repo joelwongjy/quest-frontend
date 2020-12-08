@@ -10,54 +10,50 @@ import {
 } from '@material-ui/core';
 import { QuestComponentProps } from 'interfaces/components/common';
 
-interface QuestDialogProps extends QuestComponentProps {
-  isDialogOpen: boolean;
-  dialogHeader: string;
-  dialogContent: string;
+interface QuestAlertProps extends QuestComponentProps {
+  isAlertOpen: boolean;
+  alertHeader: string;
+  alertMessage: string;
   hasConfirm: boolean;
   closeHandler: () => void;
-  confirmHandler: () => void;
+  confirmHandler?: () => void;
   cancelHandler?: () => void;
 }
 
-const QuestDialog: React.FunctionComponent<QuestDialogProps> = ({
-  isDialogOpen,
-  dialogHeader,
-  dialogContent,
+const QuestAlert: React.FunctionComponent<QuestAlertProps> = ({
+  isAlertOpen,
+  alertHeader,
+  alertMessage,
   hasConfirm,
   closeHandler,
   confirmHandler,
   cancelHandler,
 }) => {
   return (
-    <div>
-      <Dialog
-        open={isDialogOpen}
-        onClose={closeHandler}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{dialogHeader}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-content">
-            {dialogContent}
-          </DialogContentText>
-        </DialogContent>
-        {hasConfirm ? (
-          <DialogActions>
-            {cancelHandler && <Button onClick={cancelHandler}>Cancel</Button>}
-            {confirmHandler && (
-              <Button onClick={confirmHandler}>Confirm</Button>
-            )}
-          </DialogActions>
-        ) : (
-          <DialogActions>
-            <Button onClick={confirmHandler}>Okay</Button>
-          </DialogActions>
-        )}
-      </Dialog>
-    </div>
+    <Dialog
+      open={isAlertOpen}
+      onClose={closeHandler}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{alertHeader}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-content">
+          {alertMessage}
+        </DialogContentText>
+      </DialogContent>
+      {hasConfirm ? (
+        <DialogActions>
+          {cancelHandler && <Button onClick={cancelHandler}>Cancel</Button>}
+          {confirmHandler && <Button onClick={confirmHandler}>Confirm</Button>}
+        </DialogActions>
+      ) : (
+        <DialogActions>
+          <Button onClick={closeHandler}>Okay</Button>
+        </DialogActions>
+      )}
+    </Dialog>
   );
 };
 
-export default QuestDialog;
+export default QuestAlert;

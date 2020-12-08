@@ -18,14 +18,24 @@ import {
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
 
+import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface PostEditProps {
   postQuestionSet: QuestionOrder[];
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => void;
 }
 
 const PostEdit: React.FunctionComponent<PostEditProps> = ({
   postQuestionSet,
+  alertCallback,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -39,7 +49,20 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInPost(order))}
+            handleDelete={() => {
+              if (isEmptyQuestion(q)) {
+                dispatch(deleteQuestionInPost(order));
+              } else {
+                alertCallback(
+                  true,
+                  true,
+                  'Are you sure?',
+                  'You will not be able to retrieve deleted questions.',
+                  () => dispatch(deleteQuestionInPost(order)),
+                  undefined
+                );
+              }
+            }}
             handleDuplicate={() => dispatch(duplicateQuestionInPost(order))}
             handleMoveUp={() =>
               dispatch(shiftQuestionInPost({ direction: 'UP', order: q.order }))
@@ -69,6 +92,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
               }
             }}
             accessibilityEnabled
+            alertCallback={alertCallback}
             className={classes.postCard}
           />
         );

@@ -44,6 +44,14 @@ interface QuestionCardProps extends QuestComponentProps {
   accessibility: QuestionAccessibility;
   updateAccessibility: (newAccessibility: QuestionAccessibility) => void;
   accessibilityEnabled: boolean;
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => void;
 }
 
 const InputMuiTheme = createMuiTheme({
@@ -81,6 +89,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   accessibility,
   updateAccessibility,
   accessibilityEnabled,
+  alertCallback,
   className,
 }) => {
   const classes = useStyles();
@@ -188,6 +197,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               dropdown={dropdown}
               question={question}
               updateQuestion={updateQuestion}
+              alertCallback={alertCallback}
             />
           );
       }
