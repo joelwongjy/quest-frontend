@@ -58,18 +58,27 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
   };
 
   const deleteOption = (index: number) => {
-    alertCallback(
-      true,
-      true,
-      'Are you sure?',
-      'You will not be able to retrieve deleted options',
-      () => {
-        const newOptions = [...question.options];
-        newOptions.splice(index, 1);
-        updateQuestion({ ...question, options: newOptions });
-      },
-      undefined
-    );
+    if (
+      !question.options[index] ||
+      question.options[index].optionText.length === 0
+    ) {
+      const newOptions = [...question.options];
+      newOptions.splice(index, 1);
+      updateQuestion({ ...question, options: newOptions });
+    } else {
+      alertCallback(
+        true,
+        true,
+        'Are you sure?',
+        'You will not be able to retrieve deleted options',
+        () => {
+          const newOptions = [...question.options];
+          newOptions.splice(index, 1);
+          updateQuestion({ ...question, options: newOptions });
+        },
+        undefined
+      );
+    }
   };
 
   const updateOption = (newOption: string, index: number) => {
