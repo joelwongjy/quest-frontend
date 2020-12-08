@@ -15,11 +15,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     textfieldContainer: {
       display: 'flex',
-      marginBottom: theme.spacing(2),
     },
     addCard: {
       marginTop: '1rem',
-      height: '10rem',
+      height: '2.75rem',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -27,11 +26,31 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderStyle: 'dashed',
       borderColor: theme.custom.icon.iconColor,
       color: theme.custom.icon.iconColor,
-      fontSize: '1.5rem',
+      fontSize: '1.25rem',
       '&:hover': {
         cursor: 'pointer',
       },
-      margin: '1.5rem',
+    },
+    header: {
+      backgroundColor: '#044682',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '2rem',
+    },
+    list: {
+      marginTop: '1rem',
+      paddingLeft: '1rem',
+      paddingRight: '1rem',
+    },
+    addIcon: {
+      marginRight: '0.5rem',
+    },
+    button: {
+      margin: theme.spacing(3, 1, 2),
+    },
+    select: {
+      color: '#FF6500',
     },
   })
 );
