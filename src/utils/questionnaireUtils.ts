@@ -57,3 +57,16 @@ export const validateQuestionnaire = (
   }
   throw new Error('Unrecognised questionnaire type');
 };
+
+export const isEmptyQuestion = (question: QuestionOrder): boolean => {
+  const { questionText, questionType, options } = question;
+  if (questionText === '') {
+    if (questionType === QuestionType.MULTIPLE_CHOICE) {
+      return (
+        options.filter((o: OptionData) => o.optionText !== '').length === 0
+      );
+    }
+    return true;
+  }
+  return false;
+};

@@ -18,14 +18,24 @@ import {
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
 
+import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface SharedEditProps {
   questionSet: QuestionOrder[];
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => void;
 }
 
 const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
   questionSet,
+  alertCallback,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -39,7 +49,20 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             key={`question-${order}-${question.id}`}
             question={q}
             mode={QuestionMode.EDIT}
-            handleDelete={() => dispatch(deleteQuestionInShared(order))}
+            handleDelete={() => {
+              if (isEmptyQuestion(q)) {
+                dispatch(deleteQuestionInShared(order));
+              } else {
+                alertCallback(
+                  true,
+                  true,
+                  'Are you sure?',
+                  'You will not be able to retrieve deleted questions.',
+                  () => dispatch(deleteQuestionInShared(order)),
+                  undefined
+                );
+              }
+            }}
             handleDuplicate={() => {
               dispatch(duplicateQuestionInShared(order));
             }}
@@ -73,6 +96,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
               }
             }}
             accessibilityEnabled
+            alertCallback={alertCallback}
             className={classes.card}
           />
         );

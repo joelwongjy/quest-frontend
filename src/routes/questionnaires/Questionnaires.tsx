@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { isBefore, isAfter } from 'date-fns';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
@@ -15,13 +15,24 @@ import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
-import QuestDialog from 'componentWrappers/questDialog';
+import QuestAlert from 'componentWrappers/questAlert';
+import { QuestionnairePostData } from 'interfaces/api/questionnaires';
+import { RootState } from 'reducers/rootReducer';
+import {
+  clearQuestionnaire,
+  QuestionnaireDux,
+} from 'reducers/questionnaireDux';
+import QuestBanner from 'componentWrappers/questBanner';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
 
-interface QuestionnairesState extends RouteState {
+export interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
+  hasConfirm: boolean;
+  closeHandler: () => void;
+  confirmHandler: () => void;
+  cancelHandler: undefined | (() => void);
 }
 
 const Questionnaires: React.FunctionComponent = () => {
@@ -34,14 +45,37 @@ const Questionnaires: React.FunctionComponent = () => {
       questionnaires,
       isLoading: true,
       isError: false,
-      isDialogOpen: false,
-      errorHeader: '',
-      errorMessage: '',
+      isAlertOpen: false,
+      alertHeader: '',
+      alertMessage: '',
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
     }
   );
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
+    state.questionnaire;
+  const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
+  const { questionWindows, sharedQuestions } = questionnaire;
   const [tabValue, setTabValue] = useState<number>(0);
+  const [
+    hasIncompleteQuestionnaire,
+    setHasIncompleteQuestionnare,
+  ] = useState<boolean>(
+    (questionWindows[0] && questionWindows[0].questions.length !== 0) ||
+      (questionWindows[1] && questionWindows[1].questions.length !== 0) ||
+      (sharedQuestions && sharedQuestions.questions.length !== 0)
+  );
   const classes = useStyles();
 
   useEffect(() => {
@@ -68,7 +102,13 @@ const Questionnaires: React.FunctionComponent = () => {
         }
       } catch (error) {
         if (!didCancel) {
-          setState({ isError: true, isLoading: false });
+          setState({
+            isError: true,
+            isLoading: false,
+            isAlertOpen: true,
+            alertHeader: 'Something went wrong',
+            alertMessage: 'Please refresh the page and try again',
+          });
         }
       }
     };
@@ -165,6 +205,17 @@ const Questionnaires: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
+      {hasIncompleteQuestionnaire && (
+        <QuestBanner
+          severity="warning"
+          hasAction
+          action={() => {
+            history.push(`${QUESTIONNAIRES}${CREATE}`);
+          }}
+          actionMessage="Continue"
+          alertMessage="You have an incomplete questionnaire"
+        />
+      )}
       <PageHeader breadcrumbs={breadcrumbs} />
       <QuestionnaireTabs
         value={tabValue}
@@ -176,8 +227,24 @@ const Questionnaires: React.FunctionComponent = () => {
             variant="contained"
             color="secondary"
             className={classes.button}
-            component={Link}
-            to={`${QUESTIONNAIRES}${CREATE}`}
+            onClick={() => {
+              if (hasIncompleteQuestionnaire) {
+                setState({
+                  isAlertOpen: true,
+                  alertHeader: 'You have an incomplete questionnaire',
+                  alertMessage:
+                    'Are you sure you would like to start a new questionnaire?',
+                  hasConfirm: true,
+                  confirmHandler: () => {
+                    setHasIncompleteQuestionnare(false);
+                    dispatch(clearQuestionnaire());
+                    history.push(`${QUESTIONNAIRES}${CREATE}`);
+                  },
+                });
+              } else {
+                history.push(`${QUESTIONNAIRES}${CREATE}`);
+              }
+            }}
           >
             Create Questionnaire
           </Button>
@@ -207,13 +274,14 @@ const Questionnaires: React.FunctionComponent = () => {
             );
           })}
       </Grid>
-      <QuestDialog
-        isDialogOpen={state.isDialogOpen!}
-        hasConfirm={false}
-        dialogHeader={state.errorHeader!}
-        dialogContent={state.errorMessage!}
-        closeHandler={() => setState({ isDialogOpen: false })}
-        confirmHandler={() => setState({ isDialogOpen: false })}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
       />
     </PageContainer>
   );

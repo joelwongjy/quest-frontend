@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useReducer, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Paper, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
@@ -33,48 +33,124 @@ import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import { validateQuestionnaire } from 'utils/questionnaireUtils';
 
+import { RouteState } from 'interfaces/routes/common';
+import QuestAlert from 'componentWrappers/questAlert';
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
 import { useStyles } from './createQuestionnaire.styles';
+
+interface CreateQuestionnaireState extends RouteState {
+  hasConfirm: boolean;
+  closeHandler: () => void;
+  confirmHandler: undefined | (() => void);
+  cancelHandler: undefined | (() => void);
+  programmeIds: number[];
+  classIds: number[];
+  isTypeSelected: boolean;
+}
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
   const user = useUser();
   const classes = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
-  const [programmeIds, setProgrammeIds] = useState<number[]>([]);
-  const [classIds, setClassIds] = useState<number[]>([]);
-  const [isTypeSelected, setIsTypeSelected] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const { type, questionWindows } = questionnaire;
+  const { type, questionWindows, sharedQuestions } = questionnaire;
+
+  const hasIncompleteQuestionnaire =
+    (questionWindows[0] && questionWindows[0].questions.length !== 0) ||
+    (questionWindows[1] && questionWindows[1].questions.length !== 0) ||
+    (sharedQuestions && sharedQuestions.questions.length !== 0);
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     { text: 'Create', href: `${QUESTIONNAIRES}/${CREATE}` },
   ];
 
+  const [state, setState] = useReducer(
+    (s: CreateQuestionnaireState, a: Partial<CreateQuestionnaireState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      isLoading: true,
+      isError: false,
+      isAlertOpen: false,
+      alertHeader: '',
+      alertMessage: '',
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      programmeIds: [],
+      classIds: [],
+      isTypeSelected: hasIncompleteQuestionnaire ?? false,
+    }
+  );
+
+  const alertCallback = (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => {
+    setState({
+      isAlertOpen,
+      hasConfirm,
+      alertHeader,
+      alertMessage,
+    });
+    if (confirmHandler) {
+      setState({
+        confirmHandler: () => {
+          confirmHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
+    }
+    if (cancelHandler) {
+      setState({
+        cancelHandler: () => {
+          cancelHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
+    }
+  };
+
   const programmeCallback = (newProgrammes: number[]) => {
-    setProgrammeIds(newProgrammes);
+    setState({ programmeIds: newProgrammes });
   };
 
   const questClassCallback = (newClasses: number[]) => {
-    setClassIds(newClasses);
+    setState({ classIds: newClasses });
   };
 
   const handleSelectSingle = () => {
     dispatch(setType(QuestionnaireType.ONE_TIME));
-    setIsTypeSelected(true);
+    setState({ isTypeSelected: true });
   };
 
   const handleSelectPrePost = () => {
     dispatch(setType(QuestionnaireType.PRE_POST));
-    setIsTypeSelected(true);
+    setState({ isTypeSelected: true });
   };
 
   const clearQuestionnairePromise = (
@@ -105,8 +181,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     };
     const data: QuestionnairePostData = {
       ...filteredQuestionnaire,
-      classes: classIds,
-      programmes: programmeIds,
+      classes: state.classIds,
+      programmes: state.programmeIds,
     };
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
@@ -123,7 +199,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      {!isTypeSelected ? (
+      {!state.isTypeSelected ? (
         <>
           <Grid
             container
@@ -201,12 +277,15 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
             />
             <AssignAccordion
               user={user!}
-              programmeIds={programmeIds}
+              programmeIds={state.programmeIds}
               programmeCallback={programmeCallback}
-              classIds={classIds}
+              classIds={state.classIds}
               classCallback={questClassCallback}
             />
-            <EditAccordion questionnaire={questionnaire} />
+            <EditAccordion
+              questionnaire={questionnaire}
+              alertCallback={alertCallback}
+            />
             <Grid container justify="flex-end">
               <QuestButton onClick={handleComplete} fullWidth>
                 Finish
@@ -215,6 +294,15 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           </Paper>
         </div>
       )}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
