@@ -20,11 +20,16 @@ import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import QuestAlert from 'componentWrappers/questAlert';
 import { students } from './mockData';
 import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
   students: Student[];
+  hasConfirm: boolean;
+  closeHandler: () => void;
+  confirmHandler: () => void;
+  cancelHandler: undefined | (() => void);
 }
 
 const Students: React.FunctionComponent = () => {
@@ -37,6 +42,16 @@ const Students: React.FunctionComponent = () => {
       students,
       isLoading: true,
       isError: false,
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
     }
   );
   const dispatch = useDispatch();
@@ -54,7 +69,14 @@ const Students: React.FunctionComponent = () => {
         }
       } catch (error) {
         if (!didCancel) {
-          setState({ isError: true, isLoading: false });
+          setState({
+            isError: true,
+            isLoading: false,
+            isAlertOpen: true,
+            hasConfirm: false,
+            alertHeader: 'Something went wrong',
+            alertMessage: 'Please refresh the page and try again',
+          });
         }
       }
     };
@@ -129,6 +151,15 @@ const Students: React.FunctionComponent = () => {
           </List>
         </Paper>
       </div>
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
