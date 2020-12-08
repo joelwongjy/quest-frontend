@@ -95,6 +95,13 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
         const questionnaire = response.data as QuestionnaireData;
+        questionnaire.questionWindows = questionnaire.questionWindows.map(
+          (q: QuestionWindow) => ({
+            ...q,
+            startAt: new Date(q.startAt),
+            endAt: new Date(q.endAt),
+          })
+        );
         if (!didCancel) {
           dispatch(setQuestionnaire(questionnaire));
           setState({
