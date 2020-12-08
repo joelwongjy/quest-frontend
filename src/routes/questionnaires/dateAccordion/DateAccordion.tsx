@@ -60,6 +60,8 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
     if (isAfter(start, preStartDate)) {
       const difference = differenceInMinutes(start, preStartDate);
       preEndDateCallback(addMinutes(preEndDate, difference));
+    } else if (isBefore(start, preEndDate)) {
+      setHasPreError(false);
     }
     preStartDateCallback(start);
   };
@@ -68,6 +70,8 @@ const DateAccordion: React.FunctionComponent<DateAccordionProps> = ({
     if (isAfter(start, postStartDate!)) {
       const difference = differenceInMinutes(start, postStartDate!);
       postEndDateCallback!(addMinutes(postEndDate!, difference));
+    } else if (isBefore(start, postEndDate!)) {
+      setHasPostEndError(false);
     }
     if (isBefore(start, preEndDate)) {
       setHasPostStartError(true);
