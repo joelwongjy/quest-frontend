@@ -12,7 +12,7 @@ import { ClassListData } from 'interfaces/models/classes';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { DiscardableData } from 'interfaces/models/base';
 import { ClassUserRole } from 'interfaces/models/classUsers';
-import { QuestionnaireData } from 'interfaces/api/questionnaires';
+import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 
 const mockBaseData: DiscardableData = {
   id: 0,
@@ -25,7 +25,7 @@ export const questionSet: QuestionSet = {
   questions: [],
 };
 
-export const questionnaire: QuestionnaireData = {
+export const questionnaire: QuestionnairePostData = {
   title: 'testing123',
   type: QuestionnaireType.ONE_TIME,
   questionWindows: [
