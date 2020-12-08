@@ -3,7 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import nextId from 'react-id-generator';
 import { addDays } from 'date-fns';
 
-import { QuestionnairePostData } from 'interfaces/api/questionnaires';
+import {
+  QuestionnaireData,
+  QuestionnairePostData,
+} from 'interfaces/api/questionnaires';
 import {
   QuestionnaireType,
   QuestionOrder,
@@ -405,6 +408,15 @@ const questionnaire = createSlice({
         state.sharedQuestions.questions[i - 1] = currQuestion;
       }
     },
+    setQuestionnaire: (
+      state,
+      action: PayloadAction<QuestionnaireData>
+    ): void => {
+      state.title = action.payload.title;
+      state.type = action.payload.type;
+      state.questionWindows = [...action.payload.questionWindows];
+      state.sharedQuestions = { ...action.payload.sharedQuestions };
+    },
     clearQuestionnaire: (state): void => {
       state.title = '';
       state.type = QuestionnaireType.ONE_TIME;
@@ -445,6 +457,7 @@ export const {
   deleteQuestionInPre,
   deleteQuestionInPost,
   deleteQuestionInShared,
+  setQuestionnaire,
   clearQuestionnaire,
 } = questionnaire.actions;
 
