@@ -87,6 +87,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({
               }
             }}
             accessibilityEnabled
+            alertCallback={alertCallback}
             className={classes.preCard}
           />
         );

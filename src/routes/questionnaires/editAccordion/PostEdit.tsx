@@ -87,6 +87,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
               }
             }}
             accessibilityEnabled
+            alertCallback={alertCallback}
             className={classes.postCard}
           />
         );

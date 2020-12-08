@@ -91,6 +91,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
               }
             }}
             accessibilityEnabled
+            alertCallback={alertCallback}
             className={classes.card}
           />
         );

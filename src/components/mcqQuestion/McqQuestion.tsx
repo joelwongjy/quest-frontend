@@ -23,6 +23,14 @@ interface McqQuestionProps {
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionOrder) => void;
   dropdown: React.ReactNode;
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => void;
 }
 
 const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
@@ -30,6 +38,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
   mode,
   updateQuestion,
   dropdown,
+  alertCallback,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -48,11 +57,19 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
     updateQuestion(newQuestion);
   };
 
-  // TODO: Need to add alert for confirmation
   const deleteOption = (index: number) => {
-    const newOptions = [...question.options];
-    newOptions.splice(index, 1);
-    updateQuestion({ ...question, options: newOptions });
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to retrieve deleted options',
+      () => {
+        const newOptions = [...question.options];
+        newOptions.splice(index, 1);
+        updateQuestion({ ...question, options: newOptions });
+      },
+      undefined
+    );
   };
 
   const updateOption = (newOption: string, index: number) => {

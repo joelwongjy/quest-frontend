@@ -90,7 +90,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({
               alignItems="center"
             >
               <Typography variant="h6">
-                {isPre ? 'Pre-Program Questions' : 'Post-Program Questions'}
+                {isPre ? 'Pre-Programme Questions' : 'Post-Programme Questions'}
               </Typography>
               <div className={classes.modeSwitch}>
                 Pre

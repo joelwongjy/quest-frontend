@@ -74,6 +74,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             updateAccessibility={() => {}}
             accessibilityEnabled={false}
+            alertCallback={alertCallback}
             className={classes.card}
           />
         );
