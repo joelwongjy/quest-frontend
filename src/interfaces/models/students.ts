@@ -6,3 +6,8 @@ export interface Student {
   gender: string;
   age: number;
 }
+
+export enum StudentMode {
+  EDIT = 'EDIT',
+  NEW = 'NEW',
+}
