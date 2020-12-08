@@ -41,10 +41,6 @@ import EditAccordion from '../editAccordion';
 import { useStyles } from './createQuestionnaire.styles';
 
 interface CreateQuestionnaireState extends RouteState {
-  hasConfirm: boolean;
-  closeHandler: () => void;
-  confirmHandler: undefined | (() => void);
-  cancelHandler: undefined | (() => void);
   programmeIds: number[];
   classIds: number[];
   isTypeSelected: boolean;
@@ -104,8 +100,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     hasConfirm: boolean,
     alertHeader: string,
     alertMessage: string,
-    confirmHandler: undefined | (() => void),
-    cancelHandler: undefined | (() => void)
+    confirmHandler?: () => void,
+    cancelHandler?: () => void
   ) => {
     setState({
       isAlertOpen,
@@ -296,10 +292,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
       )}
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
-        hasConfirm={state.hasConfirm}
+        hasConfirm={state.hasConfirm!}
         alertHeader={state.alertHeader!}
         alertMessage={state.alertMessage!}
-        closeHandler={state.closeHandler}
+        closeHandler={state.closeHandler!}
         confirmHandler={state.confirmHandler}
         cancelHandler={state.cancelHandler}
       />
