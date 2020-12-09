@@ -16,6 +16,8 @@ import {
   clearQuestionnaire,
   QuestionnaireDux,
   setQuestionnaire,
+  setProgrammes,
+  setClasses,
 } from 'reducers/questionnaireDux';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
@@ -32,6 +34,7 @@ import {
 } from 'interfaces/models/questionnaires';
 import { validateQuestionnaire } from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
+import QuestAlert from 'componentWrappers/questAlert';
 
 import { useStyles } from './editQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
@@ -40,11 +43,6 @@ import DateAccordion from '../dateAccordion';
 
 interface RouteParams {
   id: string;
-}
-
-interface EditQuestionnaireState extends RouteState {
-  classIds: number[];
-  programmeIds: number[];
 }
 
 const EditQuestionnaire: React.FunctionComponent = () => {
@@ -56,20 +54,18 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     state.questionnaire;
   const questionnaire: QuestionnaireData = useSelector(selectQuestionnaire);
   const user = useUser();
-  const classes = useStyles();
+  const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
 
-  const { title, type, questionWindows } = questionnaire;
+  const { title, type, questionWindows, classes, programmes } = questionnaire;
 
   const [state, setState] = useReducer(
-    (s: EditQuestionnaireState, a: Partial<EditQuestionnaireState>) => ({
+    (s: RouteState, a: Partial<RouteState>) => ({
       ...s,
       ...a,
     }),
     {
-      classIds: [],
-      programmeIds: [],
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -91,9 +87,24 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   useEffect(() => {
     let didCancel = false;
 
+    const setQuestionnairePromise = (
+      myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
+      questionnaire: QuestionnairePostData
+    ) =>
+      new Promise((resolve) => {
+        myDispatch(setQuestionnaire(questionnaire));
+        resolve();
+      });
+
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
+        response.data.classes = response.data.classes.map(
+          (c: { id: number }) => c.id
+        );
+        response.data.programmes = response.data.programmes.map(
+          (p: { id: number }) => p.id
+        );
         const questionnaire = response.data as QuestionnaireData;
         questionnaire.questionWindows = questionnaire.questionWindows.map(
           (q: QuestionWindow) => ({
@@ -102,12 +113,12 @@ const EditQuestionnaire: React.FunctionComponent = () => {
             endAt: new Date(q.endAt),
           })
         );
+
         if (!didCancel) {
-          dispatch(setQuestionnaire(questionnaire));
-          setState({
-            classIds: questionnaire.classes ?? [],
-            programmeIds: questionnaire.programmes ?? [],
-            isLoading: false,
+          setQuestionnairePromise(dispatch, questionnaire).then(() => {
+            setState({
+              isLoading: false,
+            });
           });
         }
       } catch (error) {
@@ -133,11 +144,11 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   ];
 
   const programmeCallback = (newProgrammes: number[]) => {
-    setState({ programmeIds: newProgrammes });
+    dispatch(setProgrammes(newProgrammes));
   };
 
   const questClassCallback = (newClasses: number[]) => {
-    setState({ classIds: newClasses });
+    dispatch(setClasses(newClasses));
   };
 
   const clearQuestionnairePromise = (
@@ -190,7 +201,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       return;
     }
     setHasError(false);
-    const filteredQuestionnaire = {
+    const data = {
       ...questionnaire,
       questionWindows: questionnaire.questionWindows.map(
         (q: QuestionWindow) => ({
@@ -201,11 +212,6 @@ const EditQuestionnaire: React.FunctionComponent = () => {
           })),
         })
       ),
-    };
-    const data: QuestionnairePostData = {
-      ...filteredQuestionnaire,
-      classes: state.classIds,
-      programmes: state.programmeIds,
     };
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
@@ -222,9 +228,9 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div className={classes.paperContainer}>
+      <div className={muiClasses.paperContainer}>
         <Paper
-          className={classes.paper}
+          className={muiClasses.paper}
           elevation={0}
           style={{ background: 'white' }}
         >
@@ -253,9 +259,9 @@ const EditQuestionnaire: React.FunctionComponent = () => {
           />
           <AssignAccordion
             user={user!}
-            programmeIds={state.programmeIds}
+            programmeIds={programmes ?? []}
             programmeCallback={programmeCallback}
-            classIds={state.classIds}
+            classIds={classes ?? []}
             classCallback={questClassCallback}
           />
           <EditAccordion
@@ -269,6 +275,15 @@ const EditQuestionnaire: React.FunctionComponent = () => {
           </Grid>
         </Paper>
       </div>
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };

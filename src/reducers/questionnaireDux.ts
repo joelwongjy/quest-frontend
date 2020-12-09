@@ -28,6 +28,8 @@ const initialState: QuestionnaireDux = {
   sharedQuestions: {
     questions: [],
   },
+  classes: [],
+  programmes: [],
 };
 
 // Contains user information, theme, view selected and fun fact of the day
@@ -74,6 +76,12 @@ const questionnaire = createSlice({
     },
     setPostEndTime: (state, action: PayloadAction<Date>): void => {
       state.questionWindows[1].endAt = action.payload;
+    },
+    setClasses: (state, action: PayloadAction<number[]>): void => {
+      state.classes = action.payload;
+    },
+    setProgrammes: (state, action: PayloadAction<number[]>): void => {
+      state.programmes = action.payload;
     },
     addQuestionToPre: (state): void => {
       const { length } = state.questionWindows[0].questions;
@@ -414,8 +422,28 @@ const questionnaire = createSlice({
     ): void => {
       state.title = action.payload.title;
       state.type = action.payload.type;
-      state.questionWindows = [...action.payload.questionWindows];
-      state.sharedQuestions = { ...action.payload.sharedQuestions };
+      const sortedQuestionWindows = [...action.payload.questionWindows].map(
+        (q) => ({
+          ...q,
+          questions: q.questions.sort((a, b) => a.order - b.order),
+        })
+      );
+      state.questionWindows = [...sortedQuestionWindows];
+
+      if (action.payload.sharedQuestions) {
+        const sortedSharedQuestions = {
+          questions: action.payload.sharedQuestions.questions.sort(
+            (a, b) => a.order - b.order
+          ),
+        };
+        state.sharedQuestions = {
+          ...sortedSharedQuestions,
+        };
+      } else {
+        state.sharedQuestions = { questions: [] };
+      }
+      state.classes = action.payload.classes ?? [];
+      state.programmes = action.payload.programmes ?? [];
     },
     clearQuestionnaire: (state): void => {
       state.title = '';
@@ -428,6 +456,8 @@ const questionnaire = createSlice({
         },
       ];
       state.sharedQuestions = { questions: [] };
+      state.classes = [];
+      state.programmes = [];
     },
   },
 });
@@ -439,6 +469,8 @@ export const {
   setPreEndTime,
   setPostStartTime,
   setPostEndTime,
+  setClasses,
+  setProgrammes,
   addQuestionToPre,
   addQuestionToPost,
   addQuestionToShared,
