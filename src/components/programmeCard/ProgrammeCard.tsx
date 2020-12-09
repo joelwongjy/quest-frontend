@@ -15,7 +15,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
 
 import QuestCard from 'componentWrappers/questCard';
-import QuestModal from 'componentWrappers/questModal';
+import QuestAlert from 'componentWrappers/questAlert';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { MenuOption } from 'interfaces/components/programmeCard';
 import { QUESTIONNAIRES, PROGRAMMES, CLASSES } from 'constants/routes';
@@ -34,9 +34,9 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
 }) => {
   const classes = useStyles();
   const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
 
-  const toggleModal = () => setIsModalOpen((state: boolean) => !state);
+  const toggleAlert = () => setIsAlertOpen((state: boolean) => !state);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEle(event.currentTarget);
@@ -110,11 +110,12 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
             </Typography>
           </CardContent>
         </CardActionArea>
-        <QuestModal
-          name={programme.name}
-          description={programme.description}
-          isModalOpen={isModalOpen}
-          toggleModal={toggleModal}
+        <QuestAlert
+          isAlertOpen={isAlertOpen}
+          alertHeader={programme.name}
+          alertMessage={programme.description}
+          hasConfirm={false}
+          closeHandler={toggleAlert}
         />
 
         <CardActions className={classes.actions}>
