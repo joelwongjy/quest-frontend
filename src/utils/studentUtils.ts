@@ -1,6 +1,6 @@
-import { StudentPostData } from 'interfaces/api/students';
+import { StudentFormState } from 'components/studentForm/StudentForm';
 
-export const validateStudentInfo = (student: StudentPostData): boolean => {
+export const validateStudentInfo = (student: StudentFormState): boolean => {
   const { name, gender, birthday, activities } = student;
   if (name === '') {
     return false;
@@ -17,7 +17,7 @@ export const validateStudentInfo = (student: StudentPostData): boolean => {
   return true;
 };
 
-export const isEmptyStudent = (student: StudentPostData): boolean => {
+export const isEmptyStudent = (student: StudentFormState): boolean => {
   const { name, gender, birthday, activities } = student;
   return name === '' && gender === '' && !birthday && activities.length <= 0;
 };
