@@ -10,6 +10,10 @@ export interface Student {
   name: string;
   gender: string;
   birthday: Date;
+  mobileNumber?: string;
+  homeNumber?: string;
+  email?: string;
+  activities?: Activity[];
 }
 
 export enum StudentMode {

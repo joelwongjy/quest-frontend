@@ -30,6 +30,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         cursor: 'pointer',
       },
+      backgroundColor: '#F6F6F6',
     },
     header: {
       backgroundColor: '#044682',
@@ -39,9 +40,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingRight: '2rem',
     },
     list: {
-      marginTop: '1rem',
-      paddingLeft: '1rem',
-      paddingRight: '1rem',
+      marginTop: '0.5rem',
+      marginBottom: '0.5rem',
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
     },
     addIcon: {
       marginRight: '0.5rem',
@@ -49,7 +51,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     button: {
       margin: theme.spacing(3, 1, 2),
     },
-    select: {
+    subheader: {
       color: '#FF6500',
     },
   })

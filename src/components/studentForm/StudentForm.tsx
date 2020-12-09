@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useReducer, useState } from 'react';
 import {
   FormControl,
   FormHelperText,
@@ -14,16 +15,18 @@ import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { StudentMode } from 'interfaces/models/students';
+import { Activity, Student, StudentMode } from 'interfaces/models/students';
 import { useError } from 'contexts/ErrorContext';
 
 import { STUDENTS } from 'constants/routes';
 import { useHistory } from 'react-router-dom';
+import { StudentPostData } from 'interfaces/api/students';
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
   mode: StudentMode;
-  name?: string;
+  student?: Student;
+  studentCallback?: (newStudent: Student) => void;
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -34,9 +37,19 @@ interface StudentFormProps {
   ) => void;
 }
 
+interface StudentFormState {
+  name: string;
+  gender: string;
+  birthday: Date;
+  mobileNumber?: string;
+  homeNumber?: string;
+  email?: string;
+  activities: Activity[];
+}
+
 const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   mode,
-  name,
+  student,
   alertCallback,
 }) => {
   const classes = useStyles();
@@ -58,6 +71,22 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     // dunno how to code this part but doesnt allow empty fn
   };
 
+  const [state, setState] = useReducer(
+    (s: StudentFormState, a: Partial<StudentFormState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      name: student?.name ?? '',
+      gender: student?.gender ?? '',
+      birthday: student?.birthday ?? new Date(),
+      mobileNumber: student?.mobileNumber ?? '',
+      homeNumber: student?.homeNumber ?? '',
+      email: student?.email ?? '',
+      activities: student?.activities ?? [],
+    }
+  );
+
   const handleCancel = () => {
     alertCallback(
       true,
@@ -71,7 +100,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     );
   };
 
-  const hasNameTextError = hasError && name === '';
+  const hasNameTextError = hasError && student && student.name === '';
 
   const renderButtons = () => {
     switch (mode) {
@@ -107,8 +136,13 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   };
 
   return (
-    <Grid container alignItems="center" justify="center">
-      <Grid item xs={8}>
+    <Grid
+      container
+      alignItems="center"
+      justify="center"
+      style={{ marginTop: '2rem', marginBottom: '4rem' }}
+    >
+      <Grid item xs={9}>
         <QuestCard>
           <Grid item container xs={12} className={classes.header}>
             {mode === StudentMode.NEW && (
@@ -133,9 +167,14 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
           <Grid item xs={12}>
             <List className={classes.list}>
               <ListItem>
+                <Typography variant="h6" className={classes.subheader}>
+                  Particulars:
+                </Typography>
+              </ListItem>
+              <ListItem>
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={4}>
-                    <Typography variant="h6">Student: </Typography>
+                    <Typography variant="subtitle1">Name: </Typography>
                   </Grid>
                   <Grid item xs={8}>
                     <div className={classes.textfieldContainer}>
@@ -162,7 +201,153 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                 </Grid>
               </ListItem>
               <ListItem>
-                <Typography variant="h6" className={classes.select}>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle1">Gender: </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={classes.textfieldContainer}>
+                      <FormControl
+                        style={{ width: '100%' }}
+                        error={hasNameTextError}
+                      >
+                        <QuestTextField
+                          required
+                          size="small"
+                          className={classes.textfield}
+                          label="Gender"
+                          variant="outlined"
+                          onChange={(e) => updateText(e.target.value)}
+                        />
+                        {hasNameTextError && (
+                          <FormHelperText>
+                            The name cannot be blank!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle1">Birthday: </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={classes.textfieldContainer}>
+                      <FormControl
+                        style={{ width: '100%' }}
+                        error={hasNameTextError}
+                      >
+                        <QuestTextField
+                          required
+                          size="small"
+                          className={classes.textfield}
+                          label="Birthday"
+                          variant="outlined"
+                          onChange={(e) => updateText(e.target.value)}
+                        />
+                        {hasNameTextError && (
+                          <FormHelperText>
+                            The name cannot be blank!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle1">Mobile Number: </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={classes.textfieldContainer}>
+                      <FormControl
+                        style={{ width: '100%' }}
+                        error={hasNameTextError}
+                      >
+                        <QuestTextField
+                          size="small"
+                          className={classes.textfield}
+                          label="Mobile Number"
+                          variant="outlined"
+                          onChange={(e) => updateText(e.target.value)}
+                        />
+                        {hasNameTextError && (
+                          <FormHelperText>
+                            The name cannot be blank!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle1">Home Number: </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={classes.textfieldContainer}>
+                      <FormControl
+                        style={{ width: '100%' }}
+                        error={hasNameTextError}
+                      >
+                        <QuestTextField
+                          size="small"
+                          className={classes.textfield}
+                          label="Home Number"
+                          variant="outlined"
+                          onChange={(e) => updateText(e.target.value)}
+                        />
+                        {hasNameTextError && (
+                          <FormHelperText>
+                            The name cannot be blank!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle1">Email: </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={classes.textfieldContainer}>
+                      <FormControl
+                        style={{ width: '100%' }}
+                        error={hasNameTextError}
+                      >
+                        <QuestTextField
+                          size="small"
+                          className={classes.textfield}
+                          label="Email"
+                          variant="outlined"
+                          onChange={(e) => updateText(e.target.value)}
+                        />
+                        {hasNameTextError && (
+                          <FormHelperText>
+                            The name cannot be blank!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="h6"
+                  className={classes.subheader}
+                  style={{ marginTop: '0.5rem' }}
+                >
                   Activities:
                 </Typography>
               </ListItem>
@@ -177,7 +362,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         alignItems="center"
                       >
                         <Grid item xs={4}>
-                          <Typography variant="subtitle1">Programme</Typography>
+                          <Typography variant="subtitle1">
+                            Programme:
+                          </Typography>
                         </Grid>
                         <Grid item xs={8}>
                           <FormControl
@@ -208,7 +395,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         alignItems="center"
                       >
                         <Grid item xs={4}>
-                          <Typography variant="subtitle1">Class</Typography>
+                          <Typography variant="subtitle1">Class:</Typography>
                         </Grid>
                         <Grid item xs={8}>
                           <FormControl
