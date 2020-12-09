@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useReducer, useState } from 'react';
 import {
   FormControl,
@@ -9,6 +8,7 @@ import {
   ListItem,
   Select,
   MenuItem,
+  TextField,
 } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
@@ -20,7 +20,7 @@ import { useError } from 'contexts/ErrorContext';
 
 import { STUDENTS } from 'constants/routes';
 import { useHistory } from 'react-router-dom';
-import { StudentPostData } from 'interfaces/api/students';
+import { DatePicker } from '@material-ui/pickers';
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
@@ -235,26 +235,21 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <Typography variant="subtitle1">Birthday: </Typography>
                   </Grid>
                   <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <FormControl
-                        style={{ width: '100%' }}
-                        error={hasNameTextError}
-                      >
-                        <QuestTextField
-                          required
-                          size="small"
-                          className={classes.textfield}
-                          label="Birthday"
+                    <DatePicker
+                      disableFuture
+                      renderInput={(props) => (
+                        <TextField
                           variant="outlined"
-                          onChange={(e) => updateText(e.target.value)}
+                          style={{ display: 'flex' }}
+                          size="small"
+                          {...props}
                         />
-                        {hasNameTextError && (
-                          <FormHelperText>
-                            The name cannot be blank!
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                    </div>
+                      )}
+                      value={state.birthday}
+                      onChange={(newDate: Date | null) => {
+                        setState({ birthday: newDate ?? new Date() });
+                      }}
+                    />
                   </Grid>
                 </Grid>
               </ListItem>
