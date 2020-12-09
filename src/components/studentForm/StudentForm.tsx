@@ -17,18 +17,30 @@ import QuestButton from 'componentWrappers/questButton';
 import { StudentMode } from 'interfaces/models/students';
 import { useError } from 'contexts/ErrorContext';
 
+import { STUDENTS } from 'constants/routes';
+import { useHistory } from 'react-router-dom';
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
   mode: StudentMode;
-  name: string;
+  name?: string;
+  alertCallback: (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler: undefined | (() => void),
+    cancelHandler: undefined | (() => void)
+  ) => void;
 }
 
 const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   mode,
   name,
+  alertCallback,
 }) => {
   const classes = useStyles();
+  const history = useHistory();
   const { hasError } = useError();
 
   const [activities, setActivities] = useState<string[]>([
@@ -46,6 +58,19 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     // dunno how to code this part but doesnt allow empty fn
   };
 
+  const handleCancel = () => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to retrieve the above information.',
+      () => {
+        history.push(STUDENTS);
+      },
+      undefined
+    );
+  };
+
   const hasNameTextError = hasError && name === '';
 
   const renderButtons = () => {
@@ -53,7 +78,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       case StudentMode.NEW:
         return (
           <Grid container spacing={2} justify="flex-end">
-            <QuestButton className={classes.button} variant="outlined">
+            <QuestButton
+              className={classes.button}
+              variant="outlined"
+              onClick={handleCancel}
+            >
               Cancel
             </QuestButton>
             <QuestButton className={classes.button}>Add Student</QuestButton>
@@ -62,7 +91,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       case StudentMode.EDIT:
         return (
           <Grid container spacing={2} justify="flex-end">
-            <QuestButton className={classes.button} variant="outlined">
+            <QuestButton
+              className={classes.button}
+              variant="outlined"
+              onClick={handleCancel}
+            >
               Discard Changes
             </QuestButton>
             <QuestButton className={classes.button}>Save Changes</QuestButton>
