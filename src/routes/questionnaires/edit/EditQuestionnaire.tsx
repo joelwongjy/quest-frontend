@@ -21,7 +21,10 @@ import {
 } from 'reducers/questionnaireDux';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
-import { QuestionnaireData } from 'interfaces/api/questionnaires';
+import {
+  QuestionnaireData,
+  QuestionnairePostData,
+} from 'interfaces/api/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 import {
   QuestionWindow,
@@ -84,6 +87,15 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   useEffect(() => {
     let didCancel = false;
 
+    const setQuestionnairePromise = (
+      myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
+      questionnaire: QuestionnairePostData
+    ) =>
+      new Promise((resolve, _reject) => {
+        myDispatch(setQuestionnaire(questionnaire));
+        resolve();
+      });
+
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
@@ -103,9 +115,10 @@ const EditQuestionnaire: React.FunctionComponent = () => {
         );
 
         if (!didCancel) {
-          dispatch(setQuestionnaire(questionnaire));
-          setState({
-            isLoading: false,
+          setQuestionnairePromise(dispatch, questionnaire).then(() => {
+            setState({
+              isLoading: false,
+            });
           });
         }
       } catch (error) {
