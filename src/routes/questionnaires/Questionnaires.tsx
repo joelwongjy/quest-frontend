@@ -23,6 +23,7 @@ import {
   QuestionnaireDux,
 } from 'reducers/questionnaireDux';
 import QuestBanner from 'componentWrappers/questBanner';
+import { isEmptyQuestionnaire } from 'utils/questionnaireUtils';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
@@ -62,17 +63,12 @@ const Questionnaires: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const { questionWindows, sharedQuestions } = questionnaire;
   const [tabValue, setTabValue] = useState<number>(0);
   const [
     hasIncompleteQuestionnaire,
     setHasIncompleteQuestionnare,
-  ] = useState<boolean>(
-    (((questionWindows[0]?.questions?.length !== 0 ?? false) ||
-      questionWindows[1]?.questions?.length !== 0) ??
-      false) ||
-      (sharedQuestions?.questions?.length !== 0 ?? false)
-  );
+  ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -124,41 +120,43 @@ const Questionnaires: React.FunctionComponent = () => {
     return (
       <PageContainer>
         <PageHeader breadcrumbs={breadcrumbs} />
-        <QuestionnaireTabs
-          value={tabValue}
-          setValue={setTabValue}
-          labels={tabs}
-          buttonRight={
-            // Cannot use QuestButton because of the `component` attribute later
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              disabled
-            >
-              Create Questionnaire
-            </Button>
-          }
-          buttonLeft={
-            <QuestButton
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              disabled
-            >
-              Manage Sample Questions
-            </QuestButton>
-          }
-        />
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} lg={4}>
-            <QuestionnaireCardGhost />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
-            <QuestionnaireCardGhost />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
-            <QuestionnaireCardGhost />
+        <Grid container style={{ marginLeft: '1rem' }}>
+          <QuestionnaireTabs
+            value={tabValue}
+            setValue={setTabValue}
+            labels={tabs}
+            buttonRight={
+              // Cannot use QuestButton because of the `component` attribute later
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                disabled
+              >
+                Create Questionnaire
+              </Button>
+            }
+            buttonLeft={
+              <QuestButton
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                disabled
+              >
+                Manage Sample Questions
+              </QuestButton>
+            }
+          />
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} lg={4}>
+              <QuestionnaireCardGhost />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={4}>
+              <QuestionnaireCardGhost />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={4}>
+              <QuestionnaireCardGhost />
+            </Grid>
           </Grid>
         </Grid>
       </PageContainer>
@@ -214,62 +212,64 @@ const Questionnaires: React.FunctionComponent = () => {
         />
       )}
       <PageHeader breadcrumbs={breadcrumbs} />
-      <QuestionnaireTabs
-        value={tabValue}
-        setValue={setTabValue}
-        labels={tabs}
-        buttonRight={
-          // Cannot use QuestButton because of the `component` attribute
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            onClick={() => {
-              if (hasIncompleteQuestionnaire) {
-                setState({
-                  isAlertOpen: true,
-                  alertHeader: 'You have an incomplete questionnaire',
-                  alertMessage:
-                    'Are you sure you would like to start a new questionnaire?',
-                  hasConfirm: true,
-                  confirmHandler: () => {
-                    setHasIncompleteQuestionnare(false);
-                    dispatch(clearQuestionnaire());
-                    history.push(`${QUESTIONNAIRES}${CREATE}`);
-                  },
-                });
-              } else {
-                history.push(`${QUESTIONNAIRES}${CREATE}`);
-              }
-            }}
-          >
-            Create Questionnaire
-          </Button>
-        }
-        buttonLeft={
-          <QuestButton
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            disabled
-          >
-            Manage Sample Questions
-          </QuestButton>
-        }
-      />
-      <Grid container spacing={6}>
-        {renderedQuestionnaires.length > 0 &&
-          renderedQuestionnaires.map((q) => {
-            const menuOptions = getMenuOptions(q.id);
-            return (
-              <Grid item xs={12} sm={6} lg={4} key={`${q.name}-${q.id}`}>
-                <QuestionnaireCard
-                  questionnaire={q}
-                  menuOptions={menuOptions}
-                />
-              </Grid>
-            );
-          })}
+      <Grid container style={{ marginLeft: '1rem' }}>
+        <QuestionnaireTabs
+          value={tabValue}
+          setValue={setTabValue}
+          labels={tabs}
+          buttonRight={
+            // Cannot use QuestButton because of the `component` attribute
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              onClick={() => {
+                if (hasIncompleteQuestionnaire) {
+                  setState({
+                    isAlertOpen: true,
+                    alertHeader: 'You have an incomplete questionnaire',
+                    alertMessage:
+                      'Are you sure you would like to start a new questionnaire?',
+                    hasConfirm: true,
+                    confirmHandler: () => {
+                      setHasIncompleteQuestionnare(false);
+                      dispatch(clearQuestionnaire());
+                      history.push(`${QUESTIONNAIRES}${CREATE}`);
+                    },
+                  });
+                } else {
+                  history.push(`${QUESTIONNAIRES}${CREATE}`);
+                }
+              }}
+            >
+              Create Questionnaire
+            </Button>
+          }
+          buttonLeft={
+            <QuestButton
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              disabled
+            >
+              Manage Sample Questions
+            </QuestButton>
+          }
+        />
+        <Grid container spacing={6}>
+          {renderedQuestionnaires.length > 0 &&
+            renderedQuestionnaires.map((q) => {
+              const menuOptions = getMenuOptions(q.id);
+              return (
+                <Grid item xs={12} sm={6} lg={4} key={`${q.name}-${q.id}`}>
+                  <QuestionnaireCard
+                    questionnaire={q}
+                    menuOptions={menuOptions}
+                  />
+                </Grid>
+              );
+            })}
+        </Grid>
       </Grid>
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}

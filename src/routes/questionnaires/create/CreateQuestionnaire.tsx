@@ -33,7 +33,11 @@ import {
 import ApiService from 'services/apiService';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { useError } from 'contexts/ErrorContext';
-import { validateQuestionnaire } from 'utils/questionnaireUtils';
+import {
+  isEmptyQuestion,
+  isEmptyQuestionnaire,
+  validateQuestionnaire,
+} from 'utils/questionnaireUtils';
 
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
@@ -64,12 +68,6 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     programmes,
   } = questionnaire;
 
-  const hasIncompleteQuestionnaire =
-    (((questionWindows[0]?.questions?.length !== 0 ?? false) ||
-      questionWindows[1]?.questions?.length !== 0) ??
-      false) ||
-    (sharedQuestions?.questions?.length !== 0 ?? false);
-
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     { text: 'Create', href: `${QUESTIONNAIRES}/${CREATE}` },
@@ -96,7 +94,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
-      isTypeSelected: hasIncompleteQuestionnaire ?? false,
+      isTypeSelected: !isEmptyQuestionnaire(questionnaire),
     }
   );
 

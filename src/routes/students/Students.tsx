@@ -40,6 +40,7 @@ const Students: React.FunctionComponent = () => {
     }),
     {
       students,
+      isAlertOpen: false,
       isLoading: true,
       isError: false,
       hasConfirm: false,

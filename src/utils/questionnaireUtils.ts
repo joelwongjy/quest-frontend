@@ -70,3 +70,25 @@ export const isEmptyQuestion = (question: QuestionOrder): boolean => {
   }
   return false;
 };
+
+export const isEmptyQuestionnaire = (
+  questionnaire: QuestionnairePostData
+): boolean => {
+  const { questionWindows, sharedQuestions } = questionnaire;
+  if (questionWindows[0]) {
+    if (questionWindows[0].questions.length !== 0) {
+      return false;
+    }
+  }
+  if (questionWindows[1]) {
+    if (questionWindows[1].questions.length !== 0) {
+      return false;
+    }
+  }
+  if (sharedQuestions) {
+    if (sharedQuestions.questions.length !== 0) {
+      return false;
+    }
+  }
+  return true;
+};
