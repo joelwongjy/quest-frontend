@@ -15,6 +15,7 @@ import { StudentMode } from 'interfaces/models/students';
 import { useUser } from 'contexts/UserContext';
 import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
+import QuestAlert from 'componentWrappers/questAlert';
 import { useStyles } from './createStudent.styles';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -95,6 +96,15 @@ const CreateStudent: React.FunctionComponent = () => {
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
       <StudentForm mode={StudentMode.NEW} alertCallback={alertCallback} />
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };

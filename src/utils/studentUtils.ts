@@ -1,14 +1,14 @@
 import { StudentPostData } from 'interfaces/api/students';
 
 export const validateStudentInfo = (student: StudentPostData): boolean => {
-  const { name, gender, age, activities } = student;
+  const { name, gender, birthday, activities } = student;
   if (name === '') {
     return false;
   }
   if (gender === '') {
     return false;
   }
-  if (!age || age < 0) {
+  if (!birthday) {
     return false;
   }
   if (activities.length === 0) {
@@ -18,6 +18,6 @@ export const validateStudentInfo = (student: StudentPostData): boolean => {
 };
 
 export const isEmptyStudent = (student: StudentPostData): boolean => {
-  const { name, gender, age, activities } = student;
-  return name === '' && gender === '' && !age && activities.length <= 0;
+  const { name, gender, birthday, activities } = student;
+  return name === '' && gender === '' && !birthday && activities.length <= 0;
 };

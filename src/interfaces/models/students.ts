@@ -9,7 +9,7 @@ export interface Student {
   id: number;
   name: string;
   gender: string;
-  age: number;
+  birthday: Date;
 }
 
 export enum StudentMode {
