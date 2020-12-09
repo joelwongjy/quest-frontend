@@ -21,6 +21,7 @@ import { useError } from 'contexts/ErrorContext';
 import { STUDENTS } from 'constants/routes';
 import { useHistory } from 'react-router-dom';
 import { DatePicker } from '@material-ui/pickers';
+import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
@@ -93,8 +94,6 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       undefined
     );
   };
-
-  const hasNameTextError = hasError && student && student.name === '';
 
   const renderButtons = () => {
     switch (mode) {
@@ -174,7 +173,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <div className={classes.textfieldContainer}>
                       <FormControl
                         style={{ width: '100%' }}
-                        error={hasNameTextError}
+                        error={hasError && state.name === ''}
                       >
                         <QuestTextField
                           required
@@ -184,7 +183,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           variant="outlined"
                           onChange={(e) => setState({ name: e.target.value })}
                         />
-                        {hasNameTextError && (
+                        {hasError && state.name === '' && (
                           <FormHelperText>
                             The name cannot be blank!
                           </FormHelperText>
@@ -204,6 +203,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                       variant="outlined"
                       size="small"
                       className={classes.textfieldContainer}
+                      color="secondary"
                     >
                       <Select
                         id="gender-select"
@@ -217,9 +217,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         <MenuItem value="Male">Male</MenuItem>
                         <MenuItem value="Famale">Female</MenuItem>
                       </Select>
-                      {hasNameTextError && (
+                      {hasError && state.gender === '' && (
                         <FormHelperText>
-                          The name cannot be blank!
+                          The gender cannot be blank!
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -240,6 +240,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           variant="outlined"
                           style={{ display: 'flex' }}
                           size="small"
+                          color="secondary"
                           {...props}
                         />
                       )}
@@ -260,7 +261,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <div className={classes.textfieldContainer}>
                       <FormControl
                         style={{ width: '100%' }}
-                        error={hasNameTextError}
+                        error={
+                          hasError &&
+                          state.mobileNumber !== undefined &&
+                          !isValidMobileNumber(state.mobileNumber)
+                        }
                       >
                         <QuestTextField
                           size="small"
@@ -271,11 +276,13 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                             setState({ mobileNumber: e.target.value })
                           }
                         />
-                        {hasNameTextError && (
-                          <FormHelperText>
-                            The name cannot be blank!
-                          </FormHelperText>
-                        )}
+                        {hasError &&
+                          state.mobileNumber &&
+                          !isValidMobileNumber(state.mobileNumber!) && (
+                            <FormHelperText>
+                              The name cannot be blank!
+                            </FormHelperText>
+                          )}
                       </FormControl>
                     </div>
                   </Grid>
@@ -290,7 +297,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <div className={classes.textfieldContainer}>
                       <FormControl
                         style={{ width: '100%' }}
-                        error={hasNameTextError}
+                        error={
+                          hasError && !isValidMobileNumber(state.homeNumber!)
+                        }
                       >
                         <QuestTextField
                           size="small"
@@ -301,11 +310,13 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                             setState({ homeNumber: e.target.value })
                           }
                         />
-                        {hasNameTextError && (
-                          <FormHelperText>
-                            The name cannot be blank!
-                          </FormHelperText>
-                        )}
+                        {hasError &&
+                          state.homeNumber &&
+                          !isValidMobileNumber(state.homeNumber!) && (
+                            <FormHelperText>
+                              Please enter a valid home number!
+                            </FormHelperText>
+                          )}
                       </FormControl>
                     </div>
                   </Grid>
@@ -320,7 +331,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <div className={classes.textfieldContainer}>
                       <FormControl
                         style={{ width: '100%' }}
-                        error={hasNameTextError}
+                        error={hasError && !isValidEmail(state.email!)}
                       >
                         <QuestTextField
                           size="small"
@@ -329,11 +340,13 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           variant="outlined"
                           onChange={(e) => setState({ email: e.target.value })}
                         />
-                        {hasNameTextError && (
-                          <FormHelperText>
-                            The name cannot be blank!
-                          </FormHelperText>
-                        )}
+                        {hasError &&
+                          state.email &&
+                          !isValidEmail(state.email) && (
+                            <FormHelperText>
+                              Please enter a valid email address!
+                            </FormHelperText>
+                          )}
                       </FormControl>
                     </div>
                   </Grid>
@@ -368,6 +381,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                             variant="outlined"
                             size="small"
                             className={classes.textfieldContainer}
+                            color="secondary"
                           >
                             <Select
                               id="select-programmes"
@@ -399,6 +413,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                             variant="outlined"
                             size="small"
                             className={classes.textfieldContainer}
+                            color="secondary"
                           >
                             <Select
                               id="select-programmes"
