@@ -65,12 +65,6 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 
   const questClasses = ['Class 1', 'Class 2'];
 
-  const updateText = (newText: string) => {
-    const dummy = newText;
-    dummy.replaceAll('', '');
-    // dunno how to code this part but doesnt allow empty fn
-  };
-
   const [state, setState] = useReducer(
     (s: StudentFormState, a: Partial<StudentFormState>) => ({
       ...s,
@@ -78,7 +72,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }),
     {
       name: student?.name ?? '',
-      gender: student?.gender ?? '',
+      gender: student?.gender ?? 'Male',
       birthday: student?.birthday ?? new Date(),
       mobileNumber: student?.mobileNumber ?? '',
       homeNumber: student?.homeNumber ?? '',
@@ -188,7 +182,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           className={classes.textfield}
                           label="Name"
                           variant="outlined"
-                          onChange={(e) => updateText(e.target.value)}
+                          onChange={(e) => setState({ name: e.target.value })}
                         />
                         {hasNameTextError && (
                           <FormHelperText>
@@ -206,26 +200,29 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <Typography variant="subtitle1">Gender: </Typography>
                   </Grid>
                   <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <FormControl
-                        style={{ width: '100%' }}
-                        error={hasNameTextError}
+                    <FormControl
+                      variant="outlined"
+                      size="small"
+                      className={classes.textfieldContainer}
+                    >
+                      <Select
+                        id="gender-select"
+                        value={state.gender}
+                        onChange={(
+                          event: React.ChangeEvent<{ value: unknown }>
+                        ) => {
+                          setState({ gender: event.target.value as string });
+                        }}
                       >
-                        <QuestTextField
-                          required
-                          size="small"
-                          className={classes.textfield}
-                          label="Gender"
-                          variant="outlined"
-                          onChange={(e) => updateText(e.target.value)}
-                        />
-                        {hasNameTextError && (
-                          <FormHelperText>
-                            The name cannot be blank!
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                    </div>
+                        <MenuItem value="Male">Male</MenuItem>
+                        <MenuItem value="Famale">Female</MenuItem>
+                      </Select>
+                      {hasNameTextError && (
+                        <FormHelperText>
+                          The name cannot be blank!
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -237,6 +234,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   <Grid item xs={8}>
                     <DatePicker
                       disableFuture
+                      allowKeyboardControl={false}
                       renderInput={(props) => (
                         <TextField
                           variant="outlined"
@@ -269,7 +267,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           className={classes.textfield}
                           label="Mobile Number"
                           variant="outlined"
-                          onChange={(e) => updateText(e.target.value)}
+                          onChange={(e) =>
+                            setState({ mobileNumber: e.target.value })
+                          }
                         />
                         {hasNameTextError && (
                           <FormHelperText>
@@ -297,7 +297,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           className={classes.textfield}
                           label="Home Number"
                           variant="outlined"
-                          onChange={(e) => updateText(e.target.value)}
+                          onChange={(e) =>
+                            setState({ homeNumber: e.target.value })
+                          }
                         />
                         {hasNameTextError && (
                           <FormHelperText>
@@ -325,7 +327,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           className={classes.textfield}
                           label="Email"
                           variant="outlined"
-                          onChange={(e) => updateText(e.target.value)}
+                          onChange={(e) => setState({ email: e.target.value })}
                         />
                         {hasNameTextError && (
                           <FormHelperText>
