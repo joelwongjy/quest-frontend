@@ -98,7 +98,7 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
             )
           }
         />
-        <CardActionArea onClick={toggleModal}>
+        <CardActionArea onClick={toggleAlert}>
           <CardContent>
             <Typography
               className={classes.title}
