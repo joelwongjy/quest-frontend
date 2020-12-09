@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { Dispatch, useReducer, useState } from 'react';
+import React, { Dispatch, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Paper, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
@@ -20,6 +20,8 @@ import {
   setPreStartTime,
   setType,
   clearQuestionnaire,
+  setProgrammes,
+  setClasses,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
 import {
@@ -41,14 +43,12 @@ import EditAccordion from '../editAccordion';
 import { useStyles } from './createQuestionnaire.styles';
 
 interface CreateQuestionnaireState extends RouteState {
-  programmeIds: number[];
-  classIds: number[];
   isTypeSelected: boolean;
 }
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
   const user = useUser();
-  const classes = useStyles();
+  const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
 
@@ -56,7 +56,13 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const { type, questionWindows, sharedQuestions } = questionnaire;
+  const {
+    type,
+    questionWindows,
+    sharedQuestions,
+    classes,
+    programmes,
+  } = questionnaire;
 
   const hasIncompleteQuestionnaire =
     (((questionWindows[0]?.questions?.length !== 0 ?? false) ||
@@ -90,8 +96,6 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
-      programmeIds: [],
-      classIds: [],
       isTypeSelected: hasIncompleteQuestionnaire ?? false,
     }
   );
@@ -133,11 +137,11 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   };
 
   const programmeCallback = (newProgrammes: number[]) => {
-    setState({ programmeIds: newProgrammes });
+    dispatch(setProgrammes(newProgrammes));
   };
 
   const questClassCallback = (newClasses: number[]) => {
-    setState({ classIds: newClasses });
+    dispatch(setClasses(newClasses));
   };
 
   const handleSelectSingle = () => {
@@ -164,7 +168,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
       return;
     }
     setHasError(false);
-    const filteredQuestionnaire = {
+    const data = {
       ...questionnaire,
       questionWindows: questionnaire.questionWindows.map(
         (q: QuestionWindow) => ({
@@ -175,11 +179,6 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           })),
         })
       ),
-    };
-    const data: QuestionnairePostData = {
-      ...filteredQuestionnaire,
-      classes: state.classIds,
-      programmes: state.programmeIds,
     };
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
@@ -213,7 +212,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           <Grid container justify="center" alignItems="center">
             <Grid item>
               <QuestCard
-                className={classes.typeCard}
+                className={muiClasses.typeCard}
                 onClick={handleSelectSingle}
               >
                 <Grid container direction="column" alignItems="center">
@@ -226,7 +225,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
             </Grid>
             <Grid item>
               <QuestCard
-                className={classes.typeCard}
+                className={muiClasses.typeCard}
                 onClick={handleSelectPrePost}
               >
                 <Grid container direction="column" alignItems="center">
@@ -241,9 +240,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           </Grid>
         </>
       ) : (
-        <div className={classes.paperContainer}>
+        <div className={muiClasses.paperContainer}>
           <Paper
-            className={classes.paper}
+            className={muiClasses.paper}
             elevation={0}
             style={{ background: 'white' }}
           >
@@ -274,9 +273,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
             />
             <AssignAccordion
               user={user!}
-              programmeIds={state.programmeIds}
+              programmeIds={programmes ?? []}
               programmeCallback={programmeCallback}
-              classIds={state.classIds}
+              classIds={classes ?? []}
               classCallback={questClassCallback}
             />
             <EditAccordion
