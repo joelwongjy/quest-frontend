@@ -422,8 +422,26 @@ const questionnaire = createSlice({
     ): void => {
       state.title = action.payload.title;
       state.type = action.payload.type;
-      state.questionWindows = [...action.payload.questionWindows];
-      state.sharedQuestions = { ...action.payload.sharedQuestions };
+      const sortedQuestionWindows = [...action.payload.questionWindows].map(
+        (q) => ({
+          ...q,
+          questions: q.questions.sort((a, b) => a.order - b.order),
+        })
+      );
+      state.questionWindows = [...sortedQuestionWindows];
+
+      if (action.payload.sharedQuestions) {
+        const sortedSharedQuestions = {
+          questions: action.payload.sharedQuestions.questions.sort(
+            (a, b) => a.order - b.order
+          ),
+        };
+        state.sharedQuestions = {
+          ...sortedSharedQuestions,
+        };
+      } else {
+        state.sharedQuestions = { questions: [] };
+      }
       state.classes = action.payload.classes ?? [];
       state.programmes = action.payload.programmes ?? [];
     },
