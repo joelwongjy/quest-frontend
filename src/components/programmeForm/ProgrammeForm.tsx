@@ -90,7 +90,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({ mode, name }) => {
               <ListItem>
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={4}>
-                    <Typography variant="h6">Name of Programme: </Typography>
+                    <Typography variant="subtitle1">Name: </Typography>
                   </Grid>
                   <Grid item xs={8}>
                     <div className={classes.textfieldContainer}>

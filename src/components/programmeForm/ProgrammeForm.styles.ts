@@ -30,6 +30,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         cursor: 'pointer',
       },
+      backgroundColor: '#F6F6F6',
     },
     header: {
       backgroundColor: '#044682',
