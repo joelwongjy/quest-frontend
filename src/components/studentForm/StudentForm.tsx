@@ -11,17 +11,25 @@ import {
   TextField,
 } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+import { DatePicker } from '@material-ui/pickers';
 
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { Activity, Student, StudentMode } from 'interfaces/models/students';
+import { Student, StudentMode } from 'interfaces/models/students';
 import { useError } from 'contexts/ErrorContext';
-
 import { STUDENTS } from 'constants/routes';
 import { useHistory } from 'react-router-dom';
-import { DatePicker } from '@material-ui/pickers';
-import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
+import {
+  isValidEmail,
+  isValidMobileNumber,
+  validateStudentInfo,
+} from 'utils/studentUtils';
+import { useUser } from 'contexts/UserContext';
+import { ProgrammeListData } from 'interfaces/models/programmes';
+import { ClassListData } from 'interfaces/models/classes';
+import { StudentPostData } from 'interfaces/api/students';
+
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
@@ -38,14 +46,8 @@ interface StudentFormProps {
   ) => void;
 }
 
-interface StudentFormState {
-  name: string;
-  gender: string;
-  birthday: Date;
-  mobileNumber?: string;
-  homeNumber?: string;
-  email?: string;
-  activities: Activity[];
+export interface StudentFormState extends Omit<StudentPostData, 'birthday'> {
+  birthday: Date | null;
 }
 
 const StudentForm: React.FunctionComponent<StudentFormProps> = ({
@@ -55,16 +57,21 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 }) => {
   const classes = useStyles();
   const history = useHistory();
-  const { hasError } = useError();
+  const { hasError, setHasError } = useError();
+  const user = useUser();
 
-  const [activities, setActivities] = useState<string[]>([
-    'Activity 1',
-    'Activity 2',
-  ]);
+  type ActivityData = ProgrammeListData | ClassListData;
 
-  const programmes = ['Programme 1', 'Programme 2'];
+  const [activities, setActivities] = useState<ActivityData[][]>([]);
 
-  const questClasses = ['Class 1', 'Class 2'];
+  const availableProgrammes =
+    user!.programmes.filter((p) =>
+      user!.classes.some((c) => c.programme.id === p.id)
+    ) ?? [];
+
+  const availableClasses = user!.classes.filter((c) =>
+    availableProgrammes.some((p) => p.id === c.programme.id)
+  );
 
   const [state, setState] = useReducer(
     (s: StudentFormState, a: Partial<StudentFormState>) => ({
@@ -87,12 +94,48 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       true,
       true,
       'Are you sure?',
-      'You will not be able to retrieve the above information.',
+      'The above information will not be saved.',
       () => {
         history.push(STUDENTS);
       },
       undefined
     );
+  };
+
+  const handleProgrammeChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ): void => {
+    const [id, index] = (event.target.value as string).split('-').map(Number);
+    const newActivities = activities.slice();
+    [newActivities[index][0]] = user!.programmes.filter((p) => p.id === id);
+    newActivities[index][1] =
+      availableClasses.filter((c) => c.programme.id === id)[0] ?? undefined;
+    setActivities(newActivities);
+  };
+
+  const handleClassChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ): void => {
+    const [id, index] = (event.target.value as string).split('-').map(Number);
+    const newActivities = activities.slice();
+    [newActivities[index][1]] = availableClasses.filter((c) => c.id === id);
+    setActivities(newActivities);
+  };
+
+  const handleAdd = () => {
+    if (!validateStudentInfo(state)) {
+      setHasError(true);
+    }
+    // TODO: Add activity deduplication logic
+    // TODO: Post the data over
+  };
+
+  const handleEdit = () => {
+    if (!validateStudentInfo(state)) {
+      setHasError(true);
+    }
+    // TODO: Add activity deduplication logic
+    // TODO: Post the data over
   };
 
   const renderButtons = () => {
@@ -107,7 +150,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
             >
               Cancel
             </QuestButton>
-            <QuestButton className={classes.button}>Add Student</QuestButton>
+            <QuestButton className={classes.button} onClick={handleAdd}>
+              Add Student
+            </QuestButton>
           </Grid>
         );
       case StudentMode.EDIT:
@@ -120,7 +165,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
             >
               Discard Changes
             </QuestButton>
-            <QuestButton className={classes.button}>Save Changes</QuestButton>
+            <QuestButton className={classes.button} onClick={handleEdit}>
+              Save Changes
+            </QuestButton>
           </Grid>
         );
       default:
@@ -135,7 +182,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       justify="center"
       style={{ marginTop: '2rem', marginBottom: '4rem' }}
     >
-      <Grid item xs={9}>
+      <Grid item xs={12} md={9}>
         <QuestCard>
           <Grid item container xs={12} className={classes.header}>
             {mode === StudentMode.NEW && (
@@ -204,6 +251,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                       size="small"
                       className={classes.textfieldContainer}
                       color="secondary"
+                      error={hasError && state.gender === ''}
                     >
                       <Select
                         id="gender-select"
@@ -232,23 +280,33 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                     <Typography variant="subtitle1">Birthday: </Typography>
                   </Grid>
                   <Grid item xs={8}>
-                    <DatePicker
-                      disableFuture
-                      allowKeyboardControl={false}
-                      renderInput={(props) => (
-                        <TextField
-                          variant="outlined"
-                          style={{ display: 'flex' }}
-                          size="small"
-                          color="secondary"
-                          {...props}
-                        />
+                    <FormControl
+                      style={{ width: '100%' }}
+                      error={hasError && state.birthday === null}
+                    >
+                      <DatePicker
+                        disableFuture
+                        allowKeyboardControl={false}
+                        renderInput={(props) => (
+                          <TextField
+                            variant="outlined"
+                            style={{ display: 'flex' }}
+                            size="small"
+                            color="secondary"
+                            {...props}
+                          />
+                        )}
+                        value={state.birthday}
+                        onChange={(newDate: Date | null) => {
+                          setState({ birthday: newDate });
+                        }}
+                      />
+                      {hasError && state.birthday === null && (
+                        <FormHelperText>
+                          The birthday cannot be blank!
+                        </FormHelperText>
                       )}
-                      value={state.birthday}
-                      onChange={(newDate: Date | null) => {
-                        setState({ birthday: newDate ?? new Date() });
-                      }}
-                    />
+                    </FormControl>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -385,12 +443,16 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           >
                             <Select
                               id="select-programmes"
-                              value={programmes[0]}
+                              value={`${a[0].id}-${index}`}
+                              onChange={handleProgrammeChange}
                             >
-                              {programmes.map((p) => {
+                              {availableProgrammes.map((p) => {
                                 return (
-                                  <MenuItem value={p} key={p}>
-                                    {p}
+                                  <MenuItem
+                                    value={`${p.id}-${index}`}
+                                    key={`programme-${p.id}`}
+                                  >
+                                    {p.name}
                                   </MenuItem>
                                 );
                               })}
@@ -417,15 +479,21 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           >
                             <Select
                               id="select-programmes"
-                              value={questClasses[0]}
+                              value={`${a[1].id}-${index}`}
+                              onChange={handleClassChange}
                             >
-                              {questClasses.map((c) => {
-                                return (
-                                  <MenuItem value={c} key={c}>
-                                    {c}
-                                  </MenuItem>
-                                );
-                              })}
+                              {availableClasses
+                                .filter((c) => c.programme.id === a[0].id)
+                                .map((c) => {
+                                  return (
+                                    <MenuItem
+                                      value={`${c.id}-${index}`}
+                                      key={`class-${c.id}`}
+                                    >
+                                      {c.name}
+                                    </MenuItem>
+                                  );
+                                })}
                             </Select>
                           </FormControl>
                         </Grid>
@@ -434,11 +502,50 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   </Grid>
                 );
               })}
+              <FormControl
+                style={{
+                  width: '100%',
+                }}
+                error={hasError && activities.length === 0}
+              >
+                {hasError && activities.length === 0 && (
+                  <FormHelperText style={{ textAlign: 'center' }}>
+                    You need to add at least one activity!
+                  </FormHelperText>
+                )}
+              </FormControl>
               <ListItem>
                 <QuestCard
                   onClick={() => {
+                    if (user?.programmes.length === 0) {
+                      alertCallback(
+                        true,
+                        false,
+                        'You cannot add activities!',
+                        'You need to be part of a programme to add students to it..',
+                        undefined,
+                        undefined
+                      );
+                      return;
+                    }
+                    if (availableProgrammes.length === 0) {
+                      alertCallback(
+                        true,
+                        false,
+                        'You cannot add activities!',
+                        'You need to create classes first for the student to join.',
+                        undefined,
+                        undefined
+                      );
+                      return;
+                    }
                     const newActivities = activities.slice();
-                    newActivities.push('Activity x');
+                    newActivities.push([
+                      availableProgrammes[0],
+                      user!.classes.filter(
+                        (c) => c.programme.id === availableProgrammes[0].id
+                      )[0],
+                    ]);
                     setActivities(newActivities);
                   }}
                   className={classes.addCard}
@@ -446,6 +553,12 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   <AddCircleIcon className={classes.addIcon} />
                   Add an activity
                 </QuestCard>
+              </ListItem>
+              <ListItem>
+                <p style={{ textAlign: 'center', width: '100%', margin: 0 }}>
+                  If your programme is not showing up, that means you need to
+                  create classes for it first!
+                </p>
               </ListItem>
               <ListItem>{renderButtons()}</ListItem>
             </List>
