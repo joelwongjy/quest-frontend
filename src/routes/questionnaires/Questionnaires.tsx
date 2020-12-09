@@ -23,6 +23,7 @@ import {
   QuestionnaireDux,
 } from 'reducers/questionnaireDux';
 import QuestBanner from 'componentWrappers/questBanner';
+import { isEmptyQuestionnaire } from 'utils/questionnaireUtils';
 import { questionnaires } from './mockData';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
@@ -62,17 +63,12 @@ const Questionnaires: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const { questionWindows, sharedQuestions } = questionnaire;
   const [tabValue, setTabValue] = useState<number>(0);
   const [
     hasIncompleteQuestionnaire,
     setHasIncompleteQuestionnare,
-  ] = useState<boolean>(
-    (((questionWindows[0]?.questions?.length !== 0 ?? false) ||
-      questionWindows[1]?.questions?.length !== 0) ??
-      false) ||
-      (sharedQuestions?.questions?.length !== 0 ?? false)
-  );
+  ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
+
   const classes = useStyles();
 
   useEffect(() => {
