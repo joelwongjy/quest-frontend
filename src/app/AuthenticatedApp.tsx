@@ -24,6 +24,7 @@ import CreateQuestionnaires from 'routes/questionnaires/create';
 import EditQuestionnaire from 'routes/questionnaires/edit';
 import Responses from 'routes/questionnaires/responses';
 import Programme from 'routes/programmes';
+import CreateProgrammes from 'routes/programmes/create';
 import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
 
@@ -50,6 +51,11 @@ const AuthenticatedApp: React.FunctionComponent = () => {
             <Responses />
           </Route>
           <Route exact path={PROGRAMMES} component={Programme} />
+          <Route
+            exact
+            path={`${PROGRAMMES}${CREATE}`}
+            component={CreateProgrammes}
+          />
           <Route exact path={CLASSES} component={Home} />
           <Route exact path={STUDENTS} component={Students} />
           <Route
