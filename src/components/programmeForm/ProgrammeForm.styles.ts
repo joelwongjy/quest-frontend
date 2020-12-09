@@ -1,0 +1,57 @@
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paper: {
+      width: '80%',
+    },
+    paperContainer: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    textfield: {
+      flex: 1,
+    },
+    textfieldContainer: {
+      display: 'flex',
+    },
+    addCard: {
+      marginTop: '1rem',
+      height: '2.75rem',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      boxShadow: 'none',
+      borderStyle: 'dashed',
+      borderColor: theme.custom.icon.iconColor,
+      color: theme.custom.icon.iconColor,
+      fontSize: '1.25rem',
+      '&:hover': {
+        cursor: 'pointer',
+      },
+      backgroundColor: '#F6F6F6',
+    },
+    header: {
+      backgroundColor: '#044682',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '2rem',
+    },
+    list: {
+      marginTop: '1rem',
+      paddingLeft: '1rem',
+      paddingRight: '1rem',
+    },
+    addIcon: {
+      marginRight: '0.5rem',
+    },
+    button: {
+      margin: theme.spacing(3, 1, 2),
+    },
+    select: {
+      color: '#FF6500',
+    },
+  })
+);

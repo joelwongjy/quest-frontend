@@ -151,17 +151,29 @@ export const programmes: ProgrammeListData[] = [
   {
     ...mockBaseData,
     id: 1,
-    name: 'Synchronisation',
+    name: 'Synchronization',
+    description:
+      'Synchronization refers to one of two distinct but related concepts: synchronization of processes, and synchronization of data.',
+    startAt: subDays(new Date(), 3),
+    endAt: addDays(new Date(), 3),
   },
   {
     ...mockBaseData,
     id: 2,
     name: 'Memory Management',
+    description:
+      'Memory management is a form of resource management applied to computer memory.',
+    startAt: subDays(new Date(), 5),
+    endAt: addDays(new Date(), 10),
   },
   {
     ...mockBaseData,
     id: 3,
     name: 'Process Management',
+    description:
+      'Process management involves various tasks like creation, scheduling, termination of processes, and a dead lock.',
+    startAt: subDays(new Date(), 2),
+    endAt: addDays(new Date(), 6),
   },
 ];
 

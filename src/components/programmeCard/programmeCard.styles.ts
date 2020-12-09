@@ -2,8 +2,12 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(() =>
   createStyles({
+    dates: {
+      fontSize: 14,
+    },
     title: {
-      marginTop: 8,
+      marginTop: 24,
+      marginBottom: 40,
       textAlign: 'center',
     },
     status: {
@@ -15,6 +19,7 @@ export const useStyles = makeStyles(() =>
       justifyContent: 'center',
     },
     button: {
+      fullWidth: true,
       padding: '0.6rem',
     },
     buttonHidden: {
