@@ -91,7 +91,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
       questionnaire: QuestionnairePostData
     ) =>
-      new Promise((resolve, _reject) => {
+      new Promise((resolve) => {
         myDispatch(setQuestionnaire(questionnaire));
         resolve();
       });
