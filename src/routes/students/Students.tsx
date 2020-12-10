@@ -42,7 +42,7 @@ const Students: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      students,
+      students: students.slice(),
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -136,6 +136,13 @@ const Students: React.FunctionComponent = () => {
     setState({ isEditing: true, selectedStudent: student });
   };
 
+  const handleDelete = (student: Student) => {
+    const index = state.students.indexOf(student);
+    const newStudents = state.students.slice();
+    newStudents.splice(index, 1);
+    setState({ students: newStudents });
+  };
+
   return (
     <PageContainer>
       <PageHeader
@@ -201,7 +208,11 @@ const Students: React.FunctionComponent = () => {
                       >
                         <EditIcon />
                       </IconButton>
-                      <IconButton edge="end" aria-label="delete">
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleDelete(s)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
