@@ -95,7 +95,11 @@ const CreateStudent: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <StudentForm mode={StudentMode.NEW} alertCallback={alertCallback} />
+      <StudentForm
+        mode={StudentMode.NEW}
+        alertCallback={alertCallback}
+        cancelCallback={() => history.push(STUDENTS)}
+      />
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm!}

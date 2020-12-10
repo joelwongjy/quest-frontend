@@ -20,8 +20,6 @@ import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
 import { Student, StudentMode } from 'interfaces/models/students';
 import { useError } from 'contexts/ErrorContext';
-import { STUDENTS } from 'constants/routes';
-import { useHistory } from 'react-router-dom';
 import {
   isValidEmail,
   isValidMobileNumber,
@@ -38,6 +36,7 @@ interface StudentFormProps {
   mode: StudentMode;
   student?: Student;
   studentCallback?: (newStudent: Student) => void;
+  cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -55,10 +54,10 @@ export interface StudentFormState extends Omit<StudentPostData, 'birthday'> {
 const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   mode,
   student,
+  cancelCallback,
   alertCallback,
 }) => {
   const classes = useStyles();
-  const history = useHistory();
   const { hasError, setHasError } = useError();
   const user = useUser();
 
@@ -82,7 +81,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }),
     {
       name: student?.name ?? '',
-      gender: student?.gender ?? 'Male',
+      gender: student?.gender ?? 'M',
       birthday: student?.birthday ?? new Date(),
       mobileNumber: student?.mobileNumber ?? '',
       homeNumber: student?.homeNumber ?? '',
@@ -97,9 +96,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       true,
       'Are you sure?',
       'The above information will not be saved.',
-      () => {
-        history.push(STUDENTS);
-      },
+      cancelCallback,
       undefined
     );
   };
@@ -242,6 +239,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         <QuestTextField
                           required
                           size="small"
+                          value={state.name}
                           className={classes.textfield}
                           label="Name"
                           variant="outlined"
@@ -279,8 +277,8 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           setState({ gender: event.target.value as string });
                         }}
                       >
-                        <MenuItem value="Male">Male</MenuItem>
-                        <MenuItem value="Famale">Female</MenuItem>
+                        <MenuItem value="M">Male</MenuItem>
+                        <MenuItem value="F">Female</MenuItem>
                       </Select>
                       {hasError && state.gender === '' && (
                         <FormHelperText>
