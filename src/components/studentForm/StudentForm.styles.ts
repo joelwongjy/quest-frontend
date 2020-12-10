@@ -36,7 +36,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '5rem',
       alignItems: 'center',
       paddingLeft: '2rem',
-      paddingRight: '2rem',
+      paddingRight: '1rem',
     },
     list: {
       marginTop: '0.5rem',

@@ -14,6 +14,7 @@ import {
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import { DatePicker } from '@material-ui/pickers';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
@@ -95,7 +96,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       true,
       true,
       'Are you sure?',
-      'The above information will not be saved.',
+      'The information will not be saved.',
       cancelCallback,
       undefined
     );
@@ -199,24 +200,29 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       <Grid item xs={12} md={9}>
         <QuestCard>
           <Grid item container xs={12} className={classes.header}>
-            {mode === StudentMode.NEW && (
-              <Typography
-                component="h1"
-                variant="h5"
-                style={{ color: 'white' }}
-              >
-                Add Student Info
-              </Typography>
-            )}
-            {mode === StudentMode.EDIT && (
-              <Typography
-                component="h1"
-                variant="h5"
-                style={{ color: 'white' }}
-              >
-                Edit Student Info
-              </Typography>
-            )}
+            <Grid container alignItems="center" justify="space-between">
+              {mode === StudentMode.NEW && (
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  style={{ color: 'white' }}
+                >
+                  Add Student Info
+                </Typography>
+              )}
+              {mode === StudentMode.EDIT && (
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  style={{ color: 'white' }}
+                >
+                  Edit Student Info
+                </Typography>
+              )}
+              <IconButton onClick={handleCancel}>
+                <CloseIcon style={{ color: 'white', fontSize: 36 }} />
+              </IconButton>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <List className={classes.list}>
