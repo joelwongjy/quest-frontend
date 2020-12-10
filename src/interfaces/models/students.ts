@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 
-export interface Activity {
-  programmeId: number;
-  classId: number;
-}
+import { ClassListData } from './classes';
+import { ProgrammeListData } from './programmes';
+
+export type ActivityData = ProgrammeListData | ClassListData;
 
 export interface Student {
   id: number;
@@ -13,7 +13,7 @@ export interface Student {
   mobileNumber?: string;
   homeNumber?: string;
   email?: string;
-  activities?: Activity[];
+  activities?: ActivityData[][];
 }
 
 export enum StudentMode {

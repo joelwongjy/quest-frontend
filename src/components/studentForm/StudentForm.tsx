@@ -19,7 +19,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { Student, StudentMode } from 'interfaces/models/students';
+import { ActivityData, Student, StudentMode } from 'interfaces/models/students';
 import { useError } from 'contexts/ErrorContext';
 import {
   isValidEmail,
@@ -27,8 +27,6 @@ import {
   validateStudentInfo,
 } from 'utils/studentUtils';
 import { useUser } from 'contexts/UserContext';
-import { ProgrammeListData } from 'interfaces/models/programmes';
-import { ClassListData } from 'interfaces/models/classes';
 import { StudentPostData } from 'interfaces/api/students';
 
 import { useStyles } from './StudentForm.styles';
@@ -61,8 +59,6 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   const classes = useStyles();
   const { hasError, setHasError } = useError();
   const user = useUser();
-
-  type ActivityData = ProgrammeListData | ClassListData;
 
   const [activities, setActivities] = useState<ActivityData[][]>([]);
 

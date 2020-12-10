@@ -177,6 +177,7 @@ const Students: React.FunctionComponent = () => {
           >
             <List className={classes.list}>
               {state.students.map((s) => {
+                console.log(s);
                 return (
                   <ListItem key={s.name} className={classes.item}>
                     <ListItemAvatar style={{ paddingLeft: '0.5rem' }}>
@@ -188,15 +189,13 @@ const Students: React.FunctionComponent = () => {
                       primary={s.name}
                       secondary={
                         <List dense>
-                          <ListItem>
-                            <Typography>Class 1 - Program 1</Typography>
-                          </ListItem>
-                          <ListItem>
-                            <Typography>Class 2 - Program 2</Typography>
-                          </ListItem>
-                          <ListItem>
-                            <Typography>Class 3 - Program 3</Typography>
-                          </ListItem>
+                          {s.activities?.map((a) => {
+                            return (
+                              <ListItem key={`${a[0].id}-${a[1].id}`}>
+                                <Typography>{`${a[0].name} - ${a[1].name}`}</Typography>
+                              </ListItem>
+                            );
+                          })}
                         </List>
                       }
                     />
