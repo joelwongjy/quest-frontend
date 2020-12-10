@@ -2,6 +2,7 @@ import { StudentFormState } from 'components/studentForm/StudentForm';
 
 export const validateStudentInfo = (student: StudentFormState): boolean => {
   const { name, gender, birthday, activities } = student;
+  console.log(student);
   if (name === '') {
     return false;
   }

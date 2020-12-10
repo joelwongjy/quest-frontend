@@ -38,6 +38,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: '2rem',
       paddingRight: '1rem',
     },
+    headerSuccess: {
+      backgroundColor: '#006633',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '1rem',
+    },
     list: {
       marginTop: '0.5rem',
       marginBottom: '0.5rem',

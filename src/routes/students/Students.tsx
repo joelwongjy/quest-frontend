@@ -177,7 +177,6 @@ const Students: React.FunctionComponent = () => {
           >
             <List className={classes.list}>
               {state.students.map((s) => {
-                console.log(s);
                 return (
                   <ListItem key={s.name} className={classes.item}>
                     <ListItemAvatar style={{ paddingLeft: '0.5rem' }}>
