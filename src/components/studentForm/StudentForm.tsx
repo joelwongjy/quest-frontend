@@ -60,6 +60,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   const { hasError, setHasError } = useError();
   const user = useUser();
 
+  // TODO: change to student.activities when ready
   const [activities, setActivities] = useState<ActivityData[][]>([]);
 
   const availableProgrammes =
@@ -121,16 +122,33 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   const handleAdd = () => {
     if (!validateStudentInfo(state)) {
       setHasError(true);
+      alertCallback(
+        true,
+        false,
+        'Notice',
+        'Please check the highlighted fields.',
+        undefined,
+        undefined
+      );
+      // return;
     }
-    // TODO: Add activity deduplication logic
+
     // TODO: Post the data over
   };
 
   const handleEdit = () => {
     if (!validateStudentInfo(state)) {
       setHasError(true);
+      alertCallback(
+        true,
+        false,
+        'Notice',
+        'Please check the highlighted fields.',
+        undefined,
+        undefined
+      );
+      // return;
     }
-    // TODO: Add activity deduplication logic
     // TODO: Post the data over
   };
 
@@ -516,14 +534,35 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         </Grid>
                       </Grid>
                     </ListItem>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      style={{ color: 'red', marginBottom: '0.5rem' }}
-                      onClick={() => handleDeleteActivity(index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <Grid container alignItems="center">
+                      <Grid item xs={4}>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          style={{ color: 'red', marginBottom: '0.5rem' }}
+                          onClick={() => handleDeleteActivity(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={8}
+                        style={{
+                          paddingLeft: '0.5rem',
+                          marginBottom: '0.75rem',
+                        }}
+                      >
+                        {hasError &&
+                          activities.filter(
+                            (x) => x[0].id === a[0].id && x[1].id === a[0].id
+                          ).length > 1 && (
+                            <FormHelperText style={{ color: 'red' }}>
+                              This activity is duplicated!
+                            </FormHelperText>
+                          )}
+                      </Grid>
+                    </Grid>
                   </Grid>
                 );
               })}
