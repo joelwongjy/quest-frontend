@@ -9,9 +9,11 @@ import {
   Select,
   MenuItem,
   TextField,
+  IconButton,
 } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import { DatePicker } from '@material-ui/pickers';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
@@ -136,6 +138,21 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }
     // TODO: Add activity deduplication logic
     // TODO: Post the data over
+  };
+
+  const handleDeleteActivity = (index: number) => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to retrieve the deleted activity.',
+      () => {
+        const newActivities = activities.slice();
+        newActivities.splice(index, 1);
+        setActivities(newActivities);
+      },
+      undefined
+    );
   };
 
   const renderButtons = () => {
@@ -461,7 +478,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         </Grid>
                       </Grid>
                     </ListItem>
-                    <ListItem style={{ marginBottom: '0.5rem' }}>
+                    <ListItem>
                       <Grid
                         container
                         justify="space-between"
@@ -499,6 +516,14 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         </Grid>
                       </Grid>
                     </ListItem>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      style={{ color: 'red', marginBottom: '0.5rem' }}
+                      onClick={() => handleDeleteActivity(index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </Grid>
                 );
               })}
@@ -522,7 +547,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         true,
                         false,
                         'You cannot add activities!',
-                        'You need to be part of a programme to add students to it..',
+                        'You need to be part of a programme to add students to it.',
                         undefined,
                         undefined
                       );
