@@ -17,7 +17,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     addCard: {
-      marginTop: '1rem',
       height: '2.75rem',
       display: 'flex',
       justifyContent: 'center',
@@ -37,7 +36,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '5rem',
       alignItems: 'center',
       paddingLeft: '2rem',
-      paddingRight: '2rem',
+      paddingRight: '1rem',
+    },
+    headerSuccess: {
+      backgroundColor: '#006633',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '1rem',
     },
     list: {
       marginTop: '0.5rem',

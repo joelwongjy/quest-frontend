@@ -1,4 +1,4 @@
-import { Activity } from 'interfaces/models/students';
+import { ActivityData } from 'interfaces/models/students';
 
 export interface StudentPostData {
   name: string;
@@ -7,5 +7,5 @@ export interface StudentPostData {
   mobileNumber?: string;
   homeNumber?: string;
   email?: string;
-  activities: Activity[];
+  activities: ActivityData[][];
 }
