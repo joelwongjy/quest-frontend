@@ -203,7 +203,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
       container
       alignItems="center"
       justify="center"
-      style={{ marginTop: '2rem', marginBottom: '4rem' }}
+      style={{ marginTop: '2rem', paddingBottom: '4rem' }}
     >
       <Grid item xs={12} md={9}>
         <QuestCard>
