@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     addCard: {
       height: '2.75rem',
+      marginTop: '0.5rem',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
