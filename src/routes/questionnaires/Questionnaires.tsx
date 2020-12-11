@@ -188,7 +188,19 @@ const Questionnaires: React.FunctionComponent = () => {
     return [
       {
         text: 'Edit',
-        callback: () => history.push(`${QUESTIONNAIRES}/${id}${EDIT}`),
+        callback:
+          hasIncompleteQuestionnaire && id !== questionnaire.questionnaireId
+            ? () =>
+                setState({
+                  isAlertOpen: true,
+                  hasConfirm: true,
+                  alertHeader: 'Are you sure?',
+                  alertMessage:
+                    'You have an unsaved questionnaire, your changes will be discarded if you edit a different questionnaire',
+                  confirmHandler: () =>
+                    history.push(`${QUESTIONNAIRES}/${id}${EDIT}`),
+                })
+            : () => history.push(`${QUESTIONNAIRES}/${id}${EDIT}`),
       },
       {
         text: 'Make a copy',

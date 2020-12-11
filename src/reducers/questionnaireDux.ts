@@ -16,6 +16,7 @@ import {
 export type QuestionnaireDux = QuestionnairePostData;
 
 const initialState: QuestionnaireDux = {
+  questionnaireId: -1,
   title: '',
   type: QuestionnaireType.ONE_TIME,
   questionWindows: [
@@ -420,6 +421,7 @@ const questionnaire = createSlice({
       state,
       action: PayloadAction<QuestionnaireData>
     ): void => {
+      state.questionnaireId = action.payload.questionnaireId;
       state.title = action.payload.title;
       state.type = action.payload.type;
       const sortedQuestionWindows = [...action.payload.questionWindows].map(

@@ -5,6 +5,7 @@ import {
 } from 'interfaces/models/questionnaires';
 
 export interface QuestionnairePostData {
+  questionnaireId?: number;
   title: string;
   type: QuestionnaireType;
   questionWindows: QuestionWindow[];
