@@ -19,6 +19,7 @@ import { MenuOption } from 'interfaces/components/questionnaireCard';
 import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
 import {
   QuestionnaireListData,
+  QuestionnaireListDataType,
   QuestionnaireStatus,
 } from 'interfaces/models/questionnaires';
 
@@ -50,7 +51,6 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
         return (
           <Typography
             className={classes.statusDraft}
-            color="textSecondary"
             variant="body2"
             component="p"
           >
@@ -61,7 +61,6 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
         return (
           <Typography
             className={classes.statusPublished}
-            color="textSecondary"
             variant="body2"
             component="p"
           >
@@ -71,6 +70,24 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
       default:
         return null;
     }
+  };
+
+  const renderType = (type: QuestionnaireListDataType) => {
+    return (
+      <Typography
+        className={classes.type}
+        color="textSecondary"
+        variant="body2"
+        component="p"
+      >
+        {/* eslint-disable-next-line no-nested-ternary */}
+        {type === QuestionnaireListDataType.ONE_TIME
+          ? 'One-Time'
+          : type === QuestionnaireListDataType.PRE
+          ? 'Pre-Programme'
+          : 'Post-Programme'}
+      </Typography>
+    );
   };
 
   return (
@@ -139,6 +156,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             {questionnaire.name}
           </Typography>
           {renderStatus(questionnaire.status)}
+          <Typography>{renderType(questionnaire.type)}</Typography>
         </CardContent>
         <CardActions className={classes.actions}>
           {questionnaire.status === QuestionnaireStatus.PUBLISHED ? (
