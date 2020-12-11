@@ -17,8 +17,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     addCard: {
-      marginTop: '1rem',
       height: '2.75rem',
+      marginTop: '0.5rem',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -37,12 +37,20 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '5rem',
       alignItems: 'center',
       paddingLeft: '2rem',
-      paddingRight: '2rem',
+      paddingRight: '1rem',
+    },
+    headerSuccess: {
+      backgroundColor: '#006633',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '1rem',
     },
     list: {
-      marginTop: '1rem',
-      paddingLeft: '1rem',
-      paddingRight: '1rem',
+      marginTop: '0.5rem',
+      marginBottom: '0.5rem',
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
     },
     addIcon: {
       marginRight: '0.5rem',
@@ -50,7 +58,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     button: {
       margin: theme.spacing(3, 1, 2),
     },
-    select: {
+    subheader: {
       color: '#FF6500',
     },
   })
