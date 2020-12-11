@@ -3,6 +3,7 @@ import { subDays, addDays } from 'date-fns';
 import { Student } from 'interfaces/models/students';
 import {
   QuestionnaireListData,
+  QuestionnaireListDataType,
   QuestionnaireStatus,
   QuestionnaireType,
   QuestionSet,
@@ -71,6 +72,7 @@ export const questionnaires: QuestionnaireListData[] = [
     endAt: addDays(new Date(), 3),
     name: 'Test Questionnaire',
     status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
   {
     ...mockBaseData,
@@ -79,6 +81,7 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: addDays(new Date(), 2),
     endAt: addDays(new Date(), 3),
     status: QuestionnaireStatus.PUBLISHED,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
   {
     ...mockBaseData,
@@ -87,6 +90,7 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: subDays(new Date(), 1),
     endAt: addDays(new Date(), 15),
     status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
   {
     ...mockBaseData,
@@ -95,14 +99,25 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: subDays(new Date(), 10),
     endAt: subDays(new Date(), 6),
     status: QuestionnaireStatus.PUBLISHED,
+    type: QuestionnaireListDataType.ONE_TIME,
+  },
+  {
+    ...mockBaseData,
+    id: 5,
+    name: "Don't do this questionnaire!",
+    startAt: addDays(new Date(), 5),
+    endAt: addDays(new Date(), 10),
+    status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.POST,
   },
   {
     ...mockBaseData,
     id: 5,
     name: "Don't do this questionnaire!",
     startAt: subDays(new Date(), 10),
-    endAt: addDays(new Date(), 6),
+    endAt: addDays(new Date(), 3),
     status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.PRE,
   },
   {
     ...mockBaseData,
@@ -111,6 +126,7 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: subDays(new Date(), 3),
     endAt: addDays(new Date(), 6),
     status: QuestionnaireStatus.PUBLISHED,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
 ];
 
