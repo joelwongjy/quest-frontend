@@ -24,6 +24,12 @@ export enum QuestionnaireType {
   PRE_POST = 'PRE POST',
 }
 
+export enum QuestionnaireListDataType {
+  PRE = 'PRE',
+  POST = 'POST',
+  ONE_TIME = 'ONE TIME',
+}
+
 export enum QuestionMode {
   EDIT = 'EDIT',
   VIEW = 'VIEW',
@@ -35,6 +41,7 @@ export interface QuestionnaireListData extends DiscardableData {
   startAt: Date;
   endAt: Date;
   status: QuestionnaireStatus;
+  type: QuestionnaireListDataType;
 }
 
 export interface OptionData {
