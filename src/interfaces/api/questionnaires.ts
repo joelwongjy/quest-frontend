@@ -13,6 +13,7 @@ export interface QuestionnairePostData {
   sharedQuestions: QuestionSet;
   classes?: number[];
   programmes?: number[];
+  mode?: 'CREATE' | 'EDIT' | 'DUPLICATE';
 }
 
 export type QuestionnaireData = QuestionnairePostData;
