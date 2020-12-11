@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
@@ -36,7 +36,7 @@ import { validateQuestionnaire } from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
 
-import { useStyles } from './editQuestionnaire.styles';
+import { useStyles } from './duplicateQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
 import DateAccordion from '../dateAccordion';
@@ -45,9 +45,9 @@ interface RouteParams {
   id: string;
 }
 
-const EditQuestionnaire: React.FunctionComponent = () => {
+const DuplicateQuestionnaire: React.FunctionComponent = () => {
   const { id } = useRouteMatch<RouteParams>({
-    path: `${QUESTIONNAIRES}/:id${EDIT}`,
+    path: `${QUESTIONNAIRES}/:id${DUPLICATE}`,
   })!.params;
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
@@ -92,7 +92,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       questionnaire: QuestionnairePostData
     ) =>
       new Promise((resolve) => {
-        myDispatch(setQuestionnaire({ ...questionnaire, mode: 'EDIT' }));
+        myDispatch(setQuestionnaire({ ...questionnaire, mode: 'DUPLICATE' }));
         resolve();
       });
 
@@ -138,8 +138,8 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     {
-      text: `Edit ${title}`,
-      href: `${QUESTIONNAIRES}/${id}${EDIT}`,
+      text: `Duplicate ${title}`,
+      href: `${QUESTIONNAIRES}/${id}${DUPLICATE}`,
     },
   ];
 
@@ -288,4 +288,4 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   );
 };
 
-export default EditQuestionnaire;
+export default DuplicateQuestionnaire;

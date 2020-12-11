@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import QuestionnaireCard from 'components/questionnaireCard';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import PageHeader from 'components/pageHeader';
@@ -21,6 +21,7 @@ import { RootState } from 'reducers/rootReducer';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
+  setMode,
 } from 'reducers/questionnaireDux';
 import QuestBanner from 'componentWrappers/questBanner';
 import { isEmptyQuestionnaire } from 'utils/questionnaireUtils';
@@ -197,15 +198,35 @@ const Questionnaires: React.FunctionComponent = () => {
                   alertHeader: 'Are you sure?',
                   alertMessage:
                     'You have an unsaved questionnaire, your changes will be discarded if you edit a different questionnaire',
-                  confirmHandler: () =>
-                    history.push(`${QUESTIONNAIRES}/${id}${EDIT}`),
+                  confirmHandler: () => {
+                    dispatch(setMode('EDIT'));
+                    history.push(`${QUESTIONNAIRES}/${id}${EDIT}`);
+                  },
                 })
-            : () => history.push(`${QUESTIONNAIRES}/${id}${EDIT}`),
+            : () => {
+                dispatch(setMode('EDIT'));
+                history.push(`${QUESTIONNAIRES}/${id}${EDIT}`);
+              },
       },
       {
         text: 'Make a copy',
-        // eslint-disable-next-line no-console
-        callback: () => console.log('TODO: Make a copy'),
+        callback: hasIncompleteQuestionnaire
+          ? () =>
+              setState({
+                isAlertOpen: true,
+                hasConfirm: true,
+                alertHeader: 'Are you sure?',
+                alertMessage:
+                  'You have an unsaved questionnaire, your changes will be discarded if you start a new questionnaire',
+                confirmHandler: () => {
+                  dispatch(setMode('DUPLICATE'));
+                  history.push(`${QUESTIONNAIRES}/${id}${DUPLICATE}`);
+                },
+              })
+          : () => {
+              dispatch(setMode('DUPLICATE'));
+              history.push(`${QUESTIONNAIRES}/${id}${DUPLICATE}`);
+            },
       },
     ];
   };
@@ -217,7 +238,21 @@ const Questionnaires: React.FunctionComponent = () => {
           severity="warning"
           hasAction
           action={() => {
-            history.push(`${QUESTIONNAIRES}${CREATE}`);
+            switch (questionnaire.mode) {
+              case 'EDIT':
+                history.push(
+                  `${QUESTIONNAIRES}/${questionnaire.questionWindows}${EDIT}`
+                );
+                break;
+              case 'DUPLICATE':
+                history.push(
+                  `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${DUPLICATE}`
+                );
+                break;
+              case 'CREATE':
+              default:
+                history.push(`${QUESTIONNAIRES}${CREATE}`);
+            }
           }}
           actionMessage="Continue"
           alertMessage="You have an incomplete questionnaire"
