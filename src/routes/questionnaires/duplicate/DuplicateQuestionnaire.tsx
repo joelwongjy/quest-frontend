@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { DUPLICATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
