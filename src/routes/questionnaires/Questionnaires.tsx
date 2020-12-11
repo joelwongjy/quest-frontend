@@ -185,6 +185,10 @@ const Questionnaires: React.FunctionComponent = () => {
       break;
   }
 
+  renderedQuestionnaires = renderedQuestionnaires.sort(
+    (a, b) => a.startAt.getTime() - b.startAt.getTime()
+  );
+
   const getMenuOptions = (id: number): MenuOption[] => {
     return [
       {
@@ -241,7 +245,7 @@ const Questionnaires: React.FunctionComponent = () => {
             switch (questionnaire.mode) {
               case 'EDIT':
                 history.push(
-                  `${QUESTIONNAIRES}/${questionnaire.questionWindows}${EDIT}`
+                  `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${EDIT}`
                 );
                 break;
               case 'DUPLICATE':
@@ -259,7 +263,7 @@ const Questionnaires: React.FunctionComponent = () => {
         />
       )}
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container style={{ marginLeft: '1rem' }}>
+      <Grid container>
         <QuestionnaireTabs
           value={tabValue}
           setValue={setTabValue}
@@ -308,7 +312,13 @@ const Questionnaires: React.FunctionComponent = () => {
             renderedQuestionnaires.map((q) => {
               const menuOptions = getMenuOptions(q.id);
               return (
-                <Grid item xs={12} sm={6} lg={4} key={`${q.name}-${q.id}`}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  lg={4}
+                  key={`${q.type}-${q.name}-${q.id}`}
+                >
                   <QuestionnaireCard
                     questionnaire={q}
                     menuOptions={menuOptions}
