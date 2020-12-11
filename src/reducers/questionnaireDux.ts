@@ -31,6 +31,7 @@ const initialState: QuestionnaireDux = {
   },
   classes: [],
   programmes: [],
+  mode: 'CREATE',
 };
 
 // Contains user information, theme, view selected and fun fact of the day
@@ -83,6 +84,12 @@ const questionnaire = createSlice({
     },
     setProgrammes: (state, action: PayloadAction<number[]>): void => {
       state.programmes = action.payload;
+    },
+    setMode: (
+      state,
+      action: PayloadAction<'CREATE' | 'EDIT' | 'DUPLICATE'>
+    ): void => {
+      state.mode = action.payload;
     },
     addQuestionToPre: (state): void => {
       const { length } = state.questionWindows[0].questions;
@@ -446,6 +453,7 @@ const questionnaire = createSlice({
       }
       state.classes = action.payload.classes ?? [];
       state.programmes = action.payload.programmes ?? [];
+      state.mode = action.payload.mode ?? 'CREATE';
     },
     clearQuestionnaire: (state): void => {
       state.title = '';
@@ -460,6 +468,7 @@ const questionnaire = createSlice({
       state.sharedQuestions = { questions: [] };
       state.classes = [];
       state.programmes = [];
+      state.mode = 'CREATE';
     },
   },
 });
@@ -473,6 +482,7 @@ export const {
   setPostEndTime,
   setClasses,
   setProgrammes,
+  setMode,
   addQuestionToPre,
   addQuestionToPost,
   addQuestionToShared,
