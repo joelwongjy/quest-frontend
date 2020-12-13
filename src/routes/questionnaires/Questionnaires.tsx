@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import QuestionnaireCard from 'components/questionnaireCard';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import PageHeader from 'components/pageHeader';
@@ -21,6 +21,7 @@ import { RootState } from 'reducers/rootReducer';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
+  setMode,
 } from 'reducers/questionnaireDux';
 import QuestBanner from 'componentWrappers/questBanner';
 import { isEmptyQuestionnaire } from 'utils/questionnaireUtils';
@@ -184,16 +185,52 @@ const Questionnaires: React.FunctionComponent = () => {
       break;
   }
 
+  renderedQuestionnaires = renderedQuestionnaires.sort(
+    (a, b) => a.startAt.getTime() - b.startAt.getTime()
+  );
+
   const getMenuOptions = (id: number): MenuOption[] => {
     return [
       {
         text: 'Edit',
-        callback: () => history.push(`${QUESTIONNAIRES}/${id}${EDIT}`),
+        callback:
+          hasIncompleteQuestionnaire && id !== questionnaire.questionnaireId
+            ? () =>
+                setState({
+                  isAlertOpen: true,
+                  hasConfirm: true,
+                  alertHeader: 'Are you sure?',
+                  alertMessage:
+                    'You have an unsaved questionnaire, your changes will be discarded if you edit a different questionnaire',
+                  confirmHandler: () => {
+                    dispatch(setMode('EDIT'));
+                    history.push(`${QUESTIONNAIRES}/${id}${EDIT}`);
+                  },
+                })
+            : () => {
+                dispatch(setMode('EDIT'));
+                history.push(`${QUESTIONNAIRES}/${id}${EDIT}`);
+              },
       },
       {
         text: 'Make a copy',
-        // eslint-disable-next-line no-console
-        callback: () => console.log('TODO: Make a copy'),
+        callback: hasIncompleteQuestionnaire
+          ? () =>
+              setState({
+                isAlertOpen: true,
+                hasConfirm: true,
+                alertHeader: 'Are you sure?',
+                alertMessage:
+                  'You have an unsaved questionnaire, your changes will be discarded if you start a new questionnaire',
+                confirmHandler: () => {
+                  dispatch(setMode('DUPLICATE'));
+                  history.push(`${QUESTIONNAIRES}/${id}${DUPLICATE}`);
+                },
+              })
+          : () => {
+              dispatch(setMode('DUPLICATE'));
+              history.push(`${QUESTIONNAIRES}/${id}${DUPLICATE}`);
+            },
       },
     ];
   };
@@ -205,14 +242,28 @@ const Questionnaires: React.FunctionComponent = () => {
           severity="warning"
           hasAction
           action={() => {
-            history.push(`${QUESTIONNAIRES}${CREATE}`);
+            switch (questionnaire.mode) {
+              case 'EDIT':
+                history.push(
+                  `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${EDIT}`
+                );
+                break;
+              case 'DUPLICATE':
+                history.push(
+                  `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${DUPLICATE}`
+                );
+                break;
+              case 'CREATE':
+              default:
+                history.push(`${QUESTIONNAIRES}${CREATE}`);
+            }
           }}
           actionMessage="Continue"
           alertMessage="You have an incomplete questionnaire"
         />
       )}
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container style={{ marginLeft: '1rem' }}>
+      <Grid container>
         <QuestionnaireTabs
           value={tabValue}
           setValue={setTabValue}
@@ -261,7 +312,13 @@ const Questionnaires: React.FunctionComponent = () => {
             renderedQuestionnaires.map((q) => {
               const menuOptions = getMenuOptions(q.id);
               return (
-                <Grid item xs={12} sm={6} lg={4} key={`${q.name}-${q.id}`}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  lg={4}
+                  key={`${q.type}-${q.name}-${q.id}`}
+                >
                   <QuestionnaireCard
                     questionnaire={q}
                     menuOptions={menuOptions}

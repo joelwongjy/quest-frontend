@@ -17,6 +17,7 @@ import {
   CREATE,
   RESPONSES,
   EDIT,
+  DUPLICATE,
 } from 'constants/routes';
 import Home from 'routes/home';
 import Questionnaires from 'routes/questionnaires';
@@ -27,6 +28,7 @@ import Programme from 'routes/programmes';
 import CreateProgrammes from 'routes/programmes/create';
 import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
+import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
@@ -46,6 +48,9 @@ const AuthenticatedApp: React.FunctionComponent = () => {
           />
           <Route path={`${QUESTIONNAIRES}/:id${EDIT}`}>
             <EditQuestionnaire />
+          </Route>
+          <Route path={`${QUESTIONNAIRES}/:id${DUPLICATE}`}>
+            <DuplicateQuestionnaire />
           </Route>
           <Route path={`${QUESTIONNAIRES}/:id${RESPONSES}`}>
             <Responses />

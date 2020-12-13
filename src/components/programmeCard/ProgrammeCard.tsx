@@ -113,7 +113,7 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
         <QuestAlert
           isAlertOpen={isAlertOpen}
           alertHeader={programme.name}
-          alertMessage={programme.description}
+          alertMessage={programme.description ?? 'No description'}
           hasConfirm={false}
           closeHandler={toggleAlert}
         />

@@ -7,7 +7,7 @@ import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCa
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
 import { RouteState } from 'interfaces/routes/common';
-import { ProgrammeListData } from 'interfaces/models/programmes';
+import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
 import { programmes } from 'routes/questionnaires/mockData';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
@@ -15,6 +15,7 @@ import { PROGRAMMES, CREATE } from 'constants/routes';
 import ProgrammeCard from 'components/programmeCard';
 
 import QuestAlert from 'componentWrappers/questAlert';
+import ProgrammeForm from 'components/programmeForm';
 import { useStyles } from './programmes.styles';
 
 interface ProgrammesState extends RouteState {
@@ -23,6 +24,8 @@ interface ProgrammesState extends RouteState {
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
+  isEditing: boolean;
+  selectedProgramme: ProgrammeListData | undefined;
 }
 
 const Programme: React.FunctionComponent = () => {
@@ -33,6 +36,7 @@ const Programme: React.FunctionComponent = () => {
     }),
     {
       programmes,
+      isAlertOpen: false,
       isLoading: true,
       isError: false,
       hasConfirm: false,
@@ -45,6 +49,8 @@ const Programme: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
+      isEditing: false,
+      selectedProgramme: undefined,
     }
   );
 
@@ -85,6 +91,42 @@ const Programme: React.FunctionComponent = () => {
 
   const breadcrumbs = [{ text: 'Programmes', href: PROGRAMMES }];
 
+  const alertCallback = (
+    isAlertOpen: boolean,
+    hasConfirm: boolean,
+    alertHeader: string,
+    alertMessage: string,
+    confirmHandler?: () => void,
+    cancelHandler?: () => void
+  ) => {
+    setState({
+      isAlertOpen,
+      hasConfirm,
+      alertHeader,
+      alertMessage,
+    });
+    if (confirmHandler) {
+      setState({
+        confirmHandler: () => {
+          confirmHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
+    }
+    if (cancelHandler) {
+      setState({
+        cancelHandler: () => {
+          cancelHandler();
+          setState({ isAlertOpen: false });
+        },
+      });
+    } else {
+      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
+    }
+  };
+
   if (state.isLoading) {
     return (
       <PageContainer>
@@ -104,17 +146,21 @@ const Programme: React.FunctionComponent = () => {
     );
   }
 
-  const getMenuOptions = (): MenuOption[] => {
+  const getMenuOptions = (p: ProgrammeListData): MenuOption[] => {
     return [
       {
         text: 'Edit',
-        // eslint-disable-next-line no-console
-        callback: () => console.log('TODO: Edit'),
+        callback: () => setState({ isEditing: true, selectedProgramme: p }),
       },
       {
         text: 'Make a copy',
         // eslint-disable-next-line no-console
         callback: () => console.log('TODO: Make a copy'),
+      },
+      {
+        text: 'Delete',
+        // eslint-disable-next-line no-console
+        callback: () => console.log('TODO: Delete'),
       },
     ];
   };
@@ -131,30 +177,41 @@ const Programme: React.FunctionComponent = () => {
             component={Link}
             to={`${PROGRAMMES}${CREATE}`}
           >
-            Create New
+            Create Programme
           </Button>
         }
       />
-      <Grid container spacing={3}>
-        {state.programmes.length > 0 &&
-          state.programmes.map((p) => {
-            const menuOptions = getMenuOptions();
-            return (
-              <Grid item xs={12} sm={6} lg={4} key={p.name}>
-                <ProgrammeCard programme={p} menuOptions={menuOptions} />
-              </Grid>
-            );
-          })}
-      </Grid>
-      <QuestAlert
-        isAlertOpen={state.isAlertOpen!}
-        hasConfirm={state.hasConfirm}
-        alertHeader={state.alertHeader!}
-        alertMessage={state.alertMessage!}
-        closeHandler={state.closeHandler}
-        confirmHandler={state.confirmHandler}
-        cancelHandler={state.cancelHandler}
-      />
+      {state.isEditing ? (
+        <ProgrammeForm
+          mode={ProgrammeMode.EDIT}
+          programme={state.selectedProgramme}
+          alertCallback={alertCallback}
+          cancelCallback={() => setState({ isEditing: false })}
+        />
+      ) : (
+        <div>
+          <Grid container spacing={3}>
+            {state.programmes.length > 0 &&
+              state.programmes.map((p) => {
+                const menuOptions = getMenuOptions(p);
+                return (
+                  <Grid item xs={12} sm={6} lg={4} key={p.name}>
+                    <ProgrammeCard programme={p} menuOptions={menuOptions} />
+                  </Grid>
+                );
+              })}
+          </Grid>
+          <QuestAlert
+            isAlertOpen={state.isAlertOpen!}
+            hasConfirm={state.hasConfirm}
+            alertHeader={state.alertHeader!}
+            alertMessage={state.alertMessage!}
+            closeHandler={state.closeHandler}
+            confirmHandler={state.confirmHandler}
+            cancelHandler={state.cancelHandler}
+          />
+        </div>
+      )}
     </PageContainer>
   );
 };

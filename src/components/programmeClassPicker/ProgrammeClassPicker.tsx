@@ -36,7 +36,7 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
       const newClasses = [
         ...selectedClassIds,
         ...questClasses
-          .filter((c) => c.programme.id === programmeId)
+          .filter((c) => c.programmeId === programmeId)
           .map((c) => c.id),
       ];
       programmeCallback(newProgrammes);
@@ -49,7 +49,7 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
       );
       const newClasses = selectedClassIds
         .map((cId) => questClasses.filter((c) => c.id === cId)[0])
-        .filter((c) => c.programme.id !== programmeId)
+        .filter((c) => c.programmeId !== programmeId)
         .map((c) => c.id);
 
       programmeCallback(newProgrammes);
@@ -60,7 +60,7 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
       const newClasses = [...selectedClassIds, classId];
       if (
         questClasses
-          .filter((c) => c.programme.id === programmeId)
+          .filter((c) => c.programmeId === programmeId)
           .every((c) => newClasses.findIndex((x) => x === c.id) > -1)
       ) {
         const newProgrammes = [...selectedProgrammeIds, programmeId];
@@ -72,7 +72,7 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
     const newClasses = selectedClassIds.filter((cId) => cId !== classId);
     const origClass = questClasses.filter((c) => c.id === classId)[0];
     const newProgrammes = selectedProgrammeIds.filter(
-      (pId) => pId !== origClass.programme.id
+      (pId) => pId !== origClass.programmeId
     );
     programmeCallback(newProgrammes);
     classCallback(newClasses);
@@ -97,7 +97,7 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
               className={classes.formControl}
             />
             {questClasses
-              .filter((c) => c.programme.id === p.id)
+              .filter((c) => c.programmeId === p.id)
               .map((c) => {
                 return (
                   <FormControlLabel

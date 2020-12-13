@@ -3,6 +3,7 @@ import { subDays, addDays } from 'date-fns';
 import { Student } from 'interfaces/models/students';
 import {
   QuestionnaireListData,
+  QuestionnaireListDataType,
   QuestionnaireStatus,
   QuestionnaireType,
   QuestionSet,
@@ -71,6 +72,7 @@ export const questionnaires: QuestionnaireListData[] = [
     endAt: addDays(new Date(), 3),
     name: 'Test Questionnaire',
     status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
   {
     ...mockBaseData,
@@ -79,6 +81,7 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: addDays(new Date(), 2),
     endAt: addDays(new Date(), 3),
     status: QuestionnaireStatus.PUBLISHED,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
   {
     ...mockBaseData,
@@ -87,6 +90,7 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: subDays(new Date(), 1),
     endAt: addDays(new Date(), 15),
     status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
   {
     ...mockBaseData,
@@ -95,14 +99,25 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: subDays(new Date(), 10),
     endAt: subDays(new Date(), 6),
     status: QuestionnaireStatus.PUBLISHED,
+    type: QuestionnaireListDataType.ONE_TIME,
+  },
+  {
+    ...mockBaseData,
+    id: 5,
+    name: "Don't do this questionnaire!",
+    startAt: addDays(new Date(), 5),
+    endAt: addDays(new Date(), 10),
+    status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.POST,
   },
   {
     ...mockBaseData,
     id: 5,
     name: "Don't do this questionnaire!",
     startAt: subDays(new Date(), 10),
-    endAt: addDays(new Date(), 6),
+    endAt: addDays(new Date(), 3),
     status: QuestionnaireStatus.DRAFT,
+    type: QuestionnaireListDataType.PRE,
   },
   {
     ...mockBaseData,
@@ -111,6 +126,7 @@ export const questionnaires: QuestionnaireListData[] = [
     startAt: subDays(new Date(), 3),
     endAt: addDays(new Date(), 6),
     status: QuestionnaireStatus.PUBLISHED,
+    type: QuestionnaireListDataType.ONE_TIME,
   },
 ];
 
@@ -152,10 +168,9 @@ export const programmes: ProgrammeListData[] = [
     ...mockBaseData,
     id: 1,
     name: 'Synchronization',
-    description:
-      'Synchronization refers to one of two distinct but related concepts: synchronization of processes, and synchronization of data.',
     startAt: subDays(new Date(), 3),
     endAt: addDays(new Date(), 3),
+    classes: [],
   },
   {
     ...mockBaseData,
@@ -165,6 +180,7 @@ export const programmes: ProgrammeListData[] = [
       'Memory management is a form of resource management applied to computer memory.',
     startAt: subDays(new Date(), 5),
     endAt: addDays(new Date(), 10),
+    classes: [],
   },
   {
     ...mockBaseData,
@@ -174,6 +190,7 @@ export const programmes: ProgrammeListData[] = [
       'Process management involves various tasks like creation, scheduling, termination of processes, and a dead lock.',
     startAt: subDays(new Date(), 2),
     endAt: addDays(new Date(), 6),
+    classes: [],
   },
 ];
 
@@ -183,21 +200,21 @@ export const classes1: ClassListData[] = [
     id: 1,
     name: 'Semaphores',
     role: ClassUserRole.ADMIN,
-    programme: programmes[0],
+    programmeId: programmes[0].id,
   },
   {
     ...mockBaseData,
     id: 2,
     name: 'Pipes',
     role: ClassUserRole.ADMIN,
-    programme: programmes[0],
+    programmeId: programmes[0].id,
   },
   {
     ...mockBaseData,
     id: 3,
     name: 'Signals',
     role: ClassUserRole.ADMIN,
-    programme: programmes[0],
+    programmeId: programmes[0].id,
   },
 ];
 
@@ -207,20 +224,20 @@ export const classes2: ClassListData[] = [
     id: 4,
     name: 'Buddy System',
     role: ClassUserRole.ADMIN,
-    programme: programmes[0],
+    programmeId: programmes[0].id,
   },
   {
     ...mockBaseData,
     id: 5,
     name: 'Fixed Size Partitioning',
     role: ClassUserRole.ADMIN,
-    programme: programmes[0],
+    programmeId: programmes[0].id,
   },
   {
     ...mockBaseData,
     id: 6,
     name: 'Dynamic Partitioning',
     role: ClassUserRole.ADMIN,
-    programme: programmes[0],
+    programmeId: programmes[0].id,
   },
 ];
