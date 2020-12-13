@@ -362,7 +362,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                           {user!.programmes.map((p) => {
                             const filteredClasses = user!.classes.filter(
                               (c) =>
-                                c.programme.id === p.id &&
+                                c.programmeId === p.id &&
                                 questionnaire.classes?.indexOf(c.id) !== -1
                             );
                             return (
