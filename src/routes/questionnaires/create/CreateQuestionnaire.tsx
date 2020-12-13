@@ -24,23 +24,18 @@ import {
   setClasses,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
-import {
-  QuestionnaireType,
-  QuestionWindow,
-  QuestionOrder,
-  OptionData,
-} from 'interfaces/models/questionnaires';
+import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import {
-  isEmptyQuestion,
   isEmptyQuestionnaire,
-  validateQuestionnaire,
+  processCreateQuestionnaire,
+  isValidQuestionnaire,
 } from 'utils/questionnaireUtils';
-
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
+
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -60,13 +55,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const {
-    type,
-    questionWindows,
-    sharedQuestions,
-    classes,
-    programmes,
-  } = questionnaire;
+  const { type, questionWindows, classes, programmes } = questionnaire;
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
@@ -161,23 +150,14 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     });
 
   const handleComplete = async () => {
-    if (!validateQuestionnaire(questionnaire)) {
+    if (!isValidQuestionnaire(questionnaire)) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    const data = {
-      ...questionnaire,
-      questionWindows: questionnaire.questionWindows.map(
-        (q: QuestionWindow) => ({
-          ...q,
-          questions: q.questions.map((q2: QuestionOrder) => ({
-            ...q2,
-            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-          })),
-        })
-      ),
-    };
+    const data: QuestionnairePostData = processCreateQuestionnaire(
+      questionnaire
+    );
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];
