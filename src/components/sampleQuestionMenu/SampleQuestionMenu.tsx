@@ -18,6 +18,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import BookIcon from '@material-ui/icons/Bookmark';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 import QuestCard from 'componentWrappers/questCard';
 import { useWindowSize } from 'utils/windowUtils';
@@ -45,7 +47,7 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
 
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = React.useState<number>(0);
 
   const accessibilityOptions = ['Shared', 'Pre-Programme', 'Post-Programme'];
 
@@ -53,29 +55,20 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
     if (type === QuestionnaireType.ONE_TIME) {
       dispatch(addSampleQuestionToPre(text));
     } else {
-      if (checked.indexOf(0) !== -1) {
+      if (checked === 0) {
         dispatch(addSampleQuestionToShared(text));
       }
-      if (checked.indexOf(1) !== -1) {
+      if (checked === 1) {
         dispatch(addSampleQuestionToPre(text));
       }
-      if (checked.indexOf(2) !== -1) {
+      if (checked === 2) {
         dispatch(addSampleQuestionToPost(text));
       }
     }
   };
 
   const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+    setChecked(value);
   };
 
   const sampleQuestions: string[] = [
@@ -147,8 +140,10 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
                   <ListItemSecondaryAction>
                     <Checkbox
                       edge="end"
+                      icon={<RadioButtonUncheckedIcon />}
+                      checkedIcon={<RadioButtonCheckedIcon />}
                       onChange={handleToggle(index)}
-                      checked={checked.indexOf(index) !== -1}
+                      checked={checked === index}
                       inputProps={{ 'aria-labelledby': labelId }}
                     />
                   </ListItemSecondaryAction>
@@ -246,8 +241,10 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
                 <ListItemSecondaryAction>
                   <Checkbox
                     edge="end"
+                    icon={<RadioButtonUncheckedIcon />}
+                    checkedIcon={<RadioButtonCheckedIcon />}
                     onChange={handleToggle(index)}
-                    checked={checked.indexOf(index) !== -1}
+                    checked={checked === index}
                     inputProps={{ 'aria-labelledby': labelId }}
                   />
                 </ListItemSecondaryAction>
