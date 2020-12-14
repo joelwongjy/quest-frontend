@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Button,
-  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
@@ -10,33 +9,33 @@ import {
   MenuItem,
   Typography,
 } from '@material-ui/core';
-import { format } from 'date-fns';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
 
 import QuestCard from 'componentWrappers/questCard';
-import QuestAlert from 'componentWrappers/questAlert';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { MenuOption } from 'interfaces/components/programmeCard';
-import { QUESTIONNAIRES, PROGRAMMES, CLASSES } from 'constants/routes';
-import { ProgrammeListData } from 'interfaces/models/programmes';
+import {
+  QUESTIONNAIRES,
+  PROGRAMMES,
+  CLASSES,
+  STUDENTS,
+} from 'constants/routes';
+import { ClassListData } from 'interfaces/models/classes';
 
-import { useStyles } from './programmeCard.styles';
+import { useStyles } from './classCard.styles';
 
-interface ProgrammeCardProps extends QuestComponentProps {
-  programme: ProgrammeListData;
+interface ClassCardProps extends QuestComponentProps {
+  questClass: ClassListData;
   menuOptions?: MenuOption[];
 }
 
-const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
-  programme,
+const ClassCard: React.FunctionComponent<ClassCardProps> = ({
+  questClass,
   menuOptions = null,
 }) => {
   const classes = useStyles();
   const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
-  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-
-  const toggleAlert = () => setIsAlertOpen((state: boolean) => !state);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEle(event.currentTarget);
@@ -50,20 +49,6 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
     <>
       <QuestCard>
         <CardHeader
-          title={
-            <>
-              <Typography className={classes.dates} color="textSecondary">
-                Start: {format(programme.startAt, 'd MMM y')}
-              </Typography>
-              <Typography
-                className={classes.dates}
-                color="textSecondary"
-                gutterBottom
-              >
-                End: {format(programme.endAt, 'd MMM y')}
-              </Typography>
-            </>
-          }
           action={
             menuOptions && (
               <>
@@ -76,7 +61,7 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
                   <MoreVertIcon />
                 </IconButton>
                 <Menu
-                  id={`programme-menu-${programme.id}`}
+                  id={`programme-menu-${questClass.id}`}
                   anchorEl={anchorEle}
                   keepMounted
                   open={Boolean(anchorEle)}
@@ -88,7 +73,7 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
                         handleClose();
                         m.callback();
                       }}
-                      key={`${m.text}-${programme.id}`}
+                      key={`${m.text}-${questClass.id}`}
                     >
                       {m.text}
                     </MenuItem>
@@ -98,40 +83,30 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
             )
           }
         />
-        <CardActionArea onClick={toggleAlert}>
-          <CardContent>
-            <Typography
-              className={classes.title}
-              variant="h5"
-              component="h2"
-              noWrap
-            >
-              {programme.name}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <QuestAlert
-          isAlertOpen={isAlertOpen}
-          alertHeader={programme.name}
-          alertMessage={programme.description ?? 'No description'}
-          hasConfirm={false}
-          closeHandler={toggleAlert}
-        />
-
+        <CardContent>
+          <Typography
+            className={classes.title}
+            variant="h5"
+            component="h2"
+            noWrap
+          >
+            {questClass.name}
+          </Typography>
+        </CardContent>
         <CardActions className={classes.actions}>
           <Button
             size="small"
             className={classes.button}
             component={Link}
-            to={`${PROGRAMMES}/${programme.id}${CLASSES}`}
+            to={`${PROGRAMMES}/${questClass.id}/${CLASSES}/${STUDENTS}`}
           >
-            Classes
+            Students
           </Button>
           <Button
             size="small"
             className={classes.button}
             component={Link}
-            to={`${PROGRAMMES}/${programme.id}/${QUESTIONNAIRES}`}
+            to={`${PROGRAMMES}/${questClass.id}/${QUESTIONNAIRES}`}
           >
             Questionnaires
           </Button>
@@ -141,4 +116,4 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
   );
 };
 
-export default ProgrammeCard;
+export default ClassCard;
