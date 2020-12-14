@@ -41,6 +41,8 @@ import {
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
 
+import { useWindowSize } from 'utils/windowUtils';
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -56,6 +58,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
+  const { width } = useWindowSize();
 
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
@@ -194,6 +197,11 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const renderQuestionnaire = () => {
     return (
       <PageContainer>
+        {state.isTypeSelected && width! >= 720 ? (
+          <SampleQuestionMenu isMenu isFab={false} />
+        ) : (
+          state.isTypeSelected && <SampleQuestionMenu isMenu={false} isFab />
+        )}
         <PageHeader breadcrumbs={breadcrumbs} />
         {!state.isTypeSelected ? (
           <>
@@ -240,7 +248,18 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
             </Grid>
           </>
         ) : (
-          <div className={muiClasses.paperContainer}>
+          <div
+            className={muiClasses.paperContainer}
+            style={{
+              width:
+                // eslint-disable-next-line no-nested-ternary
+                width! < 720
+                  ? width! - 50
+                  : width! < 960
+                  ? width! - 290
+                  : width! - 530,
+            }}
+          >
             <Paper
               className={muiClasses.paper}
               elevation={0}
