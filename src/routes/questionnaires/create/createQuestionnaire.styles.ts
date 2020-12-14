@@ -7,7 +7,6 @@ export const useStyles = makeStyles(() =>
       width: '80%',
     },
     paperContainer: {
-      width: '100%',
       display: 'flex',
       justifyContent: 'center',
     },

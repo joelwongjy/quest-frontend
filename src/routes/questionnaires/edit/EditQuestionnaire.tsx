@@ -91,7 +91,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
       questionnaire: QuestionnairePostData
     ) =>
-      new Promise((resolve) => {
+      new Promise<void>((resolve) => {
         myDispatch(setQuestionnaire({ ...questionnaire, mode: 'EDIT' }));
         resolve();
       });
@@ -154,7 +154,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const clearQuestionnairePromise = (
     myDispatch: Dispatch<{ payload: undefined; type: string }>
   ) =>
-    new Promise((resolve) => {
+    new Promise<void>((resolve) => {
       myDispatch(clearQuestionnaire());
       resolve();
     });
