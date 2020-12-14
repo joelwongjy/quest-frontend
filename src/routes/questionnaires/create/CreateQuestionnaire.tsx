@@ -197,10 +197,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const renderQuestionnaire = () => {
     return (
       <PageContainer>
-        {state.isTypeSelected && width! >= 720 ? (
-          <SampleQuestionMenu isMenu isFab={false} />
-        ) : (
-          state.isTypeSelected && <SampleQuestionMenu isMenu={false} isFab />
+        {state.isTypeSelected && (
+          <SampleQuestionMenu type={questionnaire.type} />
         )}
         <PageHeader breadcrumbs={breadcrumbs} />
         {!state.isTypeSelected ? (
