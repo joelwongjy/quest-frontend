@@ -1,15 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { Dispatch, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  List,
-  ListItem,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Grid, List, ListItem, Paper, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
 import PostIcon from '@material-ui/icons/Description';
 import { useHistory } from 'react-router-dom';
@@ -43,14 +34,13 @@ import ApiService from 'services/apiService';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import {
-  isEmptyQuestion,
   isEmptyQuestionnaire,
   validateQuestionnaire,
 } from 'utils/questionnaireUtils';
 
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import ProgrammeClassPicker from 'components/programmeClassPicker';
+
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -71,13 +61,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const {
-    type,
-    questionWindows,
-    sharedQuestions,
-    classes,
-    programmes,
-  } = questionnaire;
+  const { type, questionWindows, classes, programmes } = questionnaire;
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
@@ -167,7 +151,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const clearQuestionnairePromise = (
     myDispatch: Dispatch<{ payload: undefined; type: string }>
   ) =>
-    new Promise((resolve, _reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    new Promise<void>((resolve, _reject) => {
       myDispatch(clearQuestionnaire());
       resolve();
     });
