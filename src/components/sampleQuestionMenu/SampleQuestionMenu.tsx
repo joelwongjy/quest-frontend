@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import {
+  CardActionArea,
   Drawer,
   Fab,
   Grid,
@@ -55,7 +56,13 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
               'Reflect on the most interesting or memorable part of the programme in the space provided below.',
             ].map((text) => (
               <ListItem key={text}>
-                <QuestCard className={classes.card}>{text}</QuestCard>
+                <CardActionArea
+                  className={classes.cardActionArea}
+                  // eslint-disable-next-line no-console
+                  onClick={() => console.log(text)}
+                >
+                  <QuestCard className={classes.card}>{text}</QuestCard>
+                </CardActionArea>
               </ListItem>
             ))}
           </List>
@@ -93,7 +100,13 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
                 'Reflect on the most interesting or memorable part of the programme in the space provided below.',
               ].map((text) => (
                 <ListItem key={text}>
-                  <QuestCard className={classes.card}>{text}</QuestCard>
+                  <CardActionArea
+                    className={classes.cardActionArea}
+                    // eslint-disable-next-line no-console
+                    onClick={() => console.log(text)}
+                  >
+                    <QuestCard className={classes.card}>{text}</QuestCard>
+                  </CardActionArea>
                 </ListItem>
               ))}
             </List>

@@ -15,28 +15,6 @@ export const useStyles = makeStyles(() =>
       display: 'flex',
       justifyContent: 'center',
     },
-    typeCard: {
-      marginTop: '1rem',
-      width: '15rem',
-      height: '15rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderColor: theme.custom.icon.iconColor,
-      color: theme.custom.icon.iconColor,
-      fontSize: '1.5rem',
-      '&:hover': {
-        cursor: 'pointer',
-      },
-      margin: '1.5rem',
-    },
-    header: {
-      backgroundColor: '#044682',
-      height: '5rem',
-      alignItems: 'center',
-      paddingLeft: '2rem',
-      paddingRight: '1rem',
-    },
     list: {
       marginTop: '0.5rem',
       marginBottom: '0.5rem',
@@ -57,11 +35,15 @@ export const useStyles = makeStyles(() =>
     drawerContainer: {
       overflow: 'auto',
     },
+    cardActionArea: {
+      borderRadius: 15,
+    },
     card: {
       backgroundColor: 'white',
       boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 8px;',
       margin: '0.25rem',
       padding: '1rem',
+      borderRadius: 12,
     },
     fab: {
       position: 'fixed',
