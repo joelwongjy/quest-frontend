@@ -135,7 +135,7 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
             {accessibilityOptions.map((option, index) => {
               const labelId = `checkbox-list-secondary-label-${index}`;
               return (
-                <ListItem button key={option}>
+                <ListItem button key={option} onClick={handleToggle(index)}>
                   <ListItemText>{option}</ListItemText>
                   <ListItemSecondaryAction>
                     <Checkbox
@@ -236,7 +236,7 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
           {accessibilityOptions.map((option, index) => {
             const labelId = `checkbox-list-secondary-label-${index}`;
             return (
-              <ListItem key={option}>
+              <ListItem key={option} onClick={handleToggle(index)}>
                 <ListItemText>{option}</ListItemText>
                 <ListItemSecondaryAction>
                   <Checkbox
