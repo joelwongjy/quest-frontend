@@ -130,8 +130,14 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
           onClose={() => setIsDialogOpen(false)}
           aria-labelledby="accessibility-dialog"
           open={isDialogOpen}
+          maxWidth="xs"
+          fullWidth
         >
-          <DialogTitle id="accessibility-dialog">Add question to:</DialogTitle>
+          <Grid container justify="center">
+            <DialogTitle id="accessibility-dialog">
+              Add question to:
+            </DialogTitle>
+          </Grid>
           <List>
             {accessibilityOptions.map((option, index) => {
               const labelId = `checkbox-list-secondary-label-${index}`;
@@ -224,8 +230,13 @@ const SampleQuestionMenu: React.FunctionComponent<SampleQuestionMenuProps> = ({
         onClose={() => setIsDialogOpen(false)}
         aria-labelledby="accessibility-dialog"
         open={isDialogOpen}
+        maxWidth="xs"
+        fullWidth
       >
-        <DialogTitle id="accessibility-dialog">Add question to:</DialogTitle>
+        <Grid container justify="center">
+          <DialogTitle id="accessibility-dialog">Add question to:</DialogTitle>
+        </Grid>
+
         <List>
           {accessibilityOptions.map((option, index) => {
             const labelId = `checkbox-list-secondary-label-${index}`;
