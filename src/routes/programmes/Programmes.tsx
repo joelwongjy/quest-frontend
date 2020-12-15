@@ -189,8 +189,8 @@ const Programme: React.FunctionComponent = () => {
           cancelCallback={() => setState({ isEditing: false })}
         />
       ) : (
-        <div>
-          <Grid container spacing={3}>
+        <div style={{ padding: '1rem' }}>
+          <Grid container spacing={6}>
             {state.programmes.length > 0 &&
               state.programmes.map((p) => {
                 const menuOptions = getMenuOptions(p);
