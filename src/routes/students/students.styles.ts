@@ -21,7 +21,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 12,
       display: 'flex',
       justifyContent: 'left',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       paddingLeft: '1rem',
       paddingRight: '1rem',
       paddingTop: '1rem',
