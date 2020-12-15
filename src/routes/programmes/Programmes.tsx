@@ -170,15 +170,17 @@ const Programme: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}${CREATE}`}
-          >
-            Create Programme
-          </Button>
+          state.isEditing ? undefined : (
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}${CREATE}`}
+            >
+              Create Programme
+            </Button>
+          )
         }
       />
       {state.isEditing ? (
@@ -201,17 +203,17 @@ const Programme: React.FunctionComponent = () => {
                 );
               })}
           </Grid>
-          <QuestAlert
-            isAlertOpen={state.isAlertOpen!}
-            hasConfirm={state.hasConfirm}
-            alertHeader={state.alertHeader!}
-            alertMessage={state.alertMessage!}
-            closeHandler={state.closeHandler}
-            confirmHandler={state.confirmHandler}
-            cancelHandler={state.cancelHandler}
-          />
         </div>
       )}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };

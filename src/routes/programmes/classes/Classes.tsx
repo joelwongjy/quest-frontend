@@ -3,15 +3,16 @@ import { Button, Grid } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
 import { RouteState, RouteParams } from 'interfaces/routes/common';
-import { ClassListData } from 'interfaces/models/classes';
+import { ClassListData, ClassMode } from 'interfaces/models/classes';
 import { questClasses } from 'routes/questionnaires/mockData';
 import ClassCard from 'components/classCard';
+import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
+import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
 
 import QuestAlert from 'componentWrappers/questAlert';
@@ -27,7 +28,7 @@ interface ClassesState extends RouteState {
   selectedClass: ClassListData | undefined;
 }
 
-const Class: React.FunctionComponent = () => {
+const Classes: React.FunctionComponent = () => {
   const [state, setState] = useReducer(
     (s: ClassesState, a: Partial<ClassesState>) => ({
       ...s,
@@ -89,9 +90,10 @@ const Class: React.FunctionComponent = () => {
   }, [dispatch]);
 
   const { id } = useParams<RouteParams>();
+  const programmeId = parseInt(id, 10);
 
   const availableClasses = state.questClasses.filter(
-    (c) => c.programme.id === parseInt(id, 10)
+    (c) => c.programme.id === programmeId
   );
 
   const breadcrumbs = [
@@ -179,26 +181,28 @@ const Class: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}${CREATE}`}
-          >
-            Create Class
-          </Button>
+          state.isEditing ? undefined : (
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}/${programmeId}${CLASSES}${CREATE}`}
+            >
+              Create Class
+            </Button>
+          )
         }
       />
       {state.isEditing ? (
-        <div />
+        <ClassForm
+          mode={ClassMode.EDIT}
+          questClass={state.selectedClass}
+          programme={state.selectedClass!.programme}
+          alertCallback={alertCallback}
+          cancelCallback={() => setState({ isEditing: false })}
+        />
       ) : (
-        // <ProgrammeForm
-        //   mode={ProgrammeMode.EDIT}
-        //   programme={state.selectedClass}
-        //   alertCallback={alertCallback}
-        //   cancelCallback={() => setState({ isEditing: false })}
-        // />
         <div>
           <Grid container spacing={3}>
             {availableClasses.length > 0 &&
@@ -211,19 +215,19 @@ const Class: React.FunctionComponent = () => {
                 );
               })}
           </Grid>
-          <QuestAlert
-            isAlertOpen={state.isAlertOpen!}
-            hasConfirm={state.hasConfirm}
-            alertHeader={state.alertHeader!}
-            alertMessage={state.alertMessage!}
-            closeHandler={state.closeHandler}
-            confirmHandler={state.confirmHandler}
-            cancelHandler={state.cancelHandler}
-          />
         </div>
       )}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
 
-export default Class;
+export default Classes;

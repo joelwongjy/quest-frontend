@@ -168,8 +168,6 @@ export const programmes: ProgrammeListData[] = [
     ...mockBaseData,
     id: 1,
     name: 'Synchronization',
-    startAt: subDays(new Date(), 3),
-    endAt: addDays(new Date(), 3),
     classes: [],
   },
   {
@@ -178,8 +176,6 @@ export const programmes: ProgrammeListData[] = [
     name: 'Memory Management',
     description:
       'Memory management is a form of resource management applied to computer memory.',
-    startAt: subDays(new Date(), 5),
-    endAt: addDays(new Date(), 10),
     classes: [],
   },
   {
@@ -188,8 +184,6 @@ export const programmes: ProgrammeListData[] = [
     name: 'Process Management',
     description:
       'Process management involves various tasks like creation, scheduling, termination of processes, and a dead lock.',
-    startAt: subDays(new Date(), 2),
-    endAt: addDays(new Date(), 6),
     classes: [],
   },
 ];

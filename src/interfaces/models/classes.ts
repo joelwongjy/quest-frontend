@@ -7,3 +7,8 @@ export interface ClassListData extends DiscardableData {
   role: ClassUserRole;
   programme: ProgrammeListData;
 }
+
+export enum ClassMode {
+  EDIT = 'EDIT',
+  NEW = 'NEW',
+}

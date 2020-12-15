@@ -6,14 +6,11 @@ import {
   Typography,
   List,
   ListItem,
-  TextField,
   IconButton,
 } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
-import { DatePicker } from '@material-ui/pickers';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { isBefore } from 'date-fns';
 
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
@@ -23,7 +20,7 @@ import { ClassData } from 'interfaces/api/classes';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
-import { validateProgrammeInfo } from 'utils/programmeUtils';
+import { programmeFormIsChanged } from 'utils/programmeUtils';
 import { useUser } from 'contexts/UserContext';
 
 import { useStyles } from './ProgrammeForm.styles';
@@ -43,10 +40,8 @@ interface ProgrammeFormProps {
   ) => void;
 }
 
-export interface ProgrammeFormState
-  extends Omit<Omit<ProgrammePostData, 'startAt'>, 'endAt'> {
-  startAt: Date | null;
-  endAt: Date | null;
+export interface ProgrammeFormState extends ProgrammePostData {
+  classesAdded: number;
 }
 const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
   mode,
@@ -66,12 +61,11 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
       ...a,
     }),
     {
-      id: programme?.id ?? user?.programmes.length ?? 0 + 1,
+      id: programme?.id ?? user?.programmes.length ?? 0,
       name: programme?.name ?? '',
       description: programme?.description ?? '',
-      startAt: programme?.startAt ?? new Date(),
-      endAt: programme?.endAt ?? new Date(),
       classes: programme?.classes ?? [],
+      classesAdded: 0,
     }
   );
 
@@ -88,7 +82,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
     if (!state.classes[index] || state.classes[index].name.length === 0) {
       const newClasses = [...state.classes];
       newClasses.splice(index, 1);
-      setState({ classes: newClasses });
+      setState({ classes: newClasses, classesAdded: state.classesAdded - 1 });
     } else {
       alertCallback(
         true,
@@ -106,7 +100,11 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
   };
 
   const handleCancel = () => {
-    if (isSuccessful) {
+    if (
+      isSuccessful ||
+      (!programmeFormIsChanged(mode, state, programme) &&
+        state.classesAdded === 0)
+    ) {
       cancelCallback();
     } else {
       alertCallback(
@@ -122,14 +120,18 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
 
   const handleAddClass = () => {
     const newClass: ClassData = {
+      id: state.classes.length,
       name: '',
       role: ClassUserRole.STUDENT,
     };
-    setState({ classes: [...state.classes, newClass] });
+    setState({
+      classes: [...state.classes, newClass],
+      classesAdded: state.classesAdded + 1,
+    });
   };
 
   const handleAdd = () => {
-    if (!validateProgrammeInfo(state)) {
+    if (state.name === '') {
       setHasError(true);
       return;
     }
@@ -139,11 +141,18 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
       top: 0,
       behavior: 'smooth',
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const newProgramme: ProgrammePostData = {
+      id: state.id,
+      name: state.name,
+      description: state.description,
+      classes: state.classes,
+    };
     // TODO: Post the data over
   };
 
   const handleEdit = () => {
-    if (!validateProgrammeInfo(state)) {
+    if (state.name === '') {
       setHasError(true);
       return;
     }
@@ -289,101 +298,6 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                         }
                       />
                     </div>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Start Date: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <FormControl
-                      style={{ width: '100%' }}
-                      error={
-                        hasError &&
-                        (state.startAt === null ||
-                          !isBefore(
-                            state.startAt ?? new Date(),
-                            state.endAt ?? new Date()
-                          ))
-                      }
-                    >
-                      <DatePicker
-                        allowKeyboardControl={false}
-                        disabled={isSuccessful}
-                        renderInput={(props) => (
-                          <TextField
-                            variant="outlined"
-                            style={{ display: 'flex' }}
-                            size="small"
-                            color="secondary"
-                            {...props}
-                          />
-                        )}
-                        value={state.startAt}
-                        onChange={(newDate: Date | null) => {
-                          setState({ startAt: newDate });
-                        }}
-                      />
-                      {hasError && state.startAt === null && (
-                        <FormHelperText>
-                          The start date cannot be blank!
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">End Date: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <FormControl
-                      style={{ width: '100%' }}
-                      error={
-                        hasError &&
-                        (state.endAt === null ||
-                          !isBefore(
-                            state.startAt ?? new Date(),
-                            state.endAt ?? new Date()
-                          ))
-                      }
-                    >
-                      <DatePicker
-                        allowKeyboardControl={false}
-                        disabled={isSuccessful}
-                        renderInput={(props) => (
-                          <TextField
-                            variant="outlined"
-                            style={{ display: 'flex' }}
-                            size="small"
-                            color="secondary"
-                            {...props}
-                          />
-                        )}
-                        value={state.endAt}
-                        onChange={(newDate: Date | null) => {
-                          setState({ endAt: newDate });
-                        }}
-                      />
-                      {hasError && state.endAt === null && (
-                        <FormHelperText>
-                          The end date cannot be blank!
-                        </FormHelperText>
-                      )}
-                      {hasError &&
-                        !isBefore(
-                          state.startAt ?? new Date(),
-                          state.endAt ?? new Date()
-                        ) && (
-                          <FormHelperText>
-                            The end date must be after the start date!
-                          </FormHelperText>
-                        )}
-                    </FormControl>
                   </Grid>
                 </Grid>
               </ListItem>
