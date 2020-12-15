@@ -9,3 +9,7 @@ export interface RouteState {
   confirmHandler?: () => void;
   cancelHandler?: () => void;
 }
+
+export interface RouteParams {
+  id: string;
+}

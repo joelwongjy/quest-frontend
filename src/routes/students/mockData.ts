@@ -1,5 +1,9 @@
 import { Student } from 'interfaces/models/students';
-import { classes1, classes2, programmes } from 'routes/questionnaires/mockData';
+import {
+  questClasses,
+  questClasses2,
+  programmes,
+} from 'routes/questionnaires/mockData';
 
 export const students: Student[] = [
   {
@@ -9,9 +13,9 @@ export const students: Student[] = [
     birthday: new Date(1979, 12, 12),
     email: 'nick.fury@gmail.com',
     activities: [
-      [programmes[0], classes1[0]],
-      [programmes[1], classes2[0]],
-      [programmes[1], classes2[1]],
+      [programmes[0], questClasses[0]],
+      [programmes[1], questClasses2[0]],
+      [programmes[1], questClasses2[1]],
     ],
   },
   {
@@ -21,8 +25,8 @@ export const students: Student[] = [
     birthday: new Date(1928, 12, 6),
     email: 'steve.rogers@gmail.com',
     activities: [
-      [programmes[0], classes1[1]],
-      [programmes[1], classes2[1]],
+      [programmes[0], questClasses[1]],
+      [programmes[1], questClasses2[1]],
     ],
   },
   {
@@ -32,8 +36,8 @@ export const students: Student[] = [
     birthday: new Date(1988, 5, 12),
     email: 'nat.romanoff@gmail.com',
     activities: [
-      [programmes[0], classes1[2]],
-      [programmes[1], classes2[2]],
+      [programmes[0], questClasses[2]],
+      [programmes[1], questClasses2[2]],
     ],
   },
   {
@@ -43,8 +47,8 @@ export const students: Student[] = [
     birthday: new Date(1982, 5, 12),
     email: 'dr.strange@gmail.com',
     activities: [
-      [programmes[0], classes1[0]],
-      [programmes[1], classes2[0]],
+      [programmes[0], questClasses[0]],
+      [programmes[1], questClasses2[0]],
     ],
   },
   {
@@ -54,8 +58,8 @@ export const students: Student[] = [
     birthday: new Date(1983, 5, 12),
     email: 'tony.stark@gmail.com',
     activities: [
-      [programmes[0], classes1[0]],
-      [programmes[1], classes2[0]],
+      [programmes[0], questClasses[0]],
+      [programmes[1], questClasses2[0]],
     ],
   },
 ];

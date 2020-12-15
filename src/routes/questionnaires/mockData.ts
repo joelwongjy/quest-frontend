@@ -194,50 +194,50 @@ export const programmes: ProgrammeListData[] = [
   },
 ];
 
-export const classes1: ClassListData[] = [
+export const questClasses: ClassListData[] = [
   {
     ...mockBaseData,
     id: 1,
     name: 'Semaphores',
     role: ClassUserRole.ADMIN,
-    programmeId: programmes[0].id,
+    programme: programmes[0],
   },
   {
     ...mockBaseData,
     id: 2,
     name: 'Pipes',
     role: ClassUserRole.ADMIN,
-    programmeId: programmes[0].id,
+    programme: programmes[1],
   },
   {
     ...mockBaseData,
     id: 3,
     name: 'Signals',
     role: ClassUserRole.ADMIN,
-    programmeId: programmes[0].id,
+    programme: programmes[2],
   },
 ];
 
-export const classes2: ClassListData[] = [
+export const questClasses2: ClassListData[] = [
   {
     ...mockBaseData,
     id: 4,
     name: 'Buddy System',
     role: ClassUserRole.ADMIN,
-    programmeId: programmes[0].id,
+    programme: programmes[0],
   },
   {
     ...mockBaseData,
     id: 5,
     name: 'Fixed Size Partitioning',
     role: ClassUserRole.ADMIN,
-    programmeId: programmes[0].id,
+    programme: programmes[0],
   },
   {
     ...mockBaseData,
     id: 6,
     name: 'Dynamic Partitioning',
     role: ClassUserRole.ADMIN,
-    programmeId: programmes[0].id,
+    programme: programmes[0],
   },
 ];

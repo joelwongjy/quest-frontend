@@ -1,5 +1,5 @@
+import { ClassData } from 'interfaces/api/classes';
 import { DiscardableData } from './base';
-import { ClassListData } from './classes';
 
 export interface ProgrammeListData extends DiscardableData {
   id: number;
@@ -7,7 +7,7 @@ export interface ProgrammeListData extends DiscardableData {
   description?: string;
   startAt: Date;
   endAt: Date;
-  classes: ClassListData[];
+  classes: ClassData[];
 }
 
 export enum ProgrammeMode {

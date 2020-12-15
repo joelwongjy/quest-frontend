@@ -1,4 +1,4 @@
-import { ClassListData } from 'interfaces/models/classes';
+import { ClassData } from './classes';
 
 export interface ProgrammePostData {
   id: number;
@@ -6,5 +6,5 @@ export interface ProgrammePostData {
   description: string;
   startAt: Date;
   endAt: Date;
-  classes: ClassListData[];
+  classes: ClassData[];
 }

@@ -19,7 +19,7 @@ import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
 import { ProgrammePostData } from 'interfaces/api/programmes';
-import { ClassListData } from 'interfaces/models/classes';
+import { ClassData } from 'interfaces/api/classes';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
@@ -121,14 +121,9 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
   };
 
   const handleAddClass = () => {
-    const newClass: ClassListData = {
+    const newClass: ClassData = {
       name: '',
       role: ClassUserRole.STUDENT,
-      programmeId: state.id,
-      id: state.classes.length + 1,
-      discardedAt: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
     setState({ classes: [...state.classes, newClass] });
   };
