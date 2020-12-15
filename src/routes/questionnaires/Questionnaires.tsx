@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Button, ButtonGroup, Grid } from '@material-ui/core';
 import { isBefore, isAfter } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -262,14 +262,18 @@ const Questionnaires: React.FunctionComponent = () => {
           alertMessage="You have an incomplete questionnaire"
         />
       )}
-      <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container>
-        <QuestionnaireTabs
-          value={tabValue}
-          setValue={setTabValue}
-          labels={tabs}
-          buttonRight={
-            // Cannot use QuestButton because of the `component` attribute
+      <PageHeader
+        breadcrumbs={breadcrumbs}
+        action={
+          <ButtonGroup>
+            <QuestButton
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              disabled
+            >
+              Manage Sample Questions
+            </QuestButton>
             <Button
               variant="contained"
               color="secondary"
@@ -295,17 +299,14 @@ const Questionnaires: React.FunctionComponent = () => {
             >
               Create Questionnaire
             </Button>
-          }
-          buttonLeft={
-            <QuestButton
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              disabled
-            >
-              Manage Sample Questions
-            </QuestButton>
-          }
+          </ButtonGroup>
+        }
+      />
+      <Grid container className={classes.main}>
+        <QuestionnaireTabs
+          value={tabValue}
+          setValue={setTabValue}
+          labels={tabs}
         />
         <Grid container spacing={6}>
           {renderedQuestionnaires.length > 0 &&
