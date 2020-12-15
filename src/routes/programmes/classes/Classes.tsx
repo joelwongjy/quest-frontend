@@ -94,15 +94,12 @@ const Class: React.FunctionComponent = () => {
     (c) => c.programme.id === parseInt(id, 10)
   );
 
-  console.log(id);
-  console.log(questClasses);
-  console.log(availableClasses);
-
   const breadcrumbs = [
     { text: 'Programmes', href: PROGRAMMES },
     { text: 'Classes', href: `${PROGRAMMES}/:id${CLASSES}` },
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const alertCallback = (
     isAlertOpen: boolean,
     hasConfirm: boolean,
