@@ -130,6 +130,45 @@ const questionnaire = createSlice({
         discardedAt: null,
       });
     },
+    addSampleQuestionToPre: (state, action: PayloadAction<string>): void => {
+      const { length } = state.questionWindows[0].questions;
+      state.questionWindows[0].questions.push({
+        order: length,
+        questionText: action.payload,
+        questionType: QuestionType.MULTIPLE_CHOICE,
+        options: [{ optionText: '' }],
+        id: parseInt(nextId().slice(2), 10),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        discardedAt: null,
+      });
+    },
+    addSampleQuestionToPost: (state, action: PayloadAction<string>): void => {
+      const { length } = state.questionWindows[1].questions;
+      state.questionWindows[1].questions.push({
+        order: length,
+        questionText: action.payload,
+        questionType: QuestionType.MULTIPLE_CHOICE,
+        options: [{ optionText: '' }],
+        id: parseInt(nextId().slice(2), 10),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        discardedAt: null,
+      });
+    },
+    addSampleQuestionToShared: (state, action: PayloadAction<string>): void => {
+      const { length } = state.sharedQuestions.questions;
+      state.sharedQuestions.questions.push({
+        order: length,
+        questionText: action.payload,
+        questionType: QuestionType.MULTIPLE_CHOICE,
+        options: [{ optionText: '' }],
+        id: parseInt(nextId().slice(2), 10),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        discardedAt: null,
+      });
+    },
     transferQuestionToPre: (
       state,
       action: PayloadAction<QuestionOrder>
@@ -487,6 +526,9 @@ export const {
   addQuestionToPre,
   addQuestionToPost,
   addQuestionToShared,
+  addSampleQuestionToPre,
+  addSampleQuestionToPost,
+  addSampleQuestionToShared,
   transferQuestionToPre,
   transferQuestionToPost,
   transferQuestionToShared,

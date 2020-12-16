@@ -1,41 +1,40 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button, Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
-import { RouteState } from 'interfaces/routes/common';
-import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
-import { programmes } from 'routes/questionnaires/mockData';
+import { RouteState, RouteParams } from 'interfaces/routes/common';
+import { ClassListData } from 'interfaces/models/classes';
+import { questClasses } from 'routes/questionnaires/mockData';
+import ClassCard from 'components/classCard';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import { PROGRAMMES, CREATE } from 'constants/routes';
-import ProgrammeCard from 'components/programmeCard';
+import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
 
 import QuestAlert from 'componentWrappers/questAlert';
-import ProgrammeForm from 'components/programmeForm';
 import { useStyles } from './programmes.styles';
 
-interface ProgrammesState extends RouteState {
-  programmes: ProgrammeListData[];
+interface ClassesState extends RouteState {
+  questClasses: ClassListData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
   isEditing: boolean;
-  selectedProgramme: ProgrammeListData | undefined;
+  selectedClass: ClassListData | undefined;
 }
 
-const Programme: React.FunctionComponent = () => {
+const Class: React.FunctionComponent = () => {
   const [state, setState] = useReducer(
-    (s: ProgrammesState, a: Partial<ProgrammesState>) => ({
+    (s: ClassesState, a: Partial<ClassesState>) => ({
       ...s,
       ...a,
     }),
     {
-      programmes,
+      questClasses,
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -50,7 +49,7 @@ const Programme: React.FunctionComponent = () => {
         setState({ isAlertOpen: false });
       },
       isEditing: false,
-      selectedProgramme: undefined,
+      selectedClass: undefined,
     }
   );
 
@@ -63,9 +62,9 @@ const Programme: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('programmes');
+        const response = await ApiService.get('classes');
         if (!didCancel) {
-          setState({ programmes: response.data, isLoading: false });
+          setState({ questClasses: response.data, isLoading: false });
           // dispatch(updateSecurities(securitiesResponse.data));
         }
       } catch (error) {
@@ -89,8 +88,18 @@ const Programme: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Programmes', href: PROGRAMMES }];
+  const { id } = useParams<RouteParams>();
 
+  const availableClasses = state.questClasses.filter(
+    (c) => c.programme.id === parseInt(id, 10)
+  );
+
+  const breadcrumbs = [
+    { text: 'Programmes', href: PROGRAMMES },
+    { text: 'Classes', href: `${PROGRAMMES}/:id${CLASSES}` },
+  ];
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const alertCallback = (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -146,11 +155,11 @@ const Programme: React.FunctionComponent = () => {
     );
   }
 
-  const getMenuOptions = (p: ProgrammeListData): MenuOption[] => {
+  const getMenuOptions = (c: ClassListData): MenuOption[] => {
     return [
       {
         text: 'Edit',
-        callback: () => setState({ isEditing: true, selectedProgramme: p }),
+        callback: () => setState({ isEditing: true, selectedClass: c }),
       },
       {
         text: 'Make a copy',
@@ -177,26 +186,27 @@ const Programme: React.FunctionComponent = () => {
             component={Link}
             to={`${PROGRAMMES}${CREATE}`}
           >
-            Create Programme
+            Create Class
           </Button>
         }
       />
       {state.isEditing ? (
-        <ProgrammeForm
-          mode={ProgrammeMode.EDIT}
-          programme={state.selectedProgramme}
-          alertCallback={alertCallback}
-          cancelCallback={() => setState({ isEditing: false })}
-        />
+        <div />
       ) : (
-        <div style={{ padding: '1rem' }}>
-          <Grid container spacing={6}>
-            {state.programmes.length > 0 &&
-              state.programmes.map((p) => {
-                const menuOptions = getMenuOptions(p);
+        // <ProgrammeForm
+        //   mode={ProgrammeMode.EDIT}
+        //   programme={state.selectedClass}
+        //   alertCallback={alertCallback}
+        //   cancelCallback={() => setState({ isEditing: false })}
+        // />
+        <div>
+          <Grid container spacing={3}>
+            {availableClasses.length > 0 &&
+              availableClasses.map((c) => {
+                const menuOptions = getMenuOptions(c);
                 return (
-                  <Grid item xs={12} sm={6} lg={4} key={p.name}>
-                    <ProgrammeCard programme={p} menuOptions={menuOptions} />
+                  <Grid item xs={12} sm={6} lg={4} key={c.name}>
+                    <ClassCard questClass={c} menuOptions={menuOptions} />
                   </Grid>
                 );
               })}
@@ -216,4 +226,4 @@ const Programme: React.FunctionComponent = () => {
   );
 };
 
-export default Programme;
+export default Class;

@@ -24,8 +24,9 @@ import Questionnaires from 'routes/questionnaires';
 import CreateQuestionnaires from 'routes/questionnaires/create';
 import EditQuestionnaire from 'routes/questionnaires/edit';
 import Responses from 'routes/questionnaires/responses';
-import Programme from 'routes/programmes';
+import Programmes from 'routes/programmes';
 import CreateProgrammes from 'routes/programmes/create';
+import Classes from 'routes/programmes/classes';
 import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
@@ -55,12 +56,15 @@ const AuthenticatedApp: React.FunctionComponent = () => {
           <Route path={`${QUESTIONNAIRES}/:id${RESPONSES}`}>
             <Responses />
           </Route>
-          <Route exact path={PROGRAMMES} component={Programme} />
+          <Route exact path={PROGRAMMES} component={Programmes} />
           <Route
             exact
             path={`${PROGRAMMES}${CREATE}`}
             component={CreateProgrammes}
           />
+          <Route path={`${PROGRAMMES}/:id${CLASSES}`}>
+            <Classes />
+          </Route>
           <Route exact path={CLASSES} component={Home} />
           <Route exact path={STUDENTS} component={Students} />
           <Route

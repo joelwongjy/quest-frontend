@@ -64,11 +64,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 
   const availableProgrammes =
     user!.programmes.filter((p) =>
-      user!.classes.some((c) => c.programmeId === p.id)
+      user!.classes.some((c) => c.programme.id === p.id)
     ) ?? [];
 
   const availableClasses = user!.classes.filter((c) =>
-    availableProgrammes.some((p) => p.id === c.programmeId)
+    availableProgrammes.some((p) => p.id === c.programme.id)
   );
 
   const [state, setState] = useReducer(
@@ -110,7 +110,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     const newActivities = state.activities.slice();
     [newActivities[index][0]] = user!.programmes.filter((p) => p.id === id);
     newActivities[index][1] =
-      availableClasses.filter((c) => c.programmeId === id)[0] ?? undefined;
+      availableClasses.filter((c) => c.programme.id === id)[0] ?? undefined;
     setState({ activities: newActivities });
   };
 
@@ -208,7 +208,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       container
       alignItems="center"
       justify="center"
-      style={{ marginTop: '2rem', marginBottom: '4rem' }}
+      style={{ marginTop: '2rem', paddingBottom: '4rem' }}
     >
       <Grid item xs={12} md={9}>
         <QuestCard>
@@ -530,7 +530,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                               disabled={isSuccessful}
                             >
                               {availableClasses
-                                .filter((c) => c.programmeId === a[0].id)
+                                .filter((c) => c.programme.id === a[0].id)
                                 .map((c) => {
                                   return (
                                     <MenuItem
@@ -624,7 +624,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                       newActivities.push([
                         availableProgrammes[0],
                         user!.classes.filter(
-                          (c) => c.programmeId === availableProgrammes[0].id
+                          (c) => c.programme.id === availableProgrammes[0].id
                         )[0],
                       ]);
                       setState({ activities: newActivities });

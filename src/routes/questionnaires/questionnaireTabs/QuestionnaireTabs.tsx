@@ -6,8 +6,8 @@ import { QuestTabsProps } from 'componentWrappers/questTabs/QuestTabs';
 import { useStyles } from './questionnaireTabs.styles';
 
 interface QuestionnaireTabsProps extends QuestTabsProps {
-  buttonRight: React.ReactNode;
-  buttonLeft: React.ReactNode;
+  buttonRight?: React.ReactNode;
+  buttonLeft?: React.ReactNode;
 }
 
 const QuestionnaireTabs: React.FunctionComponent<QuestionnaireTabsProps> = ({

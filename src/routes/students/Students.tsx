@@ -9,16 +9,14 @@ import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
 import { Student, StudentMode } from 'interfaces/models/students';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
@@ -179,13 +177,18 @@ const Students: React.FunctionComponent = () => {
               {state.students.map((s) => {
                 return (
                   <ListItem key={s.name} className={classes.item}>
-                    <ListItemAvatar style={{ paddingLeft: '0.5rem' }}>
-                      <Avatar>
-                        <PersonIcon />
-                      </Avatar>
-                    </ListItemAvatar>
+                    <EmojiPeopleIcon
+                      style={{
+                        fontSize: 28,
+                        marginTop: '0.25rem',
+                        marginLeft: '0.25rem',
+                      }}
+                    />
                     <ListItemText
                       primary={s.name}
+                      primaryTypographyProps={{
+                        style: { paddingLeft: '1rem', fontSize: 16 },
+                      }}
                       secondary={
                         <List dense>
                           {s.activities?.map((a) => {
@@ -198,7 +201,7 @@ const Students: React.FunctionComponent = () => {
                         </List>
                       }
                     />
-                    <ListItemSecondaryAction>
+                    <ListItemSecondaryAction style={{ top: '20%' }}>
                       <IconButton
                         edge="end"
                         aria-label="edit"
