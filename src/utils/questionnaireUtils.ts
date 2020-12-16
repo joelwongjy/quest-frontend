@@ -85,6 +85,9 @@ export const isEmptyQuestionnaire = (
   questionnaire: QuestionnairePostData
 ): boolean => {
   const { questionWindows, sharedQuestions } = questionnaire;
+  if (questionnaire.title && questionnaire.title !== '') {
+    return false;
+  }
   if (questionWindows[0]) {
     if (questionWindows[0].questions.length !== 0) {
       return false;

@@ -11,7 +11,6 @@ export const useStyles = makeStyles(() =>
       justifyContent: 'center',
     },
     typeCard: {
-      marginTop: '1rem',
       width: '15rem',
       height: '15rem',
       display: 'flex',
@@ -20,8 +19,12 @@ export const useStyles = makeStyles(() =>
       borderColor: theme.custom.icon.iconColor,
       color: theme.custom.icon.iconColor,
       fontSize: '1.5rem',
+      transition: theme.transitions.create(['background', 'background-color'], {
+        duration: theme.transitions.duration.complex,
+      }),
       '&:hover': {
         cursor: 'pointer',
+        backgroundColor: '#FFF9E8',
       },
       margin: '1.5rem',
     },
