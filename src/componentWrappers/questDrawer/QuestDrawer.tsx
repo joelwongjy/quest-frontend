@@ -35,7 +35,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
 }) => {
   const classes = useStyles();
   const { logout } = useAuth();
-  const { role } = useUser()!;
+  const user = useUser();
   const pathname = `/${useLocation().pathname.split('/')[1]}`;
 
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
@@ -47,6 +47,10 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
     setAlertMessage('You are attempting to log out, are you sure?');
     setIsAlertOpen(true);
   };
+
+  const isStaff =
+    user &&
+    (user.role === ClassUserRole.ADMIN || user.role === ClassUserRole.TEACHER);
 
   const drawer = (
     <>
@@ -65,52 +69,49 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem
-          button
-          key="Questionnaires"
-          selected={pathname === QUESTIONNAIRES}
-          component={Link}
-          to={QUESTIONNAIRES}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <QuestionIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText
-            primary={
-              role === ClassUserRole.STUDENT ? 'Quests' : 'Questionnaires'
-            }
-          />
-        </ListItem>
-        {role !== ClassUserRole.STUDENT && (
-          <ListItem
-            button
-            key="Programmes"
-            selected={pathname === PROGRAMMES}
-            component={Link}
-            to={PROGRAMMES}
-            className={classes.listItem}
-          >
-            <ListItemIcon>
-              <StarIcon className={classes.icon} />
-            </ListItemIcon>
-            <ListItemText primary="Programmes" />
-          </ListItem>
-        )}
-        {role !== ClassUserRole.STUDENT && (
-          <ListItem
-            button
-            key="Students"
-            selected={pathname === STUDENTS}
-            component={Link}
-            to={STUDENTS}
-            className={classes.listItem}
-          >
-            <ListItemIcon>
-              <PersonIcon className={classes.icon} />
-            </ListItemIcon>
-            <ListItemText primary="Students" />
-          </ListItem>
+        {isStaff && (
+          <>
+            <ListItem
+              button
+              key="Questionnaires"
+              selected={pathname === QUESTIONNAIRES}
+              component={Link}
+              to={QUESTIONNAIRES}
+              className={classes.listItem}
+            >
+              <ListItemIcon>
+                <QuestionIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Questionnaires" />
+            </ListItem>
+            <ListItem
+              button
+              key="Programmes"
+              selected={pathname === PROGRAMMES}
+              component={Link}
+              to={PROGRAMMES}
+              className={classes.listItem}
+            >
+              <ListItemIcon>
+                <StarIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Programmes" />
+            </ListItem>
+
+            <ListItem
+              button
+              key="Students"
+              selected={pathname === STUDENTS}
+              component={Link}
+              to={STUDENTS}
+              className={classes.listItem}
+            >
+              <ListItemIcon>
+                <PersonIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Students" />
+            </ListItem>
+          </>
         )}
         <ListItem
           button
