@@ -265,7 +265,7 @@ const Questionnaires: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <ButtonGroup>
+          <ButtonGroup className={classes.buttonGroup}>
             <QuestButton
               variant="contained"
               color="secondary"
