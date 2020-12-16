@@ -270,6 +270,7 @@ const Questionnaires: React.FunctionComponent = () => {
               variant="contained"
               color="secondary"
               className={classes.button}
+              style={{ marginRight: '0.75rem' }}
               disabled
             >
               Manage Sample Questions
