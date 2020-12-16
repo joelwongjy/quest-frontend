@@ -37,6 +37,8 @@ import {
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
 
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import { useWindowSize } from 'utils/windowUtils';
 import { useStyles } from './editQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
@@ -62,6 +64,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
+  const { width } = useWindowSize();
 
   const {
     questionnaireId,
@@ -241,8 +244,20 @@ const EditQuestionnaire: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
+      <SampleQuestionMenu type={questionnaire.type} />
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div className={muiClasses.paperContainer}>
+      <div
+        className={muiClasses.paperContainer}
+        style={{
+          width:
+            // eslint-disable-next-line no-nested-ternary
+            width! < 720
+              ? width! - 50
+              : width! < 960
+              ? width! - 290
+              : width! - 530,
+        }}
+      >
         <Paper
           className={muiClasses.paper}
           elevation={0}

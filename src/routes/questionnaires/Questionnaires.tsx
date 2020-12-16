@@ -265,11 +265,12 @@ const Questionnaires: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <ButtonGroup>
+          <ButtonGroup className={classes.buttonGroup}>
             <QuestButton
               variant="contained"
               color="secondary"
               className={classes.button}
+              style={{ marginRight: '0.75rem' }}
               disabled
             >
               Manage Sample Questions

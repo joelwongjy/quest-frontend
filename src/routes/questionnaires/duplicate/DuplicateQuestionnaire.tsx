@@ -36,6 +36,8 @@ import { isValidQuestionnaire } from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
 
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import { useWindowSize } from 'utils/windowUtils';
 import { useStyles } from './duplicateQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
@@ -57,6 +59,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
+  const { width } = useWindowSize();
 
   const { title, type, questionWindows, classes, programmes } = questionnaire;
 
@@ -91,7 +94,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
       myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
       questionnaire: QuestionnairePostData
     ) =>
-      new Promise((resolve) => {
+      new Promise<void>((resolve) => {
         myDispatch(setQuestionnaire({ ...questionnaire, mode: 'DUPLICATE' }));
         resolve();
       });
@@ -154,7 +157,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
   const clearQuestionnairePromise = (
     myDispatch: Dispatch<{ payload: undefined; type: string }>
   ) =>
-    new Promise((resolve) => {
+    new Promise<void>((resolve) => {
       myDispatch(clearQuestionnaire());
       resolve();
     });
@@ -227,8 +230,20 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
+      <SampleQuestionMenu type={questionnaire.type} />
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div className={muiClasses.paperContainer}>
+      <div
+        className={muiClasses.paperContainer}
+        style={{
+          width:
+            // eslint-disable-next-line no-nested-ternary
+            width! < 720
+              ? width! - 50
+              : width! < 960
+              ? width! - 290
+              : width! - 530,
+        }}
+      >
         <Paper
           className={muiClasses.paper}
           elevation={0}
