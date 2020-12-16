@@ -12,6 +12,7 @@ import {
   QuestionSet,
   QuestionType,
   QuestionWindow,
+  QuestionnaireListData,
 } from 'interfaces/models/questionnaires';
 
 /* =====================
@@ -104,6 +105,22 @@ export const isEmptyQuestionnaire = (
     }
   }
   return true;
+};
+
+/* =====================
+  CONVERSION FUNCTIONS
+====================== */
+
+export const convertDateOfQuestionnaires = (
+  questionnaires: QuestionnaireListData[]
+): QuestionnaireListData[] => {
+  return questionnaires.map((q: QuestionnaireListData) => ({
+    ...q,
+    createdAt: new Date(q.createdAt),
+    startAt: new Date(q.startAt),
+    endAt: new Date(q.endAt),
+    updatedAt: new Date(q.updatedAt),
+  }));
 };
 
 /* =====================
