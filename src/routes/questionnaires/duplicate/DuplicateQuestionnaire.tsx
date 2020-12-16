@@ -38,6 +38,7 @@ import QuestAlert from 'componentWrappers/questAlert';
 
 import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import { useWindowSize } from 'utils/windowUtils';
+import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './duplicateQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
@@ -162,41 +163,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
       resolve();
     });
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   const handleComplete = async () => {
     if (!isValidQuestionnaire(questionnaire)) {

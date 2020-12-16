@@ -17,6 +17,7 @@ import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import { useUser } from 'contexts/UserContext';
+import { getAlertCallback } from 'utils/alertUtils';
 
 import { useStyles } from './programmes.styles';
 
@@ -94,41 +95,7 @@ const Programme: React.FunctionComponent = () => {
 
   const breadcrumbs = [{ text: 'Programmes', href: PROGRAMMES }];
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   if (!user || user.role === ClassUserRole.STUDENT) {
     return <Redirect to={HOME} />;

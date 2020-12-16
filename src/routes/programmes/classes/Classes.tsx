@@ -13,8 +13,9 @@ import ClassCard from 'components/classCard';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
-
 import QuestAlert from 'componentWrappers/questAlert';
+import { getAlertCallback } from 'utils/alertUtils';
+
 import { useStyles } from './programmes.styles';
 
 interface ClassesState extends RouteState {
@@ -100,41 +101,7 @@ const Class: React.FunctionComponent = () => {
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   if (state.isLoading) {
     return (
