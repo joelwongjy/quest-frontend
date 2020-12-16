@@ -11,6 +11,7 @@ import { ClassMode } from 'interfaces/models/classes';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import { programmes } from 'routes/questionnaires/mockData';
+import QuestAlert from 'componentWrappers/questAlert';
 
 interface CreateClassState extends RouteState {
   programme: ProgrammeListData;
@@ -136,6 +137,15 @@ const CreateClass: React.FunctionComponent = () => {
         cancelCallback={() =>
           history.push(`${PROGRAMMES}/${state.programme.id}${CLASSES}`)
         }
+      />
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
       />
     </PageContainer>
   );
