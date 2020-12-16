@@ -235,6 +235,19 @@ const Questionnaires: React.FunctionComponent = () => {
     ];
   };
 
+  const renderBannerMessage = () => {
+    switch (questionnaire.mode) {
+      case 'EDIT':
+        return `You are currently editing: ${questionnaire.title}`;
+      case 'CREATE':
+      default:
+        if (questionnaire.title?.length > 0) {
+          return `You have an unsaved new questionnaire: ${questionnaire.title}`;
+        }
+        return 'You have an unsaved new questionnaire';
+    }
+  };
+
   return (
     <PageContainer>
       {hasIncompleteQuestionnaire && (
@@ -259,17 +272,18 @@ const Questionnaires: React.FunctionComponent = () => {
             }
           }}
           actionMessage="Continue"
-          alertMessage="You have an incomplete questionnaire"
+          alertMessage={renderBannerMessage()}
         />
       )}
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <ButtonGroup>
+          <ButtonGroup className={classes.buttonGroup}>
             <QuestButton
               variant="contained"
               color="secondary"
               className={classes.button}
+              style={{ marginRight: '0.75rem' }}
               disabled
             >
               Manage Sample Questions

@@ -138,10 +138,19 @@ const Students: React.FunctionComponent = () => {
   };
 
   const handleDelete = (student: Student) => {
-    const index = state.students.indexOf(student);
-    const newStudents = state.students.slice();
-    newStudents.splice(index, 1);
-    setState({ students: newStudents });
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to retrieve deleted students.',
+      () => {
+        const index = state.students.indexOf(student);
+        const newStudents = state.students.slice();
+        newStudents.splice(index, 1);
+        setState({ students: newStudents });
+      },
+      undefined
+    );
   };
 
   if (!user || user.role === ClassUserRole.STUDENT) {

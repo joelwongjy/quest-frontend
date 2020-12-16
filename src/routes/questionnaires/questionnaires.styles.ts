@@ -13,5 +13,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(1.5, 1.5, 1.5, 0),
       },
     },
+    buttonGroup: {
+      margin: theme.spacing(3, 1, 0),
+      marginTop: '1rem',
+    },
   })
 );
