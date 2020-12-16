@@ -24,25 +24,21 @@ import {
   setClasses,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
-import {
-  QuestionnaireType,
-  QuestionWindow,
-  QuestionOrder,
-  OptionData,
-} from 'interfaces/models/questionnaires';
+import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import {
   isEmptyQuestionnaire,
-  validateQuestionnaire,
+  processCreateQuestionnaire,
+  isValidQuestionnaire,
 } from 'utils/questionnaireUtils';
-
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
 
 import { useWindowSize } from 'utils/windowUtils';
 import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import { getAlertCallback } from 'utils/alertUtils';
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -97,41 +93,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     }
   );
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   const programmeCallback = (newProgrammes: number[]) => {
     dispatch(setProgrammes(newProgrammes));
@@ -161,7 +123,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     });
 
   const handleComplete = async () => {
-    if (!validateQuestionnaire(questionnaire)) {
+    if (!isValidQuestionnaire(questionnaire)) {
       setHasError(true);
       return;
     }
@@ -170,18 +132,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   };
 
   const handleSubmit = async () => {
-    const data = {
-      ...questionnaire,
-      questionWindows: questionnaire.questionWindows.map(
-        (q: QuestionWindow) => ({
-          ...q,
-          questions: q.questions.map((q2: QuestionOrder) => ({
-            ...q2,
-            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-          })),
-        })
-      ),
-    };
+    const data: QuestionnairePostData = processCreateQuestionnaire(
+      questionnaire
+    );
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];

@@ -28,14 +28,18 @@ import {
 import QuestButton from 'componentWrappers/questButton';
 import {
   QuestionWindow,
-  QuestionOrder,
-  OptionData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { validateQuestionnaire } from 'utils/questionnaireUtils';
+import {
+  processEditQuestionnaire,
+  isValidQuestionnaire,
+} from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
 
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import { useWindowSize } from 'utils/windowUtils';
+import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './editQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
@@ -45,6 +49,10 @@ interface RouteParams {
   id: string;
 }
 
+interface EditQuestionnaireState extends RouteState {
+  original?: QuestionnaireData;
+}
+
 const EditQuestionnaire: React.FunctionComponent = () => {
   const { id } = useRouteMatch<RouteParams>({
     path: `${QUESTIONNAIRES}/:id${EDIT}`,
@@ -52,16 +60,24 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-  const questionnaire: QuestionnaireData = useSelector(selectQuestionnaire);
+  const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
   const user = useUser();
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
+  const { width } = useWindowSize();
 
-  const { title, type, questionWindows, classes, programmes } = questionnaire;
+  const {
+    questionnaireId,
+    title,
+    type,
+    questionWindows,
+    classes,
+    programmes,
+  } = questionnaire;
 
   const [state, setState] = useReducer(
-    (s: RouteState, a: Partial<RouteState>) => ({
+    (s: EditQuestionnaireState, a: Partial<EditQuestionnaireState>) => ({
       ...s,
       ...a,
     }),
@@ -113,13 +129,20 @@ const EditQuestionnaire: React.FunctionComponent = () => {
             endAt: new Date(q.endAt),
           })
         );
-
         if (!didCancel) {
-          setQuestionnairePromise(dispatch, questionnaire).then(() => {
+          if (questionnaireId !== questionnaire.questionnaireId) {
+            setQuestionnairePromise(dispatch, questionnaire).then(() => {
+              setState({
+                isLoading: false,
+                original: questionnaire,
+              });
+            });
+          } else {
             setState({
               isLoading: false,
+              original: questionnaire,
             });
-          });
+          }
         }
       } catch (error) {
         if (!didCancel) {
@@ -133,7 +156,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, [dispatch, questionnaireId]);
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
@@ -159,65 +182,26 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       resolve();
     });
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   const handleComplete = async () => {
-    if (!validateQuestionnaire(questionnaire)) {
+    if (!isValidQuestionnaire(questionnaire)) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    const data = {
-      ...questionnaire,
-      questionWindows: questionnaire.questionWindows.map(
-        (q: QuestionWindow) => ({
-          ...q,
-          questions: q.questions.map((q2: QuestionOrder) => ({
-            ...q2,
-            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-          })),
-        })
-      ),
-    };
+    const data: QuestionnairePostData = processEditQuestionnaire(
+      questionnaire,
+      state.original!
+    );
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];
     }
-    const response = await ApiService.post('questionnaires/create', data);
+    const response = await ApiService.post(
+      `questionnaires/edit/${data.questionnaireId}`,
+      data
+    );
     if (response.status === 200) {
       clearQuestionnairePromise(dispatch).then(() =>
         history.push(QUESTIONNAIRES)
@@ -227,8 +211,20 @@ const EditQuestionnaire: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
+      <SampleQuestionMenu type={questionnaire.type} />
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div className={muiClasses.paperContainer}>
+      <div
+        className={muiClasses.paperContainer}
+        style={{
+          width:
+            // eslint-disable-next-line no-nested-ternary
+            width! < 720
+              ? width! - 50
+              : width! < 960
+              ? width! - 290
+              : width! - 530,
+        }}
+      >
         <Paper
           className={muiClasses.paper}
           elevation={0}

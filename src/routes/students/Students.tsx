@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button, Paper, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, STUDENTS } from 'constants/routes';
+import { CREATE, HOME, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
@@ -20,6 +20,8 @@ import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
+import { useUser } from 'contexts/UserContext';
+import { ClassUserRole } from 'interfaces/models/classUsers';
 import { students } from './mockData';
 import { useStyles } from './students.styles';
 
@@ -34,6 +36,7 @@ interface StudentsState extends RouteState {
 }
 
 const Students: React.FunctionComponent = () => {
+  const user = useUser();
   const [state, setState] = useReducer(
     (s: StudentsState, a: Partial<StudentsState>) => ({
       ...s,
@@ -135,11 +138,24 @@ const Students: React.FunctionComponent = () => {
   };
 
   const handleDelete = (student: Student) => {
-    const index = state.students.indexOf(student);
-    const newStudents = state.students.slice();
-    newStudents.splice(index, 1);
-    setState({ students: newStudents });
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to retrieve deleted students.',
+      () => {
+        const index = state.students.indexOf(student);
+        const newStudents = state.students.slice();
+        newStudents.splice(index, 1);
+        setState({ students: newStudents });
+      },
+      undefined
+    );
   };
+
+  if (!user || user.role === ClassUserRole.STUDENT) {
+    return <Redirect to={HOME} />;
+  }
 
   return (
     <PageContainer>

@@ -1,5 +1,5 @@
 export enum ClassUserRole {
-  TEACHER,
-  STUDENT,
-  ADMIN,
+  TEACHER = 'Teacher',
+  STUDENT = 'Student',
+  ADMIN = 'Admin',
 }
