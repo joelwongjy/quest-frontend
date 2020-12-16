@@ -55,6 +55,7 @@ export interface QuestionData extends DiscardableData {
 }
 
 export interface QuestionOrder extends QuestionData {
+  qnOrderId?: number;
   order: number;
 }
 

@@ -32,7 +32,7 @@ import {
   OptionData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { validateQuestionnaire } from 'utils/questionnaireUtils';
+import { isValidQuestionnaire } from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
 
@@ -196,7 +196,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
   };
 
   const handleComplete = async () => {
-    if (!validateQuestionnaire(questionnaire)) {
+    if (!isValidQuestionnaire(questionnaire)) {
       setHasError(true);
       return;
     }

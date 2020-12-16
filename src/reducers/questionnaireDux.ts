@@ -495,6 +495,7 @@ const questionnaire = createSlice({
       state.mode = action.payload.mode ?? 'CREATE';
     },
     clearQuestionnaire: (state): void => {
+      state.questionnaireId = -1;
       state.title = '';
       state.type = QuestionnaireType.ONE_TIME;
       state.questionWindows = [
