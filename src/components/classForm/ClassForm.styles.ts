@@ -16,22 +16,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     textfieldContainer: {
       display: 'flex',
     },
-    addCard: {
-      height: '2.75rem',
-      marginTop: '0.5rem',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      boxShadow: 'none',
-      borderStyle: 'dashed',
-      borderColor: theme.custom.icon.iconColor,
-      color: theme.custom.icon.iconColor,
-      fontSize: '1.25rem',
-      '&:hover': {
-        cursor: 'pointer',
-      },
-      backgroundColor: '#F6F6F6',
-    },
     header: {
       backgroundColor: '#044682',
       height: '5rem',
