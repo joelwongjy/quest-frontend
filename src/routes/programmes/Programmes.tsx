@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button, Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
@@ -11,11 +11,14 @@ import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
 import { programmes } from 'routes/questionnaires/mockData';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import { PROGRAMMES, CREATE } from 'constants/routes';
+import { PROGRAMMES, CREATE, HOME } from 'constants/routes';
 import ProgrammeCard from 'components/programmeCard';
-
 import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
+import { ClassUserRole } from 'interfaces/models/classUsers';
+import { useUser } from 'contexts/UserContext';
+import { getAlertCallback } from 'utils/alertUtils';
+
 import { useStyles } from './programmes.styles';
 
 interface ProgrammesState extends RouteState {
@@ -29,6 +32,7 @@ interface ProgrammesState extends RouteState {
 }
 
 const Programme: React.FunctionComponent = () => {
+  const user = useUser();
   const [state, setState] = useReducer(
     (s: ProgrammesState, a: Partial<ProgrammesState>) => ({
       ...s,
@@ -91,41 +95,11 @@ const Programme: React.FunctionComponent = () => {
 
   const breadcrumbs = [{ text: 'Programmes', href: PROGRAMMES }];
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
+
+  if (!user || user.role === ClassUserRole.STUDENT) {
+    return <Redirect to={HOME} />;
+  }
 
   if (state.isLoading) {
     return (

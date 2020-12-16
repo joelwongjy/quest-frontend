@@ -38,6 +38,7 @@ import QuestAlert from 'componentWrappers/questAlert';
 
 import { useWindowSize } from 'utils/windowUtils';
 import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import { getAlertCallback } from 'utils/alertUtils';
 import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
@@ -92,41 +93,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     }
   );
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   const programmeCallback = (newProgrammes: number[]) => {
     dispatch(setProgrammes(newProgrammes));

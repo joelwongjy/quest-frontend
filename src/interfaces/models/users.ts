@@ -1,5 +1,6 @@
 import { DiscardableData } from './base';
 import { ClassListData } from './classes';
+import { ClassUserRole } from './classUsers';
 import { ProgrammeListData } from './programmes';
 
 export enum DefaultUserRole {
@@ -22,5 +23,6 @@ export interface UserData extends UserListData, ContactData {
   gender: string;
   classes: ClassListData[];
   programmes: ProgrammeListData[];
+  role: ClassUserRole;
   // attempts: Attempt[];
 }

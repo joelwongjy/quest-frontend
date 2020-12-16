@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Button, ButtonGroup, Grid } from '@material-ui/core';
-import { isBefore, isAfter } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import QuestionnaireCard from 'components/questionnaireCard';
-import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import PageHeader from 'components/pageHeader';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
 import ApiService from 'services/apiService';
-import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
@@ -21,19 +18,27 @@ import { RootState } from 'reducers/rootReducer';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
-  setMode,
 } from 'reducers/questionnaireDux';
 import QuestBanner from 'componentWrappers/questBanner';
-import { isEmptyQuestionnaire } from 'utils/questionnaireUtils';
+import {
+  isEmptyQuestionnaire,
+  convertDateOfQuestionnaires,
+} from 'utils/questionnaireUtils';
+
 import { questionnaires } from './mockData';
+import {
+  getQuestionnairesToRender,
+  breadcrumbs,
+  tabs,
+  QuestionnairesState,
+  getMenuOptions,
+} from './helpers';
 import { useStyles } from './questionnaires.styles';
 import QuestionnaireTabs from './questionnaireTabs';
-
-export interface QuestionnairesState extends RouteState {
-  questionnaires: QuestionnaireListData[];
-}
+import QuestionnairesGhost from './QuestionnairesGhost';
 
 const Questionnaires: React.FunctionComponent = () => {
+  const [tabValue, setTabValue] = useState<number>(0);
   const [state, setState] = useReducer(
     (s: QuestionnairesState, a: Partial<QuestionnairesState>) => ({
       ...s,
@@ -64,7 +69,6 @@ const Questionnaires: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const [tabValue, setTabValue] = useState<number>(0);
   const [
     hasIncompleteQuestionnaire,
     setHasIncompleteQuestionnare,
@@ -78,15 +82,8 @@ const Questionnaires: React.FunctionComponent = () => {
     const fetchData = async () => {
       try {
         const response = await ApiService.get('questionnaires');
-        const questionnaires = (response.data
-          .questionnaires as QuestionnaireListData[]).map(
-          (q: QuestionnaireListData) => ({
-            ...q,
-            createdAt: new Date(q.createdAt),
-            startAt: new Date(q.startAt),
-            endAt: new Date(q.endAt),
-            updatedAt: new Date(q.updatedAt),
-          })
+        const questionnaires = convertDateOfQuestionnaires(
+          response.data.questionnaires as QuestionnaireListData[]
         );
         if (!didCancel) {
           setState({
@@ -114,125 +111,23 @@ const Questionnaires: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
-  const tabs = ['Current', 'Upcoming', 'Past'];
-
   if (state.isLoading) {
-    return (
-      <PageContainer>
-        <PageHeader breadcrumbs={breadcrumbs} />
-        <Grid container style={{ marginLeft: '1rem' }}>
-          <QuestionnaireTabs
-            value={tabValue}
-            setValue={setTabValue}
-            labels={tabs}
-            buttonRight={
-              // Cannot use QuestButton because of the `component` attribute later
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                disabled
-              >
-                Create Questionnaire
-              </Button>
-            }
-            buttonLeft={
-              <QuestButton
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                disabled
-              >
-                Manage Sample Questions
-              </QuestButton>
-            }
-          />
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} lg={4}>
-              <QuestionnaireCardGhost />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-              <QuestionnaireCardGhost />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-              <QuestionnaireCardGhost />
-            </Grid>
-          </Grid>
-        </Grid>
-      </PageContainer>
-    );
+    return <QuestionnairesGhost />;
   }
 
-  const now = new Date();
-  let renderedQuestionnaires;
-  switch (tabValue) {
-    case 1:
-      renderedQuestionnaires = state.questionnaires.filter((q) =>
-        isAfter(q.startAt, now)
-      );
-      break;
-    case 2:
-      renderedQuestionnaires = state.questionnaires.filter((q) =>
-        isBefore(q.endAt, now)
-      );
-      break;
-    case 0:
-    default:
-      renderedQuestionnaires = state.questionnaires.filter(
-        (q) => isBefore(q.startAt, now) && isAfter(q.endAt, now)
-      );
-      break;
-  }
-
-  renderedQuestionnaires = renderedQuestionnaires.sort(
-    (a, b) => a.startAt.getTime() - b.startAt.getTime()
+  const renderedQuestionnaires = getQuestionnairesToRender(
+    state.questionnaires,
+    tabValue
   );
 
-  const getMenuOptions = (id: number): MenuOption[] => {
-    return [
-      {
-        text: 'Edit',
-        callback:
-          hasIncompleteQuestionnaire && id !== questionnaire.questionnaireId
-            ? () =>
-                setState({
-                  isAlertOpen: true,
-                  hasConfirm: true,
-                  alertHeader: 'Are you sure?',
-                  alertMessage:
-                    'You have an unsaved questionnaire, your changes will be discarded if you edit a different questionnaire',
-                  confirmHandler: () => {
-                    dispatch(setMode('EDIT'));
-                    history.push(`${QUESTIONNAIRES}/${id}${EDIT}`);
-                  },
-                })
-            : () => {
-                dispatch(setMode('EDIT'));
-                history.push(`${QUESTIONNAIRES}/${id}${EDIT}`);
-              },
-      },
-      {
-        text: 'Make a copy',
-        callback: hasIncompleteQuestionnaire
-          ? () =>
-              setState({
-                isAlertOpen: true,
-                hasConfirm: true,
-                alertHeader: 'Are you sure?',
-                alertMessage:
-                  'You have an unsaved questionnaire, your changes will be discarded if you start a new questionnaire',
-                confirmHandler: () => {
-                  dispatch(setMode('DUPLICATE'));
-                  history.push(`${QUESTIONNAIRES}/${id}${DUPLICATE}`);
-                },
-              })
-          : () => {
-              dispatch(setMode('DUPLICATE'));
-              history.push(`${QUESTIONNAIRES}/${id}${DUPLICATE}`);
-            },
-      },
-    ];
+  const getOptions = (id: number): MenuOption[] => {
+    return getMenuOptions(
+      id,
+      questionnaire,
+      setState,
+      hasIncompleteQuestionnaire,
+      history
+    );
   };
 
   const renderBannerMessage = () => {
@@ -248,29 +143,50 @@ const Questionnaires: React.FunctionComponent = () => {
     }
   };
 
+  const handleContinue = (): void => {
+    switch (questionnaire.mode) {
+      case 'EDIT':
+        history.push(
+          `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${EDIT}`
+        );
+        break;
+      case 'DUPLICATE':
+        history.push(
+          `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${DUPLICATE}`
+        );
+        break;
+      case 'CREATE':
+      default:
+        history.push(`${QUESTIONNAIRES}${CREATE}`);
+    }
+  };
+
+  const handleCreate = (): void => {
+    if (hasIncompleteQuestionnaire) {
+      setState({
+        isAlertOpen: true,
+        alertHeader: 'You have an incomplete questionnaire',
+        alertMessage:
+          'Are you sure you would like to start a new questionnaire?',
+        hasConfirm: true,
+        confirmHandler: () => {
+          setHasIncompleteQuestionnare(false);
+          dispatch(clearQuestionnaire());
+          history.push(`${QUESTIONNAIRES}${CREATE}`);
+        },
+      });
+    } else {
+      history.push(`${QUESTIONNAIRES}${CREATE}`);
+    }
+  };
+
   return (
     <PageContainer>
       {hasIncompleteQuestionnaire && (
         <QuestBanner
           severity="warning"
           hasAction
-          action={() => {
-            switch (questionnaire.mode) {
-              case 'EDIT':
-                history.push(
-                  `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${EDIT}`
-                );
-                break;
-              case 'DUPLICATE':
-                history.push(
-                  `${QUESTIONNAIRES}/${questionnaire.questionnaireId}${DUPLICATE}`
-                );
-                break;
-              case 'CREATE':
-              default:
-                history.push(`${QUESTIONNAIRES}${CREATE}`);
-            }
-          }}
+          action={handleContinue}
           actionMessage="Continue"
           alertMessage={renderBannerMessage()}
         />
@@ -292,24 +208,7 @@ const Questionnaires: React.FunctionComponent = () => {
               variant="contained"
               color="secondary"
               className={classes.button}
-              onClick={() => {
-                if (hasIncompleteQuestionnaire) {
-                  setState({
-                    isAlertOpen: true,
-                    alertHeader: 'You have an incomplete questionnaire',
-                    alertMessage:
-                      'Are you sure you would like to start a new questionnaire?',
-                    hasConfirm: true,
-                    confirmHandler: () => {
-                      setHasIncompleteQuestionnare(false);
-                      dispatch(clearQuestionnaire());
-                      history.push(`${QUESTIONNAIRES}${CREATE}`);
-                    },
-                  });
-                } else {
-                  history.push(`${QUESTIONNAIRES}${CREATE}`);
-                }
-              }}
+              onClick={handleCreate}
             >
               Create Questionnaire
             </Button>
@@ -325,7 +224,7 @@ const Questionnaires: React.FunctionComponent = () => {
         <Grid container spacing={6}>
           {renderedQuestionnaires.length > 0 &&
             renderedQuestionnaires.map((q) => {
-              const menuOptions = getMenuOptions(q.id);
+              const menuOptions = getOptions(q.id);
               return (
                 <Grid
                   item

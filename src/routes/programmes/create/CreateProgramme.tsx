@@ -16,6 +16,7 @@ import { useUser } from 'contexts/UserContext';
 import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
+import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './createProgramme.styles';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -56,41 +57,7 @@ const CreateProgramme: React.FunctionComponent = () => {
     }
   );
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   return (
     <PageContainer>
