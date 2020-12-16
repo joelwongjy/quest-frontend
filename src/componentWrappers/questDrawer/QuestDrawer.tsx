@@ -16,9 +16,11 @@ import ExitIcon from '@material-ui/icons/ExitToAppRounded';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import { HOME, PROGRAMMES, QUESTIONNAIRES, STUDENTS } from 'constants/routes';
-
 import { useAuth } from 'contexts/AuthContext';
 import QuestAlert from 'componentWrappers/questAlert';
+import { useUser } from 'contexts/UserContext';
+
+import { ClassUserRole } from 'interfaces/models/classUsers';
 import { useStyles } from './questDrawer.styles';
 
 interface QuestDrawerProps extends QuestComponentProps {
@@ -33,6 +35,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
 }) => {
   const classes = useStyles();
   const { logout } = useAuth();
+  const { role } = useUser()!;
   const pathname = `/${useLocation().pathname.split('/')[1]}`;
 
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
@@ -73,34 +76,42 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           <ListItemIcon>
             <QuestionIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Questionnaires" />
+          <ListItemText
+            primary={
+              role === ClassUserRole.STUDENT ? 'Quests' : 'Questionnaires'
+            }
+          />
         </ListItem>
-        <ListItem
-          button
-          key="Programmes"
-          selected={pathname === PROGRAMMES}
-          component={Link}
-          to={PROGRAMMES}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <StarIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Programmes" />
-        </ListItem>
-        <ListItem
-          button
-          key="Students"
-          selected={pathname === STUDENTS}
-          component={Link}
-          to={STUDENTS}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <PersonIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Students" />
-        </ListItem>
+        {role !== ClassUserRole.STUDENT && (
+          <ListItem
+            button
+            key="Programmes"
+            selected={pathname === PROGRAMMES}
+            component={Link}
+            to={PROGRAMMES}
+            className={classes.listItem}
+          >
+            <ListItemIcon>
+              <StarIcon className={classes.icon} />
+            </ListItemIcon>
+            <ListItemText primary="Programmes" />
+          </ListItem>
+        )}
+        {role !== ClassUserRole.STUDENT && (
+          <ListItem
+            button
+            key="Students"
+            selected={pathname === STUDENTS}
+            component={Link}
+            to={STUDENTS}
+            className={classes.listItem}
+          >
+            <ListItemIcon>
+              <PersonIcon className={classes.icon} />
+            </ListItemIcon>
+            <ListItemText primary="Students" />
+          </ListItem>
+        )}
         <ListItem
           button
           key="Logout"
