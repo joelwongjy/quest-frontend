@@ -24,20 +24,15 @@ import {
   setClasses,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
-import {
-  QuestionnaireType,
-  QuestionWindow,
-  QuestionOrder,
-  OptionData,
-} from 'interfaces/models/questionnaires';
+import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
 import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import {
   isEmptyQuestionnaire,
-  validateQuestionnaire,
+  processCreateQuestionnaire,
+  isValidQuestionnaire,
 } from 'utils/questionnaireUtils';
-
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
 
@@ -161,7 +156,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     });
 
   const handleComplete = async () => {
-    if (!validateQuestionnaire(questionnaire)) {
+    if (!isValidQuestionnaire(questionnaire)) {
       setHasError(true);
       return;
     }
@@ -170,18 +165,9 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   };
 
   const handleSubmit = async () => {
-    const data = {
-      ...questionnaire,
-      questionWindows: questionnaire.questionWindows.map(
-        (q: QuestionWindow) => ({
-          ...q,
-          questions: q.questions.map((q2: QuestionOrder) => ({
-            ...q2,
-            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-          })),
-        })
-      ),
-    };
+    const data: QuestionnairePostData = processCreateQuestionnaire(
+      questionnaire
+    );
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];

@@ -28,11 +28,12 @@ import {
 import QuestButton from 'componentWrappers/questButton';
 import {
   QuestionWindow,
-  QuestionOrder,
-  OptionData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { validateQuestionnaire } from 'utils/questionnaireUtils';
+import {
+  processEditQuestionnaire,
+  isValidQuestionnaire,
+} from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
 
@@ -45,6 +46,10 @@ interface RouteParams {
   id: string;
 }
 
+interface EditQuestionnaireState extends RouteState {
+  original?: QuestionnaireData;
+}
+
 const EditQuestionnaire: React.FunctionComponent = () => {
   const { id } = useRouteMatch<RouteParams>({
     path: `${QUESTIONNAIRES}/:id${EDIT}`,
@@ -52,16 +57,23 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-  const questionnaire: QuestionnaireData = useSelector(selectQuestionnaire);
+  const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
   const user = useUser();
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
 
-  const { title, type, questionWindows, classes, programmes } = questionnaire;
+  const {
+    questionnaireId,
+    title,
+    type,
+    questionWindows,
+    classes,
+    programmes,
+  } = questionnaire;
 
   const [state, setState] = useReducer(
-    (s: RouteState, a: Partial<RouteState>) => ({
+    (s: EditQuestionnaireState, a: Partial<EditQuestionnaireState>) => ({
       ...s,
       ...a,
     }),
@@ -113,13 +125,20 @@ const EditQuestionnaire: React.FunctionComponent = () => {
             endAt: new Date(q.endAt),
           })
         );
-
         if (!didCancel) {
-          setQuestionnairePromise(dispatch, questionnaire).then(() => {
+          if (questionnaireId !== questionnaire.questionnaireId) {
+            setQuestionnairePromise(dispatch, questionnaire).then(() => {
+              setState({
+                isLoading: false,
+                original: questionnaire,
+              });
+            });
+          } else {
             setState({
               isLoading: false,
+              original: questionnaire,
             });
-          });
+          }
         }
       } catch (error) {
         if (!didCancel) {
@@ -133,7 +152,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, [dispatch, questionnaireId]);
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
@@ -196,28 +215,23 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   };
 
   const handleComplete = async () => {
-    if (!validateQuestionnaire(questionnaire)) {
+    if (!isValidQuestionnaire(questionnaire)) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    const data = {
-      ...questionnaire,
-      questionWindows: questionnaire.questionWindows.map(
-        (q: QuestionWindow) => ({
-          ...q,
-          questions: q.questions.map((q2: QuestionOrder) => ({
-            ...q2,
-            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-          })),
-        })
-      ),
-    };
+    const data: QuestionnairePostData = processEditQuestionnaire(
+      questionnaire,
+      state.original!
+    );
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];
     }
-    const response = await ApiService.post('questionnaires/create', data);
+    const response = await ApiService.post(
+      `questionnaires/edit/${data.questionnaireId}`,
+      data
+    );
     if (response.status === 200) {
       clearQuestionnairePromise(dispatch).then(() =>
         history.push(QUESTIONNAIRES)
