@@ -9,10 +9,9 @@ import {
 import { useDispatch } from 'react-redux';
 
 import QuestAccordion from 'componentWrappers/questAccordion';
-import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
-import { setTitle } from 'reducers/questionnaireDux';
+import { QuestionnaireDux, setTitle } from 'reducers/questionnaireDux';
 import { useError } from 'contexts/ErrorContext';
 
 import SingleEdit from './SingleEdit';
@@ -22,7 +21,7 @@ import { useStyles } from './editAccordion.styles';
 import PostEdit from './PostEdit';
 
 interface EditAccordionProps {
-  questionnaire: QuestionnairePostData;
+  questionnaire: QuestionnaireDux;
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,

@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import {
   QuestionAccessibility,
   QuestionMode,
-  QuestionOrder,
 } from 'interfaces/models/questionnaires';
 import {
   addQuestionToShared,
   deleteQuestionInShared,
   duplicateQuestionInShared,
+  QuestionnaireDuxQuestion,
   shiftQuestionInShared,
   transferQuestionToPost,
   transferQuestionToPre,
@@ -22,7 +22,7 @@ import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface SharedEditProps {
-  questionSet: QuestionOrder[];
+  questionSet: QuestionnaireDuxQuestion[];
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -46,7 +46,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
         const { order, ...question } = q;
         return (
           <QuestionCard
-            key={`question-${order}-${question.id}`}
+            key={`question-${question.duxId}`}
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
@@ -78,7 +78,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
             }
             isFirst={order === 0}
             isLast={order === questionSet.length - 1}
-            updateQuestion={(newQuestion: QuestionOrder) =>
+            updateQuestion={(newQuestion: QuestionnaireDuxQuestion) =>
               dispatch(updateQuestionInShared(newQuestion))
             }
             accessibility={QuestionAccessibility.SHARED}

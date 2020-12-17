@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import {
   QuestionAccessibility,
   QuestionMode,
-  QuestionOrder,
 } from 'interfaces/models/questionnaires';
 import {
   transferQuestionToPre,
@@ -14,6 +13,7 @@ import {
   updateQuestionInPost,
   shiftQuestionInPost,
   duplicateQuestionInPost,
+  QuestionnaireDuxQuestion,
 } from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard';
 import QuestCard from 'componentWrappers/questCard';
@@ -22,7 +22,7 @@ import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface PostEditProps {
-  postQuestionSet: QuestionOrder[];
+  postQuestionSet: QuestionnaireDuxQuestion[];
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -46,7 +46,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
         const { order, ...question } = q;
         return (
           <QuestionCard
-            key={`question-${order}-${question.id}`}
+            key={`question-${question.duxId}`}
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
@@ -74,7 +74,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
             }
             isFirst={order === 0}
             isLast={order === postQuestionSet.length - 1}
-            updateQuestion={(newQuestion: QuestionOrder) =>
+            updateQuestion={(newQuestion: QuestionnaireDuxQuestion) =>
               dispatch(updateQuestionInPost(newQuestion))
             }
             accessibility={QuestionAccessibility.POST}
