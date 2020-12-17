@@ -1,9 +1,13 @@
-import { ProgrammeFormState } from 'components/programmeForm/ProgrammeForm';
-import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
+import {
+  ProgrammePostData,
+  ProgrammeListData,
+  ProgrammePatchData,
+} from 'interfaces/models/programmes';
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
 
 export const programmeFormIsChanged = (
   mode: ProgrammeMode,
-  state: ProgrammeFormState,
+  state: ProgrammePostData | ProgrammePatchData,
   programme?: ProgrammeListData
 ): boolean => {
   const { name, description } = state;

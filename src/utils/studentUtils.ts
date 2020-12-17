@@ -1,7 +1,7 @@
 import { StudentFormState } from 'components/studentForm/StudentForm';
 
 export const validateStudentInfo = (student: StudentFormState): boolean => {
-  const { name, gender, birthday, activities } = student;
+  const { name, gender, birthday, programmes } = student;
   if (name === '') {
     return false;
   }
@@ -11,15 +11,15 @@ export const validateStudentInfo = (student: StudentFormState): boolean => {
   if (!birthday) {
     return false;
   }
-  if (activities.length === 0) {
+  if (programmes.length === 0) {
     return false;
   }
   return true;
 };
 
 export const isEmptyStudent = (student: StudentFormState): boolean => {
-  const { name, gender, birthday, activities } = student;
-  return name === '' && gender === '' && !birthday && activities.length <= 0;
+  const { name, gender, birthday, programmes } = student;
+  return name === '' && gender === '' && !birthday && programmes.length <= 0;
 };
 
 export const isValidEmail = (email: string): boolean => {
