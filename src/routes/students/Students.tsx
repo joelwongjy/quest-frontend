@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemSecondaryAction,
+  ListItemText,
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -180,28 +181,28 @@ const Students: React.FunctionComponent = () => {
                     <EmojiPeopleIcon
                       style={{
                         fontSize: 28,
-                        marginTop: '0.25rem',
-                        marginLeft: '0.25rem',
+                        // marginTop: '0.25rem',
+                        // marginLeft: '0.25rem',
                       }}
                     />
-                    {/* <ListItemText
+                    <ListItemText
                       primary={s.name}
                       primaryTypographyProps={{
                         style: { paddingLeft: '1rem', fontSize: 16 },
                       }}
-                      secondary={
-                        <List dense>
-                          {s.activities?.map((a) => {
-                            return (
-                              <ListItem key={`${a[0].id}-${a[1].id}`}>
-                                <Typography>{`${a[0].name} - ${a[1].name}`}</Typography>
-                              </ListItem>
-                            );
-                          })}
-                        </List>
-                      }
-                    /> */}
-                    <ListItemSecondaryAction style={{ top: '20%' }}>
+                      // secondary={
+                      //   <List dense>
+                      //     {s.activities?.map((a) => {
+                      //       return (
+                      //         <ListItem key={`${a[0].id}-${a[1].id}`}>
+                      //           <Typography>{`${a[0].name} - ${a[1].name}`}</Typography>
+                      //         </ListItem>
+                      //       );
+                      //     })}
+                      //   </List>
+                      // }
+                    />
+                    <ListItemSecondaryAction>
                       <IconButton
                         edge="end"
                         aria-label="edit"
