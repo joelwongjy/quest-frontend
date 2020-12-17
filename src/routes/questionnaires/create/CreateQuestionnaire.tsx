@@ -1,10 +1,9 @@
 import React, { Dispatch, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, List, ListItem, Paper, Typography } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
 import PostIcon from '@material-ui/icons/Description';
 import { useHistory } from 'react-router-dom';
-import { format } from 'date-fns';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, QUESTIONNAIRES } from 'constants/routes';
@@ -24,9 +23,13 @@ import {
   setClasses,
 } from 'reducers/questionnaireDux';
 import QuestCard from 'componentWrappers/questCard';
-import { QuestionnaireType } from 'interfaces/models/questionnaires';
+import {
+  QuestionnaireMode,
+  QuestionnaireType,
+  QuestionnairePostData,
+} from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
-import { QuestionnairePostData } from 'interfaces/api/questionnaires';
+
 import { useError } from 'contexts/ErrorContext';
 import {
   isEmptyQuestionnaire,
@@ -43,6 +46,7 @@ import DateAccordion from '../dateAccordion';
 import AssignAccordion from '../assignAccordion';
 import EditAccordion from '../editAccordion';
 import { useStyles } from './createQuestionnaire.styles';
+import ConfirmationPage from '../ConfirmationPage';
 
 interface CreateQuestionnaireState extends RouteState {
   isTypeSelected: boolean;
@@ -59,8 +63,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-  const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
-  const { type, questionWindows, classes, programmes } = questionnaire;
+  const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
+  const { type, questionWindows, programmes, classes } = questionnaire;
 
   const breadcrumbs = [
     { text: 'Questionnaires', href: QUESTIONNAIRES },
@@ -95,11 +99,11 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
 
   const alertCallback = getAlertCallback(setState);
 
-  const programmeCallback = (newProgrammes: number[]) => {
+  const programmeCallback = (newProgrammes: { id: number; name: string }[]) => {
     dispatch(setProgrammes(newProgrammes));
   };
 
-  const questClassCallback = (newClasses: number[]) => {
+  const classCallback = (newClasses: { id: number; name: string }[]) => {
     dispatch(setClasses(newClasses));
   };
 
@@ -245,10 +249,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
               />
               <AssignAccordion
                 user={user!}
-                programmeIds={programmes ?? []}
+                selectedProgrammes={programmes}
+                selectedClasses={classes}
                 programmeCallback={programmeCallback}
-                classIds={classes ?? []}
-                classCallback={questClassCallback}
+                classCallback={classCallback}
               />
               <EditAccordion
                 questionnaire={questionnaire}
@@ -275,122 +279,23 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
     );
   };
 
-  const renderPublishWarning = () => {
-    return (
-      <PageContainer>
-        <PageHeader breadcrumbs={breadcrumbs} />
-        <Grid
-          container
-          alignItems="center"
-          justify="center"
-          style={{ marginTop: '2rem', paddingBottom: '4rem' }}
-        >
-          <Grid item xs={12} md={9}>
-            <QuestCard>
-              <Grid item container xs={12} className={muiClasses.header}>
-                <Grid container alignItems="center" justify="space-between">
-                  <Typography
-                    component="h1"
-                    variant="h5"
-                    style={{ color: 'white' }}
-                  >
-                    Publish Questionnaire
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <List className={muiClasses.list}>
-                  <ListItem>
-                    <Typography variant="subtitle1">
-                      You are about to publish a new questionnaire with the
-                      title&nbsp;
-                      <span style={{ color: '#044682' }}>
-                        {`${questionnaire.title}.`}
-                      </span>
-                    </Typography>
-                  </ListItem>
-                  {questionnaire.classes && questionnaire.classes.length > 0 ? (
-                    <ListItem>
-                      <Typography variant="subtitle1">
-                        The questionnaire is assigned to&nbsp;
-                        <span style={{ color: '#044682' }}>
-                          {user!.programmes.map((p) => {
-                            const filteredClasses = user!.classes.filter(
-                              (c) =>
-                                c.programme.id === p.id &&
-                                questionnaire.classes?.indexOf(c.id) !== -1
-                            );
-                            return (
-                              <>
-                                {filteredClasses.map((c, index) => {
-                                  return (
-                                    <>
-                                      {`${p.name} - ${c.name}`}
-                                      {index === filteredClasses.length - 1
-                                        ? '.'
-                                        : ','}
-                                      &nbsp;
-                                    </>
-                                  );
-                                })}
-                              </>
-                            );
-                          })}
-                        </span>
-                        Please verify if you have assigned the questionnaire to
-                        the intended recipieints. Else, please click on the back
-                        button to change the assignment.
-                      </Typography>
-                    </ListItem>
-                  ) : (
-                    <ListItem>
-                      <Typography variant="subtitle1">
-                        <span style={{ color: 'red' }}>
-                          NOTE: The questionnaire is currently not assigned to
-                          any class nor programme. You can assign it later when
-                          editing it.
-                        </span>
-                      </Typography>
-                    </ListItem>
-                  )}
-                  <ListItem>
-                    <Typography variant="subtitle1">
-                      {`Once you click on Proceed, the questionnaire will be
-                      released to the intended recipients automatically on
-                      ${format(
-                        questionnaire.questionWindows[0].startAt,
-                        'dd MMM yyyy HH:mm'
-                      )} with no futher action required.`}
-                    </Typography>
-                  </ListItem>
-                  <ListItem>
-                    <Grid container spacing={2} justify="flex-end">
-                      <QuestButton
-                        className={muiClasses.button}
-                        variant="outlined"
-                        onClick={() => setState({ isCompleted: false })}
-                      >
-                        Back
-                      </QuestButton>
-                      <QuestButton
-                        className={muiClasses.button}
-                        onClick={handleSubmit}
-                      >
-                        Proceed
-                      </QuestButton>
-                    </Grid>
-                  </ListItem>
-                </List>
-              </Grid>
-            </QuestCard>
-          </Grid>
-        </Grid>
-      </PageContainer>
-    );
-  };
-
   return (
-    <>{state.isCompleted ? renderPublishWarning() : renderQuestionnaire()}</>
+    <>
+      {state.isCompleted ? (
+        <ConfirmationPage
+          breadcrumbs={breadcrumbs}
+          questionnaire={questionnaire}
+          handleCancel={() => setState({ isCompleted: false })}
+          handleSubmit={handleSubmit}
+          headerClassName={muiClasses.header}
+          listClassName={muiClasses.list}
+          buttonClassName={muiClasses.button}
+          mode={QuestionnaireMode.CREATE}
+        />
+      ) : (
+        renderQuestionnaire()
+      )}
+    </>
   );
 };
 

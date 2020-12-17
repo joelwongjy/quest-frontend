@@ -1,5 +1,5 @@
 import React, { Dispatch, useEffect, useReducer } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
 
@@ -16,60 +16,63 @@ import {
   clearQuestionnaire,
   QuestionnaireDux,
   setQuestionnaire,
-  setProgrammes,
   setClasses,
+  setProgrammes,
 } from 'reducers/questionnaireDux';
 import ApiService from 'services/apiService';
-import { RouteState } from 'interfaces/routes/common';
+import { RouteParams, RouteState } from 'interfaces/routes/common';
 import {
-  QuestionnaireData,
+  QuestionnaireFullData,
+  QuestionnaireMode,
   QuestionnairePostData,
-} from 'interfaces/api/questionnaires';
-import QuestButton from 'componentWrappers/questButton';
-import {
-  QuestionWindow,
-  QuestionOrder,
-  OptionData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { isValidQuestionnaire } from 'utils/questionnaireUtils';
+import QuestButton from 'componentWrappers/questButton';
+import {
+  convertToQuestionnaireDux,
+  isValidQuestionnaire,
+  processCreateQuestionnaire,
+} from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
-
 import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import { useWindowSize } from 'utils/windowUtils';
 import { getAlertCallback } from 'utils/alertUtils';
+
 import { useStyles } from './duplicateQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
 import DateAccordion from '../dateAccordion';
+import ConfirmationPage from '../ConfirmationPage';
 
-interface RouteParams {
-  id: string;
+interface DuplicateQuestionnaireState extends RouteState {
+  isCompleted: boolean;
 }
 
 const DuplicateQuestionnaire: React.FunctionComponent = () => {
-  const { id } = useRouteMatch<RouteParams>({
-    path: `${QUESTIONNAIRES}/:id${DUPLICATE}`,
-  })!.params;
+  const { id } = useParams<RouteParams>();
   const dispatch = useDispatch();
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-  const questionnaire: QuestionnaireData = useSelector(selectQuestionnaire);
+  const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
   const user = useUser();
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
   const { width } = useWindowSize();
 
-  const { title, type, questionWindows, classes, programmes } = questionnaire;
+  const { title, type, questionWindows, programmes, classes } = questionnaire;
 
   const [state, setState] = useReducer(
-    (s: RouteState, a: Partial<RouteState>) => ({
+    (
+      s: DuplicateQuestionnaireState,
+      a: Partial<DuplicateQuestionnaireState>
+    ) => ({
       ...s,
       ...a,
     }),
     {
+      isCompleted: false,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -92,30 +95,20 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
     let didCancel = false;
 
     const setQuestionnairePromise = (
-      myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
-      questionnaire: QuestionnairePostData
+      myDispatch: Dispatch<{ payload: QuestionnaireDux }>,
+      questionnaire: QuestionnaireDux
     ) =>
       new Promise<void>((resolve) => {
-        myDispatch(setQuestionnaire({ ...questionnaire, mode: 'DUPLICATE' }));
+        myDispatch(setQuestionnaire(questionnaire));
         resolve();
       });
 
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
-        response.data.classes = response.data.classes.map(
-          (c: { id: number }) => c.id
-        );
-        response.data.programmes = response.data.programmes.map(
-          (p: { id: number }) => p.id
-        );
-        const questionnaire = response.data as QuestionnaireData;
-        questionnaire.questionWindows = questionnaire.questionWindows.map(
-          (q: QuestionWindow) => ({
-            ...q,
-            startAt: new Date(q.startAt),
-            endAt: new Date(q.endAt),
-          })
+        const questionnaire = convertToQuestionnaireDux(
+          response.data as QuestionnaireFullData,
+          QuestionnaireMode.DUPLICATE
         );
 
         if (!didCancel) {
@@ -147,11 +140,11 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
     },
   ];
 
-  const programmeCallback = (newProgrammes: number[]) => {
+  const programmeCallback = (newProgrammes: { id: number; name: string }[]) => {
     dispatch(setProgrammes(newProgrammes));
   };
 
-  const questClassCallback = (newClasses: number[]) => {
+  const classCallback = (newClasses: { id: number; name: string }[]) => {
     dispatch(setClasses(newClasses));
   };
 
@@ -171,18 +164,13 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
       return;
     }
     setHasError(false);
-    const data = {
-      ...questionnaire,
-      questionWindows: questionnaire.questionWindows.map(
-        (q: QuestionWindow) => ({
-          ...q,
-          questions: q.questions.map((q2: QuestionOrder) => ({
-            ...q2,
-            options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-          })),
-        })
-      ),
-    };
+    setState({ isCompleted: true });
+  };
+
+  const handleSubmit = async () => {
+    const data: QuestionnairePostData = processCreateQuestionnaire(
+      questionnaire
+    );
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];
@@ -194,80 +182,101 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
       );
     }
   };
+  const renderQuestionnaire = () => {
+    return (
+      <PageContainer>
+        <SampleQuestionMenu type={questionnaire.type} />
+        <PageHeader breadcrumbs={breadcrumbs} />
+        <div
+          className={muiClasses.paperContainer}
+          style={{
+            width:
+              // eslint-disable-next-line no-nested-ternary
+              width! < 720
+                ? width! - 50
+                : width! < 960
+                ? width! - 290
+                : width! - 530,
+          }}
+        >
+          <Paper
+            className={muiClasses.paper}
+            elevation={0}
+            style={{ background: 'white' }}
+          >
+            <DateAccordion
+              type={type}
+              preStartDate={new Date(questionWindows[0].startAt)}
+              preStartDateCallback={(date: Date) =>
+                dispatch(setPreStartTime(date))
+              }
+              preEndDate={new Date(questionWindows[0].endAt)}
+              preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
+              postStartDate={
+                questionWindows.length > 1
+                  ? new Date(questionWindows[1].startAt)
+                  : undefined
+              }
+              postStartDateCallback={(date: Date) =>
+                dispatch(setPostStartTime(date))
+              }
+              postEndDate={
+                questionWindows.length > 1
+                  ? new Date(questionWindows[1].endAt)
+                  : undefined
+              }
+              postEndDateCallback={(date: Date) =>
+                dispatch(setPostEndTime(date))
+              }
+            />
+            <AssignAccordion
+              user={user!}
+              selectedProgrammes={programmes}
+              selectedClasses={classes}
+              programmeCallback={programmeCallback}
+              classCallback={classCallback}
+            />
+            <EditAccordion
+              questionnaire={questionnaire}
+              alertCallback={alertCallback}
+            />
+            <Grid container justify="flex-end">
+              <QuestButton onClick={handleComplete} fullWidth>
+                Finish
+              </QuestButton>
+            </Grid>
+          </Paper>
+        </div>
+        <QuestAlert
+          isAlertOpen={state.isAlertOpen!}
+          hasConfirm={state.hasConfirm!}
+          alertHeader={state.alertHeader!}
+          alertMessage={state.alertMessage!}
+          closeHandler={state.closeHandler!}
+          confirmHandler={state.confirmHandler}
+          cancelHandler={state.cancelHandler}
+        />
+      </PageContainer>
+    );
+  };
 
   return (
-    <PageContainer>
-      <SampleQuestionMenu type={questionnaire.type} />
-      <PageHeader breadcrumbs={breadcrumbs} />
-      <div
-        className={muiClasses.paperContainer}
-        style={{
-          width:
-            // eslint-disable-next-line no-nested-ternary
-            width! < 720
-              ? width! - 50
-              : width! < 960
-              ? width! - 290
-              : width! - 530,
-        }}
-      >
-        <Paper
-          className={muiClasses.paper}
-          elevation={0}
-          style={{ background: 'white' }}
-        >
-          <DateAccordion
-            type={type}
-            preStartDate={new Date(questionWindows[0].startAt)}
-            preStartDateCallback={(date: Date) =>
-              dispatch(setPreStartTime(date))
-            }
-            preEndDate={new Date(questionWindows[0].endAt)}
-            preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
-            postStartDate={
-              questionWindows.length > 1
-                ? new Date(questionWindows[1].startAt)
-                : undefined
-            }
-            postStartDateCallback={(date: Date) =>
-              dispatch(setPostStartTime(date))
-            }
-            postEndDate={
-              questionWindows.length > 1
-                ? new Date(questionWindows[1].endAt)
-                : undefined
-            }
-            postEndDateCallback={(date: Date) => dispatch(setPostEndTime(date))}
-          />
-          <AssignAccordion
-            user={user!}
-            programmeIds={programmes ?? []}
-            programmeCallback={programmeCallback}
-            classIds={classes ?? []}
-            classCallback={questClassCallback}
-          />
-          <EditAccordion
-            questionnaire={questionnaire}
-            alertCallback={alertCallback}
-          />
-          <Grid container justify="flex-end">
-            <QuestButton onClick={handleComplete} fullWidth>
-              Finish
-            </QuestButton>
-          </Grid>
-        </Paper>
-      </div>
-      <QuestAlert
-        isAlertOpen={state.isAlertOpen!}
-        hasConfirm={state.hasConfirm!}
-        alertHeader={state.alertHeader!}
-        alertMessage={state.alertMessage!}
-        closeHandler={state.closeHandler!}
-        confirmHandler={state.confirmHandler}
-        cancelHandler={state.cancelHandler}
-      />
-    </PageContainer>
+    <>
+      {state.isCompleted ? (
+        <ConfirmationPage
+          breadcrumbs={breadcrumbs}
+          questionnaire={questionnaire}
+          handleCancel={() => setState({ isCompleted: false })}
+          handleSubmit={handleSubmit}
+          headerClassName={muiClasses.header}
+          listClassName={muiClasses.list}
+          buttonClassName={muiClasses.button}
+          mode={QuestionnaireMode.DUPLICATE}
+        />
+      ) : (
+        renderQuestionnaire()
+      )}
+    </>
   );
 };
-
 export default DuplicateQuestionnaire;

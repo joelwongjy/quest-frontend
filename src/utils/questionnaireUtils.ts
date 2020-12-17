@@ -1,47 +1,69 @@
 import { isBefore } from 'date-fns';
 
 import {
-  QuestionnaireData,
   QuestionnairePostData,
-} from 'interfaces/api/questionnaires';
+  QuestionnaireType,
+  QuestionnaireListData,
+  QuestionnaireFullData,
+  QuestionnaireMode,
+  QuestionnaireWindowData,
+  QuestionnaireWindowPostData,
+  QuestionnairePatchData,
+} from 'interfaces/models/questionnaires';
 import {
   OptionData,
-  QuestionnaireType,
+  OptionPostData,
   QuestionData,
-  QuestionOrder,
-  QuestionSet,
+  QuestionPostData,
+  QuestionSetData,
+  QuestionSetPostData,
   QuestionType,
-  QuestionWindow,
-  QuestionnaireListData,
-} from 'interfaces/models/questionnaires';
+} from 'interfaces/models/questions';
+import nextId from 'react-id-generator';
+import {
+  QuestionnaireDux,
+  QuestionnaireDuxOption,
+  QuestionnaireDuxQuestion,
+  QuestionnaireDuxWindow,
+} from 'reducers/questionnaireDux';
 
 /* =====================
   VALIDATION FUNCTIONS
 ====================== */
 
-export const isValidQuestion = (question: QuestionOrder): boolean => {
+export const isValidQuestion = (
+  question: QuestionData | QuestionPostData
+): boolean => {
   const { questionText, questionType, options } = question;
   if (questionText === '') {
     return false;
   }
   if (questionType === QuestionType.MULTIPLE_CHOICE) {
-    return options.filter((o: OptionData) => o.optionText !== '').length >= 1;
+    if (!options) {
+      return false;
+    }
+    return (
+      options.filter((o: OptionData | OptionPostData) => o.optionText !== '')
+        .length >= 1
+    );
   }
   return true;
 };
 
-export const isValidQuestionSet = (questionSet: QuestionSet): boolean => {
+export const isValidQuestionSet = <T extends QuestionData | QuestionPostData>(
+  questionSet: QuestionSetData | QuestionSetPostData
+): boolean => {
   const { questions } = questionSet;
   return (
     questions.every(isValidQuestion) &&
-    questions
-      .map((q: QuestionOrder) => q.order)
+    (questions as T[])
+      .map((q: T) => q.order)
       .filter((v, i, a) => a.indexOf(v) === i).length === questions.length
   );
 };
 
 export const isValidQuestionWindow = (
-  questionWindow: QuestionWindow
+  questionWindow: QuestionnaireWindowData | QuestionnaireWindowPostData
 ): boolean => {
   const { questions, startAt, endAt } = questionWindow;
   return (
@@ -51,7 +73,7 @@ export const isValidQuestionWindow = (
 };
 
 export const isValidQuestionnaire = (
-  questionnaire: QuestionnairePostData
+  questionnaire: QuestionnaireDux
 ): boolean => {
   const { title, questionWindows, sharedQuestions } = questionnaire;
   if (questionnaire.type === QuestionnaireType.ONE_TIME) {
@@ -83,7 +105,7 @@ export const isValidQuestionnaire = (
 export const isEmptyQuestion = isValidQuestion;
 
 export const isEmptyQuestionnaire = (
-  questionnaire: QuestionnairePostData
+  questionnaire: QuestionnaireDux
 ): boolean => {
   const { questionWindows, sharedQuestions } = questionnaire;
   if (questionnaire.title && questionnaire.title !== '') {
@@ -123,34 +145,92 @@ export const convertDateOfQuestionnaires = (
   }));
 };
 
+export const convertToQuestionnaireDux = (
+  questionnaire: QuestionnaireFullData,
+  mode: QuestionnaireMode
+): QuestionnaireDux => {
+  const result: QuestionnaireDux = {
+    title: questionnaire.title,
+    mode,
+    type: questionnaire.type,
+    questionnaireId: questionnaire.questionnaireId,
+    questionWindows: questionnaire.questionWindows.map(
+      (q: QuestionnaireWindowData) => ({
+        ...q,
+        startAt: new Date(q.startAt),
+        endAt: new Date(q.endAt),
+        questions: q.questions.map((q2) => ({ ...q2, duxId: nextId() })),
+      })
+    ),
+    sharedQuestions: questionnaire.sharedQuestions
+      ? {
+          questions: questionnaire?.sharedQuestions?.questions.map((q) => ({
+            ...q,
+            duxId: nextId(),
+          })),
+        }
+      : { questions: [] },
+    programmes: questionnaire.programmes.map((p) => ({
+      id: p.id,
+      name: p.name,
+    })),
+    classes: questionnaire.classes.map((c) => ({
+      id: c.id,
+      name: c.name,
+    })),
+  };
+
+  return result;
+};
+
 /* =====================
   SUBMISSION FUNCTIONS
 ====================== */
 
 export const processCreateQuestionnaire = (
-  questionnaire: QuestionnairePostData
+  questionnaire: QuestionnaireDux
 ): QuestionnairePostData => {
   return {
     ...questionnaire,
-    questionWindows: questionnaire.questionWindows.map((q: QuestionWindow) => ({
-      ...q,
-      questions: q.questions.map((q2: QuestionOrder) => ({
-        ...q2,
-        options: q2.options.filter((o: OptionData) => o.optionText !== ''),
-      })),
-    })),
+    questionWindows: questionnaire.questionWindows.map(
+      (q: QuestionnaireDuxWindow) => ({
+        ...q,
+        startAt: new Date(q.startAt),
+        endAt: new Date(q.endAt),
+        questions: q.questions.map((q2) => ({
+          ...q2,
+          options:
+            q2?.options?.filter(
+              (o: OptionData | OptionPostData) => o.optionText !== ''
+            ) ?? [],
+        })),
+      })
+    ),
     sharedQuestions: {
       questions: questionnaire.sharedQuestions.questions.map(
-        (q: QuestionOrder) => ({
+        (q: QuestionnaireDuxQuestion) => ({
           ...q,
-          options: q.options.filter((o: OptionData) => o.optionText !== ''),
+          options: q.options.filter(
+            (o: QuestionnaireDuxOption) => o.optionText !== ''
+          ),
         })
       ),
     },
+    classes: questionnaire.classes.map((c) => c.id),
+    programmes: questionnaire.programmes.map((c) => c.id),
   };
 };
 
-function isSameOptions<T extends OptionData>(first: T[], second: T[]) {
+function isSameOptions<T extends OptionData | OptionPostData>(
+  first: T[] | undefined,
+  second: T[] | undefined
+) {
+  if (first === undefined && second === undefined) {
+    return true;
+  }
+  if (first === undefined || second === undefined) {
+    return false;
+  }
   if (first.length !== second.length) {
     return false;
   }
@@ -173,7 +253,10 @@ function isSameOptions<T extends OptionData>(first: T[], second: T[]) {
   return isSame;
 }
 
-function isSameQuestion<T extends QuestionData>(first: T, second: T) {
+function isSameQuestion<T extends QuestionData | QuestionPostData>(
+  first: T,
+  second: T
+) {
   return (
     first.questionType === second.questionType &&
     first.questionText === second.questionText &&
@@ -182,38 +265,50 @@ function isSameQuestion<T extends QuestionData>(first: T, second: T) {
 }
 
 const processEditQuestionOrders = (
-  questionSet: QuestionOrder[],
-  original: QuestionOrder[]
-): QuestionOrder[] => {
-  const finalQuestionOrder: QuestionOrder[] = [];
+  questionSet: (QuestionData | QuestionPostData)[],
+  original: QuestionData[]
+): (QuestionData | QuestionPostData)[] => {
+  const finalQuestionOrder: (QuestionData | QuestionPostData)[] = [];
   for (let i = 0; i < questionSet.length; i += 1) {
     const questionOrder = questionSet[i];
-    if (questionOrder.qnOrderId) {
+    let pushed = false;
+    if ('qnOrderId' in questionOrder) {
       const originalQuestionOrder = original.find(
-        (q: QuestionOrder) => q.qnOrderId === questionOrder.qnOrderId
+        (q: QuestionData) => q.qnOrderId === questionOrder.qnOrderId
       )!;
       const isSame = isSameQuestion(questionOrder, originalQuestionOrder);
       if (!isSame) {
-        questionOrder.qnOrderId = undefined;
+        const newQuestionOrder: QuestionPostData = {
+          order: questionOrder.order,
+          questionText: questionOrder.questionText,
+          questionType: questionOrder.questionType,
+        };
+        finalQuestionOrder.push(newQuestionOrder);
+        pushed = true;
       }
     }
-    finalQuestionOrder.push(questionOrder);
+    if (!pushed) {
+      finalQuestionOrder.push(questionOrder);
+    }
   }
   return finalQuestionOrder;
 };
 
 export const processEditQuestionnaire = (
-  questionnaire: QuestionnairePostData,
-  original: QuestionnaireData
-): QuestionnairePostData => {
+  questionnaire: QuestionnaireDux,
+  original: QuestionnaireFullData
+): QuestionnairePatchData => {
   const noEmptyOptions: QuestionnairePostData = processCreateQuestionnaire(
     questionnaire
   );
-  const changesIdentified: QuestionnairePostData = {
+  const changesIdentified: QuestionnairePatchData = {
     ...noEmptyOptions,
+    questionnaireId: original.questionnaireId,
+    status: original.status,
     questionWindows: noEmptyOptions.questionWindows.map(
-      (q: QuestionWindow, index: number) => ({
+      (q: QuestionnaireWindowPostData, index: number) => ({
         ...q,
+        windowId: original.questionWindows[index].windowId,
         questions: processEditQuestionOrders(
           q.questions,
           original.questionWindows[index].questions
@@ -225,7 +320,7 @@ export const processEditQuestionnaire = (
         questionnaire.type === QuestionnaireType.PRE_POST
           ? processEditQuestionOrders(
               noEmptyOptions.sharedQuestions.questions,
-              original.sharedQuestions.questions
+              original.sharedQuestions!.questions
             )
           : [],
     },

@@ -21,18 +21,17 @@ import {
 } from 'reducers/questionnaireDux';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
-import {
-  QuestionnaireData,
-  QuestionnairePostData,
-} from 'interfaces/api/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 import {
-  QuestionWindow,
+  QuestionnaireFullData,
+  QuestionnaireMode,
+  QuestionnairePatchData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
 import {
   processEditQuestionnaire,
   isValidQuestionnaire,
+  convertToQuestionnaireDux,
 } from 'utils/questionnaireUtils';
 import { RootState } from 'reducers/rootReducer';
 import QuestAlert from 'componentWrappers/questAlert';
@@ -44,13 +43,15 @@ import { useStyles } from './editQuestionnaire.styles';
 import EditAccordion from '../editAccordion';
 import AssignAccordion from '../assignAccordion';
 import DateAccordion from '../dateAccordion';
+import ConfirmationPage from '../ConfirmationPage';
 
 interface RouteParams {
   id: string;
 }
 
 interface EditQuestionnaireState extends RouteState {
-  original?: QuestionnaireData;
+  original?: QuestionnaireFullData;
+  isCompleted: boolean;
 }
 
 const EditQuestionnaire: React.FunctionComponent = () => {
@@ -82,6 +83,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       ...a,
     }),
     {
+      isCompleted: false,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -104,43 +106,33 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     let didCancel = false;
 
     const setQuestionnairePromise = (
-      myDispatch: Dispatch<{ payload: QuestionnairePostData; type: string }>,
-      questionnaire: QuestionnairePostData
+      myDispatch: Dispatch<{ payload: QuestionnaireDux; type: string }>,
+      questionnaire: QuestionnaireDux
     ) =>
       new Promise<void>((resolve) => {
-        myDispatch(setQuestionnaire({ ...questionnaire, mode: 'EDIT' }));
+        myDispatch(setQuestionnaire(questionnaire));
         resolve();
       });
 
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
-        response.data.classes = response.data.classes.map(
-          (c: { id: number }) => c.id
-        );
-        response.data.programmes = response.data.programmes.map(
-          (p: { id: number }) => p.id
-        );
-        const questionnaire = response.data as QuestionnaireData;
-        questionnaire.questionWindows = questionnaire.questionWindows.map(
-          (q: QuestionWindow) => ({
-            ...q,
-            startAt: new Date(q.startAt),
-            endAt: new Date(q.endAt),
-          })
+        const questionnaire = convertToQuestionnaireDux(
+          response.data as QuestionnaireFullData,
+          QuestionnaireMode.EDIT
         );
         if (!didCancel) {
           if (questionnaireId !== questionnaire.questionnaireId) {
             setQuestionnairePromise(dispatch, questionnaire).then(() => {
               setState({
                 isLoading: false,
-                original: questionnaire,
+                original: response.data as QuestionnaireFullData,
               });
             });
           } else {
             setState({
               isLoading: false,
-              original: questionnaire,
+              original: response.data as QuestionnaireFullData,
             });
           }
         }
@@ -166,11 +158,11 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     },
   ];
 
-  const programmeCallback = (newProgrammes: number[]) => {
+  const programmeCallback = (newProgrammes: { id: number; name: string }[]) => {
     dispatch(setProgrammes(newProgrammes));
   };
 
-  const questClassCallback = (newClasses: number[]) => {
+  const classCallback = (newClasses: { id: number; name: string }[]) => {
     dispatch(setClasses(newClasses));
   };
 
@@ -190,7 +182,11 @@ const EditQuestionnaire: React.FunctionComponent = () => {
       return;
     }
     setHasError(false);
-    const data: QuestionnairePostData = processEditQuestionnaire(
+    setState({ isCompleted: true });
+  };
+
+  const handleSubmit = async () => {
+    const data: QuestionnairePatchData = processEditQuestionnaire(
       questionnaire,
       state.original!
     );
@@ -209,78 +205,101 @@ const EditQuestionnaire: React.FunctionComponent = () => {
     }
   };
 
-  return (
-    <PageContainer>
-      <SampleQuestionMenu type={questionnaire.type} />
-      <PageHeader breadcrumbs={breadcrumbs} />
-      <div
-        className={muiClasses.paperContainer}
-        style={{
-          width:
-            // eslint-disable-next-line no-nested-ternary
-            width! < 720
-              ? width! - 50
-              : width! < 960
-              ? width! - 290
-              : width! - 530,
-        }}
-      >
-        <Paper
-          className={muiClasses.paper}
-          elevation={0}
-          style={{ background: 'white' }}
+  const renderQuestionnaire = () => {
+    return (
+      <PageContainer>
+        <SampleQuestionMenu type={questionnaire.type} />
+        <PageHeader breadcrumbs={breadcrumbs} />
+        <div
+          className={muiClasses.paperContainer}
+          style={{
+            width:
+              // eslint-disable-next-line no-nested-ternary
+              width! < 720
+                ? width! - 50
+                : width! < 960
+                ? width! - 290
+                : width! - 530,
+          }}
         >
-          <DateAccordion
-            type={type}
-            preStartDate={new Date(questionWindows[0].startAt)}
-            preStartDateCallback={(date: Date) =>
-              dispatch(setPreStartTime(date))
-            }
-            preEndDate={new Date(questionWindows[0].endAt)}
-            preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
-            postStartDate={
-              questionWindows.length > 1
-                ? new Date(questionWindows[1].startAt)
-                : undefined
-            }
-            postStartDateCallback={(date: Date) =>
-              dispatch(setPostStartTime(date))
-            }
-            postEndDate={
-              questionWindows.length > 1
-                ? new Date(questionWindows[1].endAt)
-                : undefined
-            }
-            postEndDateCallback={(date: Date) => dispatch(setPostEndTime(date))}
-          />
-          <AssignAccordion
-            user={user!}
-            programmeIds={programmes ?? []}
-            programmeCallback={programmeCallback}
-            classIds={classes ?? []}
-            classCallback={questClassCallback}
-          />
-          <EditAccordion
-            questionnaire={questionnaire}
-            alertCallback={alertCallback}
-          />
-          <Grid container justify="flex-end">
-            <QuestButton onClick={handleComplete} fullWidth>
-              Finish
-            </QuestButton>
-          </Grid>
-        </Paper>
-      </div>
-      <QuestAlert
-        isAlertOpen={state.isAlertOpen!}
-        hasConfirm={state.hasConfirm!}
-        alertHeader={state.alertHeader!}
-        alertMessage={state.alertMessage!}
-        closeHandler={state.closeHandler!}
-        confirmHandler={state.confirmHandler}
-        cancelHandler={state.cancelHandler}
-      />
-    </PageContainer>
+          <Paper
+            className={muiClasses.paper}
+            elevation={0}
+            style={{ background: 'white' }}
+          >
+            <DateAccordion
+              type={type}
+              preStartDate={new Date(questionWindows[0].startAt)}
+              preStartDateCallback={(date: Date) =>
+                dispatch(setPreStartTime(date))
+              }
+              preEndDate={new Date(questionWindows[0].endAt)}
+              preEndDateCallback={(date: Date) => dispatch(setPreEndTime(date))}
+              postStartDate={
+                questionWindows.length > 1
+                  ? new Date(questionWindows[1].startAt)
+                  : undefined
+              }
+              postStartDateCallback={(date: Date) =>
+                dispatch(setPostStartTime(date))
+              }
+              postEndDate={
+                questionWindows.length > 1
+                  ? new Date(questionWindows[1].endAt)
+                  : undefined
+              }
+              postEndDateCallback={(date: Date) =>
+                dispatch(setPostEndTime(date))
+              }
+            />
+            <AssignAccordion
+              user={user!}
+              selectedProgrammes={programmes}
+              selectedClasses={classes}
+              programmeCallback={programmeCallback}
+              classCallback={classCallback}
+            />
+            <EditAccordion
+              questionnaire={questionnaire}
+              alertCallback={alertCallback}
+            />
+            <Grid container justify="flex-end">
+              <QuestButton onClick={handleComplete} fullWidth>
+                Finish
+              </QuestButton>
+            </Grid>
+          </Paper>
+        </div>
+        <QuestAlert
+          isAlertOpen={state.isAlertOpen!}
+          hasConfirm={state.hasConfirm!}
+          alertHeader={state.alertHeader!}
+          alertMessage={state.alertMessage!}
+          closeHandler={state.closeHandler!}
+          confirmHandler={state.confirmHandler}
+          cancelHandler={state.cancelHandler}
+        />
+      </PageContainer>
+    );
+  };
+
+  return (
+    <>
+      {state.isCompleted ? (
+        <ConfirmationPage
+          breadcrumbs={breadcrumbs}
+          questionnaire={questionnaire}
+          handleCancel={() => setState({ isCompleted: false })}
+          handleSubmit={handleSubmit}
+          headerClassName={muiClasses.header}
+          listClassName={muiClasses.list}
+          buttonClassName={muiClasses.button}
+          mode={QuestionnaireMode.EDIT}
+        />
+      ) : (
+        renderQuestionnaire()
+      )}
+    </>
   );
 };
 

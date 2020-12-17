@@ -2,20 +2,20 @@ import React from 'react';
 
 import QuestAccordion from 'componentWrappers/questAccordion';
 import ProgrammeClassPicker from 'components/programmeClassPicker';
-import { UserData } from 'interfaces/models/users';
+import { PersonData } from 'interfaces/models/persons';
 
 interface AssignAccordionProps {
-  user: UserData;
-  programmeIds: number[];
-  classIds: number[];
-  programmeCallback: (newProgrammes: number[]) => void;
-  classCallback: (newClasses: number[]) => void;
+  user: PersonData;
+  selectedProgrammes: { id: number; name: string }[];
+  selectedClasses: { id: number; name: string }[];
+  programmeCallback: (newProgrammes: { id: number; name: string }[]) => void;
+  classCallback: (newClasses: { id: number; name: string }[]) => void;
 }
 
 const AssignAccordion: React.FC<AssignAccordionProps> = ({
   user,
-  programmeIds,
-  classIds,
+  selectedProgrammes,
+  selectedClasses,
   programmeCallback,
   classCallback,
 }) => {
@@ -23,9 +23,8 @@ const AssignAccordion: React.FC<AssignAccordionProps> = ({
     <QuestAccordion heading="Step 2: Assign the questionnaire">
       <ProgrammeClassPicker
         programmes={user!.programmes}
-        questClasses={user!.classes}
-        selectedProgrammeIds={programmeIds}
-        selectedClassIds={classIds}
+        selectedClasses={selectedClasses}
+        selectedProgrammes={selectedProgrammes}
         programmeCallback={programmeCallback}
         classCallback={classCallback}
       />

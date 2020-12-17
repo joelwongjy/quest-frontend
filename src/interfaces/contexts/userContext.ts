@@ -1,5 +1,5 @@
-import { UserData } from 'interfaces/models/users';
+import { PersonData } from 'interfaces/models/persons';
 
-type UserContextInterface = UserData | null;
+type UserContextInterface = PersonData | null;
 
 export default UserContextInterface;

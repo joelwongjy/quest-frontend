@@ -1,23 +1,12 @@
+import { ClassData } from './classes';
 import { DiscardableData } from './base';
-
-export enum QuestionnaireStatus {
-  DRAFT = 'DRAFT',
-  PUBLISHED = 'PUBLISHED',
-}
-
-export enum QuestionType {
-  MULTIPLE_CHOICE = 'MULTIPLE CHOICE',
-  MOOD = 'MOOD',
-  SHORT_ANSWER = 'SHORT ANSWER',
-  LONG_ANSWER = 'LONG ANSWER',
-  SCALE = 'SCALE',
-}
-
-export enum QuestionAccessibility {
-  SHARED = 'SHARED',
-  PRE = 'PRE',
-  POST = 'POST',
-}
+import { ProgrammeData } from './programmes';
+import {
+  QuestionPostData,
+  QuestionSetData,
+  QuestionSetPatchData,
+  QuestionSetPostData,
+} from './questions';
 
 export enum QuestionnaireType {
   ONE_TIME = 'ONE TIME',
@@ -30,40 +19,97 @@ export enum QuestionnaireListDataType {
   ONE_TIME = 'ONE TIME',
 }
 
+export enum QuestionnaireStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+}
+
+export interface QuestionnairePostData {
+  title: string;
+  type: QuestionnaireType;
+  questionWindows: QuestionnaireWindowPostData[];
+  sharedQuestions: QuestionSetPostData;
+  classes: number[];
+  programmes: number[];
+}
+
+export interface QuestionnaireWindowPostData {
+  startAt: Date | string;
+  endAt: Date | string;
+  questions: QuestionPostData[];
+}
+
+export interface QuestionnairePatchData
+  extends Omit<QuestionnairePostData, 'questionWindows' | 'sharedQuestions'> {
+  status: QuestionnaireStatus;
+  questionnaireId: number; // do we need this?
+  questionWindows: QuestionnaireWindowPatchData[];
+  sharedQuestions?: QuestionSetPatchData;
+}
+
+export interface QuestionnaireListData extends DiscardableData {
+  name: string;
+  startAt: Date | string;
+  endAt: Date | string;
+  status: QuestionnaireStatus;
+  type: QuestionnaireListDataType;
+}
+
+export interface QuestionnaireId {
+  id: number;
+}
+
+export interface QuestionnaireWindowId extends QuestionnaireId {
+  windowId: string;
+}
+
+export interface QuestionnaireWindowData extends QuestionSetData {
+  windowId: number;
+  startAt: Date | string;
+  endAt: Date | string;
+}
+
+export interface QuestionnaireWindowPatchData extends QuestionSetPatchData {
+  windowId: number;
+  startAt: Date | string;
+  endAt: Date | string;
+}
+
+export interface QuestionnaireFullData extends QuestionnaireProgramClassData {
+  title: string;
+  type: QuestionnaireType;
+  status: QuestionnaireStatus;
+  questionnaireId: number;
+  questionWindows: QuestionnaireWindowData[];
+  sharedQuestions?: QuestionSetData;
+}
+
+export interface QuestionnaireOneWindowData
+  extends Omit<QuestionnaireFullData, 'questionWindows'>,
+    QuestionnaireWindowData {}
+
+export interface QuestionnaireProgramClassData {
+  programmes: ProgrammeData[];
+  classes: ClassData[];
+}
+
+/* ================
+ CUSTOM INTERFACES
+================= */
+export enum QuestionAccessibility {
+  SHARED = 'SHARED',
+  PRE = 'PRE',
+  POST = 'POST',
+}
+
 export enum QuestionMode {
   EDIT = 'EDIT',
   VIEW = 'VIEW',
   NEW = 'NEW',
 }
 
-export interface QuestionnaireListData extends DiscardableData {
-  name: string;
-  startAt: Date;
-  endAt: Date;
-  status: QuestionnaireStatus;
-  type: QuestionnaireListDataType;
-}
-
-export interface OptionData {
-  optionText: string;
-}
-
-export interface QuestionData extends DiscardableData {
-  questionText: string;
-  questionType: QuestionType;
-  options: OptionData[];
-}
-
-export interface QuestionOrder extends QuestionData {
-  qnOrderId?: number;
-  order: number;
-}
-
-export interface QuestionSet {
-  questions: QuestionOrder[];
-}
-
-export interface QuestionWindow extends QuestionSet {
-  startAt: Date;
-  endAt: Date;
+export enum QuestionnaireMode {
+  EDIT = 'EDIT',
+  CREATE = 'CREATE',
+  DUPLICATE = 'DUPLICATE',
 }

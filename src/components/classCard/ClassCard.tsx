@@ -28,10 +28,12 @@ import { useStyles } from './classCard.styles';
 interface ClassCardProps extends QuestComponentProps {
   questClass: ClassListData;
   menuOptions?: MenuOption[];
+  programmeId: number;
 }
 
 const ClassCard: React.FunctionComponent<ClassCardProps> = ({
   questClass,
+  programmeId,
   menuOptions = null,
 }) => {
   const classes = useStyles();
@@ -98,7 +100,7 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
             size="small"
             className={classes.button}
             component={Link}
-            to={`${PROGRAMMES}/${questClass.id}/${CLASSES}/${STUDENTS}`}
+            to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
           >
             Students
           </Button>
@@ -106,7 +108,7 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
             size="small"
             className={classes.button}
             component={Link}
-            to={`${PROGRAMMES}/${questClass.id}/${QUESTIONNAIRES}`}
+            to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${QUESTIONNAIRES}`}
           >
             Questionnaires
           </Button>

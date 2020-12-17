@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserData } from 'interfaces/models/users';
+import { PersonData } from 'interfaces/models/persons';
 
 export interface MiscDux {
-  user?: UserData;
+  user?: PersonData;
   lastRetrieved?: number;
 }
 
@@ -14,7 +14,7 @@ const misc = createSlice({
   name: 'misc',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserData>): void => {
+    setUser: (state, action: PayloadAction<PersonData>): void => {
       state.user = { ...action.payload };
       state.lastRetrieved = Date.now();
     },

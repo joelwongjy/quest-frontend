@@ -13,7 +13,6 @@ import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import QuestButton from 'componentWrappers/questButton';
 
 import QuestAlert from 'componentWrappers/questAlert';
-import { QuestionnairePostData } from 'interfaces/api/questionnaires';
 import { RootState } from 'reducers/rootReducer';
 import {
   clearQuestionnaire,
@@ -68,7 +67,7 @@ const Questionnaires: React.FunctionComponent = () => {
 
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
-  const questionnaire: QuestionnairePostData = useSelector(selectQuestionnaire);
+  const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
   const [
     hasIncompleteQuestionnaire,
     setHasIncompleteQuestionnare,

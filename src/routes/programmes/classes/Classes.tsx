@@ -3,23 +3,26 @@ import { Button, Grid } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
-import { RouteState, RouteParams } from 'interfaces/routes/common';
+import { RouteParams, RouteState } from 'interfaces/routes/common';
 import { ClassListData } from 'interfaces/models/classes';
-import { questClasses } from 'routes/questionnaires/mockData';
+import { ClassMode } from 'interfaces/components/classForm';
 import ClassCard from 'components/classCard';
+import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
+import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
 import QuestAlert from 'componentWrappers/questAlert';
 import { getAlertCallback } from 'utils/alertUtils';
+import { ProgrammeData } from 'interfaces/models/programmes';
 
-import { useStyles } from './programmes.styles';
+import { sampleProgramme } from '../mockData';
+import { useStyles } from './classes.styles';
 
 interface ClassesState extends RouteState {
-  questClasses: ClassListData[];
+  programme: ProgrammeData;
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -28,14 +31,15 @@ interface ClassesState extends RouteState {
   selectedClass: ClassListData | undefined;
 }
 
-const Class: React.FunctionComponent = () => {
+const Classes: React.FunctionComponent = () => {
+  const { id } = useParams<RouteParams>();
   const [state, setState] = useReducer(
     (s: ClassesState, a: Partial<ClassesState>) => ({
       ...s,
       ...a,
     }),
     {
-      questClasses,
+      programme: sampleProgramme,
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -63,10 +67,13 @@ const Class: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('classes');
+        const response = await ApiService.get(`programmes/${id}`);
         if (!didCancel) {
-          setState({ questClasses: response.data, isLoading: false });
-          // dispatch(updateSecurities(securitiesResponse.data));
+          setState({
+            programme: response.data as ProgrammeData,
+            isLoading: false,
+          });
+          // dispatch if required
         }
       } catch (error) {
         if (!didCancel) {
@@ -89,15 +96,13 @@ const Class: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const { id } = useParams<RouteParams>();
-
-  const availableClasses = state.questClasses.filter(
-    (c) => c.programme.id === parseInt(id, 10)
-  );
-
   const breadcrumbs = [
     { text: 'Programmes', href: PROGRAMMES },
-    { text: 'Classes', href: `${PROGRAMMES}/:id${CLASSES}` },
+    {
+      text: state.isLoading ? 'Loading' : state.programme.name,
+      href: `${PROGRAMMES}/${state.programme.id}${CLASSES}`,
+    },
+    { text: 'Classes', href: `${PROGRAMMES}/${state.programme.id}${CLASSES}` },
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -146,51 +151,57 @@ const Class: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}${CREATE}`}
-          >
-            Create Class
-          </Button>
+          state.isEditing ? undefined : (
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}/${id}${CLASSES}${CREATE}`}
+            >
+              Create Class
+            </Button>
+          )
         }
       />
       {state.isEditing ? (
-        <div />
+        <ClassForm
+          mode={ClassMode.EDIT}
+          questClass={state.selectedClass}
+          programme={state.programme}
+          alertCallback={alertCallback}
+          cancelCallback={() => setState({ isEditing: false })}
+        />
       ) : (
-        // <ProgrammeForm
-        //   mode={ProgrammeMode.EDIT}
-        //   programme={state.selectedClass}
-        //   alertCallback={alertCallback}
-        //   cancelCallback={() => setState({ isEditing: false })}
-        // />
         <div>
           <Grid container spacing={3}>
-            {availableClasses.length > 0 &&
-              availableClasses.map((c) => {
+            {state.programme.classCount > 0 &&
+              state.programme.classes.map((c) => {
                 const menuOptions = getMenuOptions(c);
                 return (
                   <Grid item xs={12} sm={6} lg={4} key={c.name}>
-                    <ClassCard questClass={c} menuOptions={menuOptions} />
+                    <ClassCard
+                      questClass={c}
+                      menuOptions={menuOptions}
+                      programmeId={state.programme.id}
+                    />
                   </Grid>
                 );
               })}
           </Grid>
-          <QuestAlert
-            isAlertOpen={state.isAlertOpen!}
-            hasConfirm={state.hasConfirm}
-            alertHeader={state.alertHeader!}
-            alertMessage={state.alertMessage!}
-            closeHandler={state.closeHandler}
-            confirmHandler={state.confirmHandler}
-            cancelHandler={state.cancelHandler}
-          />
         </div>
       )}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
 
-export default Class;
+export default Classes;

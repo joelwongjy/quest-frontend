@@ -10,7 +10,6 @@ import {
   MenuItem,
   Typography,
 } from '@material-ui/core';
-import { format } from 'date-fns';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
 
@@ -50,20 +49,6 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
     <>
       <QuestCard>
         <CardHeader
-          title={
-            <>
-              <Typography className={classes.dates} color="textSecondary">
-                Start: {format(programme.startAt, 'd MMM y')}
-              </Typography>
-              <Typography
-                className={classes.dates}
-                color="textSecondary"
-                gutterBottom
-              >
-                End: {format(programme.endAt, 'd MMM y')}
-              </Typography>
-            </>
-          }
           action={
             menuOptions && (
               <>

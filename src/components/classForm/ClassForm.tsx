@@ -13,22 +13,19 @@ import CloseIcon from '@material-ui/icons/Close';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import {
-  ProgrammePostData,
-  ProgrammeListData,
-  ProgrammePatchData,
-} from 'interfaces/models/programmes';
-import { ProgrammeMode } from 'interfaces/components/programmeForm';
+import { ClassPostData, ClassListData } from 'interfaces/models/classes';
+import { ClassMode } from 'interfaces/components/classForm';
+import { ProgrammeData } from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
-import { programmeFormIsChanged } from 'utils/programmeUtils';
 import ApiService from 'services/apiService';
 
-import { useStyles } from './ProgrammeForm.styles';
+import { useStyles } from './ClassForm.styles';
 
-interface ProgrammeFormProps {
-  mode: ProgrammeMode;
-  programme?: ProgrammeListData;
-  programmeCallback?: (newProgramme: ProgrammeListData) => void;
+interface ClassFormProps {
+  mode: ClassMode;
+  questClass?: ClassListData;
+  programme: ProgrammeData;
+  classCallback?: (newClass: ClassListData) => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -40,32 +37,37 @@ interface ProgrammeFormProps {
   ) => void;
 }
 
-export type ProgrammeFormState = ProgrammePostData | ProgrammePatchData;
+export type ClassFormState = ClassPostData;
 
-const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
+const ClassForm: React.FC<ClassFormProps> = ({
   mode,
+  questClass,
   programme,
   cancelCallback,
   alertCallback,
 }) => {
   const classes = useStyles();
   const { hasError, setHasError } = useError();
-
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
   const [state, setState] = useReducer(
-    (s: ProgrammeFormState, a: Partial<ProgrammeFormState>) => ({
+    (s: ClassFormState, a: Partial<ClassFormState>) => ({
       ...s,
       ...a,
     }),
     {
-      name: programme?.name ?? '',
-      description: programme?.description ?? '',
+      name: questClass?.name ?? '',
+      studentIds: [],
+      teacherIds: [],
     }
   );
 
   const handleCancel = () => {
-    if (isSuccessful || !programmeFormIsChanged(mode, state, programme)) {
+    if (
+      isSuccessful ||
+      state.name === '' ||
+      (mode === ClassMode.EDIT && state.name === questClass!.name)
+    ) {
       cancelCallback();
     } else {
       alertCallback(
@@ -87,13 +89,16 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(`programmes/create`, state);
+      const response = await ApiService.post(
+        `programmes/${programme.id}/classes/create`,
+        state
+      );
       if (response.status === 200) {
+        setIsSuccessful(true);
         window.scrollTo({
           top: 0,
           behavior: 'smooth',
         });
-        setIsSuccessful(true);
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -103,23 +108,23 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
   };
 
   const handleEdit = async () => {
-    if (state.name === '' || !programme) {
+    if (state.name === '' || !questClass) {
       setHasError(true);
       return;
     }
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(
-        `programmes/${programme!.id}`,
+      const response = await ApiService.patch(
+        `classes/${questClass.id}`,
         state
       );
       if (response.status === 200) {
+        setIsSuccessful(true);
         window.scrollTo({
           top: 0,
           behavior: 'auto',
         });
-        setIsSuccessful(true);
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -130,7 +135,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
 
   const renderButtons = () => {
     switch (mode) {
-      case ProgrammeMode.NEW:
+      case ClassMode.NEW:
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
@@ -141,11 +146,11 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
               Cancel
             </QuestButton>
             <QuestButton className={classes.button} onClick={handleAdd}>
-              Add Programme
+              Add Class
             </QuestButton>
           </Grid>
         );
-      case ProgrammeMode.EDIT:
+      case ClassMode.EDIT:
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
@@ -181,22 +186,22 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
             className={isSuccessful ? classes.headerSuccess : classes.header}
           >
             <Grid container alignItems="center" justify="space-between">
-              {mode === ProgrammeMode.NEW && (
+              {mode === ClassMode.NEW && (
                 <Typography
                   component="h1"
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Programme {isSuccessful && ' - Successful'}
+                  Add Class {isSuccessful && ' - Successful'}
                 </Typography>
               )}
-              {mode === ProgrammeMode.EDIT && (
+              {mode === ClassMode.EDIT && (
                 <Typography
                   component="h1"
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Programme {isSuccessful && ' - Successful'}
+                  Edit Class {isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>
@@ -208,13 +213,13 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
             <List className={classes.list}>
               <ListItem>
                 <Typography variant="h6" className={classes.subheader}>
-                  Programme Details:
+                  {programme.name}
                 </Typography>
               </ListItem>
               <ListItem>
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={4}>
-                    <Typography variant="subtitle1">Name: </Typography>
+                    <Typography variant="subtitle1">Name of Class: </Typography>
                   </Grid>
                   <Grid item xs={8}>
                     <div className={classes.textfieldContainer}>
@@ -227,7 +232,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                           size="small"
                           value={state.name}
                           className={classes.textfield}
-                          label="Programme Name"
+                          label="Class Name"
                           variant="outlined"
                           disabled={isSuccessful}
                           onChange={(e) => setState({ name: e.target.value })}
@@ -241,33 +246,6 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                     </div>
                   </Grid>
                 </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Description: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <QuestTextField
-                        size="small"
-                        value={state.description}
-                        className={classes.textfield}
-                        label="Description"
-                        variant="outlined"
-                        disabled={isSuccessful}
-                        onChange={(e) =>
-                          setState({ description: e.target.value })
-                        }
-                      />
-                    </div>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Typography variant="h6" className={classes.subheader}>
-                  Classes:
-                </Typography>
               </ListItem>
               {isSuccessful ? (
                 <Grid container spacing={2} justify="flex-end">
@@ -290,4 +268,4 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
   );
 };
 
-export default ProgrammeForm;
+export default ClassForm;

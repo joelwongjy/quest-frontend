@@ -4,21 +4,58 @@ import nextId from 'react-id-generator';
 import { addDays } from 'date-fns';
 
 import {
-  QuestionnaireData,
-  QuestionnairePostData,
-} from 'interfaces/api/questionnaires';
-import {
+  QuestionnaireFullData,
+  QuestionnaireStatus,
   QuestionnaireType,
-  QuestionOrder,
-  QuestionType,
+  QuestionnaireWindowData,
+  QuestionnaireMode,
 } from 'interfaces/models/questionnaires';
+import {
+  OptionData,
+  QuestionData,
+  QuestionSetData,
+  QuestionType,
+} from 'interfaces/models/questions';
 
-export type QuestionnaireDux = QuestionnairePostData;
+export interface QuestionnaireDuxOption extends Omit<OptionData, 'optionId'> {
+  optionId?: number;
+}
+
+export interface QuestionnaireDuxQuestion
+  extends Omit<QuestionData, 'qnOrderId' | 'options'> {
+  duxId: string;
+  qnOrderId?: number;
+  options: QuestionnaireDuxOption[];
+}
+
+export interface QuestionnaireDuxQuestionSet
+  extends Omit<QuestionSetData, 'questions'> {
+  questions: QuestionnaireDuxQuestion[];
+}
+export interface QuestionnaireDuxWindow
+  extends Omit<QuestionnaireWindowData, 'windowId' | 'questions'> {
+  windowId?: number;
+  questions: QuestionnaireDuxQuestion[];
+}
+
+export interface QuestionnaireDux
+  extends Omit<
+    QuestionnaireFullData,
+    'status' | 'questionWindows' | 'sharedQuestions' | 'classes' | 'programmes'
+  > {
+  status?: QuestionnaireStatus;
+  questionWindows: QuestionnaireDuxWindow[];
+  sharedQuestions: QuestionnaireDuxQuestionSet;
+  programmes: { id: number; name: string }[];
+  classes: { id: number; name: string }[];
+  mode: QuestionnaireMode;
+}
 
 const initialState: QuestionnaireDux = {
   questionnaireId: -1,
   title: '',
   type: QuestionnaireType.ONE_TIME,
+  status: QuestionnaireStatus.DRAFT,
   questionWindows: [
     {
       startAt: new Date(),
@@ -31,7 +68,7 @@ const initialState: QuestionnaireDux = {
   },
   classes: [],
   programmes: [],
-  mode: 'CREATE',
+  mode: QuestionnaireMode.CREATE,
 };
 
 // Contains user information, theme, view selected and fun fact of the day
@@ -79,147 +116,114 @@ const questionnaire = createSlice({
     setPostEndTime: (state, action: PayloadAction<Date>): void => {
       state.questionWindows[1].endAt = action.payload;
     },
-    setClasses: (state, action: PayloadAction<number[]>): void => {
+    setClasses: (
+      state,
+      action: PayloadAction<{ id: number; name: string }[]>
+    ): void => {
       state.classes = action.payload;
     },
-    setProgrammes: (state, action: PayloadAction<number[]>): void => {
+    setProgrammes: (
+      state,
+      action: PayloadAction<{ id: number; name: string }[]>
+    ): void => {
       state.programmes = action.payload;
     },
-    setMode: (
-      state,
-      action: PayloadAction<'CREATE' | 'EDIT' | 'DUPLICATE'>
-    ): void => {
+    setMode: (state, action: PayloadAction<QuestionnaireMode>): void => {
       state.mode = action.payload;
     },
     addQuestionToPre: (state): void => {
       const { length } = state.questionWindows[0].questions;
       state.questionWindows[0].questions.push({
+        duxId: nextId(),
         order: length,
         questionText: '',
         questionType: QuestionType.MULTIPLE_CHOICE,
         options: [{ optionText: '' }],
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     addQuestionToPost: (state): void => {
       const { length } = state.questionWindows[1].questions;
       state.questionWindows[1].questions.push({
+        duxId: nextId(),
         order: length,
         questionText: '',
         questionType: QuestionType.MULTIPLE_CHOICE,
         options: [{ optionText: '' }],
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     addQuestionToShared: (state): void => {
       const { length } = state.sharedQuestions.questions;
       state.sharedQuestions.questions.push({
+        duxId: nextId(),
         order: length,
         questionText: '',
         questionType: QuestionType.MULTIPLE_CHOICE,
         options: [{ optionText: '' }],
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     addSampleQuestionToPre: (state, action: PayloadAction<string>): void => {
       const { length } = state.questionWindows[0].questions;
       state.questionWindows[0].questions.push({
+        duxId: nextId(),
         order: length,
         questionText: action.payload,
         questionType: QuestionType.MULTIPLE_CHOICE,
         options: [{ optionText: '' }],
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     addSampleQuestionToPost: (state, action: PayloadAction<string>): void => {
       const { length } = state.questionWindows[1].questions;
       state.questionWindows[1].questions.push({
+        duxId: nextId(),
         order: length,
         questionText: action.payload,
         questionType: QuestionType.MULTIPLE_CHOICE,
         options: [{ optionText: '' }],
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     addSampleQuestionToShared: (state, action: PayloadAction<string>): void => {
       const { length } = state.sharedQuestions.questions;
       state.sharedQuestions.questions.push({
+        duxId: nextId(),
         order: length,
         questionText: action.payload,
         questionType: QuestionType.MULTIPLE_CHOICE,
         options: [{ optionText: '' }],
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     transferQuestionToPre: (
       state,
-      action: PayloadAction<QuestionOrder>
+      action: PayloadAction<QuestionnaireDuxQuestion>
     ): void => {
       const { length } = state.questionWindows[0].questions;
       state.questionWindows[0].questions.push({
+        ...action.payload,
         order: length,
-        questionText: action.payload.questionText,
-        questionType: action.payload.questionType,
-        options: action.payload.options,
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: action.payload.createdAt,
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     transferQuestionToPost: (
       state,
-      action: PayloadAction<QuestionOrder>
+      action: PayloadAction<QuestionnaireDuxQuestion>
     ): void => {
       const { length } = state.questionWindows[1].questions;
       state.questionWindows[1].questions.push({
+        ...action.payload,
         order: length,
-        questionText: action.payload.questionText,
-        questionType: action.payload.questionType,
-        options: action.payload.options,
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: action.payload.createdAt,
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     transferQuestionToShared: (
       state,
-      action: PayloadAction<QuestionOrder>
+      action: PayloadAction<QuestionnaireDuxQuestion>
     ): void => {
       const { length } = state.sharedQuestions.questions;
       state.sharedQuestions.questions.push({
+        ...action.payload,
         order: length,
-        questionText: action.payload.questionText,
-        questionType: action.payload.questionType,
-        options: action.payload.options,
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: action.payload.createdAt,
-        updatedAt: new Date(),
-        discardedAt: null,
       });
     },
     updateQuestionInPre: (
       state,
-      action: PayloadAction<QuestionOrder>
+      action: PayloadAction<QuestionnaireDuxQuestion>
     ): void => {
       const { order, ...question } = action.payload;
       state.questionWindows[0].questions[order] = {
@@ -229,7 +233,7 @@ const questionnaire = createSlice({
     },
     updateQuestionInPost: (
       state,
-      action: PayloadAction<QuestionOrder>
+      action: PayloadAction<QuestionnaireDuxQuestion>
     ): void => {
       const { order, ...question } = action.payload;
       state.questionWindows[1].questions[order] = {
@@ -239,7 +243,7 @@ const questionnaire = createSlice({
     },
     updateQuestionInShared: (
       state,
-      action: PayloadAction<QuestionOrder>
+      action: PayloadAction<QuestionnaireDuxQuestion>
     ): void => {
       const { order, ...question } = action.payload;
       state.sharedQuestions.questions[order] = {
@@ -393,14 +397,11 @@ const questionnaire = createSlice({
       const { length } = state.questionWindows[0].questions;
       const questionToDuplicate = state.questionWindows[0].questions[index];
       state.questionWindows[0].questions.push({
+        duxId: nextId(),
         order: length,
         questionText: questionToDuplicate.questionText,
         questionType: questionToDuplicate.questionType,
         options: questionToDuplicate.options,
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
 
       // Bubble all the way up
@@ -418,14 +419,11 @@ const questionnaire = createSlice({
       const { length } = state.questionWindows[1].questions;
       const questionToDuplicate = state.questionWindows[1].questions[index];
       state.questionWindows[1].questions.push({
+        duxId: nextId(),
         order: length,
         questionText: questionToDuplicate.questionText,
         questionType: questionToDuplicate.questionType,
         options: questionToDuplicate.options,
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
 
       // Bubble all the way up
@@ -443,14 +441,11 @@ const questionnaire = createSlice({
       const { length } = state.sharedQuestions.questions;
       const questionToDuplicate = state.sharedQuestions.questions[index];
       state.sharedQuestions.questions.push({
+        duxId: nextId(),
         order: length,
         questionText: questionToDuplicate.questionText,
         questionType: questionToDuplicate.questionType,
         options: questionToDuplicate.options,
-        id: parseInt(nextId().slice(2), 10),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        discardedAt: null,
       });
 
       // Bubble all the way up
@@ -465,11 +460,12 @@ const questionnaire = createSlice({
     },
     setQuestionnaire: (
       state,
-      action: PayloadAction<QuestionnaireData>
+      action: PayloadAction<QuestionnaireDux>
     ): void => {
       state.questionnaireId = action.payload.questionnaireId;
       state.title = action.payload.title;
       state.type = action.payload.type;
+      state.status = action.payload.status;
       const sortedQuestionWindows = [...action.payload.questionWindows].map(
         (q) => ({
           ...q,
@@ -490,14 +486,15 @@ const questionnaire = createSlice({
       } else {
         state.sharedQuestions = { questions: [] };
       }
-      state.classes = action.payload.classes ?? [];
       state.programmes = action.payload.programmes ?? [];
-      state.mode = action.payload.mode ?? 'CREATE';
+      state.classes = action.payload.classes ?? [];
+      state.mode = action.payload.mode ?? QuestionnaireMode.CREATE;
     },
     clearQuestionnaire: (state): void => {
       state.questionnaireId = -1;
       state.title = '';
       state.type = QuestionnaireType.ONE_TIME;
+      state.status = QuestionnaireStatus.DRAFT;
       state.questionWindows = [
         {
           startAt: new Date(),
@@ -506,9 +503,9 @@ const questionnaire = createSlice({
         },
       ];
       state.sharedQuestions = { questions: [] };
-      state.classes = [];
       state.programmes = [];
-      state.mode = 'CREATE';
+      state.classes = [];
+      state.mode = QuestionnaireMode.CREATE;
     },
   },
 });
@@ -520,8 +517,8 @@ export const {
   setPreEndTime,
   setPostStartTime,
   setPostEndTime,
-  setClasses,
   setProgrammes,
+  setClasses,
   setMode,
   addQuestionToPre,
   addQuestionToPost,

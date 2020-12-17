@@ -1,31 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { Dispatch, useReducer, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Paper, Typography } from '@material-ui/core';
-import SingleIcon from '@material-ui/icons/DescriptionOutlined';
-import PostIcon from '@material-ui/icons/Description';
-import { useHistory } from 'react-router-dom';
+import React, { useReducer } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, STUDENTS } from 'constants/routes';
+import { CREATE, HOME, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import StudentForm from 'components/studentForm';
-import QuestButton from 'componentWrappers/questButton';
-import { StudentMode } from 'interfaces/models/students';
+import { StudentMode } from 'interfaces/models/users';
 import { useUser } from 'contexts/UserContext';
-import { useError } from 'contexts/ErrorContext';
+// import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import { useStyles } from './createStudent.styles';
+import { ClassUserRole } from 'interfaces/models/classUsers';
+import { getAlertCallback } from 'utils/alertUtils';
+// import { useStyles } from './createStudent.styles';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface CreateStudentState extends RouteState {}
+type CreateStudentState = RouteState;
 
 const CreateStudent: React.FunctionComponent = () => {
   const user = useUser();
-  const classes = useStyles();
+  // const classes = useStyles();
   const history = useHistory();
-  const { setHasError } = useError();
+  // const { setHasError } = useError();
 
   const breadcrumbs = [
     { text: 'Students', href: STUDENTS },
@@ -56,41 +52,11 @@ const CreateStudent: React.FunctionComponent = () => {
     }
   );
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
+
+  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
+    return <Redirect to={HOME} />;
+  }
 
   return (
     <PageContainer>

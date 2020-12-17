@@ -26,5 +26,21 @@ export const useStyles = makeStyles(() =>
       },
       margin: '1.5rem',
     },
+    header: {
+      backgroundColor: '#044682',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '1rem',
+    },
+    list: {
+      marginTop: '0.5rem',
+      marginBottom: '0.5rem',
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
+    },
+    button: {
+      margin: theme.spacing(3, 1, 2),
+    },
   })
 );

@@ -7,8 +7,8 @@ import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCa
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
 import { RouteState } from 'interfaces/routes/common';
-import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
-import { programmes } from 'routes/questionnaires/mockData';
+import { ProgrammeListData } from 'interfaces/models/programmes';
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import { PROGRAMMES, CREATE, HOME } from 'constants/routes';
@@ -19,6 +19,7 @@ import { ClassUserRole } from 'interfaces/models/classUsers';
 import { useUser } from 'contexts/UserContext';
 import { getAlertCallback } from 'utils/alertUtils';
 
+import { programmes } from './mockData';
 import { useStyles } from './programmes.styles';
 
 interface ProgrammesState extends RouteState {
@@ -70,7 +71,7 @@ const Programme: React.FunctionComponent = () => {
         const response = await ApiService.get('programmes');
         if (!didCancel) {
           setState({ programmes: response.data, isLoading: false });
-          // dispatch(updateSecurities(securitiesResponse.data));
+          // dispatch here
         }
       } catch (error) {
         if (!didCancel) {
@@ -97,7 +98,7 @@ const Programme: React.FunctionComponent = () => {
 
   const alertCallback = getAlertCallback(setState);
 
-  if (!user || user.role === ClassUserRole.STUDENT) {
+  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
     return <Redirect to={HOME} />;
   }
 
@@ -144,15 +145,17 @@ const Programme: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}${CREATE}`}
-          >
-            Create Programme
-          </Button>
+          state.isEditing ? undefined : (
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}${CREATE}`}
+            >
+              Create Programme
+            </Button>
+          )
         }
       />
       {state.isEditing ? (
@@ -175,17 +178,17 @@ const Programme: React.FunctionComponent = () => {
                 );
               })}
           </Grid>
-          <QuestAlert
-            isAlertOpen={state.isAlertOpen!}
-            hasConfirm={state.hasConfirm}
-            alertHeader={state.alertHeader!}
-            alertMessage={state.alertMessage!}
-            closeHandler={state.closeHandler}
-            confirmHandler={state.confirmHandler}
-            cancelHandler={state.cancelHandler}
-          />
         </div>
       )}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };

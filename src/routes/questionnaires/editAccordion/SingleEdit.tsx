@@ -5,12 +5,12 @@ import QuestionCard from 'components/questionCard';
 import {
   QuestionAccessibility,
   QuestionMode,
-  QuestionOrder,
 } from 'interfaces/models/questionnaires';
 import {
   addQuestionToPre,
   deleteQuestionInPre,
   duplicateQuestionInPre,
+  QuestionnaireDuxQuestion,
   shiftQuestionInPre,
   updateQuestionInPre,
 } from 'reducers/questionnaireDux';
@@ -20,7 +20,7 @@ import { isEmptyQuestion } from 'utils/questionnaireUtils';
 import { useStyles } from './editAccordion.styles';
 
 interface SingleEditProps {
-  questionSet: QuestionOrder[];
+  questionSet: QuestionnaireDuxQuestion[];
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -41,10 +41,10 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
   return (
     <div className={classes.root}>
       {questionSet.map((q) => {
-        const { order, ...question } = q;
+        const { order } = q;
         return (
           <QuestionCard
-            key={`question-${order}-${question.id}`}
+            key={`question-${q.duxId}`}
             question={q}
             mode={QuestionMode.EDIT}
             handleDelete={() => {
@@ -72,7 +72,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
             }
             isFirst={order === 0}
             isLast={order === questionSet.length - 1}
-            updateQuestion={(newQuestion: QuestionOrder) =>
+            updateQuestion={(newQuestion: QuestionnaireDuxQuestion) =>
               dispatch(updateQuestionInPre(newQuestion))
             }
             accessibility={QuestionAccessibility.SHARED}

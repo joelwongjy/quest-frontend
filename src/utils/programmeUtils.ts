@@ -1,10 +1,21 @@
-import { isBefore } from 'date-fns';
+import {
+  ProgrammePostData,
+  ProgrammeListData,
+  ProgrammePatchData,
+} from 'interfaces/models/programmes';
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
 
-import { ProgrammeFormState } from 'components/programmeForm/ProgrammeForm';
-
-export const validateProgrammeInfo = (
-  programme: ProgrammeFormState
+export const programmeFormIsChanged = (
+  mode: ProgrammeMode,
+  state: ProgrammePostData | ProgrammePatchData,
+  programme?: ProgrammeListData
 ): boolean => {
-  const { name, startAt, endAt } = programme;
-  return name !== '' && isBefore(startAt ?? new Date(), endAt ?? new Date());
+  const { name, description } = state;
+  if (mode === ProgrammeMode.EDIT) {
+    return (
+      name !== programme!.name ||
+      (description !== '' && description !== programme!.description)
+    );
+  }
+  return name !== '' || description !== '';
 };

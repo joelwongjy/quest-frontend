@@ -1,26 +1,23 @@
 import React from 'react';
 import { FormControlLabel, FormGroup, Checkbox } from '@material-ui/core';
 
-import { ProgrammeListData } from 'interfaces/models/programmes';
-import { ClassListData } from 'interfaces/models/classes';
+import { PersonData } from 'interfaces/models/persons';
 
 import { useStyles } from './programmeClassPicker.styles';
 
 export interface ProgrammeClassPickerProps {
-  programmes: ProgrammeListData[];
-  questClasses: ClassListData[];
-  selectedProgrammeIds: number[];
-  selectedClassIds: number[];
-  programmeCallback: (newProgrammes: number[]) => void;
-  classCallback: (newClasses: number[]) => void;
+  programmes: PersonData['programmes'];
+  selectedProgrammes: { id: number; name: string }[];
+  selectedClasses: { id: number; name: string }[];
+  programmeCallback: (newProgrammes: { id: number; name: string }[]) => void;
+  classCallback: (newClasses: { id: number; name: string }[]) => void;
 }
 
 const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
   const {
     programmes,
-    questClasses,
-    selectedProgrammeIds,
-    selectedClassIds,
+    selectedProgrammes,
+    selectedClasses,
     programmeCallback,
     classCallback,
   } = props;
@@ -28,52 +25,54 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
 
   const updateState = (
     checked: boolean,
-    programmeId: number,
-    classId?: number
+    programme: { id: number; name: string },
+    _class?: { id: number; name: string }
   ): void => {
-    if (checked && classId === undefined) {
-      const newProgrammes = [...selectedProgrammeIds, programmeId];
+    if (checked && !_class) {
+      const newProgrammes = [...selectedProgrammes, programme];
       const newClasses = [
-        ...selectedClassIds,
-        ...questClasses
-          .filter((c) => c.programme.id === programmeId)
-          .map((c) => c.id),
+        ...selectedClasses,
+        ...programmes
+          .find((p) => p.id === programme.id)!
+          .classes.map((c) => ({ id: c.id, name: c.name })),
       ];
       programmeCallback(newProgrammes);
       classCallback(newClasses);
       return;
     }
-    if (!checked && classId === undefined) {
-      const newProgrammes = selectedProgrammeIds.filter(
-        (pId) => pId !== programmeId
+    if (!checked && !_class) {
+      const newProgrammes = selectedProgrammes.filter(
+        (p) => p.id !== programme.id
       );
-      const newClasses = selectedClassIds
-        .map((cId) => questClasses.filter((c) => c.id === cId)[0])
-        .filter((c) => c.programme.id !== programmeId)
-        .map((c) => c.id);
-
+      const removedProgramme = programmes.find((p) => p.id === programme.id)!;
+      const newClasses = selectedClasses.filter(
+        (c) => removedProgramme.classes.findIndex((c2) => c.id === c2.id) === -1
+      );
       programmeCallback(newProgrammes);
       classCallback(newClasses);
       return;
     }
-    if (checked && classId) {
-      const newClasses = [...selectedClassIds, classId];
+    if (checked && _class) {
+      const newClasses = [...selectedClasses, _class];
       if (
-        questClasses
-          .filter((c) => c.programme.id === programmeId)
-          .every((c) => newClasses.findIndex((x) => x === c.id) > -1)
+        programmes
+          .find((p) => p.id === programme.id)!
+          .classes.every((c) => newClasses.findIndex((x) => x.id === c.id) > -1)
       ) {
-        const newProgrammes = [...selectedProgrammeIds, programmeId];
+        const newProgrammes = [...selectedProgrammes, programme];
         programmeCallback(newProgrammes);
       }
       classCallback(newClasses);
       return;
     }
-    const newClasses = selectedClassIds.filter((cId) => cId !== classId);
-    const origClass = questClasses.filter((c) => c.id === classId)[0];
-    const newProgrammes = selectedProgrammeIds.filter(
-      (pId) => pId !== origClass.programme.id
-    );
+    const newClasses = selectedClasses.filter((c) => c.id !== _class!.id);
+    const newProgrammes = programmes
+      .filter((p) =>
+        p.classes.some(
+          (c) => newClasses.findIndex((c2) => c2.id === c.id) !== -1
+        )
+      )
+      .map((p) => ({ id: p.id, name: p.name }));
     programmeCallback(newProgrammes);
     classCallback(newClasses);
   };
@@ -87,37 +86,33 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
               value={p.id}
               control={
                 <Checkbox
-                  onChange={(_event, checked) => updateState(checked, p.id)}
+                  onChange={(_event, checked) => updateState(checked, p)}
                   checked={
-                    selectedProgrammeIds.findIndex((x) => x === p.id) !== -1
+                    selectedProgrammes.findIndex((x) => x.id === p.id) !== -1
                   }
                 />
               }
               label={p.name}
               className={classes.formControl}
             />
-            {questClasses
-              .filter((c) => c.programme.id === p.id)
-              .map((c) => {
-                return (
-                  <FormControlLabel
-                    value={c.id}
-                    key={c.id}
-                    control={
-                      <Checkbox
-                        onChange={(_event, checked) =>
-                          updateState(checked, p.id, c.id)
-                        }
-                        checked={
-                          selectedClassIds.findIndex((x) => x === c.id) !== -1
-                        }
-                      />
-                    }
-                    label={c.name}
-                    className={classes.formControlIndent}
-                  />
-                );
-              })}
+            {p.classes.map((c) => {
+              return (
+                <FormControlLabel
+                  value={c.id}
+                  key={c.id}
+                  control={
+                    <Checkbox
+                      onChange={(_event, checked) => updateState(checked, p, c)}
+                      checked={
+                        selectedClasses.findIndex((x) => x.id === c.id) !== -1
+                      }
+                    />
+                  }
+                  label={c.name}
+                  className={classes.formControlIndent}
+                />
+              );
+            })}
           </FormGroup>
         );
       })}

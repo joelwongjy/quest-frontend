@@ -50,7 +50,8 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
 
   const isStaff =
     user &&
-    (user.role === ClassUserRole.ADMIN || user.role === ClassUserRole.TEACHER);
+    (user.highestClassRole === ClassUserRole.ADMIN ||
+      user.highestClassRole === ClassUserRole.TEACHER);
 
   const drawer = (
     <>
