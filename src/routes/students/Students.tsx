@@ -1,5 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button, Paper, Typography } from '@material-ui/core';
+import {
+  Button,
+  Paper,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+} from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import { Link, Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -8,31 +17,26 @@ import { CREATE, HOME, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
-import { Student, StudentMode } from 'interfaces/models/students';
+import { StudentMode } from 'interfaces/models/users';
+import { PersonData, PersonListData } from 'interfaces/models/persons';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-
 import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
 import { useUser } from 'contexts/UserContext';
 import { ClassUserRole } from 'interfaces/models/classUsers';
+import { getAlertCallback } from 'utils/alertUtils';
 import { students } from './mockData';
+
 import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
-  students: Student[];
+  students: PersonListData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
   isEditing: boolean;
-  selectedStudent: Student | undefined;
+  selectedStudent: PersonData | undefined;
 }
 
 const Students: React.FunctionComponent = () => {
@@ -97,53 +101,33 @@ const Students: React.FunctionComponent = () => {
 
   const breadcrumbs = [{ text: 'Students', href: STUDENTS }];
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
+  const alertCallback = getAlertCallback(setState);
+
+  const handleEdit = async (student: PersonListData) => {
+    setState({ isLoading: true });
+    try {
+      const response = await ApiService.get(`persons/${student.id}`);
+      if (response.status === 200) {
+        setState({
+          isEditing: true,
+          selectedStudent: response.data as PersonData,
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      setState({ isLoading: false, isError: true });
     }
   };
 
-  const handleEdit = (student: Student) => {
-    setState({ isEditing: true, selectedStudent: student });
-  };
-
-  const handleDelete = (student: Student) => {
+  const handleDelete = (student: PersonListData) => {
     alertCallback(
       true,
       true,
       'Are you sure?',
       'You will not be able to retrieve deleted students.',
       () => {
+        // TODO: Send a DELETE request to backend
         const index = state.students.indexOf(student);
         const newStudents = state.students.slice();
         newStudents.splice(index, 1);
@@ -153,7 +137,7 @@ const Students: React.FunctionComponent = () => {
     );
   };
 
-  if (!user || user.role === ClassUserRole.STUDENT) {
+  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
     return <Redirect to={HOME} />;
   }
 
@@ -200,7 +184,7 @@ const Students: React.FunctionComponent = () => {
                         marginLeft: '0.25rem',
                       }}
                     />
-                    <ListItemText
+                    {/* <ListItemText
                       primary={s.name}
                       primaryTypographyProps={{
                         style: { paddingLeft: '1rem', fontSize: 16 },
@@ -216,7 +200,7 @@ const Students: React.FunctionComponent = () => {
                           })}
                         </List>
                       }
-                    />
+                    /> */}
                     <ListItemSecondaryAction style={{ top: '20%' }}>
                       <IconButton
                         edge="end"
