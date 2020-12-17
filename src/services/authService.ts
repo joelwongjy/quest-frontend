@@ -2,7 +2,7 @@ import store from 'app/store';
 import TokenUtils from 'utils/tokenUtils';
 import { setUser, clearUser } from 'reducers/miscDux';
 import ApiService from 'services/apiService';
-import { UserData, UserPostData } from 'interfaces/models/users';
+import { UserPostData } from 'interfaces/models/users';
 
 import { GENERAL_ERROR } from 'constants/messages';
 import { PersonData } from 'interfaces/models/persons';
