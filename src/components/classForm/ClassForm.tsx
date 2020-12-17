@@ -13,19 +13,18 @@ import CloseIcon from '@material-ui/icons/Close';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { ClassData, ClassPostData } from 'interfaces/api/classes';
-import { ProgrammePostData } from 'interfaces/api/programmes';
-import { ClassListData, ClassMode } from 'interfaces/models/classes';
-import { ClassUserRole } from 'interfaces/models/classUsers';
-import { ProgrammeListData } from 'interfaces/models/programmes';
+import { ClassPostData, ClassListData } from 'interfaces/models/classes';
+import { ClassMode } from 'interfaces/components/classForm';
+import { ProgrammeData } from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
+import ApiService from 'services/apiService';
 
 import { useStyles } from './ClassForm.styles';
 
 interface ClassFormProps {
   mode: ClassMode;
   questClass?: ClassListData;
-  programme: ProgrammeListData;
+  programme: ProgrammeData;
   classCallback?: (newClass: ClassListData) => void;
   cancelCallback: () => void;
   alertCallback: (
@@ -57,10 +56,9 @@ const ClassForm: React.FC<ClassFormProps> = ({
       ...a,
     }),
     {
-      id: questClass?.id ?? programme.classes.length,
       name: questClass?.name ?? '',
-      role: questClass?.role ?? ClassUserRole.STUDENT,
-      programme,
+      studentIds: [],
+      teacherIds: [],
     }
   );
 
@@ -83,59 +81,56 @@ const ClassForm: React.FC<ClassFormProps> = ({
     }
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (state.name === '') {
       setHasError(true);
       return;
     }
     setHasError(false);
-    setIsSuccessful(true);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-    const newClass: ClassData = {
-      id: state.id,
-      name: state.name,
-      role: state.role,
-    };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newProgramme: ProgrammePostData = {
-      id: state.programme.id,
-      name: state.programme.name,
-      description: state.programme.description,
-      classes: [...state.programme.classes, newClass],
-    };
-    // TODO: Post the data over
+    // TODO: Add loading
+    try {
+      const response = await ApiService.post(
+        `programmes/${programme.id}/classes/create`,
+        state
+      );
+      if (response.status === 200) {
+        setIsSuccessful(true);
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
   };
 
-  const handleEdit = () => {
-    if (state.name === '') {
+  const handleEdit = async () => {
+    if (state.name === '' || !questClass) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    setIsSuccessful(true);
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto',
-    });
-    const newClass: ClassData = {
-      id: state.id,
-      name: state.name,
-      role: state.role,
-    };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newProgramme: ProgrammePostData = {
-      id: state.programme.id,
-      name: state.programme.name,
-      description: state.programme.description,
-      classes: [
-        ...state.programme.classes.filter((c) => c.id !== questClass!.id),
-        newClass,
-      ],
-    };
-    // TODO: Post the data over
+    // TODO: Add loading
+    try {
+      const response = await ApiService.patch(
+        `classes/${questClass.id}`,
+        state
+      );
+      if (response.status === 200) {
+        setIsSuccessful(true);
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
   };
 
   const renderButtons = () => {

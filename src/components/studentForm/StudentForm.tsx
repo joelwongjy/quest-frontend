@@ -19,7 +19,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { Student, StudentMode } from 'interfaces/models/students';
+import { StudentMode } from 'interfaces/models/users';
 import { useError } from 'contexts/ErrorContext';
 import {
   isValidEmail,
@@ -27,14 +27,16 @@ import {
   validateStudentInfo,
 } from 'utils/studentUtils';
 import { useUser } from 'contexts/UserContext';
-import { StudentPostData } from 'interfaces/api/students';
+import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
 
+import { ClassUserRole } from 'interfaces/models/classUsers';
+import ApiService from 'services/apiService';
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
   mode: StudentMode;
-  student?: Student;
-  studentCallback?: (newStudent: Student) => void;
+  student?: PersonData;
+  studentCallback?: (newStudent: PersonData) => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -46,7 +48,7 @@ interface StudentFormProps {
   ) => void;
 }
 
-export interface StudentFormState extends Omit<StudentPostData, 'birthday'> {
+export interface StudentFormState extends Omit<PersonPostData, 'birthday'> {
   birthday: Date | null;
 }
 
@@ -63,13 +65,46 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
   const availableProgrammes =
-    user!.programmes.filter((p) =>
-      user!.classes.some((c) => c.programme.id === p.id)
+    user?.programmes.filter(
+      (p) =>
+        p.classes.filter((c) => c.role !== ClassUserRole.STUDENT).length > 0
     ) ?? [];
 
-  const availableClasses = user!.classes.filter((c) =>
-    availableProgrammes.some((p) => p.id === c.programme.id)
-  );
+  const availableClasses =
+    user?.programmes
+      .map((p) => p.classes)
+      .reduce((a, b) => [...a, ...b], [])
+      .filter((c) => c.role !== ClassUserRole.STUDENT) ?? [];
+
+  const spreadProgrammes = (
+    programmes: PersonPostData['programmes']
+  ): PersonPostData['programmes'] => {
+    const result: PersonPostData['programmes'] = [];
+    programmes.forEach((p) => {
+      p.classes.forEach((c) => {
+        result.push({
+          ...p,
+          classes: [c],
+        });
+      });
+    });
+    return result;
+  };
+
+  const condenseProgrammes = (
+    programmes: PersonPostData['programmes']
+  ): PersonPostData['programmes'] => {
+    const result: PersonPostData['programmes'] = [];
+    programmes.forEach((p) => {
+      const index = result.findIndex((r) => r.id === p.id);
+      if (index === -1) {
+        result.push(p);
+      } else {
+        result[index].classes.push(p.classes[0]);
+      }
+    });
+    return result;
+  };
 
   const [state, setState] = useReducer(
     (s: StudentFormState, a: Partial<StudentFormState>) => ({
@@ -78,13 +113,14 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }),
     {
       name: student?.name ?? '',
-      gender: student?.gender ?? 'M',
-      birthday: student?.birthday ?? new Date(),
+      gender: student?.gender ?? Gender.MALE,
+      birthday: student?.birthday ? new Date(student.birthday) : null,
       mobileNumber: student?.mobileNumber ?? '',
       homeNumber: student?.homeNumber ?? '',
       email: student?.email ?? '',
-      // TODO: change to student?.activities ?? [] when ready
-      activities: [],
+      programmes: student?.programmes
+        ? spreadProgrammes(student.programmes)
+        : [],
     }
   );
 
@@ -104,51 +140,78 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   };
 
   const handleProgrammeChange = (
-    event: React.ChangeEvent<{ value: unknown }>
+    index: number,
+    newProgrammeId: number
   ): void => {
-    const [id, index] = (event.target.value as string).split('-').map(Number);
-    const newActivities = state.activities.slice();
-    [newActivities[index][0]] = user!.programmes.filter((p) => p.id === id);
-    newActivities[index][1] =
-      availableClasses.filter((c) => c.programme.id === id)[0] ?? undefined;
-    setState({ activities: newActivities });
+    const newProgrammes = state.programmes.slice();
+    const newProgramme = user!.programmes.find((p) => p.id === newProgrammeId)!;
+    newProgrammes[index] = {
+      id: newProgramme.id,
+      classes: [
+        newProgramme.classes.filter((c) => c.role !== ClassUserRole.STUDENT)[0],
+      ],
+    };
+    setState({ programmes: newProgrammes });
   };
 
-  const handleClassChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ): void => {
-    const [id, index] = (event.target.value as string).split('-').map(Number);
-    const newActivities = state.activities.slice();
-    [newActivities[index][1]] = availableClasses.filter((c) => c.id === id);
-    setState({ activities: newActivities });
+  const handleClassChange = (index: number, newClassId: number): void => {
+    const newProgrammes = state.programmes.slice();
+    newProgrammes[index].classes = availableClasses.filter(
+      (c) => c.id === newClassId
+    );
+    setState({ programmes: newProgrammes });
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!validateStudentInfo(state)) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    setIsSuccessful(true);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-    // TODO: Post the data over
+    // TODO: Add loading
+    try {
+      const response = await ApiService.post(`persons`, {
+        ...state,
+        programmes: condenseProgrammes(state.programmes),
+      });
+      if (response.status === 200) {
+        setIsSuccessful(true);
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
   };
 
-  const handleEdit = () => {
-    if (!validateStudentInfo(state)) {
+  const handleEdit = async () => {
+    if (!validateStudentInfo(state) || !student) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    setIsSuccessful(true);
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto',
-    });
-    // TODO: Post the data over
+    // TODO: Add loading
+    try {
+      const response = await ApiService.patch(`persons/${student.id}`, {
+        ...state,
+        programmes: condenseProgrammes(state.programmes),
+      });
+      if (response.status === 200) {
+        setIsSuccessful(true);
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
   };
 
   const handleDeleteActivity = (index: number) => {
@@ -158,9 +221,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       'Are you sure?',
       'You will not be able to retrieve the deleted activity.',
       () => {
-        const newActivities = state.activities.slice();
-        newActivities.splice(index, 1);
-        setState({ activities: newActivities });
+        const newProgrammes = state.programmes.slice();
+        newProgrammes.splice(index, 1);
+        setState({ programmes: newProgrammes });
       },
       undefined
     );
@@ -464,130 +527,148 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   Activities:
                 </Typography>
               </ListItem>
-              {state.activities.map((a, index) => {
-                return (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <Grid container key={`${a}-${index}`}>
-                    <ListItem>
-                      <Grid
-                        container
-                        justify="space-between"
-                        alignItems="center"
-                      >
-                        <Grid item xs={4}>
-                          <Typography variant="subtitle1">
-                            Programme:
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={8}>
-                          <FormControl
-                            variant="outlined"
-                            size="small"
-                            className={classes.textfieldContainer}
-                            color="secondary"
-                          >
-                            <Select
-                              id="select-programmes"
-                              value={`${a[0].id}-${index}`}
-                              onChange={handleProgrammeChange}
-                              disabled={isSuccessful}
+              {state.programmes.map((p, index) => {
+                return p.classes.map((c) => {
+                  return (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Grid container key={`${p}-${index}`}>
+                      <ListItem>
+                        <Grid
+                          container
+                          justify="space-between"
+                          alignItems="center"
+                        >
+                          <Grid item xs={4}>
+                            <Typography variant="subtitle1">
+                              Programme:
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <FormControl
+                              variant="outlined"
+                              size="small"
+                              className={classes.textfieldContainer}
+                              color="secondary"
                             >
-                              {availableProgrammes.map((p) => {
-                                return (
-                                  <MenuItem
-                                    value={`${p.id}-${index}`}
-                                    key={`programme-${p.id}`}
-                                  >
-                                    {p.name}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      </Grid>
-                    </ListItem>
-                    <ListItem>
-                      <Grid
-                        container
-                        justify="space-between"
-                        alignItems="center"
-                      >
-                        <Grid item xs={4}>
-                          <Typography variant="subtitle1">Class:</Typography>
-                        </Grid>
-                        <Grid item xs={8}>
-                          <FormControl
-                            variant="outlined"
-                            size="small"
-                            className={classes.textfieldContainer}
-                            color="secondary"
-                          >
-                            <Select
-                              id="select-programmes"
-                              value={`${a[1].id}-${index}`}
-                              onChange={handleClassChange}
-                              disabled={isSuccessful}
-                            >
-                              {availableClasses
-                                .filter((c) => c.programme.id === a[0].id)
-                                .map((c) => {
+                              <Select
+                                id="select-programmes"
+                                value={p.id}
+                                onChange={(
+                                  event: React.ChangeEvent<{ value: unknown }>
+                                ) =>
+                                  handleProgrammeChange(
+                                    index,
+                                    Number(event.target.value)
+                                  )
+                                }
+                                disabled={isSuccessful}
+                              >
+                                {user!.programmes.map((p) => {
                                   return (
                                     <MenuItem
-                                      value={`${c.id}-${index}`}
-                                      key={`class-${c.id}`}
+                                      value={p.id}
+                                      key={`programme-${p.id}`}
                                     >
-                                      {c.name}
+                                      {p.name}
                                     </MenuItem>
                                   );
                                 })}
-                            </Select>
-                          </FormControl>
+                              </Select>
+                            </FormControl>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </ListItem>
-                    {!isSuccessful && (
-                      <Grid container alignItems="center">
-                        <Grid item xs={4}>
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            style={{ color: 'red', marginBottom: '0.5rem' }}
-                            onClick={() => handleDeleteActivity(index)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Grid>
+                      </ListItem>
+                      <ListItem>
                         <Grid
-                          item
-                          xs={8}
-                          style={{
-                            paddingLeft: '0.5rem',
-                            marginBottom: '0.75rem',
-                          }}
+                          container
+                          justify="space-between"
+                          alignItems="center"
                         >
-                          {hasError &&
-                            state.activities.filter(
-                              (x) => x[0].id === a[0].id && x[1].id === a[0].id
-                            ).length > 1 && (
-                              <FormHelperText style={{ color: 'red' }}>
-                                This activity is duplicated!
-                              </FormHelperText>
-                            )}
+                          <Grid item xs={4}>
+                            <Typography variant="subtitle1">Class:</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <FormControl
+                              variant="outlined"
+                              size="small"
+                              className={classes.textfieldContainer}
+                              color="secondary"
+                            >
+                              <Select
+                                id="select-programmes"
+                                value={c.id}
+                                onChange={(
+                                  event: React.ChangeEvent<{ value: unknown }>
+                                ) =>
+                                  handleClassChange(
+                                    index,
+                                    Number(event.target.value)
+                                  )
+                                }
+                                disabled={isSuccessful}
+                              >
+                                {user!.programmes
+                                  .find((p2) => p2.id === p.id)!
+                                  .classes.map((c2) => {
+                                    return (
+                                      <MenuItem
+                                        value={c2.id}
+                                        key={`class-${c2.id}`}
+                                      >
+                                        {c2.name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                              </Select>
+                            </FormControl>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    )}
-                  </Grid>
-                );
+                      </ListItem>
+                      {!isSuccessful && (
+                        <Grid container alignItems="center">
+                          <Grid item xs={4}>
+                            <IconButton
+                              edge="end"
+                              aria-label="delete"
+                              style={{ color: 'red', marginBottom: '0.5rem' }}
+                              onClick={() => handleDeleteActivity(index)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={8}
+                            style={{
+                              paddingLeft: '0.5rem',
+                              marginBottom: '0.75rem',
+                            }}
+                          >
+                            {hasError &&
+                              state.programmes.filter(
+                                (x) =>
+                                  x.id === p.id &&
+                                  x.classes[0].id === p.classes[0].id
+                              ).length > 1 && (
+                                <FormHelperText style={{ color: 'red' }}>
+                                  This activity is duplicated!
+                                </FormHelperText>
+                              )}
+                          </Grid>
+                        </Grid>
+                      )}
+                    </Grid>
+                  );
+                });
               })}
               {!isSuccessful && (
                 <FormControl
                   style={{
                     width: '100%',
                   }}
-                  error={hasError && state.activities.length === 0}
+                  error={hasError && state.programmes.length === 0}
                 >
-                  {hasError && state.activities.length === 0 && (
+                  {hasError && state.programmes.length === 0 && (
                     <FormHelperText style={{ textAlign: 'center' }}>
                       You need to add at least one activity!
                     </FormHelperText>
@@ -598,7 +679,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                 <ListItem>
                   <QuestCard
                     onClick={() => {
-                      if (user?.programmes.length === 0) {
+                      if (user!.programmes.length === 0) {
                         alertCallback(
                           true,
                           false,
@@ -609,7 +690,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         );
                         return;
                       }
-                      if (availableProgrammes.length === 0) {
+                      if (
+                        user!.programmes
+                          .map((p) => p.classes.length)
+                          .reduce((a, b) => a + b, 0) === 0
+                      ) {
                         alertCallback(
                           true,
                           false,
@@ -620,14 +705,12 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         );
                         return;
                       }
-                      const newActivities = state.activities.slice();
-                      newActivities.push([
-                        availableProgrammes[0],
-                        user!.classes.filter(
-                          (c) => c.programme.id === availableProgrammes[0].id
-                        )[0],
-                      ]);
-                      setState({ activities: newActivities });
+                      const newProgrammes = state.programmes.slice();
+                      newProgrammes.push({
+                        ...availableProgrammes[0],
+                        classes: [availableProgrammes[0].classes[0]],
+                      });
+                      setState({ programmes: newProgrammes });
                     }}
                     className={classes.addCard}
                   >

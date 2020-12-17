@@ -8,20 +8,20 @@ import {
   ListItem,
   IconButton,
 } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { ProgrammePostData } from 'interfaces/api/programmes';
-import { ClassData } from 'interfaces/api/classes';
-import { ClassUserRole } from 'interfaces/models/classUsers';
-import { ProgrammeListData, ProgrammeMode } from 'interfaces/models/programmes';
+import {
+  ProgrammePostData,
+  ProgrammeListData,
+  ProgrammePatchData,
+} from 'interfaces/models/programmes';
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
 import { useError } from 'contexts/ErrorContext';
 import { programmeFormIsChanged } from 'utils/programmeUtils';
-import { useUser } from 'contexts/UserContext';
+import ApiService from 'services/apiService';
 
 import { useStyles } from './ProgrammeForm.styles';
 
@@ -40,9 +40,8 @@ interface ProgrammeFormProps {
   ) => void;
 }
 
-export interface ProgrammeFormState extends ProgrammePostData {
-  classesAdded: number;
-}
+export type ProgrammeFormState = ProgrammePostData | ProgrammePatchData;
+
 const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
   mode,
   programme,
@@ -51,7 +50,6 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
 }) => {
   const classes = useStyles();
   const { hasError, setHasError } = useError();
-  const user = useUser();
 
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
@@ -61,50 +59,13 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
       ...a,
     }),
     {
-      id: programme?.id ?? user?.programmes.length ?? 0,
       name: programme?.name ?? '',
       description: programme?.description ?? '',
-      classes: programme?.classes ?? [],
-      classesAdded: 0,
     }
   );
 
-  const handleClassEdit = (
-    index: number,
-    event: React.ChangeEvent<{ value: unknown }>
-  ): void => {
-    const newClasses = state.classes.slice();
-    newClasses[index].name = event.target.value as string;
-    setState({ classes: newClasses });
-  };
-
-  const handleDeleteClass = (index: number) => {
-    if (!state.classes[index] || state.classes[index].name.length === 0) {
-      const newClasses = [...state.classes];
-      newClasses.splice(index, 1);
-      setState({ classes: newClasses, classesAdded: state.classesAdded - 1 });
-    } else {
-      alertCallback(
-        true,
-        true,
-        'Are you sure?',
-        'You will not be able to retrieve deleted class',
-        () => {
-          const newClasses = [...state.classes];
-          newClasses.splice(index, 1);
-          setState({ ...classes, classes: newClasses });
-        },
-        undefined
-      );
-    }
-  };
-
   const handleCancel = () => {
-    if (
-      isSuccessful ||
-      (!programmeFormIsChanged(mode, state, programme) &&
-        state.classesAdded === 0)
-    ) {
+    if (isSuccessful || !programmeFormIsChanged(mode, state, programme)) {
       cancelCallback();
     } else {
       alertCallback(
@@ -118,51 +79,53 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
     }
   };
 
-  const handleAddClass = () => {
-    const newClass: ClassData = {
-      id: state.classes.length,
-      name: '',
-      role: ClassUserRole.STUDENT,
-    };
-    setState({
-      classes: [...state.classes, newClass],
-      classesAdded: state.classesAdded + 1,
-    });
-  };
-
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (state.name === '') {
       setHasError(true);
       return;
     }
     setHasError(false);
-    setIsSuccessful(true);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newProgramme: ProgrammePostData = {
-      id: state.id,
-      name: state.name,
-      description: state.description,
-      classes: state.classes,
-    };
-    // TODO: Post the data over
+    // TODO: Add loading
+    try {
+      const response = await ApiService.post(`programmes/create`, state);
+      if (response.status === 200) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+        setIsSuccessful(true);
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
   };
 
-  const handleEdit = () => {
-    if (state.name === '') {
+  const handleEdit = async () => {
+    if (state.name === '' || !programme) {
       setHasError(true);
       return;
     }
     setHasError(false);
-    setIsSuccessful(true);
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto',
-    });
-    // TODO: Post the data over
+    // TODO: Add loading
+    try {
+      const response = await ApiService.post(
+        `programmes/${programme!.id}`,
+        state
+      );
+      if (response.status === 200) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        });
+        setIsSuccessful(true);
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
   };
 
   const renderButtons = () => {
@@ -306,73 +269,6 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                   Classes:
                 </Typography>
               </ListItem>
-              {state.classes.map((c, index) => {
-                return (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <Grid container key={`${c}-${index}`}>
-                    <ListItem>
-                      <Grid
-                        container
-                        justify="space-between"
-                        alignItems="center"
-                      >
-                        <Grid item xs={4}>
-                          <Typography variant="subtitle1">
-                            Class {index + 1}:
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={isSuccessful ? 8 : 7}>
-                          <div className={classes.textfieldContainer}>
-                            <FormControl
-                              style={{ width: '100%' }}
-                              error={
-                                hasError && state.classes[index].name === ''
-                              }
-                            >
-                              <QuestTextField
-                                required
-                                size="small"
-                                className={classes.textfield}
-                                label="Class Name"
-                                variant="outlined"
-                                disabled={isSuccessful}
-                                onChange={(e) => handleClassEdit(index, e)}
-                              />
-                              {hasError && state.classes[index].name === '' && (
-                                <FormHelperText>
-                                  The name cannot be blank!
-                                </FormHelperText>
-                              )}
-                            </FormControl>
-                          </div>
-                        </Grid>
-                        {!isSuccessful && (
-                          <Grid item xs={1}>
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => handleDeleteClass(index)}
-                              style={{ marginLeft: '0.5rem' }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Grid>
-                        )}
-                      </Grid>
-                    </ListItem>
-                  </Grid>
-                );
-              })}
-              {!isSuccessful && (
-                <ListItem>
-                  <QuestCard
-                    onClick={handleAddClass}
-                    className={classes.addCard}
-                  >
-                    <AddCircleIcon className={classes.addIcon} />
-                    Add a class
-                  </QuestCard>
-                </ListItem>
-              )}
               {isSuccessful ? (
                 <Grid container spacing={2} justify="flex-end">
                   <QuestButton
