@@ -1,27 +1,26 @@
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import ApiService from 'services/apiService';
 import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import { PROGRAMMES, CLASSES, CREATE } from 'constants/routes';
-import { ClassMode } from 'interfaces/models/classes';
-import { ProgrammeListData } from 'interfaces/models/programmes';
+import { ClassMode } from 'interfaces/components/classForm';
+import { ProgrammeData } from 'interfaces/models/programmes';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
-import { programmes } from 'routes/questionnaires/mockData';
 import QuestAlert from 'componentWrappers/questAlert';
+import { sampleProgramme } from 'routes/programmes/mockData';
+import { getAlertCallback } from 'utils/alertUtils';
 
 interface CreateClassState extends RouteState {
-  programme: ProgrammeListData;
+  programme: ProgrammeData;
 }
 
 const CreateClass: React.FunctionComponent = () => {
   const history = useHistory();
-  const { id } = useRouteMatch<RouteParams>({
-    path: `${PROGRAMMES}/:id${CLASSES}${CREATE}`,
-  })!.params;
+  const { id } = useParams<RouteParams>();
   const programmeId = parseInt(id, 10);
 
   const breadcrumbs = [
@@ -39,7 +38,7 @@ const CreateClass: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      programme: programmes[0],
+      programme: sampleProgramme,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -65,10 +64,14 @@ const CreateClass: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('programme');
+        // To be replaced with `programmes/${id}/students`
+        const response = await ApiService.get(`programmes/${id}`);
         if (!didCancel) {
-          setState({ programme: response.data, isLoading: false });
-          // dispatch(updateSecurities(securitiesResponse.data));
+          setState({
+            programme: response.data as ProgrammeData,
+            isLoading: false,
+          });
+          // do dispatch here if necessary
         }
       } catch (error) {
         if (!didCancel) {
@@ -91,41 +94,7 @@ const CreateClass: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const alertCallback = (
-    isAlertOpen: boolean,
-    hasConfirm: boolean,
-    alertHeader: string,
-    alertMessage: string,
-    confirmHandler?: () => void,
-    cancelHandler?: () => void
-  ) => {
-    setState({
-      isAlertOpen,
-      hasConfirm,
-      alertHeader,
-      alertMessage,
-    });
-    if (confirmHandler) {
-      setState({
-        confirmHandler: () => {
-          confirmHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ confirmHandler: () => setState({ isAlertOpen: false }) });
-    }
-    if (cancelHandler) {
-      setState({
-        cancelHandler: () => {
-          cancelHandler();
-          setState({ isAlertOpen: false });
-        },
-      });
-    } else {
-      setState({ cancelHandler: () => setState({ isAlertOpen: false }) });
-    }
-  };
+  const alertCallback = getAlertCallback(setState);
 
   return (
     <PageContainer>

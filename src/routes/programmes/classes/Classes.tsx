@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
-import { RouteState, RouteParams } from 'interfaces/routes/common';
-import { ClassListData, ClassMode } from 'interfaces/models/classes';
-import { questClasses } from 'routes/questionnaires/mockData';
+import { RouteParams, RouteState } from 'interfaces/routes/common';
+import { ClassListData } from 'interfaces/models/classes';
+import { ClassMode } from 'interfaces/components/classForm';
 import ClassCard from 'components/classCard';
 import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
@@ -16,11 +16,13 @@ import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCa
 import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
 import QuestAlert from 'componentWrappers/questAlert';
 import { getAlertCallback } from 'utils/alertUtils';
+import { ProgrammeData } from 'interfaces/models/programmes';
 
-import { useStyles } from './programmes.styles';
+import { sampleProgramme } from '../mockData';
+import { useStyles } from './classes.styles';
 
 interface ClassesState extends RouteState {
-  questClasses: ClassListData[];
+  programme: ProgrammeData;
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -30,13 +32,14 @@ interface ClassesState extends RouteState {
 }
 
 const Classes: React.FunctionComponent = () => {
+  const { id } = useParams<RouteParams>();
   const [state, setState] = useReducer(
     (s: ClassesState, a: Partial<ClassesState>) => ({
       ...s,
       ...a,
     }),
     {
-      questClasses,
+      programme: sampleProgramme,
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -64,10 +67,13 @@ const Classes: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('classes');
+        const response = await ApiService.get(`programmes/${id}`);
         if (!didCancel) {
-          setState({ questClasses: response.data, isLoading: false });
-          // dispatch(updateSecurities(securitiesResponse.data));
+          setState({
+            programme: response.data as ProgrammeData,
+            isLoading: false,
+          });
+          // dispatch if required
         }
       } catch (error) {
         if (!didCancel) {
@@ -89,13 +95,6 @@ const Classes: React.FunctionComponent = () => {
       didCancel = true;
     };
   }, [dispatch]);
-
-  const { id } = useParams<RouteParams>();
-  const programmeId = parseInt(id, 10);
-
-  const availableClasses = state.questClasses.filter(
-    (c) => c.programme.id === programmeId
-  );
 
   const breadcrumbs = [
     { text: 'Programmes', href: PROGRAMMES },
@@ -154,7 +153,7 @@ const Classes: React.FunctionComponent = () => {
               color="secondary"
               className={classes.button}
               component={Link}
-              to={`${PROGRAMMES}/${programmeId}${CLASSES}${CREATE}`}
+              to={`${PROGRAMMES}/${id}${CLASSES}${CREATE}`}
             >
               Create Class
             </Button>
@@ -165,19 +164,23 @@ const Classes: React.FunctionComponent = () => {
         <ClassForm
           mode={ClassMode.EDIT}
           questClass={state.selectedClass}
-          programme={state.selectedClass!.programme}
+          programme={state.programme}
           alertCallback={alertCallback}
           cancelCallback={() => setState({ isEditing: false })}
         />
       ) : (
         <div>
           <Grid container spacing={3}>
-            {availableClasses.length > 0 &&
-              availableClasses.map((c) => {
+            {state.programme.classCount > 0 &&
+              state.programme.classes.map((c) => {
                 const menuOptions = getMenuOptions(c);
                 return (
                   <Grid item xs={12} sm={6} lg={4} key={c.name}>
-                    <ClassCard questClass={c} menuOptions={menuOptions} />
+                    <ClassCard
+                      questClass={c}
+                      menuOptions={menuOptions}
+                      programmeId={state.programme.id}
+                    />
                   </Grid>
                 );
               })}
