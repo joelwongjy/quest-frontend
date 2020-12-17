@@ -5,7 +5,7 @@ import { useAsync } from 'react-async';
 import AuthContextInterface from 'interfaces/contexts/authContext';
 import AuthService from 'services/authService';
 import Loading from 'components/loading';
-import { UserPostData } from 'interfaces/api/auth';
+import { UserPostData } from 'interfaces/models/users';
 
 const AuthContext = React.createContext<AuthContextInterface | undefined>(
   undefined
