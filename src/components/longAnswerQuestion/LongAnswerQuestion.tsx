@@ -6,16 +6,17 @@ import {
   FormLabel,
 } from '@material-ui/core';
 
-import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
+import { QuestionMode } from 'interfaces/models/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
 import { useError } from 'contexts/ErrorContext';
+import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { useStyles } from './LongAnswerQuestion.styles';
 
 interface LongAnswerQuestionProps {
-  question: QuestionOrder;
+  question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
-  updateQuestion: (newQuestion: QuestionOrder) => void;
+  updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
   dropdown: React.ReactNode;
 }
 

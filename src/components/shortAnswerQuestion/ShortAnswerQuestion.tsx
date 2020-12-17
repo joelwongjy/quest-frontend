@@ -7,16 +7,17 @@ import {
 } from '@material-ui/core';
 
 import QuestTextField from 'componentWrappers/questTextField';
-import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
+import { QuestionMode } from 'interfaces/models/questionnaires';
 import { useError } from 'contexts/ErrorContext';
+import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { useStyles } from './ShortAnswerQuestion.styles';
 
 interface ShortAnswerQuestionProps {
   dropdown: React.ReactNode;
-  question: QuestionOrder;
+  question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
-  updateQuestion: (newQuestion: QuestionOrder) => void;
+  updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
 }
 
 const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = ({

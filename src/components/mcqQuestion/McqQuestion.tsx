@@ -13,15 +13,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import QuestButton from 'componentWrappers/questButton';
 import QuestTextField from 'componentWrappers/questTextField';
-import { QuestionOrder, QuestionMode } from 'interfaces/models/questionnaires';
+import { QuestionMode } from 'interfaces/models/questionnaires';
 import { useError } from 'contexts/ErrorContext';
+import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { useStyles } from './McqQuestion.styles';
 
 interface McqQuestionProps {
-  question: QuestionOrder;
+  question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
-  updateQuestion: (newQuestion: QuestionOrder) => void;
+  updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
   dropdown: React.ReactNode;
   alertCallback: (
     isAlertOpen: boolean,
@@ -127,7 +128,7 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
             {question.options.map((option, index) => (
               <div
                 // eslint-disable-next-line react/no-array-index-key
-                key={`option-${question.id}-${index}`}
+                key={`option-${question.duxId}-${index}`}
                 style={{ width: '100%', display: 'flex', alignItems: 'center' }}
               >
                 <FormControl style={{ width: '100%' }} error={hasOptionError}>
