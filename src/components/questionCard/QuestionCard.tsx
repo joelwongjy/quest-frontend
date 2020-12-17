@@ -19,20 +19,20 @@ import QuestCard from 'componentWrappers/questCard';
 import McqQuestion from 'components/mcqQuestion';
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
-  QuestionOrder,
-  QuestionType,
   QuestionMode,
   QuestionAccessibility,
 } from 'interfaces/models/questionnaires';
 import ShortAnswerQuestion from 'components/shortAnswerQuestion';
 import LongAnswerQuestion from 'components/longAnswerQuestion';
 import MoodQuestion from 'components/moodQuestion';
-
+import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 import ScaleQuestion from 'components/scaleQuestion';
+import { QuestionType } from 'interfaces/models/questions';
+
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
-  question: QuestionOrder;
+  question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   handleDelete: () => void;
   handleDuplicate: () => void;
@@ -40,7 +40,7 @@ interface QuestionCardProps extends QuestComponentProps {
   handleMoveDown: () => void;
   isFirst: boolean;
   isLast: boolean;
-  updateQuestion: (newQuestion: QuestionOrder) => void;
+  updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
   accessibility: QuestionAccessibility;
   updateAccessibility: (newAccessibility: QuestionAccessibility) => void;
   accessibilityEnabled: boolean;
@@ -206,7 +206,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   return (
-    <QuestCard className={className} key={question.id}>
+    <QuestCard className={className} key={question.duxId}>
       <MuiThemeProvider theme={InputMuiTheme}>
         {renderQuestion()}
       </MuiThemeProvider>
