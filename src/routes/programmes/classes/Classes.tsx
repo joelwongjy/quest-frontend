@@ -98,7 +98,11 @@ const Classes: React.FunctionComponent = () => {
 
   const breadcrumbs = [
     { text: 'Programmes', href: PROGRAMMES },
-    { text: 'Classes', href: `${PROGRAMMES}/:id${CLASSES}` },
+    {
+      text: state.programme.name,
+      href: `${PROGRAMMES}/${state.programme.id}${CLASSES}`,
+    },
+    { text: 'Classes', href: `${PROGRAMMES}/${state.programme.id}${CLASSES}` },
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -23,15 +23,6 @@ const CreateClass: React.FunctionComponent = () => {
   const { id } = useParams<RouteParams>();
   const programmeId = parseInt(id, 10);
 
-  const breadcrumbs = [
-    { text: 'Programmes', href: PROGRAMMES },
-    { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
-    {
-      text: 'Create',
-      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${CREATE}`,
-    },
-  ];
-
   const [state, setState] = useReducer(
     (s: CreateClassState, a: Partial<CreateClassState>) => ({
       ...s,
@@ -93,6 +84,19 @@ const CreateClass: React.FunctionComponent = () => {
       didCancel = true;
     };
   }, [dispatch]);
+
+  const breadcrumbs = [
+    { text: 'Programmes', href: PROGRAMMES },
+    {
+      text: state.programme.name,
+      href: `${PROGRAMMES}/${programmeId}${CLASSES}`,
+    },
+    { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
+    {
+      text: 'Create',
+      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${CREATE}`,
+    },
+  ];
 
   const alertCallback = getAlertCallback(setState);
 
