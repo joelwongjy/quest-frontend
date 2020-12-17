@@ -101,14 +101,14 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           title={
             <>
               <Typography className={classes.dates} color="textSecondary">
-                Start: {format(questionnaire.startAt, 'd MMM y')}
+                Start: {format(questionnaire.startAt as Date, 'd MMM y')}
               </Typography>
               <Typography
                 className={classes.dates}
                 color="textSecondary"
                 gutterBottom
               >
-                End: {format(questionnaire.endAt, 'd MMM y')}
+                End: {format(questionnaire.endAt as Date, 'd MMM y')}
               </Typography>
             </>
           }
