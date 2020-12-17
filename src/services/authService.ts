@@ -2,9 +2,10 @@ import store from 'app/store';
 import TokenUtils from 'utils/tokenUtils';
 import { setUser, clearUser } from 'reducers/miscDux';
 import ApiService from 'services/apiService';
-import { UserData } from 'interfaces/models/users';
-import { UserPostData } from 'interfaces/api/auth';
+import { UserData, UserPostData } from 'interfaces/models/users';
+
 import { GENERAL_ERROR } from 'constants/messages';
+import { PersonData } from 'interfaces/models/persons';
 
 const logout = (): Promise<void> => {
   TokenUtils.removeToken();
@@ -30,7 +31,7 @@ const login = async (data: UserPostData): Promise<null> => {
   return TokenUtils.storeToken(response);
 };
 
-const getUser = async (): Promise<UserData | null> => {
+const getUser = async (): Promise<PersonData | null> => {
   const token = TokenUtils.getToken();
   if (!token) {
     return Promise.resolve(null);
