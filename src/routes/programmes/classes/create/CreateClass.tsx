@@ -88,7 +88,7 @@ const CreateClass: React.FunctionComponent = () => {
   const breadcrumbs = [
     { text: 'Programmes', href: PROGRAMMES },
     {
-      text: state.programme.name,
+      text: state.isLoading ? 'Loading' : state.programme.name,
       href: `${PROGRAMMES}/${programmeId}${CLASSES}`,
     },
     { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
