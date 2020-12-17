@@ -1,4 +1,4 @@
-import { UserPostData } from 'interfaces/api/auth';
+import { UserPostData } from 'interfaces/models/users';
 import UserContextInterface from './userContext';
 
 export default interface AuthContextInterface {

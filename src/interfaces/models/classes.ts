@@ -1,14 +1,33 @@
 import { DiscardableData } from './base';
-import { ClassUserRole } from './classUsers';
-import { ProgrammeListData } from './programmes';
+import { PersonListData } from './persons';
 
-export interface ClassListData extends DiscardableData {
+// POST /programmes/:programmeId/classes/create
+export interface ClassPostData {
   name: string;
-  role: ClassUserRole;
-  programme: ProgrammeListData;
+  studentIds: number[];
+  teacherIds: number[];
 }
 
-export enum ClassMode {
-  EDIT = 'EDIT',
-  NEW = 'NEW',
+// PATCH /classes/:classId
+export interface ClassPatchData {
+  name?: string;
+  studentIds?: number[]; // the complete list of student ids
+  teacherIds: number[]; // the complete list of teacher ids
+}
+
+// This interface is never directly fetched/sent
+// Will always be sent as part of a programme
+export interface ClassListData extends DiscardableData {
+  name: string;
+  studentCount: number;
+  teacherCount: number;
+  description?: string;
+}
+
+// GET /classes/:classId
+export interface ClassData extends ClassListData {
+  programmeName: string;
+  programmeId: number;
+  students: PersonListData[];
+  teachers: PersonListData[];
 }
