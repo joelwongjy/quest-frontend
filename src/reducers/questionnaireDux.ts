@@ -487,6 +487,7 @@ const questionnaire = createSlice({
         state.sharedQuestions = { questions: [] };
       }
       state.programmes = action.payload.programmes ?? [];
+      state.classes = action.payload.classes ?? [];
       state.mode = action.payload.mode ?? QuestionnaireMode.CREATE;
     },
     clearQuestionnaire: (state): void => {
@@ -503,6 +504,7 @@ const questionnaire = createSlice({
       ];
       state.sharedQuestions = { questions: [] };
       state.programmes = [];
+      state.classes = [];
       state.mode = QuestionnaireMode.CREATE;
     },
   },
