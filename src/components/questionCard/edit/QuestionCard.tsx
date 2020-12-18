@@ -16,19 +16,19 @@ import UpIcon from '@material-ui/icons/ArrowUpward';
 import DownIcon from '@material-ui/icons/ArrowDownward';
 
 import QuestCard from 'componentWrappers/questCard';
-import McqQuestion from 'components/mcqQuestion/edit';
+import EditMcqQuestion from 'components/mcqQuestion/edit';
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
   QuestionMode,
   QuestionAccessibility,
 } from 'interfaces/models/questionnaires';
-import ShortAnswerQuestion from 'components/shortAnswerQuestion';
-import MoodQuestion from 'components/moodQuestion/edit';
+import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit';
+import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
+import EditMoodQuestion from 'components/moodQuestion/edit';
+import EditScaleQuestion from 'components/scaleQuestion/edit';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
-import ScaleQuestion from 'components/scaleQuestion';
 import { QuestionType } from 'interfaces/models/questions';
 
-import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
@@ -155,7 +155,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       switch (question.questionType) {
         case QuestionType.SHORT_ANSWER:
           return (
-            <ShortAnswerQuestion
+            <EditShortAnswerQuestion
               mode={mode}
               dropdown={dropdown}
               question={question}
@@ -173,7 +173,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           );
         case QuestionType.MOOD:
           return (
-            <MoodQuestion
+            <EditMoodQuestion
               mode={mode}
               dropdown={dropdown}
               question={question}
@@ -182,7 +182,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           );
         case QuestionType.SCALE:
           return (
-            <ScaleQuestion
+            <EditScaleQuestion
               mode={mode}
               dropdown={dropdown}
               question={question}
@@ -192,7 +192,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         case QuestionType.MULTIPLE_CHOICE:
         default:
           return (
-            <McqQuestion
+            <EditMcqQuestion
               mode={mode}
               dropdown={dropdown}
               question={question}

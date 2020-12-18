@@ -11,16 +11,16 @@ import { QuestionMode } from 'interfaces/models/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './ShortAnswerQuestion.styles';
+import { useStyles } from './editShortAnswerQuestion.styles';
 
-interface ShortAnswerQuestionProps {
+interface EditShortAnswerQuestionProps {
   dropdown: React.ReactNode;
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
 }
 
-const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = ({
+const EditShortAnswerQuestion: React.FunctionComponent<EditShortAnswerQuestionProps> = ({
   dropdown,
   question,
   mode,
@@ -80,4 +80,4 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default ShortAnswerQuestion;
+export default EditShortAnswerQuestion;
