@@ -10,6 +10,8 @@ import {
 import { DiscardableData } from 'interfaces/models/base';
 import { QuestionSetData, QuestionType } from 'interfaces/models/questions';
 import { PersonListData } from 'interfaces/models/persons';
+import { AttemptFullData } from 'interfaces/models/attempts';
+import { DefaultUserRole } from 'interfaces/models/users';
 
 const mockBaseData: DiscardableData = {
   id: 0,
@@ -149,3 +151,151 @@ export const students: PersonListData[] = [
     name: 'Tony Stark',
   },
 ];
+
+export const attempt: AttemptFullData = {
+  user: {
+    username: 'johndoe',
+    name: 'John Doe',
+    appRole: DefaultUserRole.USER,
+    discardedAt: null,
+    id: 1,
+    createdAt: new Date(2020, 7, 12),
+    updatedAt: new Date(),
+  },
+  questionnaireWindow: {
+    windowId: 1,
+    startAt: new Date(2020, 12, 1),
+    endAt: new Date(2020, 12, 12),
+    questions: [
+      {
+        ...mockBaseData,
+        order: 1,
+        qnOrderId: 1,
+        questionText: 'Do you want to build a snow man?',
+        questionType: QuestionType.MULTIPLE_CHOICE,
+        options: [
+          {
+            optionId: 1,
+            optionText: 'Yes',
+          },
+          {
+            optionId: 2,
+            optionText: 'No',
+          },
+          {
+            optionId: 3,
+            optionText: 'Maybe',
+          },
+        ],
+      },
+      {
+        ...mockBaseData,
+        qnOrderId: 2,
+        order: 2,
+        questionText: 'I love DSC',
+        questionType: QuestionType.LONG_ANSWER,
+        options: [],
+      },
+      {
+        ...mockBaseData,
+        qnOrderId: 3,
+        order: 3,
+        questionText: 'Do you like prof ben?',
+        questionType: QuestionType.SHORT_ANSWER,
+        options: [],
+      },
+      {
+        ...mockBaseData,
+        qnOrderId: 4,
+        order: 4,
+        questionText: 'What do you think of CVWO?',
+        questionType: QuestionType.MOOD,
+        options: [],
+      },
+      {
+        ...mockBaseData,
+        qnOrderId: 5,
+        order: 5,
+        questionText: 'Rate Orbital',
+        questionType: QuestionType.SCALE,
+        options: [],
+      },
+    ],
+  },
+  answers: [
+    {
+      answerId: 1,
+      questionOrder: {
+        ...mockBaseData,
+        order: 1,
+        qnOrderId: 1,
+        questionText: 'Do you want to build a snow man?',
+        questionType: QuestionType.MULTIPLE_CHOICE,
+        options: [
+          {
+            optionId: 1,
+            optionText: 'Yes',
+          },
+          {
+            optionId: 2,
+            optionText: 'No',
+          },
+          {
+            optionId: 3,
+            optionText: 'Maybe',
+          },
+        ],
+      },
+      option: {
+        optionId: 1,
+        optionText: 'Yes',
+      },
+    },
+    {
+      answerId: 2,
+      questionOrder: {
+        ...mockBaseData,
+        qnOrderId: 2,
+        order: 2,
+        questionText: 'I love DSC',
+        questionType: QuestionType.LONG_ANSWER,
+        options: [],
+      },
+      textResponse: 'Dread it, run from it, destiny arrives all the same.',
+    },
+    {
+      answerId: 3,
+      questionOrder: {
+        ...mockBaseData,
+        qnOrderId: 3,
+        order: 3,
+        questionText: 'Do you like prof ben?',
+        questionType: QuestionType.SHORT_ANSWER,
+        options: [],
+      },
+      textResponse: 'Dread it, run from it, destiny arrives all the same.',
+    },
+    {
+      answerId: 4,
+      questionOrder: {
+        ...mockBaseData,
+        qnOrderId: 4,
+        order: 4,
+        questionText: 'What do you think of CVWO?',
+        questionType: QuestionType.MOOD,
+        options: [],
+      },
+    },
+    {
+      answerId: 5,
+      questionOrder: {
+        ...mockBaseData,
+        qnOrderId: 5,
+        order: 5,
+        questionText: 'Rate Orbital',
+        questionType: QuestionType.SCALE,
+        options: [],
+      },
+    },
+  ],
+};

@@ -1,20 +1,144 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
 import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 
-import { questionnaires } from '../mockData';
+import { AttemptFullData } from 'interfaces/models/attempts';
+import { RouteState } from 'interfaces/routes/common';
+import { useUser } from 'contexts/UserContext';
+import ApiService from 'services/apiService';
+import { getAlertCallback } from 'utils/alertUtils';
+import QuestAlert from 'componentWrappers/questAlert';
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@material-ui/core';
+import {
+  QuestionAccessibility,
+  QuestionMode,
+  QuestionnaireFullData,
+  QuestionnaireMode,
+} from 'interfaces/models/questionnaires';
+import { convertToQuestionnaireDux } from 'utils/questionnaireUtils';
+import nextId from 'react-id-generator';
+import ViewQuestionCard from 'components/questionCard/view';
+import { attempt, questionnaires } from '../mockData';
+import { useStyles } from './responses.styles';
 
 interface RouteParams {
   id: string;
+}
+
+interface ResponsesState extends RouteState {
+  questionnaire: QuestionnaireFullData | undefined;
+  currentAttempt: AttemptFullData | undefined;
+  currentProgrammeId: number | undefined;
+  currentClassId: number | undefined;
+  currentStudentId: number | undefined;
 }
 
 const Responses: React.FunctionComponent = () => {
   const { id } = useRouteMatch<RouteParams>({
     path: `${QUESTIONNAIRES}/:id${RESPONSES}`,
   })!.params;
+
+  const classes = useStyles();
+  const user = useUser();
+
+  const [state, setState] = useReducer(
+    (s: ResponsesState, a: Partial<ResponsesState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      questionnaire: undefined,
+      currentAttempt: attempt,
+      currentProgrammeId: undefined,
+      currentClassId: undefined,
+      currentStudentId: undefined,
+      isLoading: true,
+      isError: false,
+      isAlertOpen: false,
+      alertHeader: '',
+      alertMessage: '',
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+    }
+  );
+
+  useEffect(() => {
+    let didCancel = false;
+
+    const fetchData = async () => {
+      try {
+        const response = await ApiService.get(`questionnaires/${id}`);
+        const questionnaire = convertToQuestionnaireDux(
+          response.data as QuestionnaireFullData,
+          QuestionnaireMode.EDIT
+        );
+        if (!didCancel) {
+          if (parseInt(id, 10) !== questionnaire.questionnaireId) {
+            setState({
+              isLoading: false,
+              questionnaire: response.data as QuestionnaireFullData,
+            });
+          } else {
+            setState({
+              isLoading: false,
+              questionnaire: response.data as QuestionnaireFullData,
+            });
+          }
+        }
+      } catch (error) {
+        setState({
+          isLoading: false,
+          isAlertOpen: true,
+          hasConfirm: false,
+          alertHeader: 'Something went wrong',
+          alertMessage: 'Please refresh and try again later.',
+        });
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      didCancel = true;
+    };
+  }, []);
+
+  const fetchAttempt = async (id: number) => {
+    try {
+      const response = await ApiService.get(
+        `questionnaires/${state.questionnaire!.questionnaireId}/student/${id}`
+      );
+      const attempt = response.data as AttemptFullData;
+      setState({ currentAttempt: attempt });
+    } catch (error) {
+      setState({
+        isAlertOpen: true,
+        hasConfirm: false,
+        alertHeader: 'Something went wrong',
+        alertMessage: 'Please refresh and try again later.',
+      });
+    }
+  };
+
+  const alertCallback = getAlertCallback(setState);
 
   const questionnaire = questionnaires.filter(
     (q) => q.id === parseInt(id, 10)
@@ -31,6 +155,167 @@ const Responses: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
+      <Grid container justify="center">
+        <Typography
+          variant="h5"
+          className={classes.title}
+        >{`${state.questionnaire?.title} - Responses`}</Typography>
+      </Grid>
+      <Grid container justify="center">
+        <Grid item>
+          <FormControl
+            variant="outlined"
+            className={classes.formControl}
+            size="small"
+            focused={state.currentProgrammeId === undefined}
+            color="secondary"
+          >
+            <InputLabel id="programme-select-outlined-label">
+              Programme
+            </InputLabel>
+            <Select
+              labelId="programme-select-outlined-label"
+              id="programme-select-outlined"
+              value={state.currentProgrammeId}
+              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                const newProgrammeId = Number(event.target.value);
+                if (newProgrammeId !== state.currentProgrammeId) {
+                  setState({
+                    currentProgrammeId: event.target.value as number,
+                    currentClassId: undefined,
+                    currentStudentId: undefined,
+                  });
+                }
+              }}
+              label="Programme"
+            >
+              {state.questionnaire?.programmes
+                ?.filter(
+                  (x) =>
+                    user!.programmes.filter((y) => y.id === x.id).length > 0
+                )
+                .map((x) => {
+                  return (
+                    <MenuItem key={x.id} value={x.id}>
+                      {user!.programmes.find((p) => p.id === x.id)?.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item>
+          <FormControl
+            key={state.currentClassId}
+            variant="outlined"
+            className={classes.formControl}
+            size="small"
+            focused={
+              state.currentProgrammeId !== undefined &&
+              state.currentClassId === undefined
+            }
+            color="secondary"
+          >
+            <InputLabel id="class-select-outlined-label">Class</InputLabel>
+            <Select
+              labelId="class-select-outlined-label"
+              id="class-select-outlined"
+              value={state.currentClassId}
+              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                setState({ currentClassId: event.target.value as number });
+              }}
+              label="Class"
+              disabled={state.currentProgrammeId === undefined}
+            >
+              {user!.programmes
+                .find((y) => y.id === state.currentProgrammeId)
+                ?.classes.map((x) => {
+                  return (
+                    <MenuItem key={x.id} value={x.id}>
+                      {x.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item>
+          <FormControl
+            variant="outlined"
+            focused={
+              state.currentProgrammeId !== undefined &&
+              state.currentClassId !== undefined &&
+              state.currentStudentId === undefined
+            }
+            color="secondary"
+            className={classes.formControlName}
+            size="small"
+          >
+            <InputLabel id="name-select-outlined-label">Student</InputLabel>
+            <Select
+              labelId="student-select-outlined-label"
+              id="student-select-outlined"
+              value={state.currentStudentId}
+              disabled={
+                state.currentProgrammeId === undefined ||
+                state.currentClassId === undefined
+              }
+              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                setState({ currentStudentId: event.target.value as number });
+                fetchAttempt(event.target.value as number);
+              }}
+              label="Student"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      {state.currentProgrammeId === undefined ||
+      state.currentClassId === undefined ? (
+        <Grid container justify="center" style={{ marginTop: '2rem' }}>
+          <Typography>
+            Please specify the programme, class and student to view the attempt.
+          </Typography>
+        </Grid>
+      ) : (
+        <Grid container justify="center">
+          <Grid item xs={10}>
+            <div className={classes.root}>
+              {state.currentAttempt?.answers
+                .sort((x, y) => x.questionOrder.order - y.questionOrder.order)
+                .map((ans) => {
+                  const question = ans.questionOrder;
+                  return (
+                    <ViewQuestionCard
+                      key={`answer-${ans.answerId}`}
+                      question={{ ...question, duxId: nextId() }}
+                      answer={ans}
+                      mode={QuestionMode.VIEW}
+                      accessibility={QuestionAccessibility.PRE}
+                      alertCallback={alertCallback}
+                      className={classes.card}
+                    />
+                  );
+                })}
+            </div>
+          </Grid>
+        </Grid>
+      )}
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
