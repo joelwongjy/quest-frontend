@@ -11,16 +11,16 @@ import QuestTextField from 'componentWrappers/questTextField';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './LongAnswerQuestion.styles';
+import { useStyles } from './editLongAnswerQuestion.styles';
 
-interface LongAnswerQuestionProps {
+interface EditLongAnswerQuestionProps {
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
   dropdown: React.ReactNode;
 }
 
-const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
+const EditLongAnswerQuestion: React.FunctionComponent<EditLongAnswerQuestionProps> = ({
   question,
   mode,
   updateQuestion,
@@ -81,4 +81,4 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default LongAnswerQuestion;
+export default EditLongAnswerQuestion;
