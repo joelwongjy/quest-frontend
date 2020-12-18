@@ -11,6 +11,12 @@ import {
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { AnswerData } from 'interfaces/models/answers';
+import { QuestionType } from 'interfaces/models/questions';
+import ViewMcqQuestion from 'components/mcqQuestion/view';
+import ViewScaleQuestion from 'components/scaleQuestion/view';
+import ViewMoodQuestion from 'components/moodQuestion/view';
+import ViewLongAnswerQuestion from 'components/longAnswerQuestion/view';
+import ViewShortAnswerQuestion from 'components/shortAnswerQuestion/view';
 import { useStyles } from '../edit/questionCard.styles';
 
 interface ViewQuestionCardProps extends QuestComponentProps {
@@ -47,7 +53,19 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
   const classes = useStyles();
 
   const renderQuestion = () => {
-    return <></>;
+    switch (question.questionType) {
+      case QuestionType.SHORT_ANSWER:
+        return <ViewShortAnswerQuestion answer={answer} />;
+      case QuestionType.LONG_ANSWER:
+        return <ViewLongAnswerQuestion answer={answer} />;
+      case QuestionType.MOOD:
+        return <ViewMoodQuestion answer={answer} />;
+      case QuestionType.SCALE:
+        return <ViewScaleQuestion answer={answer} />;
+      case QuestionType.MULTIPLE_CHOICE:
+      default:
+        return <ViewMcqQuestion answer={answer} />;
+    }
   };
 
   return (
