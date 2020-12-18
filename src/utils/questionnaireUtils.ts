@@ -102,7 +102,24 @@ export const isValidQuestionnaire = (
   CHECK EMPTY FUNCTIONS
 ======================= */
 
-export const isEmptyQuestion = isValidQuestion;
+export const isEmptyQuestion = (
+  question: QuestionData | QuestionPostData
+): boolean => {
+  const { questionText, questionType, options } = question;
+  if (questionText !== '') {
+    return false;
+  }
+  if (questionType === QuestionType.MULTIPLE_CHOICE) {
+    if (!options) {
+      return true;
+    }
+    return (
+      options.filter((o: OptionData | OptionPostData) => o.optionText !== '')
+        .length === 0
+    );
+  }
+  return true;
+};
 
 export const isEmptyQuestionnaire = (
   questionnaire: QuestionnaireDux
