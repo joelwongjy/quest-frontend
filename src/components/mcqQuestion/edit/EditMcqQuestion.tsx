@@ -17,9 +17,9 @@ import { QuestionMode } from 'interfaces/models/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './McqQuestion.styles';
+import { useStyles } from './editMcqQuestion.styles';
 
-interface McqQuestionProps {
+interface EditMcqQuestionProps {
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
@@ -34,7 +34,7 @@ interface McqQuestionProps {
   ) => void;
 }
 
-const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
+const EditMcqQuestion: React.FunctionComponent<EditMcqQuestionProps> = ({
   question,
   mode,
   updateQuestion,
@@ -188,4 +188,4 @@ const McqQuestion: React.FunctionComponent<McqQuestionProps> = ({
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default McqQuestion;
+export default EditMcqQuestion;

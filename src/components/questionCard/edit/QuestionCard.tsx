@@ -16,19 +16,19 @@ import UpIcon from '@material-ui/icons/ArrowUpward';
 import DownIcon from '@material-ui/icons/ArrowDownward';
 
 import QuestCard from 'componentWrappers/questCard';
-import McqQuestion from 'components/mcqQuestion';
+import McqQuestion from 'components/mcqQuestion/edit';
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
   QuestionMode,
   QuestionAccessibility,
 } from 'interfaces/models/questionnaires';
 import ShortAnswerQuestion from 'components/shortAnswerQuestion';
-import LongAnswerQuestion from 'components/longAnswerQuestion';
 import MoodQuestion from 'components/moodQuestion';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 import ScaleQuestion from 'components/scaleQuestion';
 import { QuestionType } from 'interfaces/models/questions';
 
+import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
 import { useStyles } from './questionCard.styles';
 
 interface QuestionCardProps extends QuestComponentProps {
@@ -164,7 +164,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           );
         case QuestionType.LONG_ANSWER:
           return (
-            <LongAnswerQuestion
+            <EditLongAnswerQuestion
               mode={mode}
               dropdown={dropdown}
               question={question}
