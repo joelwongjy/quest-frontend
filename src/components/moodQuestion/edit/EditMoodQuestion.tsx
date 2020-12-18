@@ -18,16 +18,16 @@ import QuestTextField from 'componentWrappers/questTextField';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './MoodQuestion.styles';
+import { useStyles } from './EditMoodQuestion.styles';
 
-interface MoodQuestionProps {
+interface EditMoodQuestionProps {
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
   dropdown: React.ReactNode;
 }
 
-const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
+const EditMoodQuestion: React.FunctionComponent<EditMoodQuestionProps> = ({
   question,
   mode,
   updateQuestion,
@@ -155,4 +155,4 @@ const MoodQuestion: React.FunctionComponent<MoodQuestionProps> = ({
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default MoodQuestion;
+export default EditMoodQuestion;

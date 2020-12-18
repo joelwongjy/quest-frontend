@@ -23,7 +23,7 @@ import {
   QuestionAccessibility,
 } from 'interfaces/models/questionnaires';
 import ShortAnswerQuestion from 'components/shortAnswerQuestion';
-import MoodQuestion from 'components/moodQuestion';
+import MoodQuestion from 'components/moodQuestion/edit';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 import ScaleQuestion from 'components/scaleQuestion';
 import { QuestionType } from 'interfaces/models/questions';
