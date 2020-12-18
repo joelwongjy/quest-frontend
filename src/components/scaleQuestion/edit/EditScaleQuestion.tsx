@@ -14,16 +14,16 @@ import QuestTextField from 'componentWrappers/questTextField';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './ScaleQuestion.styles';
+import { useStyles } from './editScaleQuestion.styles';
 
-interface ScaleQuestionProps {
+interface EditScaleQuestionProps {
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
   dropdown: React.ReactNode;
 }
 
-const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
+const EditScaleQuestion: React.FunctionComponent<EditScaleQuestionProps> = ({
   question,
   mode,
   updateQuestion,
@@ -156,4 +156,4 @@ const ScaleQuestion: React.FunctionComponent<ScaleQuestionProps> = ({
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default ScaleQuestion;
+export default EditScaleQuestion;
