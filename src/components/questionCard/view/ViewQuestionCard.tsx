@@ -11,7 +11,7 @@ import {
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { AnswerData } from 'interfaces/models/answers';
-import { useStyles } from '../questionCard.styles';
+import { useStyles } from '../edit/questionCard.styles';
 
 interface ViewQuestionCardProps extends QuestComponentProps {
   question: QuestionnaireDuxQuestion;

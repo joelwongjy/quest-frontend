@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import QuestionCard from 'components/questionCard';
+import QuestionCard from 'components/questionCard/edit';
 import {
   QuestionAccessibility,
   QuestionMode,
