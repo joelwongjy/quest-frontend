@@ -15,7 +15,7 @@ import {
   duplicateQuestionInPost,
   QuestionnaireDuxQuestion,
 } from 'reducers/questionnaireDux';
-import QuestionCard from 'components/questionCard';
+import QuestionCard from 'components/questionCard/edit';
 import QuestCard from 'componentWrappers/questCard';
 
 import { isEmptyQuestion } from 'utils/questionnaireUtils';

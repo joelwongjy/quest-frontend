@@ -6,25 +6,25 @@ import {
   FormLabel,
 } from '@material-ui/core';
 
-import { QuestionMode } from 'interfaces/models/questionnaires';
 import QuestTextField from 'componentWrappers/questTextField';
+import { QuestionMode } from 'interfaces/models/questionnaires';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './LongAnswerQuestion.styles';
+import { useStyles } from './editShortAnswerQuestion.styles';
 
-interface LongAnswerQuestionProps {
+interface EditShortAnswerQuestionProps {
+  dropdown: React.ReactNode;
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
-  dropdown: React.ReactNode;
 }
 
-const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
+const EditShortAnswerQuestion: React.FunctionComponent<EditShortAnswerQuestionProps> = ({
+  dropdown,
   question,
   mode,
   updateQuestion,
-  dropdown,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -63,8 +63,7 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
             <QuestTextField
               disabled
               id="disabled"
-              defaultValue="Long Answer"
-              rows={3}
+              defaultValue="Short Answer"
             />
           </div>
         );
@@ -72,7 +71,7 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <QuestTextField placeholder="Long Answer" />
+            <QuestTextField placeholder="Short Answer" />
           </div>
         );
     }
@@ -81,4 +80,4 @@ const LongAnswerQuestion: React.FunctionComponent<LongAnswerQuestionProps> = ({
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default LongAnswerQuestion;
+export default EditShortAnswerQuestion;

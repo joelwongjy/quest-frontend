@@ -6,25 +6,25 @@ import {
   FormLabel,
 } from '@material-ui/core';
 
-import QuestTextField from 'componentWrappers/questTextField';
 import { QuestionMode } from 'interfaces/models/questionnaires';
+import QuestTextField from 'componentWrappers/questTextField';
 import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
-import { useStyles } from './ShortAnswerQuestion.styles';
+import { useStyles } from './editLongAnswerQuestion.styles';
 
-interface ShortAnswerQuestionProps {
-  dropdown: React.ReactNode;
+interface EditLongAnswerQuestionProps {
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
   updateQuestion: (newQuestion: QuestionnaireDuxQuestion) => void;
+  dropdown: React.ReactNode;
 }
 
-const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = ({
-  dropdown,
+const EditLongAnswerQuestion: React.FunctionComponent<EditLongAnswerQuestionProps> = ({
   question,
   mode,
   updateQuestion,
+  dropdown,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -63,7 +63,8 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
             <QuestTextField
               disabled
               id="disabled"
-              defaultValue="Short Answer"
+              defaultValue="Long Answer"
+              rows={3}
             />
           </div>
         );
@@ -71,7 +72,7 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
         return (
           <div className={classes.top}>
             <FormLabel component="legend">{question}</FormLabel>
-            <QuestTextField placeholder="Short Answer" />
+            <QuestTextField placeholder="Long Answer" />
           </div>
         );
     }
@@ -80,4 +81,4 @@ const ShortAnswerQuestion: React.FunctionComponent<ShortAnswerQuestionProps> = (
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
 };
 
-export default ShortAnswerQuestion;
+export default EditLongAnswerQuestion;

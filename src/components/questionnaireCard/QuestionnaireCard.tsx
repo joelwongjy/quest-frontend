@@ -159,7 +159,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           <Typography>{renderType(questionnaire.type)}</Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          {questionnaire.status === QuestionnaireStatus.PUBLISHED ? (
+          {questionnaire.status !== QuestionnaireStatus.PUBLISHED ? (
             <Button
               size="small"
               className={classes.button}
