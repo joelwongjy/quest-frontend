@@ -17,7 +17,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     textfieldContainer: {
       display: 'flex',
-      marginBottom: theme.spacing(2),
+      marginBottom: theme.spacing(3),
     },
     option: {
       flex: 1,

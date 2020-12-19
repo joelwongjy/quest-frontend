@@ -22,7 +22,9 @@ import { useStyles } from '../edit/questionCard.styles';
 interface ViewQuestionCardProps extends QuestComponentProps {
   question: QuestionnaireDuxQuestion;
   mode: QuestionMode;
-  answer: AnswerData;
+  answer?: AnswerData;
+  answerBefore?: AnswerData;
+  answerAfter?: AnswerData;
   accessibility: QuestionAccessibility;
   alertCallback: (
     isAlertOpen: boolean,
@@ -46,6 +48,8 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
   question,
   mode,
   answer,
+  answerBefore,
+  answerAfter,
   accessibility,
   alertCallback,
   className,
@@ -57,14 +61,26 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
       case QuestionType.SHORT_ANSWER:
         return <ViewShortAnswerQuestion answer={answer} />;
       case QuestionType.LONG_ANSWER:
-        return <ViewLongAnswerQuestion answer={answer} />;
+        return (
+          <ViewLongAnswerQuestion
+            answer={answer}
+            answerBefore={answerBefore}
+            answerAfter={answerAfter}
+          />
+        );
       case QuestionType.MOOD:
         return <ViewMoodQuestion answer={answer} />;
       case QuestionType.SCALE:
         return <ViewScaleQuestion answer={answer} />;
       case QuestionType.MULTIPLE_CHOICE:
       default:
-        return <ViewMcqQuestion answer={answer} />;
+        return (
+          <ViewMcqQuestion
+            answer={answer}
+            answerBefore={answerBefore}
+            answerAfter={answerAfter}
+          />
+        );
     }
   };
 
