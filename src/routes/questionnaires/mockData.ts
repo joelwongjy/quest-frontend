@@ -282,6 +282,8 @@ export const attempt: AttemptFullData = {
       },
       textResponse: 'Dread it, run from it, destiny arrives all the same.',
     },
+  ],
+  answersAfter: [
     {
       answerId: 4,
       questionOrder: {
@@ -305,5 +307,4 @@ export const attempt: AttemptFullData = {
       },
     },
   ],
-  answersAfter: undefined,
 };

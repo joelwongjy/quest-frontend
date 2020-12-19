@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
@@ -18,6 +18,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Switch,
   Typography,
 } from '@material-ui/core';
 import {
@@ -25,6 +26,7 @@ import {
   QuestionMode,
   QuestionnaireFullData,
   QuestionnaireMode,
+  QuestionnaireType,
 } from 'interfaces/models/questionnaires';
 import { convertToQuestionnaireDux } from 'utils/questionnaireUtils';
 import nextId from 'react-id-generator';
@@ -81,26 +83,26 @@ const Responses: React.FunctionComponent = () => {
     }
   );
 
+  const [isPre, setIsPre] = useState<boolean>(true);
+
   useEffect(() => {
     let didCancel = false;
 
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
-        const questionnaire = convertToQuestionnaireDux(
-          response.data as QuestionnaireFullData,
-          QuestionnaireMode.EDIT
-        );
+        const questionnaire = response.data as QuestionnaireFullData;
+
         if (!didCancel) {
           if (parseInt(id, 10) !== questionnaire.questionnaireId) {
             setState({
               isLoading: false,
-              questionnaire: response.data as QuestionnaireFullData,
+              questionnaire,
             });
           } else {
             setState({
               isLoading: false,
-              questionnaire: response.data as QuestionnaireFullData,
+              questionnaire,
             });
           }
         }
@@ -341,25 +343,63 @@ const Responses: React.FunctionComponent = () => {
           </Grid>
           <Grid item xs={10}>
             <Paper className={classes.paper} style={{ marginBottom: '3rem' }}>
+              <Grid
+                container
+                justify="space-between"
+                style={{ marginTop: '0.5rem' }}
+              >
+                <Typography
+                  variant="h6"
+                  style={{ paddingLeft: '1rem', textDecoration: 'underline' }}
+                >
+                  {isPre
+                    ? 'Pre-Programme Questions'
+                    : 'Post-Programme Questions'}
+                </Typography>
+                <div className={classes.modeSwitch}>
+                  Pre
+                  <Switch onChange={() => setIsPre((state) => !state)} />
+                  Post
+                </div>
+              </Grid>
               <div className={classes.root}>
-                {state.currentAttempt?.answersBefore
-                  ?.sort(
-                    (x, y) => x.questionOrder.order - y.questionOrder.order
-                  )
-                  .map((ans) => {
-                    const question = ans.questionOrder;
-                    return (
-                      <ViewQuestionCard
-                        key={`pre-answer-${ans.answerId}`}
-                        question={{ ...question, duxId: nextId() }}
-                        answer={ans}
-                        mode={QuestionMode.VIEW}
-                        accessibility={QuestionAccessibility.PRE}
-                        alertCallback={alertCallback}
-                        className={classes.card}
-                      />
-                    );
-                  })}
+                {isPre
+                  ? state.currentAttempt?.answersBefore
+                      ?.sort(
+                        (x, y) => x.questionOrder.order - y.questionOrder.order
+                      )
+                      .map((ans) => {
+                        const question = ans.questionOrder;
+                        return (
+                          <ViewQuestionCard
+                            key={`pre-answer-${ans.answerId}`}
+                            question={{ ...question, duxId: nextId() }}
+                            answer={ans}
+                            mode={QuestionMode.VIEW}
+                            accessibility={QuestionAccessibility.PRE}
+                            alertCallback={alertCallback}
+                            className={classes.card}
+                          />
+                        );
+                      })
+                  : state.currentAttempt?.answersAfter
+                      ?.sort(
+                        (x, y) => x.questionOrder.order - y.questionOrder.order
+                      )
+                      .map((ans) => {
+                        const question = ans.questionOrder;
+                        return (
+                          <ViewQuestionCard
+                            key={`pre-answer-${ans.answerId}`}
+                            question={{ ...question, duxId: nextId() }}
+                            answer={ans}
+                            mode={QuestionMode.VIEW}
+                            accessibility={QuestionAccessibility.PRE}
+                            alertCallback={alertCallback}
+                            className={classes.card}
+                          />
+                        );
+                      })}
               </div>
             </Paper>
           </Grid>

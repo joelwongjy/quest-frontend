@@ -44,5 +44,8 @@ export const useStyles = makeStyles(() =>
       margin: '1.5rem',
       padding: '1.5rem',
     },
+    modeSwitch: {
+      marginRight: '1rem',
+    },
   })
 );
