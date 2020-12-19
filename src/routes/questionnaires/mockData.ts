@@ -273,7 +273,7 @@ export const attempt: AttemptFullData = {
           ...mockBaseData,
           order: 1,
           qnOrderId: 1,
-          questionText: 'Do you want to build a snow man?',
+          questionText: 'Do you want to build a castle?',
           questionType: QuestionType.MULTIPLE_CHOICE,
           options: [
             {

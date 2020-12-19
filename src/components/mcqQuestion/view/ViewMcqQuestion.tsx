@@ -207,7 +207,7 @@ const ViewMcqQuestion: React.FunctionComponent<ViewMcqQuestionProps> = ({
                   After
                 </Typography>
               </Grid>
-              <Typography>
+              <Typography style={{ paddingTop: '1rem', paddingRight: '1rem' }}>
                 This question has been modified or deleted after the student
                 attempted the pre-programme questionnaire.
               </Typography>
@@ -241,7 +241,7 @@ const ViewMcqQuestion: React.FunctionComponent<ViewMcqQuestionProps> = ({
                   Before
                 </Typography>
               </Grid>
-              <Typography>
+              <Typography style={{ paddingTop: '1rem', paddingRight: '1rem' }}>
                 This question was added after the student attempted the
                 pre-programme questionnaire.
               </Typography>

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
@@ -25,10 +25,7 @@ import {
   QuestionAccessibility,
   QuestionMode,
   QuestionnaireFullData,
-  QuestionnaireMode,
-  QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { convertToQuestionnaireDux } from 'utils/questionnaireUtils';
 import nextId from 'react-id-generator';
 import ViewQuestionCard from 'components/questionCard/view';
 import { attempt } from '../mockData';
@@ -163,18 +160,46 @@ const Responses: React.FunctionComponent = () => {
     }
     const res = [];
     for (let i = 0; i < preArray?.length; i += 1) {
-      res.push(
-        <ViewQuestionCard
-          key={`shared-answer-${preArray[i].answerId}`}
-          question={{ ...preArray[i].questionOrder, duxId: nextId() }}
-          answerBefore={preArray[i]}
-          answerAfter={postArray[i]}
-          mode={QuestionMode.VIEW}
-          accessibility={QuestionAccessibility.PRE}
-          alertCallback={alertCallback}
-          className={classes.card}
-        />
-      );
+      if (
+        preArray[i].questionOrder.questionText ===
+        postArray[i].questionOrder.questionText
+      ) {
+        res.push(
+          <ViewQuestionCard
+            key={`shared-answer-${preArray[i].answerId}`}
+            question={{ ...preArray[i].questionOrder, duxId: nextId() }}
+            answerBefore={preArray[i]}
+            answerAfter={postArray[i]}
+            mode={QuestionMode.VIEW}
+            accessibility={QuestionAccessibility.PRE}
+            alertCallback={alertCallback}
+            className={classes.card}
+          />
+        );
+      } else {
+        res.push(
+          <ViewQuestionCard
+            key={`shared-answer-${preArray[i].answerId}`}
+            question={{ ...preArray[i].questionOrder, duxId: nextId() }}
+            answerBefore={preArray[i]}
+            mode={QuestionMode.VIEW}
+            accessibility={QuestionAccessibility.PRE}
+            alertCallback={alertCallback}
+            className={classes.card}
+          />
+        );
+        res.push(
+          <ViewQuestionCard
+            key={`shared-answer-${preArray[i].answerId}`}
+            question={{ ...preArray[i].questionOrder, duxId: nextId() }}
+            answerAfter={postArray[i]}
+            mode={QuestionMode.VIEW}
+            accessibility={QuestionAccessibility.PRE}
+            alertCallback={alertCallback}
+            className={classes.card}
+          />
+        );
+      }
     }
     // eslint-disable-next-line consistent-return
     return <>{res}</>;
