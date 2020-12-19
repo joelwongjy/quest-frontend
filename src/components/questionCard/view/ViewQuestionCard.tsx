@@ -61,7 +61,13 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
       case QuestionType.SHORT_ANSWER:
         return <ViewShortAnswerQuestion answer={answer} />;
       case QuestionType.LONG_ANSWER:
-        return <ViewLongAnswerQuestion answer={answer} />;
+        return (
+          <ViewLongAnswerQuestion
+            answer={answer}
+            answerBefore={answerBefore}
+            answerAfter={answerAfter}
+          />
+        );
       case QuestionType.MOOD:
         return <ViewMoodQuestion answer={answer} />;
       case QuestionType.SCALE:
