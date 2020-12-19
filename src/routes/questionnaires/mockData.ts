@@ -222,47 +222,54 @@ export const attempt: AttemptFullData = {
       },
     ],
   },
-  answers: [
-    {
-      answerId: 1,
-      questionOrder: {
-        ...mockBaseData,
-        order: 1,
-        qnOrderId: 1,
-        questionText: 'Do you want to build a snow man?',
-        questionType: QuestionType.MULTIPLE_CHOICE,
-        options: [
-          {
-            optionId: 1,
-            optionText: 'Yes',
-          },
-          {
-            optionId: 2,
-            optionText: 'No',
-          },
-          {
-            optionId: 3,
-            optionText: 'Maybe',
-          },
-        ],
+  answers: undefined,
+  answersShared: {
+    sharedAnswersBefore: [
+      {
+        answerId: 1,
+        questionOrder: {
+          ...mockBaseData,
+          order: 1,
+          qnOrderId: 1,
+          questionText: 'Do you want to build a snow man?',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: [
+            {
+              optionId: 1,
+              optionText: 'Yes',
+            },
+            {
+              optionId: 2,
+              optionText: 'No',
+            },
+            {
+              optionId: 3,
+              optionText: 'Maybe',
+            },
+          ],
+        },
+        option: {
+          optionId: 1,
+          optionText: 'Yes',
+        },
       },
-      option: {
-        optionId: 1,
-        optionText: 'Yes',
+    ],
+    sharedAnswersAfter: [
+      {
+        answerId: 2,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 2,
+          order: 2,
+          questionText: 'I love DSC',
+          questionType: QuestionType.LONG_ANSWER,
+          options: [],
+        },
+        textResponse: 'Dread it, run from it, destiny arrives all the same.',
       },
-    },
-    {
-      answerId: 2,
-      questionOrder: {
-        ...mockBaseData,
-        qnOrderId: 2,
-        order: 2,
-        questionText: 'I love DSC',
-        questionType: QuestionType.LONG_ANSWER,
-        options: [],
-      },
-      textResponse: 'Dread it, run from it, destiny arrives all the same.',
-    },
+    ],
+  },
+  answersBefore: [
     {
       answerId: 3,
       questionOrder: {
@@ -298,4 +305,5 @@ export const attempt: AttemptFullData = {
       },
     },
   ],
+  answersAfter: undefined,
 };

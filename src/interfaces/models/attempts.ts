@@ -10,5 +10,11 @@ export interface AttemptPostData {
 export interface AttemptFullData {
   user: UserData;
   questionnaireWindow: QuestionnaireWindowData;
-  answers: AnswerData[];
+  answers?: AnswerData[];
+  answersShared?: {
+    sharedAnswersBefore: AnswerData[];
+    sharedAnswersAfter: AnswerData[];
+  };
+  answersBefore?: AnswerData[];
+  answersAfter?: AnswerData[];
 }

@@ -6,6 +6,12 @@ export const useStyles = makeStyles(() =>
     root: {
       flex: 1,
     },
+    paper: {
+      marginTop: '3rem',
+      padding: '1rem',
+      boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+      borderRadius: 12,
+    },
     title: {
       marginTop: '2rem',
       marginBottom: '2rem',
