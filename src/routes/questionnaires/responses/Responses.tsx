@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { ReactNode, useEffect, useReducer, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
@@ -150,6 +150,35 @@ const Responses: React.FunctionComponent = () => {
       href: `${QUESTIONNAIRES}/${id}${RESPONSES}`,
     },
   ];
+
+  const renderPrePost = () => {
+    const preArray = state.currentAttempt?.answersShared?.sharedAnswersBefore.sort(
+      (x, y) => x.questionOrder.order - y.questionOrder.order
+    );
+    const postArray = state.currentAttempt?.answersShared?.sharedAnswersAfter.sort(
+      (x, y) => x.questionOrder.order - y.questionOrder.order
+    );
+    if (!preArray || !postArray) {
+      return;
+    }
+    const res = [];
+    for (let i = 0; i < preArray?.length; i += 1) {
+      res.push(
+        <ViewQuestionCard
+          key={`shared-answer-${preArray[i].answerId}`}
+          question={{ ...preArray[i].questionOrder, duxId: nextId() }}
+          answerBefore={preArray[i]}
+          answerAfter={postArray[i]}
+          mode={QuestionMode.VIEW}
+          accessibility={QuestionAccessibility.PRE}
+          alertCallback={alertCallback}
+          className={classes.card}
+        />
+      );
+    }
+    // eslint-disable-next-line consistent-return
+    return <>{res}</>;
+  };
 
   return (
     <PageContainer>
@@ -319,26 +348,7 @@ const Responses: React.FunctionComponent = () => {
                   Shared Questions
                 </Typography>
               </Grid>
-              <div className={classes.root}>
-                {state.currentAttempt?.answersBefore
-                  ?.sort(
-                    (x, y) => x.questionOrder.order - y.questionOrder.order
-                  )
-                  .map((ans) => {
-                    const question = ans.questionOrder;
-                    return (
-                      <ViewQuestionCard
-                        key={`pre-answer-${ans.answerId}`}
-                        question={{ ...question, duxId: nextId() }}
-                        answer={ans}
-                        mode={QuestionMode.VIEW}
-                        accessibility={QuestionAccessibility.PRE}
-                        alertCallback={alertCallback}
-                        className={classes.card}
-                      />
-                    );
-                  })}
-              </div>
+              {renderPrePost()}
             </Paper>
           </Grid>
           <Grid item xs={10}>

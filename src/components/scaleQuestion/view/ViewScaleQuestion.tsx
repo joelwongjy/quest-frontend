@@ -8,43 +8,50 @@ import QuestSlider from 'componentWrappers/questSlider';
 import { useStyles } from './viewScaleQuestion.styles';
 
 interface ViewScaleQuestionProps {
-  answer: AnswerData;
+  answer?: AnswerData;
+  answerBefore?: AnswerData;
+  answerAfter?: AnswerData;
 }
 
 const ViewScaleQuestion: React.FunctionComponent<ViewScaleQuestionProps> = ({
   answer,
+  answerBefore,
+  answerAfter,
 }) => {
   const classes = useStyles();
 
   const renderQuestion = () => {
-    return (
-      <div className={classes.top}>
-        <div className={classes.textfieldContainer}>
-          <FormControl style={{ width: '100%' }}>
-            <QuestTextField
-              className={classes.textfield}
-              label="Question"
-              value={answer.questionOrder.questionText}
-              InputProps={{
-                readOnly: true,
-              }}
+    if (answer) {
+      return (
+        <div className={classes.top}>
+          <div className={classes.textfieldContainer}>
+            <FormControl style={{ width: '100%' }}>
+              <QuestTextField
+                className={classes.textfield}
+                label="Question"
+                value={answer.questionOrder.questionText}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </FormControl>
+          </div>
+          <Grid container alignItems="center" justify="space-around">
+            <QuestSlider
+              aria-labelledby="discrete-slider"
+              valueLabelDisplay="on"
+              step={1}
+              marks
+              min={1}
+              max={5}
+              value={3}
+              className={classes.scale}
             />
-          </FormControl>
+          </Grid>
         </div>
-        <Grid container alignItems="center" justify="space-around">
-          <QuestSlider
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="on"
-            step={1}
-            marks
-            min={1}
-            max={5}
-            value={3}
-            className={classes.scale}
-          />
-        </Grid>
-      </div>
-    );
+      );
+    }
+    return <></>;
   };
 
   return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
