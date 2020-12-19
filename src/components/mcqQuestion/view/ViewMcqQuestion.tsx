@@ -170,6 +170,7 @@ const ViewMcqQuestion: React.FunctionComponent<ViewMcqQuestionProps> = ({
         </div>
       );
     }
+
     return <></>;
   };
 

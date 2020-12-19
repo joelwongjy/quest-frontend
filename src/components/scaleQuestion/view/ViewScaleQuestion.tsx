@@ -136,6 +136,7 @@ const ViewScaleQuestion: React.FunctionComponent<ViewScaleQuestionProps> = ({
         </div>
       );
     }
+
     return <></>;
   };
 
