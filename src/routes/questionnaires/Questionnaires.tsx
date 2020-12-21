@@ -23,6 +23,7 @@ import {
   isEmptyQuestionnaire,
   convertDateOfQuestionnaires,
 } from 'utils/questionnaireUtils';
+import QuestionnaireTabs from 'components/questionnaireTabs';
 
 import { questionnaires } from './mockData';
 import {
@@ -33,7 +34,6 @@ import {
   getMenuOptions,
 } from './helpers';
 import { useStyles } from './questionnaires.styles';
-import QuestionnaireTabs from './questionnaireTabs';
 import QuestionnairesGhost from './QuestionnairesGhost';
 
 const Questionnaires: React.FunctionComponent = () => {
@@ -108,7 +108,7 @@ const Questionnaires: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, []);
 
   if (state.isLoading) {
     return <QuestionnairesGhost />;

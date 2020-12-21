@@ -5,8 +5,8 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import QuestButton from 'componentWrappers/questButton';
+import QuestionnaireTabs from 'components/questionnaireTabs';
 
-import QuestionnaireTabs from './questionnaireTabs';
 import { breadcrumbs, tabs } from './helpers';
 import { useStyles } from './questionnaires.styles';
 
@@ -15,7 +15,7 @@ const QuestionnairesGhost: React.FC = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container style={{ marginLeft: '1rem' }}>
+      <Grid container className={classes.main}>
         <QuestionnaireTabs
           value={0}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -43,7 +43,7 @@ const QuestionnairesGhost: React.FC = () => {
             </QuestButton>
           }
         />
-        <Grid container spacing={3}>
+        <Grid container spacing={6}>
           <Grid item xs={12} sm={6} lg={4}>
             <QuestionnaireCardGhost />
           </Grid>
