@@ -23,7 +23,6 @@ import {
 } from '@material-ui/core';
 import {
   QuestionAccessibility,
-  QuestionMode,
   QuestionnaireFullData,
 } from 'interfaces/models/questionnaires';
 import nextId from 'react-id-generator';
@@ -170,7 +169,6 @@ const Responses: React.FunctionComponent = () => {
             question={{ ...preArray[i].questionOrder, duxId: nextId() }}
             answerBefore={preArray[i]}
             answerAfter={postArray[i]}
-            mode={QuestionMode.VIEW}
             accessibility={QuestionAccessibility.PRE}
             alertCallback={alertCallback}
             className={classes.card}
@@ -182,7 +180,6 @@ const Responses: React.FunctionComponent = () => {
             key={`shared-answer-${preArray[i].answerId}`}
             question={{ ...preArray[i].questionOrder, duxId: nextId() }}
             answerBefore={preArray[i]}
-            mode={QuestionMode.VIEW}
             accessibility={QuestionAccessibility.PRE}
             alertCallback={alertCallback}
             className={classes.card}
@@ -193,7 +190,6 @@ const Responses: React.FunctionComponent = () => {
             key={`shared-answer-${preArray[i].answerId}`}
             question={{ ...preArray[i].questionOrder, duxId: nextId() }}
             answerAfter={postArray[i]}
-            mode={QuestionMode.VIEW}
             accessibility={QuestionAccessibility.PRE}
             alertCallback={alertCallback}
             className={classes.card}
@@ -350,7 +346,6 @@ const Responses: React.FunctionComponent = () => {
                       key={`single-answer-${ans.answerId}`}
                       question={{ ...question, duxId: nextId() }}
                       answer={ans}
-                      mode={QuestionMode.VIEW}
                       accessibility={QuestionAccessibility.PRE}
                       alertCallback={alertCallback}
                       className={classes.card}
@@ -410,7 +405,6 @@ const Responses: React.FunctionComponent = () => {
                             key={`pre-answer-${ans.answerId}`}
                             question={{ ...question, duxId: nextId() }}
                             answer={ans}
-                            mode={QuestionMode.VIEW}
                             accessibility={QuestionAccessibility.PRE}
                             alertCallback={alertCallback}
                             className={classes.card}
@@ -428,7 +422,6 @@ const Responses: React.FunctionComponent = () => {
                             key={`pre-answer-${ans.answerId}`}
                             question={{ ...question, duxId: nextId() }}
                             answer={ans}
-                            mode={QuestionMode.VIEW}
                             accessibility={QuestionAccessibility.PRE}
                             alertCallback={alertCallback}
                             className={classes.card}

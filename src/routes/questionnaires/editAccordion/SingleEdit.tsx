@@ -2,10 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import QuestionCard from 'components/questionCard/edit';
-import {
-  QuestionAccessibility,
-  QuestionMode,
-} from 'interfaces/models/questionnaires';
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToPre,
   deleteQuestionInPre,
@@ -46,7 +43,6 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
           <QuestionCard
             key={`question-${q.duxId}`}
             question={q}
-            mode={QuestionMode.EDIT}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {
                 dispatch(deleteQuestionInPre(order));
