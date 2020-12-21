@@ -18,10 +18,7 @@ import DownIcon from '@material-ui/icons/ArrowDownward';
 import QuestCard from 'componentWrappers/questCard';
 import EditMcqQuestion from 'components/mcqQuestion/edit';
 import { QuestComponentProps } from 'interfaces/components/common';
-import {
-  QuestionMode,
-  QuestionAccessibility,
-} from 'interfaces/models/questionnaires';
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import EditShortAnswerQuestion from 'components/shortAnswerQuestion/edit';
 import EditLongAnswerQuestion from 'components/longAnswerQuestion/edit';
 import EditMoodQuestion from 'components/moodQuestion/edit';
@@ -29,11 +26,10 @@ import EditScaleQuestion from 'components/scaleQuestion/edit';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 import { QuestionType } from 'interfaces/models/questions';
 
-import { useStyles } from './questionCard.styles';
+import { useStyles } from './editQuestionCard.styles';
 
-interface QuestionCardProps extends QuestComponentProps {
+interface EditQuestionCardProps extends QuestComponentProps {
   question: QuestionnaireDuxQuestion;
-  mode: QuestionMode;
   handleDelete: () => void;
   handleDuplicate: () => void;
   handleMoveUp: () => void;
@@ -75,10 +71,9 @@ const mapAccessibilityToIndex = (accessibility: QuestionAccessibility) => {
   }
 };
 
-const QuestionCard: React.FC<QuestionCardProps> = ({
+const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   question,
-  mode,
   handleDelete,
   handleDuplicate,
   handleMoveUp,
@@ -151,58 +146,50 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   );
 
   const renderQuestion = () => {
-    if (mode === QuestionMode.EDIT || mode === QuestionMode.NEW) {
-      switch (question.questionType) {
-        case QuestionType.SHORT_ANSWER:
-          return (
-            <EditShortAnswerQuestion
-              mode={mode}
-              dropdown={dropdown}
-              question={question}
-              updateQuestion={updateQuestion}
-            />
-          );
-        case QuestionType.LONG_ANSWER:
-          return (
-            <EditLongAnswerQuestion
-              mode={mode}
-              dropdown={dropdown}
-              question={question}
-              updateQuestion={updateQuestion}
-            />
-          );
-        case QuestionType.MOOD:
-          return (
-            <EditMoodQuestion
-              mode={mode}
-              dropdown={dropdown}
-              question={question}
-              updateQuestion={updateQuestion}
-            />
-          );
-        case QuestionType.SCALE:
-          return (
-            <EditScaleQuestion
-              mode={mode}
-              dropdown={dropdown}
-              question={question}
-              updateQuestion={updateQuestion}
-            />
-          );
-        case QuestionType.MULTIPLE_CHOICE:
-        default:
-          return (
-            <EditMcqQuestion
-              mode={mode}
-              dropdown={dropdown}
-              question={question}
-              updateQuestion={updateQuestion}
-              alertCallback={alertCallback}
-            />
-          );
-      }
+    switch (question.questionType) {
+      case QuestionType.SHORT_ANSWER:
+        return (
+          <EditShortAnswerQuestion
+            dropdown={dropdown}
+            question={question}
+            updateQuestion={updateQuestion}
+          />
+        );
+      case QuestionType.LONG_ANSWER:
+        return (
+          <EditLongAnswerQuestion
+            dropdown={dropdown}
+            question={question}
+            updateQuestion={updateQuestion}
+          />
+        );
+      case QuestionType.MOOD:
+        return (
+          <EditMoodQuestion
+            dropdown={dropdown}
+            question={question}
+            updateQuestion={updateQuestion}
+          />
+        );
+      case QuestionType.SCALE:
+        return (
+          <EditScaleQuestion
+            dropdown={dropdown}
+            question={question}
+            updateQuestion={updateQuestion}
+          />
+        );
+      case QuestionType.MULTIPLE_CHOICE:
+      default:
+        return (
+          <EditMcqQuestion
+            dropdown={dropdown}
+            question={question}
+            updateQuestion={updateQuestion}
+            alertCallback={alertCallback}
+          />
+        );
     }
-    return <></>;
   };
 
   return (
@@ -216,7 +203,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             aria-label="delete"
             onClick={handleDelete}
             style={{ color: 'red' }}
-            disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
           >
             <DeleteIcon />
           </IconButton>
@@ -224,7 +210,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             aria-label="duplicate"
             onClick={handleDuplicate}
             style={{ color: 'grey' }}
-            disabled={mode !== QuestionMode.EDIT && mode !== QuestionMode.NEW}
           >
             <DuplicateIcon />
           </IconButton>
@@ -259,4 +244,4 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   );
 };
 
-export default QuestionCard;
+export default EditQuestionCard;

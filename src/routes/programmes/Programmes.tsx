@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button, Grid } from '@material-ui/core';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
@@ -11,12 +11,10 @@ import { ProgrammeListData } from 'interfaces/models/programmes';
 import { ProgrammeMode } from 'interfaces/components/programmeForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import { PROGRAMMES, CREATE, HOME } from 'constants/routes';
+import { PROGRAMMES, CREATE } from 'constants/routes';
 import ProgrammeCard from 'components/programmeCard';
 import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
-import { ClassUserRole } from 'interfaces/models/classUsers';
-import { useUser } from 'contexts/UserContext';
 import { getAlertCallback } from 'utils/alertUtils';
 
 import { programmes } from './mockData';
@@ -33,7 +31,6 @@ interface ProgrammesState extends RouteState {
 }
 
 const Programme: React.FunctionComponent = () => {
-  const user = useUser();
   const [state, setState] = useReducer(
     (s: ProgrammesState, a: Partial<ProgrammesState>) => ({
       ...s,
@@ -97,10 +94,6 @@ const Programme: React.FunctionComponent = () => {
   const breadcrumbs = [{ text: 'Programmes', href: PROGRAMMES }];
 
   const alertCallback = getAlertCallback(setState);
-
-  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
-    return <Redirect to={HOME} />;
-  }
 
   if (state.isLoading) {
     return (
