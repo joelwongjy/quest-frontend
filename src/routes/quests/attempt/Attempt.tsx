@@ -77,7 +77,6 @@ const Attempt: React.FC = () => {
         const response = await ApiService.get(
           `questionnaires/${id}/window/${windowId}`
         );
-        console.log(response.data);
         if (!didCancel) {
           dispatch(setAttempt(response.data));
           setState({
