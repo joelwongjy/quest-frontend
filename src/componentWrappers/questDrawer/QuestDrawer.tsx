@@ -9,13 +9,20 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/HomeRounded';
+import QuestIcon from '@material-ui/icons/ColorizeRounded';
 import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
 import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
 import ExitIcon from '@material-ui/icons/ExitToAppRounded';
 
 import { QuestComponentProps } from 'interfaces/components/common';
-import { HOME, PROGRAMMES, QUESTIONNAIRES, STUDENTS } from 'constants/routes';
+import {
+  HOME,
+  PROGRAMMES,
+  QUESTIONNAIRES,
+  QUESTS,
+  STUDENTS,
+} from 'constants/routes';
 import { useAuth } from 'contexts/AuthContext';
 import QuestAlert from 'componentWrappers/questAlert';
 import { useUser } from 'contexts/UserContext';
@@ -69,6 +76,19 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
             <HomeIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem
+          button
+          key="Quests"
+          selected={pathname === QUESTS}
+          component={Link}
+          to={QUESTS}
+          className={classes.listItem}
+        >
+          <ListItemIcon>
+            <QuestIcon className={classes.icon} />
+          </ListItemIcon>
+          <ListItemText primary="Quests" />
         </ListItem>
         {isStaff && (
           <>
