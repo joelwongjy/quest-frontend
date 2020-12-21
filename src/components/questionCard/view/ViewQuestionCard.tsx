@@ -4,10 +4,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 import QuestCard from 'componentWrappers/questCard';
 import { QuestComponentProps } from 'interfaces/components/common';
-import {
-  QuestionMode,
-  QuestionAccessibility,
-} from 'interfaces/models/questionnaires';
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { AnswerData } from 'interfaces/models/answers';
@@ -17,11 +14,10 @@ import ViewScaleQuestion from 'components/scaleQuestion/view';
 import ViewMoodQuestion from 'components/moodQuestion/view';
 import ViewLongAnswerQuestion from 'components/longAnswerQuestion/view';
 import ViewShortAnswerQuestion from 'components/shortAnswerQuestion/view';
-import { useStyles } from '../edit/questionCard.styles';
+import { useStyles } from './viewQuestionCard.styles';
 
 interface ViewQuestionCardProps extends QuestComponentProps {
   question: QuestionnaireDuxQuestion;
-  mode: QuestionMode;
   answer?: AnswerData;
   answerBefore?: AnswerData;
   answerAfter?: AnswerData;
@@ -46,7 +42,6 @@ const InputMuiTheme = createMuiTheme({
 
 const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
   question,
-  mode,
   answer,
   answerBefore,
   answerAfter,
