@@ -285,7 +285,12 @@ const Responses: React.FunctionComponent = () => {
             >
               {user!.programmes
                 .find((y) => y.id === state.currentProgrammeId)
-                ?.classes.map((x) => {
+                ?.classes.filter(
+                  (c) =>
+                    state.questionnaire!.classes.filter((y) => y.id === c.id)
+                      .length > 0
+                )
+                .map((x) => {
                   return (
                     <MenuItem key={x.id} value={x.id}>
                       {x.name}
