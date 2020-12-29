@@ -80,5 +80,8 @@ export const useStyles = makeStyles((theme) =>
     modeSwitch: {
       marginRight: '1rem',
     },
+    addIcon: {
+      marginRight: '0.5rem',
+    },
   })
 );

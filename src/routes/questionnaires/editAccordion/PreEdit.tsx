@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToPre,
@@ -97,7 +99,8 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPre())}
       >
-        ⊕ Add a question
+        <AddCircleIcon className={classes.addIcon} />
+        Add a question
       </QuestCard>
     </div>
   );
