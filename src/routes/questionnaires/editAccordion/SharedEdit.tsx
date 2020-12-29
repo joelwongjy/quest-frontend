@@ -103,7 +103,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
           dispatch(addQuestionToShared());
         }}
       >
-        Add a question
+        ⊕ Add a question
       </QuestCard>
     </div>
   );

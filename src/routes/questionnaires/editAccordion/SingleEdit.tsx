@@ -84,7 +84,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPre())}
       >
-        Add a question
+        ⊕ Add a question
       </QuestCard>
     </div>
   );

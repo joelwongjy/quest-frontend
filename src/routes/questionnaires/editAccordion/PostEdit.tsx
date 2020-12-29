@@ -97,7 +97,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPost())}
       >
-        Add a question
+        ⊕ Add a question
       </QuestCard>
     </div>
   );
