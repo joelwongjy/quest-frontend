@@ -68,7 +68,7 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
     const newClasses = selectedClasses.filter((c) => c.id !== _class!.id);
     const newProgrammes = programmes
       .filter((p) =>
-        p.classes.some(
+        p.classes.every(
           (c) => newClasses.findIndex((c2) => c2.id === c.id) !== -1
         )
       )
