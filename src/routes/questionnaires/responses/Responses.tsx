@@ -36,6 +36,8 @@ interface RouteParams {
 
 interface ResponsesState extends RouteState {
   questionnaire: QuestionnaireFullData | undefined;
+  accessibleProgrammes: { id: number; name: string }[];
+  accessibleClasses: { id: number; name: string }[];
   currentAttempt: AttemptFullData | undefined;
   currentProgrammeId: number | undefined;
   currentClassId: number | undefined;
@@ -57,6 +59,8 @@ const Responses: React.FunctionComponent = () => {
     }),
     {
       questionnaire: undefined,
+      accessibleProgrammes: [],
+      accessibleClasses: [],
       currentAttempt: attempt,
       currentProgrammeId: undefined,
       currentClassId: undefined,
@@ -88,13 +92,21 @@ const Responses: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`questionnaires/${id}`);
         const questionnaire = response.data as QuestionnaireFullData;
-
         if (!didCancel) {
-          if (parseInt(id, 10) !== questionnaire.questionnaireId) {
+          if (parseInt(id, 10) === questionnaire.questionnaireId) {
             setState({
               isLoading: false,
               questionnaire,
             });
+            const programmes: { id: number; name: string }[] = [];
+            questionnaire.classes.forEach((c) => {
+              user!.programmes.forEach((p) => {
+                if (p.classes.filter((x) => x.id === c.id).length > 0) {
+                  programmes.push({ id: p.id, name: p.name });
+                }
+              });
+            });
+            setState({ accessibleProgrammes: programmes });
           } else {
             setState({
               isLoading: false,
@@ -238,18 +250,13 @@ const Responses: React.FunctionComponent = () => {
               }}
               label="Programme"
             >
-              {state.questionnaire?.programmes
-                ?.filter(
-                  (x) =>
-                    user!.programmes.filter((y) => y.id === x.id).length > 0
-                )
-                .map((x) => {
-                  return (
-                    <MenuItem key={x.id} value={x.id}>
-                      {user!.programmes.find((p) => p.id === x.id)?.name}
-                    </MenuItem>
-                  );
-                })}
+              {state.accessibleProgrammes.map((x) => {
+                return (
+                  <MenuItem key={x.id} value={x.id}>
+                    {user!.programmes.find((p) => p.id === x.id)?.name}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
