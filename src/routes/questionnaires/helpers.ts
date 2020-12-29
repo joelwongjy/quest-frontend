@@ -19,7 +19,9 @@ export interface QuestionnairesState extends RouteState {
 
 export const getQuestionnairesToRender = (
   questionnaires: QuestionnaireListData[],
-  tabValue: number
+  tabValue: number,
+  selectedProgrammes: { id: number; name: string }[],
+  selectedClasses: { id: number; name: string }[]
 ): QuestionnaireListData[] => {
   const now = new Date();
   let renderedQuestionnaires;
@@ -45,6 +47,21 @@ export const getQuestionnairesToRender = (
   renderedQuestionnaires = renderedQuestionnaires.sort(
     (a, b) => (a.startAt as Date).getTime() - (b.startAt as Date).getTime()
   );
+  if (
+    (selectedClasses !== undefined && selectedClasses.length > 0) ||
+    (selectedProgrammes !== undefined && selectedProgrammes.length > 0)
+  ) {
+    renderedQuestionnaires = renderedQuestionnaires.filter((q) => {
+      return (
+        q.classes.find(
+          (c) => selectedClasses.filter((x) => x.id === c.id).length > 0
+        ) !== undefined ||
+        q.programmes.find(
+          (p) => selectedProgrammes.filter((y) => y.id === p.id).length > 0
+        ) !== undefined
+      );
+    });
+  }
   return renderedQuestionnaires;
 };
 

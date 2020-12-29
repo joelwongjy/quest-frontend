@@ -68,7 +68,8 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({
                     <span style={{ color: '#044682' }}>{`${title}.`}</span>
                   </Typography>
                 </ListItem>
-                {programmes && programmes.length > 0 ? (
+                {(programmes && programmes.length > 0) ||
+                (classes && classes.length > 0) ? (
                   <ListItem>
                     <Typography variant="subtitle1">
                       The questionnaire is assigned to&nbsp;
