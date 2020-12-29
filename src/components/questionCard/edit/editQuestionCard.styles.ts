@@ -20,7 +20,15 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
       margin: theme.spacing(1),
-      minWidth: 225,
+      width: 120,
+    },
+    textfield: {
+      margin: theme.spacing(1),
+      flex: 1,
+      '& input': {
+        backgroundColor: '#F8F8F8',
+        borderRadius: 2,
+      },
     },
   })
 );
