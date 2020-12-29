@@ -135,6 +135,7 @@ const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
         <Select
           labelId={`dropdown-${question.duxId}`}
           id="dropdown-select"
+          label="Type"
           open={open}
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
@@ -166,8 +167,8 @@ const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
         required
         size="small"
         className={classes.textfield}
-        label="Question"
         variant="outlined"
+        placeholder="Enter your question..."
         value={question.questionText}
         onChange={(e) => updateText(e.target.value)}
       />
