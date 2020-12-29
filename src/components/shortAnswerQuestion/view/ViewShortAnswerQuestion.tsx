@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormGroup, Grid, Typography } from '@material-ui/core';
+import { FormGroup, Grid, Typography } from '@material-ui/core';
 
 import QuestTextField from 'componentWrappers/questTextField';
 
@@ -23,18 +23,6 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
     if (answer) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <FormControl style={{ width: '100%' }}>
-              <QuestTextField
-                className={classes.textfield}
-                label="Question"
-                value={answer.questionOrder.questionText}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </div>
           <QuestTextField
             placeholder="Short Answer"
             label="Answer"
@@ -51,22 +39,6 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
     if (answerBefore !== undefined || answerAfter !== undefined) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <FormControl style={{ width: '100%' }}>
-              <QuestTextField
-                className={classes.textfield}
-                label="Question"
-                value={
-                  answerBefore
-                    ? answerBefore.questionOrder.questionText
-                    : answerAfter!.questionOrder.questionText
-                }
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </div>
           <Grid container justify="space-between">
             <Grid
               item

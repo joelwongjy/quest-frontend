@@ -22,5 +22,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
       minWidth: 225,
     },
+    textfield: {
+      flex: 1,
+    },
+    textfieldContainer: {
+      display: 'flex',
+    },
   })
 );

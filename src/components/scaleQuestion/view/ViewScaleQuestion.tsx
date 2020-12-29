@@ -1,7 +1,5 @@
 import React from 'react';
-import { FormControl, FormGroup, Grid, Typography } from '@material-ui/core';
-
-import QuestTextField from 'componentWrappers/questTextField';
+import { FormGroup, Grid, Typography } from '@material-ui/core';
 
 import { AnswerData } from 'interfaces/models/answers';
 import QuestSlider from 'componentWrappers/questSlider';
@@ -24,18 +22,6 @@ const ViewScaleQuestion: React.FunctionComponent<ViewScaleQuestionProps> = ({
     if (answer) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <FormControl style={{ width: '100%' }}>
-              <QuestTextField
-                className={classes.textfield}
-                label="Question"
-                value={answer.questionOrder.questionText}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </div>
           <Grid container alignItems="center" justify="space-around">
             <QuestSlider
               aria-labelledby="discrete-slider"
@@ -55,22 +41,6 @@ const ViewScaleQuestion: React.FunctionComponent<ViewScaleQuestionProps> = ({
     if (answerBefore !== undefined || answerAfter !== undefined) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <FormControl style={{ width: '100%' }}>
-              <QuestTextField
-                className={classes.textfield}
-                label="Question"
-                value={
-                  answerBefore !== undefined
-                    ? answerBefore.questionOrder.questionText
-                    : answerAfter!.questionOrder.questionText
-                }
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </div>
           <Grid container alignItems="center" justify="space-between">
             <Grid
               item

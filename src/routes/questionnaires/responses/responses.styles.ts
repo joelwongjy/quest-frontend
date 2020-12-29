@@ -27,21 +27,22 @@ export const useStyles = makeStyles(() =>
       minWidth: 225,
     },
     card: {
-      backgroundColor: '#ABC3BB',
       boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
       margin: '1.5rem',
+    },
+    sharedHeader: {
+      backgroundColor: '#ABC3BB',
+      alignItems: 'center',
       padding: '1.5rem',
     },
-    preCard: {
-      backgroundColor: '#CBE1EE',
-      boxShadow: 'rgba(203, 225, 238, 0.2) 0px 8px 24px;',
-      margin: '1.5rem',
+    preHeader: {
+      backgroundColor: '#CBE2EF',
+      alignItems: 'center',
       padding: '1.5rem',
     },
-    postCard: {
+    postHeader: {
       backgroundColor: '#E1CEC9',
-      boxShadow: 'rgba(225, 206, 201, 0.2) 0px 8px 24px;',
-      margin: '1.5rem',
+      alignItems: 'center',
       padding: '1.5rem',
     },
     modeSwitch: {

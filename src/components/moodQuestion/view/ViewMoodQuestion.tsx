@@ -8,8 +8,6 @@ import {
   SentimentVeryDissatisfied,
 } from '@material-ui/icons/';
 
-import QuestTextField from 'componentWrappers/questTextField';
-
 import { AnswerData } from 'interfaces/models/answers';
 import { useStyles } from './viewMoodQuestion.styles';
 
@@ -30,16 +28,6 @@ const ViewMoodQuestion: React.FunctionComponent<ViewMoodQuestionProps> = ({
     if (answer) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <QuestTextField
-              className={classes.textfield}
-              label="Question"
-              value={answer.questionOrder.questionText}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </div>
           <div className={classes.emojiContainer}>
             <IconButton aria-label="Very Dissatisfied">
               <SentimentVeryDissatisfied fontSize="large" />
@@ -64,20 +52,6 @@ const ViewMoodQuestion: React.FunctionComponent<ViewMoodQuestionProps> = ({
     if (answerBefore !== undefined || answerAfter !== undefined) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <QuestTextField
-              className={classes.textfield}
-              label="Question"
-              value={
-                answerBefore !== undefined
-                  ? answerBefore.questionOrder.questionText
-                  : answerAfter!.questionOrder.questionText
-              }
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </div>
           <Grid container alignItems="center" justify="space-between">
             <Grid
               item

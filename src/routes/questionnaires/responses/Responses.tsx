@@ -37,7 +37,6 @@ interface RouteParams {
 interface ResponsesState extends RouteState {
   questionnaire: QuestionnaireFullData | undefined;
   accessibleProgrammes: { id: number; name: string }[];
-  accessibleClasses: { id: number; name: string }[];
   currentAttempt: AttemptFullData | undefined;
   currentProgrammeId: number | undefined;
   currentClassId: number | undefined;
@@ -60,7 +59,6 @@ const Responses: React.FunctionComponent = () => {
     {
       questionnaire: undefined,
       accessibleProgrammes: [],
-      accessibleClasses: [],
       currentAttempt: attempt,
       currentProgrammeId: undefined,
       currentClassId: undefined,
@@ -159,7 +157,7 @@ const Responses: React.FunctionComponent = () => {
     },
   ];
 
-  const renderPrePost = () => {
+  const renderShared = () => {
     const preArray = state.currentAttempt?.answersShared?.sharedAnswersBefore.sort(
       (x, y) => x.questionOrder.order - y.questionOrder.order
     );
@@ -184,6 +182,7 @@ const Responses: React.FunctionComponent = () => {
             accessibility={QuestionAccessibility.PRE}
             alertCallback={alertCallback}
             className={classes.card}
+            headerStyles={classes.sharedHeader}
           />
         );
       } else {
@@ -195,6 +194,7 @@ const Responses: React.FunctionComponent = () => {
             accessibility={QuestionAccessibility.PRE}
             alertCallback={alertCallback}
             className={classes.card}
+            headerStyles={classes.sharedHeader}
           />
         );
         res.push(
@@ -205,6 +205,7 @@ const Responses: React.FunctionComponent = () => {
             accessibility={QuestionAccessibility.PRE}
             alertCallback={alertCallback}
             className={classes.card}
+            headerStyles={classes.sharedHeader}
           />
         );
       }
@@ -364,6 +365,7 @@ const Responses: React.FunctionComponent = () => {
                           accessibility={QuestionAccessibility.PRE}
                           alertCallback={alertCallback}
                           className={classes.card}
+                          headerStyles={classes.sharedHeader}
                         />
                       );
                     })}
@@ -386,7 +388,7 @@ const Responses: React.FunctionComponent = () => {
                       Shared Questions
                     </Typography>
                   </Grid>
-                  {renderPrePost()}
+                  {renderShared()}
                 </Paper>
               </Grid>
               <Grid item xs={10}>
@@ -432,7 +434,8 @@ const Responses: React.FunctionComponent = () => {
                                 answer={ans}
                                 accessibility={QuestionAccessibility.PRE}
                                 alertCallback={alertCallback}
-                                className={classes.preCard}
+                                className={classes.card}
+                                headerStyles={classes.preHeader}
                               />
                             );
                           })
@@ -450,7 +453,8 @@ const Responses: React.FunctionComponent = () => {
                                 answer={ans}
                                 accessibility={QuestionAccessibility.PRE}
                                 alertCallback={alertCallback}
-                                className={classes.postCard}
+                                className={classes.card}
+                                headerStyles={classes.postHeader}
                               />
                             );
                           })}
