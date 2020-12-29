@@ -50,7 +50,11 @@ const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProp
                 borderRight: '2px solid grey',
               }}
             >
-              <Grid container justify="center">
+              <Grid
+                container
+                justify="center"
+                style={{ marginBottom: '0.5rem' }}
+              >
                 <Typography variant="h6" style={{ color: '#695F5F' }}>
                   Before
                 </Typography>
@@ -75,7 +79,11 @@ const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProp
               xs={6}
               style={{ paddingLeft: '1.5rem', paddingRight: '0.5rem' }}
             >
-              <Grid container justify="center">
+              <Grid
+                container
+                justify="center"
+                style={{ marginBottom: '0.5rem' }}
+              >
                 <Typography variant="h6" style={{ color: '#695F5F' }}>
                   After
                 </Typography>

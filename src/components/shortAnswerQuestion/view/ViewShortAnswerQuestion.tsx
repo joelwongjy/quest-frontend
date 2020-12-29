@@ -49,7 +49,11 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
                 borderRight: '2px solid grey',
               }}
             >
-              <Grid container justify="center">
+              <Grid
+                container
+                justify="center"
+                style={{ marginBottom: '0.5rem' }}
+              >
                 <Typography variant="h6" style={{ color: '#695F5F' }}>
                   Before
                 </Typography>
@@ -80,7 +84,11 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
                 borderRight: '2px solid grey',
               }}
             >
-              <Grid container justify="center">
+              <Grid
+                container
+                justify="center"
+                style={{ marginBottom: '0,5rem' }}
+              >
                 <Typography variant="h6" style={{ color: '#695F5F' }}>
                   Before
                 </Typography>
