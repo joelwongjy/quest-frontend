@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Button, ButtonGroup, Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  Button,
+  ButtonGroup,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Fab,
+  Grid,
+} from '@material-ui/core';
+import FilterIcon from '@material-ui/icons/FilterList';
 
 import PageContainer from 'components/pageContainer';
 import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
@@ -25,6 +34,8 @@ import {
 } from 'utils/questionnaireUtils';
 import QuestionnaireTabs from 'components/questionnaireTabs';
 
+import ProgrammeClassPicker from 'components/programmeClassPicker';
+import { useUser } from 'contexts/UserContext';
 import { questionnaires } from './mockData';
 import {
   getQuestionnairesToRender,
@@ -37,6 +48,7 @@ import { useStyles } from './questionnaires.styles';
 import QuestionnairesGhost from './QuestionnairesGhost';
 
 const Questionnaires: React.FunctionComponent = () => {
+  const user = useUser()!;
   const [tabValue, setTabValue] = useState<number>(0);
   const [state, setState] = useReducer(
     (s: QuestionnairesState, a: Partial<QuestionnairesState>) => ({
@@ -68,10 +80,16 @@ const Questionnaires: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
-  const [
-    hasIncompleteQuestionnaire,
-    setHasIncompleteQuestionnare,
-  ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
+  const [hasIncompleteQuestionnaire, setHasIncompleteQuestionnare] = useState<
+    boolean
+  >(!isEmptyQuestionnaire(questionnaire));
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [selectedProgrammes, setSelectedProgrammes] = useState<
+    { id: number; name: string }[]
+  >([]);
+  const [selectedClasses, setSelectedClasses] = useState<
+    { id: number; name: string }[]
+  >([]);
 
   const classes = useStyles();
 
@@ -116,7 +134,9 @@ const Questionnaires: React.FunctionComponent = () => {
 
   const renderedQuestionnaires = getQuestionnairesToRender(
     state.questionnaires,
-    tabValue
+    tabValue,
+    selectedProgrammes,
+    selectedClasses
   );
 
   const getOptions = (id: number): MenuOption[] => {
@@ -177,6 +197,14 @@ const Questionnaires: React.FunctionComponent = () => {
     } else {
       history.push(`${QUESTIONNAIRES}${CREATE}`);
     }
+  };
+
+  const programmeCallback = (newProgrammes: { id: number; name: string }[]) => {
+    setSelectedProgrammes(newProgrammes);
+  };
+
+  const classCallback = (newClasses: { id: number; name: string }[]) => {
+    setSelectedClasses(newClasses);
   };
 
   return (
@@ -241,6 +269,28 @@ const Questionnaires: React.FunctionComponent = () => {
             })}
         </Grid>
       </Grid>
+      <Fab
+        color="secondary"
+        aria-label="edit"
+        className={classes.fab}
+        onClick={() => setIsFilterOpen(true)}
+      >
+        <FilterIcon />
+      </Fab>
+      <Dialog open={isFilterOpen} onClose={() => setIsFilterOpen(false)}>
+        <DialogTitle id="filter-dialog-title">
+          Filter Questionnaires
+        </DialogTitle>
+        <DialogContent>
+          <ProgrammeClassPicker
+            programmes={user!.programmes}
+            selectedClasses={selectedClasses}
+            selectedProgrammes={selectedProgrammes}
+            programmeCallback={programmeCallback}
+            classCallback={classCallback}
+          />
+        </DialogContent>
+      </Dialog>
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm!}
