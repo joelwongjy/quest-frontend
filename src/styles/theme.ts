@@ -92,6 +92,11 @@ const muiTheme = createMuiTheme({
       iconBorderColor: '#FFF2E5',
       iconHighlight: grey[900],
     },
+    questionBackground: {
+      shared: '#ABC3BB',
+      pre: '#CBE2EF',
+      post: '#E1CEC9',
+    },
   },
 });
 
