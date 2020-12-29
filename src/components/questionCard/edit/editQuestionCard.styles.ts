@@ -21,6 +21,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       width: 120,
+      minWidth: 120,
+      maxWidth: 120,
     },
     textfield: {
       margin: theme.spacing(1),
