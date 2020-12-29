@@ -16,6 +16,9 @@ export const useStyles = makeStyles((theme) =>
         textAlign: 'center',
       },
       width: '80%',
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+      },
       backgroundColor: theme.custom.icon.iconBorderColor,
       color: theme.custom.icon.iconColor,
       border: 0,
@@ -47,6 +50,10 @@ export const useStyles = makeStyles((theme) =>
         cursor: 'pointer',
       },
       margin: '1.5rem',
+      [theme.breakpoints.down('md')]: {
+        margin: '0',
+      },
+      borderRadius: 0,
     },
     card: {
       backgroundColor: theme.custom.icon.iconBorderColor,
