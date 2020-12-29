@@ -11,6 +11,11 @@ declare module '@material-ui/core/styles/createMuiTheme' {
       iconBorderColor: string;
       iconHighlight: string;
     };
+    questionBackground: {
+      shared: string;
+      pre: string;
+      post: string;
+    };
   }
 
   interface CustomOptions {
@@ -22,6 +27,11 @@ declare module '@material-ui/core/styles/createMuiTheme' {
       iconColor?: string;
       iconBorderColor?: string;
       iconHighlight?: string;
+    };
+    questionBackground?: {
+      shared?: string;
+      pre?: string;
+      post?: string;
     };
   }
 

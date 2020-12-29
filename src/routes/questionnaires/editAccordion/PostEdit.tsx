@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   transferQuestionToPre,
@@ -97,6 +99,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPost())}
       >
+        <AddCircleIcon className={classes.addIcon} />
         Add a question
       </QuestCard>
     </div>

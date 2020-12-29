@@ -3,13 +3,6 @@ import { theme } from 'styles/theme';
 
 export const useStyles = makeStyles(() =>
   createStyles({
-    paper: {
-      width: '80%',
-    },
-    paperContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
     typeCard: {
       width: '15rem',
       height: '15rem',

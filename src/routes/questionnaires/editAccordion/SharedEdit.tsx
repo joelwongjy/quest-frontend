@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToShared,
@@ -103,6 +105,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
           dispatch(addQuestionToShared());
         }}
       >
+        <AddCircleIcon className={classes.addIcon} />
         Add a question
       </QuestCard>
     </div>
