@@ -94,7 +94,7 @@ const Programme: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Programmes', href: PROGRAMMES }];
+  const breadcrumbs = [{ text: 'Programmes', href: `${PROGRAMMES}` }];
 
   const alertCallback = getAlertCallback(setState);
 

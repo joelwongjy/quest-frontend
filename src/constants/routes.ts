@@ -14,6 +14,7 @@ export const STUDENTS = '/students';
 
 // Sub-routes
 export const CREATE = '/create';
+export const ADD = '/add';
 export const EDIT = '/edit';
 export const DUPLICATE = '/duplicate';
 export const VIEW = '/view';
