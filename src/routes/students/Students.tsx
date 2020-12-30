@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { Link, Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, HOME, STUDENTS } from 'constants/routes';
+import { CREATE, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
@@ -13,8 +13,6 @@ import { PersonData, PersonListData } from 'interfaces/models/persons';
 import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
 import StudentList from 'components/studentList';
-import { useUser } from 'contexts/UserContext';
-import { ClassUserRole } from 'interfaces/models/classUsers';
 import { getAlertCallback } from 'utils/alertUtils';
 import { students } from './mockData';
 
@@ -31,7 +29,6 @@ interface StudentsState extends RouteState {
 }
 
 const Students: React.FunctionComponent = () => {
-  const user = useUser();
   const [state, setState] = useReducer(
     (s: StudentsState, a: Partial<StudentsState>) => ({
       ...s,
@@ -127,10 +124,6 @@ const Students: React.FunctionComponent = () => {
       undefined
     );
   };
-
-  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
-    return <Redirect to={HOME} />;
-  }
 
   return (
     <PageContainer>

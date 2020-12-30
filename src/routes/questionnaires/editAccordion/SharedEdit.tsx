@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import {
-  QuestionAccessibility,
-  QuestionMode,
-} from 'interfaces/models/questionnaires';
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToShared,
   deleteQuestionInShared,
@@ -48,7 +47,6 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
           <QuestionCard
             key={`question-${question.duxId}`}
             question={q}
-            mode={QuestionMode.EDIT}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {
                 dispatch(deleteQuestionInShared(order));
@@ -107,6 +105,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
           dispatch(addQuestionToShared());
         }}
       >
+        <AddCircleIcon className={classes.addIcon} />
         Add a question
       </QuestCard>
     </div>

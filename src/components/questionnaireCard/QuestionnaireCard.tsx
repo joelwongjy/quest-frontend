@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import QuestCard from 'componentWrappers/questCard';
-import { MenuOption } from 'interfaces/components/questionnaireCard';
-import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
+import { CardMode, MenuOption } from 'interfaces/components/questionnaireCard';
+import { QUESTIONNAIRES, QUESTS, RESPONSES } from 'constants/routes';
 import {
   QuestionnaireListData,
   QuestionnaireListDataType,
@@ -28,11 +28,17 @@ import { useStyles } from './questionnaireCard.styles';
 interface QuestionnaireCardProps extends QuestComponentProps {
   questionnaire: QuestionnaireListData;
   menuOptions?: MenuOption[];
+  mode?: CardMode;
+  programmeName?: string;
+  isAttempted?: boolean;
 }
 
 const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
   questionnaire,
   menuOptions = null,
+  mode = CardMode.STAFF,
+  programmeName = '',
+  isAttempted = false,
 }) => {
   const classes = useStyles();
   const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
@@ -72,6 +78,18 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
     }
   };
 
+  const renderProgramme = () => {
+    return (
+      <Typography
+        className={classes.statusPublished}
+        variant="body2"
+        component="p"
+      >
+        {programmeName}
+      </Typography>
+    );
+  };
+
   const renderType = (type: QuestionnaireListDataType) => {
     return (
       <Typography
@@ -89,6 +107,64 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
       </Typography>
     );
   };
+
+  if (mode === CardMode.STUDENT) {
+    return (
+      <QuestCard>
+        <CardHeader
+          title={
+            <>
+              <Typography
+                className={classes.dates}
+                color="textSecondary"
+                gutterBottom
+              >
+                {isAttempted
+                  ? 'Completed'
+                  : `Closes At: ${format(
+                      questionnaire.endAt as Date,
+                      'd MMM y'
+                    )}`}
+              </Typography>
+            </>
+          }
+        />
+        <CardContent>
+          <Typography
+            className={classes.title}
+            variant="h5"
+            component="h2"
+            noWrap
+          >
+            {questionnaire.name}
+          </Typography>
+          {renderProgramme()}
+          <Typography>{renderType(questionnaire.type)}</Typography>
+        </CardContent>
+        <CardActions className={classes.actions}>
+          {isAttempted ? (
+            <Button
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
+            >
+              View Attempt
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
+            >
+              Do Quest
+            </Button>
+          )}
+        </CardActions>
+      </QuestCard>
+    );
+  }
 
   return (
     <>
@@ -159,20 +235,14 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           <Typography>{renderType(questionnaire.type)}</Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          {questionnaire.status !== QuestionnaireStatus.PUBLISHED ? (
-            <Button
-              size="small"
-              className={classes.button}
-              component={Link}
-              to={`${QUESTIONNAIRES}/${questionnaire.id}${RESPONSES}`}
-            >
-              View Responses
-            </Button>
-          ) : (
-            <Button size="small" className={classes.button} disabled>
-              View Responses
-            </Button>
-          )}
+          <Button
+            size="small"
+            className={classes.button}
+            component={Link}
+            to={`${QUESTIONNAIRES}/${questionnaire.id}${RESPONSES}`}
+          >
+            View Responses
+          </Button>
         </CardActions>
       </QuestCard>
     </>

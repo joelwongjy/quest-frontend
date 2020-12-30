@@ -1,6 +1,6 @@
 import React, { Dispatch, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import SingleIcon from '@material-ui/icons/DescriptionOutlined';
 import PostIcon from '@material-ui/icons/Description';
 import { useHistory } from 'react-router-dom';
@@ -167,6 +167,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
             >
               <Typography
                 style={{ fontSize: 24, fontWeight: 'bold', color: 'grey' }}
+                align="center"
               >
                 What type of questionnaire would you like to create?
               </Typography>
@@ -204,7 +205,6 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           </>
         ) : (
           <div
-            className={muiClasses.paperContainer}
             style={{
               width:
                 // eslint-disable-next-line no-nested-ternary
@@ -215,55 +215,53 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                   : width! - 530,
             }}
           >
-            <Paper
-              className={muiClasses.paper}
-              elevation={0}
-              style={{ background: 'white' }}
-            >
-              <DateAccordion
-                type={type}
-                preStartDate={new Date(questionWindows[0].startAt)}
-                preStartDateCallback={(date: Date) =>
-                  dispatch(setPreStartTime(date))
-                }
-                preEndDate={new Date(questionWindows[0].endAt)}
-                preEndDateCallback={(date: Date) =>
-                  dispatch(setPreEndTime(date))
-                }
-                postStartDate={
-                  questionWindows.length > 1
-                    ? new Date(questionWindows[1].startAt)
-                    : undefined
-                }
-                postStartDateCallback={(date: Date) =>
-                  dispatch(setPostStartTime(date))
-                }
-                postEndDate={
-                  questionWindows.length > 1
-                    ? new Date(questionWindows[1].endAt)
-                    : undefined
-                }
-                postEndDateCallback={(date: Date) =>
-                  dispatch(setPostEndTime(date))
-                }
-              />
-              <AssignAccordion
-                user={user!}
-                selectedProgrammes={programmes}
-                selectedClasses={classes}
-                programmeCallback={programmeCallback}
-                classCallback={classCallback}
-              />
-              <EditAccordion
-                questionnaire={questionnaire}
-                alertCallback={alertCallback}
-              />
-              <Grid container justify="flex-end">
-                <QuestButton onClick={handleComplete} fullWidth>
-                  Finish
-                </QuestButton>
+            <Grid container justify="center">
+              <Grid item xs={12} md={10}>
+                <DateAccordion
+                  type={type}
+                  preStartDate={new Date(questionWindows[0].startAt)}
+                  preStartDateCallback={(date: Date) =>
+                    dispatch(setPreStartTime(date))
+                  }
+                  preEndDate={new Date(questionWindows[0].endAt)}
+                  preEndDateCallback={(date: Date) =>
+                    dispatch(setPreEndTime(date))
+                  }
+                  postStartDate={
+                    questionWindows.length > 1
+                      ? new Date(questionWindows[1].startAt)
+                      : undefined
+                  }
+                  postStartDateCallback={(date: Date) =>
+                    dispatch(setPostStartTime(date))
+                  }
+                  postEndDate={
+                    questionWindows.length > 1
+                      ? new Date(questionWindows[1].endAt)
+                      : undefined
+                  }
+                  postEndDateCallback={(date: Date) =>
+                    dispatch(setPostEndTime(date))
+                  }
+                />
+                <AssignAccordion
+                  user={user!}
+                  selectedProgrammes={programmes}
+                  selectedClasses={classes}
+                  programmeCallback={programmeCallback}
+                  classCallback={classCallback}
+                />
+                <EditAccordion
+                  questionnaire={questionnaire}
+                  alertCallback={alertCallback}
+                />
+                <Grid container justify="flex-end">
+                  <QuestButton onClick={handleComplete} fullWidth>
+                    Finish
+                  </QuestButton>
+                </Grid>
               </Grid>
-            </Paper>
+            </Grid>
           </div>
         )}
         <QuestAlert

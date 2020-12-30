@@ -2,12 +2,14 @@ import { combineReducers } from 'redux';
 
 import misc, { MiscDux } from 'reducers/miscDux';
 import questionnaire, { QuestionnaireDux } from 'reducers/questionnaireDux';
+import attempt, { AttemptDux } from 'reducers/attemptDux';
 
 export interface RootState {
   misc: MiscDux;
   questionnaire: QuestionnaireDux;
+  attempt: AttemptDux;
 }
 
-const rootReducer = combineReducers({ misc, questionnaire });
+const rootReducer = combineReducers({ misc, questionnaire, attempt });
 
 export default rootReducer;

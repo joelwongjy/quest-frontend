@@ -1,24 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useReducer } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, HOME, STUDENTS } from 'constants/routes';
+import { CREATE, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import StudentForm from 'components/studentForm';
 import { StudentMode } from 'interfaces/models/users';
-import { useUser } from 'contexts/UserContext';
 // import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import { ClassUserRole } from 'interfaces/models/classUsers';
 import { getAlertCallback } from 'utils/alertUtils';
 // import { useStyles } from './createStudent.styles';
 
 type CreateStudentState = RouteState;
 
 const CreateStudent: React.FunctionComponent = () => {
-  const user = useUser();
   // const classes = useStyles();
   const history = useHistory();
   // const { setHasError } = useError();
@@ -53,10 +49,6 @@ const CreateStudent: React.FunctionComponent = () => {
   );
 
   const alertCallback = getAlertCallback(setState);
-
-  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
-    return <Redirect to={HOME} />;
-  }
 
   return (
     <PageContainer>

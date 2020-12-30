@@ -36,7 +36,7 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
             </FormControl>
           </div>
           <QuestTextField
-            placeholder="Long Answer"
+            placeholder="Short Answer"
             label="Answer"
             value={answer.textResponse}
             InputProps={{
@@ -84,7 +84,7 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
               </Grid>
               {answerBefore !== undefined ? (
                 <QuestTextField
-                  placeholder="Long Answer"
+                  placeholder="Short Answer"
                   label="Answer"
                   value={answerBefore.textResponse}
                   InputProps={{
@@ -115,7 +115,7 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
               </Grid>
               {answerAfter !== undefined ? (
                 <QuestTextField
-                  placeholder="Long Answer"
+                  placeholder="Short Answer"
                   label="Answer"
                   value={answerAfter.textResponse}
                   InputProps={{

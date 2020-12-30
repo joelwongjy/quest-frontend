@@ -48,11 +48,14 @@ export interface QuestionnairePatchData
 }
 
 export interface QuestionnaireListData extends DiscardableData {
+  windowId: number;
   name: string;
   startAt: Date | string;
   endAt: Date | string;
   status: QuestionnaireStatus;
   type: QuestionnaireListDataType;
+  programmes: { id: number; name: string }[];
+  classes: { id: number; name: string }[];
 }
 
 export interface QuestionnaireId {

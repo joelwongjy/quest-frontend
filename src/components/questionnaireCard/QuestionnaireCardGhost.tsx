@@ -10,29 +10,45 @@ import {
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import { CardMode } from 'interfaces/components/questionnaireCard';
+
 import { useStyles } from './questionnaireCard.styles';
 
-const QuestionnaireCardGhost: React.FunctionComponent = () => {
+interface QuestionnaireCardGhostProps {
+  mode?: CardMode;
+}
+
+const QuestionnaireCardGhost: React.FC<QuestionnaireCardGhostProps> = ({
+  mode = CardMode.STAFF,
+}) => {
   const classes = useStyles();
   return (
     <>
-      <Typography className={classes.dates} color="textSecondary" gutterBottom>
-        <Skeleton />
-      </Typography>
+      {mode !== CardMode.STUDENT && (
+        <Typography
+          className={classes.dates}
+          color="textSecondary"
+          gutterBottom
+        >
+          <Skeleton />
+        </Typography>
+      )}
 
       <Card>
         <CardHeader
           title={<Skeleton />}
           action={
-            <>
-              <IconButton
-                aria-label="more options"
-                aria-controls="more options"
-                aria-haspopup="true"
-              >
-                <MoreVertIcon />
-              </IconButton>
-            </>
+            mode !== CardMode.STUDENT && (
+              <>
+                <IconButton
+                  aria-label="more options"
+                  aria-controls="more options"
+                  aria-haspopup="true"
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </>
+            )
           }
         />
         <CardContent>

@@ -17,5 +17,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(3, 1, 0),
       marginTop: '1rem',
     },
+    fab: {
+      position: 'fixed',
+      zIndex: 5,
+      bottom: theme.spacing(3),
+      right: theme.spacing(3),
+    },
   })
 );

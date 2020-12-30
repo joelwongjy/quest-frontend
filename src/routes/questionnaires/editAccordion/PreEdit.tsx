@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import {
-  QuestionAccessibility,
-  QuestionMode,
-} from 'interfaces/models/questionnaires';
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToPre,
   deleteQuestionInPre,
@@ -48,7 +47,6 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({
           <QuestionCard
             key={`question-${question.duxId}`}
             question={q}
-            mode={QuestionMode.EDIT}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {
                 dispatch(deleteQuestionInPre(order));
@@ -101,6 +99,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({
         className={classes.addCard}
         onClick={() => dispatch(addQuestionToPre())}
       >
+        <AddCircleIcon className={classes.addIcon} />
         Add a question
       </QuestCard>
     </div>
