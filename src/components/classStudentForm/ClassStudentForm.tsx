@@ -165,9 +165,19 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
             </Grid>
           </Grid>
           <Grid item xs={12}>
+            <Grid container justify="center" style={{ marginTop: '1.5rem' }}>
+              <Grid item>
+                <Typography variant="subtitle1">
+                  {state.students.length}{' '}
+                  {state.students.length === 1 ? 'Student' : 'Students'}{' '}
+                  Selected
+                </Typography>
+              </Grid>
+            </Grid>
+
             <List className={classes.list}>
               <Grid item container justify="space-between" spacing={2}>
-                <Grid item xs style={{ marginTop: '3rem' }}>
+                <Grid item xs>
                   <List>
                     {availableStudents.map((s, index) => {
                       const labelId = `checkbox-list-label-${index}`;
@@ -200,13 +210,6 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
                 </Grid>
                 <Grid item xs>
                   <List>
-                    <ListItem>
-                      <Typography variant="subtitle1">
-                        {state.students.length}{' '}
-                        {state.students.length === 1 ? 'Student' : 'Students'}{' '}
-                        Selected
-                      </Typography>
-                    </ListItem>
                     {state.students.map((s, index) => {
                       return (
                         <ListItem key={`${s}`}>
