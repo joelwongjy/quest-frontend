@@ -100,6 +100,7 @@ const Classes: React.FunctionComponent = () => {
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
       text: state.isLoading ? 'Loading' : state.programme.name,
+      href: `${PROGRAMMES}/${state.programme.id}${CLASSES}`,
     },
     { text: 'Classes', href: `${PROGRAMMES}/${state.programme.id}${CLASSES}` },
   ];

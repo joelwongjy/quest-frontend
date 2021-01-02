@@ -92,10 +92,12 @@ const AddStudents: React.FunctionComponent = () => {
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
       text: state.isLoading ? 'Loading' : state.questClass.programmeName,
+      href: `${PROGRAMMES}/${programmeId}${CLASSES}`,
     },
     { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
     {
       text: state.isLoading ? 'Loading' : state.questClass.name,
+      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}`,
     },
     {
       text: 'Students',

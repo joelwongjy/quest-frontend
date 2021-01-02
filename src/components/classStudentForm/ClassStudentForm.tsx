@@ -69,7 +69,7 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
   );
 
   const handleCancel = () => {
-    if (isSuccessful) {
+    if (isSuccessful || state.students.length === 0) {
       cancelCallback();
     } else {
       alertCallback(
