@@ -267,7 +267,7 @@ const Responses: React.FunctionComponent = () => {
             <Select
               labelId="programme-select-outlined-label"
               id="programme-select-outlined"
-              value={state.currentProgrammeId}
+              value={state.currentProgrammeId ?? ''}
               onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
                 const newProgrammeId = Number(event.target.value);
                 if (newProgrammeId !== state.currentProgrammeId) {
@@ -306,7 +306,7 @@ const Responses: React.FunctionComponent = () => {
             <Select
               labelId="class-select-outlined-label"
               id="class-select-outlined"
-              value={state.currentClassId}
+              value={state.currentClassId ?? ''}
               onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
                 setState({ currentClassId: event.target.value as number });
               }}
@@ -346,7 +346,7 @@ const Responses: React.FunctionComponent = () => {
             <Select
               labelId="student-select-outlined-label"
               id="student-select-outlined"
-              value={state.currentStudentId}
+              value={state.currentStudentId ?? ''}
               disabled={
                 state.currentProgrammeId === undefined ||
                 state.currentClassId === undefined

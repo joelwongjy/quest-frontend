@@ -51,7 +51,6 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
                 {answerBefore !== undefined ? (
                   <QuestTextField
                     disabled
-                    defaultValue="Long Answer"
                     value={answerBefore.textResponse}
                     className={classes.textfield}
                   />
@@ -79,7 +78,6 @@ const ViewShortAnswerQuestion: React.FunctionComponent<ViewShortAnswerQuestionPr
                 {answerAfter !== undefined ? (
                   <QuestTextField
                     disabled
-                    defaultValue="Long Answer"
                     value={answerAfter.textResponse}
                     className={`${classes.textfield} is-right`}
                   />

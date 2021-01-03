@@ -52,7 +52,6 @@ const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProp
                 {answerBefore !== undefined ? (
                   <QuestTextField
                     disabled
-                    defaultValue="Long Answer"
                     value={answerBefore.textResponse}
                     rows={3}
                     multiline
@@ -82,7 +81,6 @@ const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProp
                 {answerAfter !== undefined ? (
                   <QuestTextField
                     disabled
-                    defaultValue="Long Answer"
                     value={answerAfter.textResponse}
                     rows={3}
                     multiline
