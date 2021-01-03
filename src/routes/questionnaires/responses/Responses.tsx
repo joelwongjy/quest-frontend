@@ -98,7 +98,10 @@ const Responses: React.FunctionComponent = () => {
             const programmes: { id: number; name: string }[] = [];
             questionnaire.classes.forEach((c) => {
               user!.programmes.forEach((p) => {
-                if (p.classes.filter((x) => x.id === c.id).length > 0) {
+                if (
+                  p.classes.filter((x) => x.id === c.id).length > 0 &&
+                  programmes.find((p2) => p2.id === p.id) === undefined
+                ) {
                   programmes.push({ id: p.id, name: p.name });
                 }
               });
