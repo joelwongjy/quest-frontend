@@ -6,31 +6,61 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 16,
       marginTop: 16,
       marginRight: 16,
-      marginBottom: 8,
+      marginBottom: 16,
     },
     top: {
       display: 'flex',
       flexDirection: 'column',
     },
-    textfield: {
-      flex: 1,
+    beforeAfter: {
+      color: '#675F5F',
+      marginBottom: '0.5rem',
     },
-    textfieldContainer: {
-      display: 'flex',
-      marginBottom: theme.spacing(3),
+    leftAnswer: {
+      paddingLeft: '0.5rem',
+      borderRight: '2px solid #efefef',
+      paddingRight: '0.5rem',
+      [theme.breakpoints.down('sm')]: {
+        borderBottom: '2px solid #efefef',
+        borderRight: 0,
+        padding: '0 0 1rem 0',
+      },
+    },
+    rightAnswer: {
+      paddingLeft: '1rem',
+      [theme.breakpoints.down('sm')]: {
+        padding: '1rem 0 1rem 0.5rem',
+      },
     },
     option: {
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: '0.5rem',
+      '& span.Mui-disabled': {
+        color: '#675F5F',
+      },
+    },
+    optionSelected: {
+      backgroundColor: '#F5F9FC',
+      borderRadius: '0.5rem',
+      marginRight: '0.5rem',
+
+      '&.is-right': {
+        backgroundColor: '#F9ECF7',
+      },
+    },
+    noOption: {
+      paddingRight: '1rem',
+      textAlign: 'center',
+      color: '#983E3A',
+      fontSize: '0.9rem',
+      marginTop: '0.5rem',
+      marginBottom: '1rem',
+    },
+    noOptionContainer: {
       flex: 1,
-      paddingTop: '1rem',
-    },
-    button: {
-      color: 'white',
-      marginBottom: '0.5rem',
-    },
-    optionButton: {
-      color: 'white',
-      marginBottom: '0.5rem',
-      marginTop: '1rem',
+      display: 'flex',
+      alignItems: 'center',
     },
   })
 );
