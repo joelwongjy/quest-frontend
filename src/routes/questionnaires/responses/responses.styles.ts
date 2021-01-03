@@ -1,7 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { theme } from 'styles/theme';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
@@ -11,6 +10,12 @@ export const useStyles = makeStyles(() =>
       padding: '1rem',
       boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
       borderRadius: 12,
+      [theme.breakpoints.down('sm')]: {
+        boxShadow: 'none',
+        padding: 0,
+        backgroundColor: 'transparent',
+        margin: 0,
+      },
     },
     title: {
       marginTop: '2rem',
@@ -25,10 +30,6 @@ export const useStyles = makeStyles(() =>
     formControlName: {
       margin: theme.spacing(1),
       minWidth: 225,
-    },
-    card: {
-      boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
-      margin: '1.5rem',
     },
     sharedHeader: {
       backgroundColor: '#ABC3BB',

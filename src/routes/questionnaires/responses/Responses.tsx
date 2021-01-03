@@ -4,7 +4,6 @@ import { useRouteMatch } from 'react-router-dom';
 import PageContainer from 'components/pageContainer';
 import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-
 import { AttemptFullData } from 'interfaces/models/attempts';
 import { RouteState } from 'interfaces/routes/common';
 import { useUser } from 'contexts/UserContext';
@@ -25,8 +24,8 @@ import {
   QuestionAccessibility,
   QuestionnaireFullData,
 } from 'interfaces/models/questionnaires';
-import nextId from 'react-id-generator';
 import ViewQuestionCard from 'components/questionCard/view';
+
 import { attempt } from '../mockData';
 import { useStyles } from './responses.styles';
 
@@ -158,70 +157,97 @@ const Responses: React.FunctionComponent = () => {
   ];
 
   const renderShared = () => {
-    const preArray = state.currentAttempt?.answersShared?.sharedAnswersBefore.sort(
-      (x, y) => x.questionOrder.order - y.questionOrder.order
-    );
-    const postArray = state.currentAttempt?.answersShared?.sharedAnswersAfter.sort(
-      (x, y) => x.questionOrder.order - y.questionOrder.order
-    );
-    if (!preArray || !postArray) {
-      return;
+    const preArray = state.currentAttempt?.answersShared?.sharedAnswersBefore
+      .slice()
+      .sort((x, y) => x.questionOrder.order - y.questionOrder.order);
+
+    const postArray = state.currentAttempt?.answersShared?.sharedAnswersAfter
+      .slice()
+      .sort((x, y) => x.questionOrder.order - y.questionOrder.order);
+
+    let result = [];
+    if (!preArray && !postArray) {
+      return null;
     }
-    const res = [];
-    for (let i = 0; i < preArray?.length; i += 1) {
-      if (
-        preArray[i].questionOrder.questionText ===
-        postArray[i].questionOrder.questionText
-      ) {
-        res.push(
-          <ViewQuestionCard
-            key={`shared-answer-${preArray[i].answerId}`}
-            question={{ ...preArray[i].questionOrder, duxId: nextId() }}
-            answerBefore={preArray[i]}
-            answerAfter={postArray[i]}
-            accessibility={QuestionAccessibility.PRE}
-            alertCallback={alertCallback}
-            className={classes.card}
-            headerStyles={classes.sharedHeader}
-          />
+    if (!postArray) {
+      result = preArray!.map((a) => (
+        <ViewQuestionCard
+          key={`shared-answer-${a.answerId}`}
+          question={a.questionOrder}
+          answerBefore={a}
+          accessibility={QuestionAccessibility.SHARED}
+          alertCallback={alertCallback}
+          headerStyles={classes.sharedHeader}
+        />
+      ));
+    } else if (!preArray) {
+      result = postArray!.map((a) => (
+        <ViewQuestionCard
+          key={`shared-answer-${a.answerId}`}
+          question={a.questionOrder}
+          answerAfter={a}
+          accessibility={QuestionAccessibility.SHARED}
+          alertCallback={alertCallback}
+          headerStyles={classes.sharedHeader}
+        />
+      ));
+    } else {
+      for (let i = 0; i < preArray?.length; i += 1) {
+        const postIndex = postArray.findIndex(
+          (a) =>
+            a.questionOrder.qnOrderId === preArray[i].questionOrder.qnOrderId
         );
-      } else {
-        res.push(
+        if (postIndex === -1) {
+          result.push(
+            <ViewQuestionCard
+              key={`shared-answer-${preArray[i].answerId}`}
+              question={preArray[i].questionOrder}
+              answerBefore={preArray[i]}
+              accessibility={QuestionAccessibility.SHARED}
+              alertCallback={alertCallback}
+              headerStyles={classes.sharedHeader}
+            />
+          );
+        } else {
+          result.push(
+            <ViewQuestionCard
+              key={`shared-answer-${preArray[i].answerId}`}
+              question={preArray[i].questionOrder}
+              answerAfter={postArray[postIndex]!}
+              answerBefore={preArray[i]}
+              accessibility={QuestionAccessibility.SHARED}
+              alertCallback={alertCallback}
+              headerStyles={classes.sharedHeader}
+            />
+          );
+          postArray.splice(postIndex, 1);
+        }
+      }
+      for (let i = 0; i < postArray?.length; i += 1) {
+        result.push(
           <ViewQuestionCard
-            key={`shared-answer-${preArray[i].answerId}`}
-            question={{ ...preArray[i].questionOrder, duxId: nextId() }}
-            answerBefore={preArray[i]}
-            accessibility={QuestionAccessibility.PRE}
-            alertCallback={alertCallback}
-            className={classes.card}
-            headerStyles={classes.sharedHeader}
-          />
-        );
-        res.push(
-          <ViewQuestionCard
-            key={`shared-answer-${preArray[i].answerId}`}
-            question={{ ...preArray[i].questionOrder, duxId: nextId() }}
+            key={`shared-answer-${postArray[i].answerId}`}
+            question={postArray[i].questionOrder}
             answerAfter={postArray[i]}
-            accessibility={QuestionAccessibility.PRE}
+            accessibility={QuestionAccessibility.SHARED}
             alertCallback={alertCallback}
-            className={classes.card}
             headerStyles={classes.sharedHeader}
           />
         );
       }
     }
-    // eslint-disable-next-line consistent-return
-    return <>{res}</>;
+    return <>{result}</>;
   };
 
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
       <Grid container justify="center">
-        <Typography
-          variant="h5"
-          className={classes.title}
-        >{`${state.questionnaire?.title} - Responses`}</Typography>
+        <Typography variant="h5" className={classes.title}>
+          {state.questionnaire?.title
+            ? `${state.questionnaire?.title} - Responses`
+            : 'Loading...'}
+        </Typography>
       </Grid>
       <Grid container justify="center">
         <Grid item>
@@ -349,7 +375,7 @@ const Responses: React.FunctionComponent = () => {
         <>
           {state.currentAttempt?.answers && (
             <Grid container justify="center">
-              <Grid item xs={10}>
+              <Grid item xs={12} sm={10} md={9}>
                 <div className={classes.root}>
                   {attempt.answers
                     ?.sort(
@@ -360,11 +386,10 @@ const Responses: React.FunctionComponent = () => {
                       return (
                         <ViewQuestionCard
                           key={`single-answer-${ans.answerId}`}
-                          question={{ ...question, duxId: nextId() }}
+                          question={question}
                           answer={ans}
                           accessibility={QuestionAccessibility.PRE}
                           alertCallback={alertCallback}
-                          className={classes.card}
                           headerStyles={classes.sharedHeader}
                         />
                       );
@@ -375,7 +400,7 @@ const Responses: React.FunctionComponent = () => {
           )}
           {state.currentAttempt?.answersShared && (
             <Grid container justify="center">
-              <Grid item xs={10}>
+              <Grid item xs={12} sm={10} md={9}>
                 <Paper className={classes.paper}>
                   <Grid container justify="center">
                     <Typography
@@ -391,7 +416,7 @@ const Responses: React.FunctionComponent = () => {
                   {renderShared()}
                 </Paper>
               </Grid>
-              <Grid item xs={10}>
+              <Grid item xs={12} sm={10} md={9}>
                 <Paper
                   className={classes.paper}
                   style={{ marginBottom: '3rem' }}
@@ -430,11 +455,10 @@ const Responses: React.FunctionComponent = () => {
                             return (
                               <ViewQuestionCard
                                 key={`pre-answer-${ans.answerId}`}
-                                question={{ ...question, duxId: nextId() }}
+                                question={question}
                                 answer={ans}
                                 accessibility={QuestionAccessibility.PRE}
                                 alertCallback={alertCallback}
-                                className={classes.card}
                                 headerStyles={classes.preHeader}
                               />
                             );
@@ -449,11 +473,10 @@ const Responses: React.FunctionComponent = () => {
                             return (
                               <ViewQuestionCard
                                 key={`pre-answer-${ans.answerId}`}
-                                question={{ ...question, duxId: nextId() }}
+                                question={question}
                                 answer={ans}
-                                accessibility={QuestionAccessibility.PRE}
+                                accessibility={QuestionAccessibility.POST}
                                 alertCallback={alertCallback}
-                                className={classes.card}
                                 headerStyles={classes.postHeader}
                               />
                             );
