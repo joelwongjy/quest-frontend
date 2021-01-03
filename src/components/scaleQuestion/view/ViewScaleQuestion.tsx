@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, Grid } from '@material-ui/core';
+import { FormGroup } from '@material-ui/core';
 
 import { AnswerData } from 'interfaces/models/answers';
 import QuestSlider from 'componentWrappers/questSlider';
