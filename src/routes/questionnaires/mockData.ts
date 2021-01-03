@@ -8,7 +8,12 @@ import {
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
 import { DiscardableData } from 'interfaces/models/base';
-import { QuestionSetData, QuestionType } from 'interfaces/models/questions';
+import {
+  Mood,
+  QuestionSetData,
+  QuestionType,
+  Scale,
+} from 'interfaces/models/questions';
 import { PersonListData } from 'interfaces/models/persons';
 import { AttemptFullData } from 'interfaces/models/attempts';
 import { DefaultUserRole } from 'interfaces/models/users';
@@ -34,7 +39,7 @@ export const questionnaire: QuestionnairePostData = {
       questions: [
         {
           order: 1,
-          questionText: 'i love dsc',
+          questionText: 'I love DSC',
           questionType: QuestionType.MULTIPLE_CHOICE,
           options: [
             {
@@ -220,7 +225,7 @@ export const attempt: AttemptFullData = {
       {
         ...mockBaseData,
         qnOrderId: 3,
-        order: 3,
+        order: 1,
         questionText: 'Do you like prof ben?',
         questionType: QuestionType.SHORT_ANSWER,
         options: [],
@@ -228,7 +233,7 @@ export const attempt: AttemptFullData = {
       {
         ...mockBaseData,
         qnOrderId: 4,
-        order: 4,
+        order: 1,
         questionText: 'What do you think of CVWO?',
         questionType: QuestionType.MOOD,
         options: [],
@@ -236,7 +241,7 @@ export const attempt: AttemptFullData = {
       {
         ...mockBaseData,
         qnOrderId: 5,
-        order: 5,
+        order: 2,
         questionText: 'Rate Orbital',
         questionType: QuestionType.SCALE,
         options: [],
@@ -252,7 +257,7 @@ export const attempt: AttemptFullData = {
           ...mockBaseData,
           order: 1,
           qnOrderId: 1,
-          questionText: 'Do you want to build a snow man?',
+          questionText: 'Do you want to build a castle?',
           questionType: QuestionType.MULTIPLE_CHOICE,
           options: [
             {
@@ -286,10 +291,106 @@ export const attempt: AttemptFullData = {
         },
         textResponse: 'Dread it, run from it, destiny arrives all the same.',
       },
+      {
+        answerId: 7,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 7,
+          order: 3,
+          questionText: 'I makan DSC',
+          questionType: QuestionType.LONG_ANSWER,
+          options: [],
+        },
+        textResponse: 'Monch monch.',
+      },
+      {
+        answerId: 8,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 8,
+          order: 4,
+          questionText: 'Happy New Year',
+          questionType: QuestionType.SHORT_ANSWER,
+          options: [],
+        },
+        textResponse: 'Yeah haha.',
+      },
+      {
+        answerId: 11,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 4,
+          order: 5,
+          questionText: 'I want to put some dirt in your eye.',
+          questionType: QuestionType.MOOD,
+          options: [
+            {
+              optionId: 1,
+              optionText: Mood.VERY_BAD,
+            },
+            {
+              optionId: 2,
+              optionText: Mood.BAD,
+            },
+            {
+              optionId: 3,
+              optionText: Mood.NORMAL,
+            },
+            {
+              optionId: 4,
+              optionText: Mood.GOOD,
+            },
+            {
+              optionId: 5,
+              optionText: Mood.VERY_GOOD,
+            },
+          ],
+        },
+        option: {
+          optionId: 2,
+          optionText: Mood.GOOD,
+        },
+      },
+      {
+        answerId: 12,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 11,
+          order: 6,
+          questionText: 'With great power comes great responsibility. Agree?',
+          questionType: QuestionType.SCALE,
+          options: [
+            {
+              optionId: 1,
+              optionText: Scale.ONE,
+            },
+            {
+              optionId: 2,
+              optionText: Scale.TWO,
+            },
+            {
+              optionId: 3,
+              optionText: Scale.THREE,
+            },
+            {
+              optionId: 4,
+              optionText: Scale.FOUR,
+            },
+            {
+              optionId: 5,
+              optionText: Scale.FIVE,
+            },
+          ],
+        },
+        option: {
+          optionId: 1,
+          optionText: Scale.ONE,
+        },
+      },
     ],
     sharedAnswersAfter: [
       {
-        answerId: 1,
+        answerId: 3,
         questionOrder: {
           ...mockBaseData,
           order: 1,
@@ -317,7 +418,7 @@ export const attempt: AttemptFullData = {
         },
       },
       {
-        answerId: 2,
+        answerId: 4,
         questionOrder: {
           ...mockBaseData,
           qnOrderId: 2,
@@ -329,43 +430,190 @@ export const attempt: AttemptFullData = {
         textResponse:
           'This universe is finite, its resources, finite... If life is left unchecked, life will cease to exist.',
       },
+      {
+        answerId: 9,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 8,
+          order: 4,
+          questionText: 'Happy New Year',
+          questionType: QuestionType.SHORT_ANSWER,
+          options: [],
+        },
+        textResponse:
+          'Mei tiao da jie xiao xiang. Mei ge ren de zui li. Jian mian di yi ju hua. Jiu Shi Gong xi Gong xi',
+      },
+      {
+        answerId: 10,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 4,
+          order: 5,
+          questionText: 'I want to put some dirt in your eye.',
+          questionType: QuestionType.MOOD,
+          options: [
+            {
+              optionId: 1,
+              optionText: Mood.VERY_BAD,
+            },
+            {
+              optionId: 2,
+              optionText: Mood.BAD,
+            },
+            {
+              optionId: 3,
+              optionText: Mood.NORMAL,
+            },
+            {
+              optionId: 4,
+              optionText: Mood.GOOD,
+            },
+            {
+              optionId: 5,
+              optionText: Mood.VERY_GOOD,
+            },
+          ],
+        },
+        option: {
+          optionId: 5,
+          optionText: Mood.VERY_GOOD,
+        },
+      },
+      {
+        answerId: 11,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 11,
+          order: 6,
+          questionText: 'With great power comes great responsibility. Agree?',
+          questionType: QuestionType.SCALE,
+          options: [
+            {
+              optionId: 1,
+              optionText: Scale.ONE,
+            },
+            {
+              optionId: 2,
+              optionText: Scale.TWO,
+            },
+            {
+              optionId: 3,
+              optionText: Scale.THREE,
+            },
+            {
+              optionId: 4,
+              optionText: Scale.FOUR,
+            },
+            {
+              optionId: 5,
+              optionText: Scale.FIVE,
+            },
+          ],
+        },
+        option: {
+          optionId: 5,
+          optionText: Scale.ONE,
+        },
+      },
     ],
   },
   answersBefore: [
     {
-      answerId: 3,
+      answerId: 5,
       questionOrder: {
         ...mockBaseData,
         qnOrderId: 3,
-        order: 3,
+        order: 1,
         questionText: 'Do you like prof ben?',
         questionType: QuestionType.SHORT_ANSWER,
         options: [],
       },
       textResponse: 'Dread it, run from it, destiny arrives all the same.',
     },
-  ],
-  answersAfter: [
     {
       answerId: 4,
       questionOrder: {
         ...mockBaseData,
-        qnOrderId: 4,
-        order: 4,
-        questionText: 'What do you think of CVWO?',
-        questionType: QuestionType.MOOD,
+        qnOrderId: 9,
+        order: 2,
+        questionText: 'Pizza Time!',
+        questionType: QuestionType.LONG_ANSWER,
         options: [],
+      },
+      textResponse: "You're late. I'm not paying for those.",
+    },
+  ],
+  answersAfter: [
+    {
+      answerId: 6,
+      questionOrder: {
+        ...mockBaseData,
+        qnOrderId: 4,
+        order: 1,
+        questionText: 'I want to put some dirt in your eye.',
+        questionType: QuestionType.MOOD,
+        options: [
+          {
+            optionId: 1,
+            optionText: Mood.VERY_BAD,
+          },
+          {
+            optionId: 2,
+            optionText: Mood.BAD,
+          },
+          {
+            optionId: 3,
+            optionText: Mood.NORMAL,
+          },
+          {
+            optionId: 4,
+            optionText: Mood.GOOD,
+          },
+          {
+            optionId: 5,
+            optionText: Mood.VERY_GOOD,
+          },
+        ],
+      },
+      option: {
+        optionId: 2,
+        optionText: Mood.BAD,
       },
     },
     {
-      answerId: 5,
+      answerId: 7,
       questionOrder: {
         ...mockBaseData,
         qnOrderId: 5,
-        order: 5,
+        order: 2,
         questionText: 'Rate Orbital',
         questionType: QuestionType.SCALE,
-        options: [],
+        options: [
+          {
+            optionId: 1,
+            optionText: Scale.ONE,
+          },
+          {
+            optionId: 2,
+            optionText: Scale.TWO,
+          },
+          {
+            optionId: 3,
+            optionText: Scale.THREE,
+          },
+          {
+            optionId: 4,
+            optionText: Scale.FOUR,
+          },
+          {
+            optionId: 5,
+            optionText: Scale.FIVE,
+          },
+        ],
+      },
+      option: {
+        optionId: 1,
+        optionText: Scale.ONE,
       },
     },
   ],

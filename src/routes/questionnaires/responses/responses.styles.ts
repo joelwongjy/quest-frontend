@@ -1,7 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { theme } from 'styles/theme';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
@@ -11,6 +10,12 @@ export const useStyles = makeStyles(() =>
       padding: '1rem',
       boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
       borderRadius: 12,
+      [theme.breakpoints.down('sm')]: {
+        boxShadow: 'none',
+        padding: 0,
+        backgroundColor: 'transparent',
+        margin: 0,
+      },
     },
     title: {
       marginTop: '2rem',
@@ -26,22 +31,19 @@ export const useStyles = makeStyles(() =>
       margin: theme.spacing(1),
       minWidth: 225,
     },
-    card: {
+    sharedHeader: {
       backgroundColor: '#ABC3BB',
-      boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
-      margin: '1.5rem',
+      alignItems: 'center',
       padding: '1.5rem',
     },
-    preCard: {
-      backgroundColor: '#CBE1EE',
-      boxShadow: 'rgba(203, 225, 238, 0.2) 0px 8px 24px;',
-      margin: '1.5rem',
+    preHeader: {
+      backgroundColor: '#CBE2EF',
+      alignItems: 'center',
       padding: '1.5rem',
     },
-    postCard: {
+    postHeader: {
       backgroundColor: '#E1CEC9',
-      boxShadow: 'rgba(225, 206, 201, 0.2) 0px 8px 24px;',
-      margin: '1.5rem',
+      alignItems: 'center',
       padding: '1.5rem',
     },
     modeSwitch: {

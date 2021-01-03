@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormGroup, Grid, Typography } from '@material-ui/core';
+import { FormGroup, Grid, Typography } from '@material-ui/core';
 
 import QuestTextField from 'componentWrappers/questTextField';
 import { AnswerData } from 'interfaces/models/answers';
@@ -21,29 +21,14 @@ const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProp
   const renderQuestion = () => {
     if (answer) {
       return (
-        <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <FormControl style={{ width: '100%' }}>
-              <QuestTextField
-                className={classes.textfield}
-                label="Question"
-                value={answer.questionOrder.questionText}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </div>
+        <div className={`${classes.top} is-single`}>
           <QuestTextField
-            placeholder="Long Answer"
+            disabled
             label="Answer"
             value={answer.textResponse}
             multiline
-            rows={4}
-            InputProps={{
-              readOnly: true,
-            }}
-            style={{ marginTop: '1rem' }}
+            rows={3}
+            className={classes.textfield}
           />
         </div>
       );
@@ -52,76 +37,64 @@ const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProp
     if (answerBefore !== undefined || answerAfter !== undefined) {
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <FormControl style={{ width: '100%' }}>
-              <QuestTextField
-                className={classes.textfield}
-                label="Question"
-                value={
-                  answerBefore !== undefined
-                    ? answerBefore.questionOrder.questionText
-                    : answerAfter!.questionOrder.questionText
-                }
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </FormControl>
-          </div>
           <Grid container justify="space-between">
-            <Grid
-              item
-              xs={6}
-              style={{
-                paddingLeft: '0.5rem',
-                paddingRight: '1.5rem',
-                borderRight: '2px solid grey',
-              }}
-            >
-              <Grid container justify="center">
-                <Typography variant="h6" style={{ color: '#695F5F' }}>
+            <Grid item xs={12} md={6} className={classes.leftAnswer}>
+              <Grid
+                container
+                justify="center"
+                alignItems="center"
+                direction="column"
+              >
+                <Typography variant="h6" className={classes.beforeAfter}>
                   Before
                 </Typography>
+
+                {answerBefore !== undefined ? (
+                  <QuestTextField
+                    disabled
+                    value={answerBefore.textResponse}
+                    rows={3}
+                    multiline
+                    className={classes.textfield}
+                  />
+                ) : (
+                  <div className={classes.noOptionContainer}>
+                    <Typography className={classes.noOption}>
+                      This question was added after the student attempted the
+                      pre-programme questionnaire.
+                    </Typography>
+                  </div>
+                )}
               </Grid>
-              {answerBefore !== undefined ? (
-                <QuestTextField
-                  disabled
-                  defaultValue="Long Answer"
-                  value={answerBefore.textResponse}
-                  rows={3}
-                  multiline
-                />
-              ) : (
-                <Typography>
-                  This question was added after the student attempted the
-                  pre-programme questionnaire.
-                </Typography>
-              )}
             </Grid>
-            <Grid
-              item
-              xs={6}
-              style={{ paddingLeft: '1.5rem', paddingRight: '0.5rem' }}
-            >
-              <Grid container justify="center">
-                <Typography variant="h6" style={{ color: '#695F5F' }}>
+            <Grid item xs={12} md={6} className={classes.rightAnswer}>
+              <Grid
+                container
+                justify="center"
+                alignItems="center"
+                direction="column"
+              >
+                <Typography variant="h6" className={classes.beforeAfter}>
                   After
                 </Typography>
+
+                {answerAfter !== undefined ? (
+                  <QuestTextField
+                    disabled
+                    value={answerAfter.textResponse}
+                    rows={3}
+                    multiline
+                    className={`${classes.textfield} is-right`}
+                  />
+                ) : (
+                  <div className={classes.noOptionContainer}>
+                    <Typography className={classes.noOption}>
+                      This question has been modified or deleted after the
+                      student attempted the pre-programme questionnaire.
+                    </Typography>
+                  </div>
+                )}
               </Grid>
-              {answerAfter !== undefined ? (
-                <QuestTextField
-                  disabled
-                  defaultValue="Long Answer"
-                  value={answerAfter.textResponse}
-                  rows={3}
-                  multiline
-                />
-              ) : (
-                <Typography>
-                  This question has been modified or deleted after the student
-                  attempted the pre-programme questionnaire.
-                </Typography>
-              )}
             </Grid>
           </Grid>
         </div>

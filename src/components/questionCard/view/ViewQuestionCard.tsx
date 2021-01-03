@@ -1,27 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import {
+  createMuiTheme,
+  FormControl,
+  Grid,
+  MuiThemeProvider,
+} from '@material-ui/core';
 
 import QuestCard from 'componentWrappers/questCard';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
-import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { AnswerData } from 'interfaces/models/answers';
-import { QuestionType } from 'interfaces/models/questions';
+import { QuestionData, QuestionType } from 'interfaces/models/questions';
 import ViewMcqQuestion from 'components/mcqQuestion/view';
 import ViewScaleQuestion from 'components/scaleQuestion/view';
 import ViewMoodQuestion from 'components/moodQuestion/view';
 import ViewLongAnswerQuestion from 'components/longAnswerQuestion/view';
 import ViewShortAnswerQuestion from 'components/shortAnswerQuestion/view';
+import QuestTextField from 'componentWrappers/questTextField';
 import { useStyles } from './viewQuestionCard.styles';
 
 interface ViewQuestionCardProps extends QuestComponentProps {
-  question: QuestionnaireDuxQuestion;
+  question: QuestionData;
   answer?: AnswerData;
   answerBefore?: AnswerData;
   answerAfter?: AnswerData;
   accessibility: QuestionAccessibility;
+  headerStyles?: string;
   alertCallback: (
     isAlertOpen: boolean,
     hasConfirm: boolean,
@@ -45,16 +51,20 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
   answer,
   answerBefore,
   answerAfter,
-  accessibility,
-  alertCallback,
-  className,
+  headerStyles,
 }) => {
   const classes = useStyles();
 
-  const renderQuestion = () => {
+  const renderAnswer = () => {
     switch (question.questionType) {
       case QuestionType.SHORT_ANSWER:
-        return <ViewShortAnswerQuestion answer={answer} />;
+        return (
+          <ViewShortAnswerQuestion
+            answer={answer}
+            answerBefore={answerBefore}
+            answerAfter={answerAfter}
+          />
+        );
       case QuestionType.LONG_ANSWER:
         return (
           <ViewLongAnswerQuestion
@@ -64,9 +74,21 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
           />
         );
       case QuestionType.MOOD:
-        return <ViewMoodQuestion answer={answer} />;
+        return (
+          <ViewMoodQuestion
+            answer={answer}
+            answerBefore={answerBefore}
+            answerAfter={answerAfter}
+          />
+        );
       case QuestionType.SCALE:
-        return <ViewScaleQuestion answer={answer} />;
+        return (
+          <ViewScaleQuestion
+            answer={answer}
+            answerBefore={answerBefore}
+            answerAfter={answerAfter}
+          />
+        );
       case QuestionType.MULTIPLE_CHOICE:
       default:
         return (
@@ -79,11 +101,38 @@ const ViewQuestionCard: React.FC<ViewQuestionCardProps> = ({
     }
   };
 
+  const renderQuestionText = () => {
+    if (answer !== undefined) {
+      return answer.questionOrder.questionText;
+    }
+    return answerBefore !== undefined
+      ? answerBefore.questionOrder.questionText
+      : answerAfter!.questionOrder.questionText;
+  };
+
   return (
-    <QuestCard className={className} key={question.duxId}>
-      <MuiThemeProvider theme={InputMuiTheme}>
-        {renderQuestion()}
-      </MuiThemeProvider>
+    <QuestCard className={classes.card} key={question.qnOrderId}>
+      <Grid>
+        <Grid item xs={12} className={headerStyles}>
+          <div className={classes.textfieldContainer}>
+            <FormControl style={{ width: '100%', backgroundColor: '#F8F8F8' }}>
+              <QuestTextField
+                className={classes.textfield}
+                value={renderQuestionText()}
+                size="small"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </FormControl>
+          </div>
+        </Grid>
+        <Grid item xs={12}>
+          <MuiThemeProvider theme={InputMuiTheme}>
+            {renderAnswer()}
+          </MuiThemeProvider>
+        </Grid>
+      </Grid>
     </QuestCard>
   );
 };
