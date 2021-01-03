@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import nextId from 'react-id-generator';
+import { v4 as uuid } from 'uuid';
 import { addDays } from 'date-fns';
 
 import {
@@ -134,7 +134,7 @@ const questionnaire = createSlice({
     addQuestionToPre: (state): void => {
       const { length } = state.questionWindows[0].questions;
       state.questionWindows[0].questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: '',
         questionType: QuestionType.MULTIPLE_CHOICE,
@@ -144,7 +144,7 @@ const questionnaire = createSlice({
     addQuestionToPost: (state): void => {
       const { length } = state.questionWindows[1].questions;
       state.questionWindows[1].questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: '',
         questionType: QuestionType.MULTIPLE_CHOICE,
@@ -154,7 +154,7 @@ const questionnaire = createSlice({
     addQuestionToShared: (state): void => {
       const { length } = state.sharedQuestions.questions;
       state.sharedQuestions.questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: '',
         questionType: QuestionType.MULTIPLE_CHOICE,
@@ -164,7 +164,7 @@ const questionnaire = createSlice({
     addSampleQuestionToPre: (state, action: PayloadAction<string>): void => {
       const { length } = state.questionWindows[0].questions;
       state.questionWindows[0].questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: action.payload,
         questionType: QuestionType.MULTIPLE_CHOICE,
@@ -174,7 +174,7 @@ const questionnaire = createSlice({
     addSampleQuestionToPost: (state, action: PayloadAction<string>): void => {
       const { length } = state.questionWindows[1].questions;
       state.questionWindows[1].questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: action.payload,
         questionType: QuestionType.MULTIPLE_CHOICE,
@@ -184,7 +184,7 @@ const questionnaire = createSlice({
     addSampleQuestionToShared: (state, action: PayloadAction<string>): void => {
       const { length } = state.sharedQuestions.questions;
       state.sharedQuestions.questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: action.payload,
         questionType: QuestionType.MULTIPLE_CHOICE,
@@ -397,7 +397,7 @@ const questionnaire = createSlice({
       const { length } = state.questionWindows[0].questions;
       const questionToDuplicate = state.questionWindows[0].questions[index];
       state.questionWindows[0].questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: questionToDuplicate.questionText,
         questionType: questionToDuplicate.questionType,
@@ -419,7 +419,7 @@ const questionnaire = createSlice({
       const { length } = state.questionWindows[1].questions;
       const questionToDuplicate = state.questionWindows[1].questions[index];
       state.questionWindows[1].questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: questionToDuplicate.questionText,
         questionType: questionToDuplicate.questionType,
@@ -441,7 +441,7 @@ const questionnaire = createSlice({
       const { length } = state.sharedQuestions.questions;
       const questionToDuplicate = state.sharedQuestions.questions[index];
       state.sharedQuestions.questions.push({
-        duxId: nextId(),
+        duxId: uuid(),
         order: length,
         questionText: questionToDuplicate.questionText,
         questionType: questionToDuplicate.questionType,
