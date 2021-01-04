@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
 import QuestionCard from 'components/questionCard/edit';
@@ -43,7 +42,7 @@ const SingleEdit: React.FunctionComponent<SingleEditProps> = ({
         const { order } = q;
         return (
           <QuestionCard
-            key={`question-${q.duxId}`}
+            key={`question-single-${q.duxId}`}
             question={q}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {

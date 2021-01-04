@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
@@ -16,8 +15,8 @@ import {
 } from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard/edit';
 import QuestCard from 'componentWrappers/questCard';
-
 import { isEmptyQuestion } from 'utils/questionnaireUtils';
+
 import { useStyles } from './editAccordion.styles';
 
 interface PostEditProps {
@@ -45,7 +44,7 @@ const PostEdit: React.FunctionComponent<PostEditProps> = ({
         const { order, ...question } = q;
         return (
           <QuestionCard
-            key={`question-${question.duxId}`}
+            key={`question-post-${question.duxId}`}
             question={q}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {

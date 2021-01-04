@@ -45,7 +45,7 @@ const PreEdit: React.FunctionComponent<PreEditProps> = ({
         const { order, ...question } = q;
         return (
           <QuestionCard
-            key={`question-${question.duxId}`}
+            key={`question-pre-${question.duxId}`}
             question={q}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {
