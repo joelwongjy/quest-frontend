@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, Grid, IconButton, Typography } from '@material-ui/core';
+import { FormGroup, IconButton } from '@material-ui/core';
 import {
   SentimentVerySatisfied,
   SentimentSatisfiedAlt,
@@ -8,9 +8,9 @@ import {
   SentimentVeryDissatisfied,
 } from '@material-ui/icons/';
 
-import QuestTextField from 'componentWrappers/questTextField';
-
 import { AnswerData } from 'interfaces/models/answers';
+import { Mood } from 'interfaces/models/questions';
+
 import { useStyles } from './viewMoodQuestion.styles';
 
 interface ViewMoodQuestionProps {
@@ -26,34 +26,84 @@ const ViewMoodQuestion: React.FunctionComponent<ViewMoodQuestionProps> = ({
 }) => {
   const classes = useStyles();
 
+  const getEmojiClass = (
+    mood: Mood,
+    before?: string,
+    after?: string
+  ): string => {
+    let result = classes.emoji;
+    if ((before && before === mood) || (after && after === mood)) {
+      result += ` ${classes.emojiSelected}`;
+    }
+    if (before && before === mood) {
+      result += ' is-before';
+    }
+    if (after && after === mood) {
+      result += ' is-after';
+    }
+    return result;
+  };
+
   const renderQuestion = () => {
     if (answer) {
+      const optionText = answer.option?.optionText;
+
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <QuestTextField
-              className={classes.textfield}
-              label="Question"
-              value={answer.questionOrder.questionText}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </div>
           <div className={classes.emojiContainer}>
-            <IconButton aria-label="Very Dissatisfied">
+            <IconButton
+              aria-label="Very Dissatisfied"
+              disabled
+              className={
+                optionText === Mood.VERY_BAD
+                  ? `${classes.emojiSelected} ${classes.emoji}`
+                  : classes.emoji
+              }
+            >
               <SentimentVeryDissatisfied fontSize="large" />
             </IconButton>
-            <IconButton aria-label="Sissatisfied">
+            <IconButton
+              aria-label="Dissatisfied"
+              disabled
+              className={
+                optionText === Mood.BAD
+                  ? `${classes.emojiSelected} ${classes.emoji}`
+                  : classes.emoji
+              }
+            >
               <SentimentDissatisfied fontSize="large" />
             </IconButton>
-            <IconButton aria-label="Neutral">
+            <IconButton
+              aria-label="Neutral"
+              disabled
+              className={
+                optionText === Mood.NORMAL
+                  ? `${classes.emojiSelected} ${classes.emoji}`
+                  : classes.emoji
+              }
+            >
               <SentimentSatisfied fontSize="large" />
             </IconButton>
-            <IconButton aria-label="Satisfied">
+            <IconButton
+              aria-label="Satisfied"
+              disabled
+              className={
+                optionText === Mood.GOOD
+                  ? `${classes.emojiSelected} ${classes.emoji}`
+                  : classes.emoji
+              }
+            >
               <SentimentSatisfiedAlt fontSize="large" />
             </IconButton>
-            <IconButton aria-label="Very Satisfied">
+            <IconButton
+              aria-label="Very Satisfied"
+              disabled
+              className={
+                optionText === Mood.VERY_GOOD
+                  ? `${classes.emojiSelected} ${classes.emoji}`
+                  : classes.emoji
+              }
+            >
               <SentimentVerySatisfied fontSize="large" />
             </IconButton>
           </div>
@@ -62,98 +112,46 @@ const ViewMoodQuestion: React.FunctionComponent<ViewMoodQuestionProps> = ({
     }
 
     if (answerBefore !== undefined || answerAfter !== undefined) {
+      const beforeText = answerBefore?.option?.optionText;
+      const afterText = answerAfter?.option?.optionText;
+
+      const veryBadClass = getEmojiClass(Mood.VERY_BAD, beforeText, afterText);
+      const badClass = getEmojiClass(Mood.BAD, beforeText, afterText);
+      const normalClass = getEmojiClass(Mood.NORMAL, beforeText, afterText);
+      const goodClass = getEmojiClass(Mood.GOOD, beforeText, afterText);
+      const veryGoodClass = getEmojiClass(
+        Mood.VERY_GOOD,
+        beforeText,
+        afterText
+      );
+
       return (
         <div className={classes.top}>
-          <div className={classes.textfieldContainer}>
-            <QuestTextField
-              className={classes.textfield}
-              label="Question"
-              value={
-                answerBefore !== undefined
-                  ? answerBefore.questionOrder.questionText
-                  : answerAfter!.questionOrder.questionText
-              }
-              InputProps={{
-                readOnly: true,
-              }}
-            />
+          <div className={classes.emojiContainer}>
+            <IconButton
+              aria-label="Very Dissatisfied"
+              disabled
+              className={veryBadClass}
+            >
+              <SentimentVeryDissatisfied fontSize="large" />
+            </IconButton>
+            <IconButton aria-label="Dissatisfied" disabled className={badClass}>
+              <SentimentDissatisfied fontSize="large" />
+            </IconButton>
+            <IconButton aria-label="Neutral" disabled className={normalClass}>
+              <SentimentSatisfied fontSize="large" />
+            </IconButton>
+            <IconButton aria-label="Satisfied" disabled className={goodClass}>
+              <SentimentSatisfiedAlt fontSize="large" />
+            </IconButton>
+            <IconButton
+              aria-label="Very Satisfied"
+              disabled
+              className={veryGoodClass}
+            >
+              <SentimentVerySatisfied fontSize="large" />
+            </IconButton>
           </div>
-          <Grid container alignItems="center" justify="space-between">
-            <Grid
-              item
-              xs={6}
-              style={{ paddingLeft: '0.5rem', borderRight: '2px solid grey' }}
-            >
-              <Grid container justify="center">
-                <Typography variant="h6" style={{ color: '#695F5F' }}>
-                  Before
-                </Typography>
-              </Grid>
-              {answerBefore !== undefined ? (
-                <div className={classes.emojiContainer}>
-                  <IconButton aria-label="Very Dissatisfied">
-                    <SentimentVeryDissatisfied fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Sissatisfied">
-                    <SentimentDissatisfied fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Neutral">
-                    <SentimentSatisfied fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Satisfied">
-                    <SentimentSatisfiedAlt fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Very Satisfied">
-                    <SentimentVerySatisfied fontSize="large" />
-                  </IconButton>
-                </div>
-              ) : (
-                <Typography
-                  style={{ paddingTop: '1rem', paddingRight: '1rem' }}
-                >
-                  This question was added after the student attempted the
-                  pre-programme questionnaire.
-                </Typography>
-              )}
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              style={{ paddingLeft: '0.5rem', borderRight: '2px solid grey' }}
-            >
-              <Grid container justify="center">
-                <Typography variant="h6" style={{ color: '#695F5F' }}>
-                  Before
-                </Typography>
-              </Grid>
-              {answerAfter !== undefined ? (
-                <div className={classes.emojiContainer}>
-                  <IconButton aria-label="Very Dissatisfied">
-                    <SentimentVeryDissatisfied fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Sissatisfied">
-                    <SentimentDissatisfied fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Neutral">
-                    <SentimentSatisfied fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Satisfied">
-                    <SentimentSatisfiedAlt fontSize="large" />
-                  </IconButton>
-                  <IconButton aria-label="Very Satisfied">
-                    <SentimentVerySatisfied fontSize="large" />
-                  </IconButton>
-                </div>
-              ) : (
-                <Typography
-                  style={{ paddingTop: '1rem', paddingRight: '1rem' }}
-                >
-                  This question has been modified or deleted after the student
-                  attempted the pre-programme questionnaire
-                </Typography>
-              )}
-            </Grid>
-          </Grid>
         </div>
       );
     }

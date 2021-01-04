@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  ButtonGroup,
   createMuiTheme,
   FormControl,
   FormHelperText,
@@ -233,7 +232,7 @@ const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
           <DuplicateIcon />
         </IconButton>
       </div>
-      <ButtonGroup variant="outlined">
+      <div>
         {!isFirst && (
           <IconButton aria-label="up" onClick={handleMoveUp}>
             <UpIcon />
@@ -244,7 +243,7 @@ const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
             <DownIcon />
           </IconButton>
         )}
-      </ButtonGroup>
+      </div>
       {accessibilityEnabled && (
         <FormControl variant="outlined" size="small">
           <Select

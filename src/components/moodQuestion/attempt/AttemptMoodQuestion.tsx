@@ -61,7 +61,7 @@ const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
           return (
             <IconButton
               key={`${question.qnOrderId}-${m}`}
-              aria-label="Very Dissatisfied"
+              aria-label={m}
               color={
                 optionToIdMap[m] === answer?.optionId ? 'primary' : undefined
               }

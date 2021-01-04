@@ -1,4 +1,5 @@
 import { isBefore } from 'date-fns';
+import { v4 as uuid } from 'uuid';
 
 import {
   QuestionnairePostData,
@@ -19,7 +20,6 @@ import {
   QuestionSetPostData,
   QuestionType,
 } from 'interfaces/models/questions';
-import nextId from 'react-id-generator';
 import {
   QuestionnaireDux,
   QuestionnaireDuxOption,
@@ -176,14 +176,14 @@ export const convertToQuestionnaireDux = (
         ...q,
         startAt: new Date(q.startAt),
         endAt: new Date(q.endAt),
-        questions: q.questions.map((q2) => ({ ...q2, duxId: nextId() })),
+        questions: q.questions.map((q2) => ({ ...q2, duxId: uuid() })),
       })
     ),
     sharedQuestions: questionnaire.sharedQuestions
       ? {
           questions: questionnaire?.sharedQuestions?.questions.map((q) => ({
             ...q,
-            duxId: nextId(),
+            duxId: uuid(),
           })),
         }
       : { questions: [] },

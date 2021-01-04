@@ -45,7 +45,7 @@ const SharedEdit: React.FunctionComponent<SharedEditProps> = ({
         const { order, ...question } = q;
         return (
           <QuestionCard
-            key={`question-${question.duxId}`}
+            key={`question-shared-${question.duxId}`}
             question={q}
             handleDelete={() => {
               if (isEmptyQuestion(q)) {
