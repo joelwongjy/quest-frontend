@@ -188,6 +188,8 @@ export const attempt: AttemptFullData = {
     createdAt: new Date(2020, 7, 12),
     updatedAt: new Date(),
   },
+  type: QuestionnaireType.PRE_POST,
+  title: 'Questionnaire One',
   questionnaireWindow: {
     windowId: 1,
     startAt: new Date(2020, 12, 1),
@@ -248,8 +250,7 @@ export const attempt: AttemptFullData = {
       },
     ],
   },
-  answers: undefined,
-  answersShared: {
+  answers: {
     sharedAnswersBefore: [
       {
         answerId: 1,
@@ -516,105 +517,105 @@ export const attempt: AttemptFullData = {
         },
       },
     ],
+    answersBefore: [
+      {
+        answerId: 5,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 3,
+          order: 1,
+          questionText: 'Do you like prof ben?',
+          questionType: QuestionType.SHORT_ANSWER,
+          options: [],
+        },
+        textResponse: 'Dread it, run from it, destiny arrives all the same.',
+      },
+      {
+        answerId: 4,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 9,
+          order: 2,
+          questionText: 'Pizza Time!',
+          questionType: QuestionType.LONG_ANSWER,
+          options: [],
+        },
+        textResponse: "You're late. I'm not paying for those.",
+      },
+    ],
+    answersAfter: [
+      {
+        answerId: 6,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 4,
+          order: 1,
+          questionText: 'I want to put some dirt in your eye.',
+          questionType: QuestionType.MOOD,
+          options: [
+            {
+              optionId: 1,
+              optionText: Mood.VERY_BAD,
+            },
+            {
+              optionId: 2,
+              optionText: Mood.BAD,
+            },
+            {
+              optionId: 3,
+              optionText: Mood.NORMAL,
+            },
+            {
+              optionId: 4,
+              optionText: Mood.GOOD,
+            },
+            {
+              optionId: 5,
+              optionText: Mood.VERY_GOOD,
+            },
+          ],
+        },
+        option: {
+          optionId: 2,
+          optionText: Mood.BAD,
+        },
+      },
+      {
+        answerId: 7,
+        questionOrder: {
+          ...mockBaseData,
+          qnOrderId: 5,
+          order: 2,
+          questionText: 'Rate Orbital',
+          questionType: QuestionType.SCALE,
+          options: [
+            {
+              optionId: 1,
+              optionText: Scale.ONE,
+            },
+            {
+              optionId: 2,
+              optionText: Scale.TWO,
+            },
+            {
+              optionId: 3,
+              optionText: Scale.THREE,
+            },
+            {
+              optionId: 4,
+              optionText: Scale.FOUR,
+            },
+            {
+              optionId: 5,
+              optionText: Scale.FIVE,
+            },
+          ],
+        },
+        option: {
+          optionId: 1,
+          optionText: Scale.ONE,
+        },
+      },
+    ],
   },
-  answersBefore: [
-    {
-      answerId: 5,
-      questionOrder: {
-        ...mockBaseData,
-        qnOrderId: 3,
-        order: 1,
-        questionText: 'Do you like prof ben?',
-        questionType: QuestionType.SHORT_ANSWER,
-        options: [],
-      },
-      textResponse: 'Dread it, run from it, destiny arrives all the same.',
-    },
-    {
-      answerId: 4,
-      questionOrder: {
-        ...mockBaseData,
-        qnOrderId: 9,
-        order: 2,
-        questionText: 'Pizza Time!',
-        questionType: QuestionType.LONG_ANSWER,
-        options: [],
-      },
-      textResponse: "You're late. I'm not paying for those.",
-    },
-  ],
-  answersAfter: [
-    {
-      answerId: 6,
-      questionOrder: {
-        ...mockBaseData,
-        qnOrderId: 4,
-        order: 1,
-        questionText: 'I want to put some dirt in your eye.',
-        questionType: QuestionType.MOOD,
-        options: [
-          {
-            optionId: 1,
-            optionText: Mood.VERY_BAD,
-          },
-          {
-            optionId: 2,
-            optionText: Mood.BAD,
-          },
-          {
-            optionId: 3,
-            optionText: Mood.NORMAL,
-          },
-          {
-            optionId: 4,
-            optionText: Mood.GOOD,
-          },
-          {
-            optionId: 5,
-            optionText: Mood.VERY_GOOD,
-          },
-        ],
-      },
-      option: {
-        optionId: 2,
-        optionText: Mood.BAD,
-      },
-    },
-    {
-      answerId: 7,
-      questionOrder: {
-        ...mockBaseData,
-        qnOrderId: 5,
-        order: 2,
-        questionText: 'Rate Orbital',
-        questionType: QuestionType.SCALE,
-        options: [
-          {
-            optionId: 1,
-            optionText: Scale.ONE,
-          },
-          {
-            optionId: 2,
-            optionText: Scale.TWO,
-          },
-          {
-            optionId: 3,
-            optionText: Scale.THREE,
-          },
-          {
-            optionId: 4,
-            optionText: Scale.FOUR,
-          },
-          {
-            optionId: 5,
-            optionText: Scale.FIVE,
-          },
-        ],
-      },
-      option: {
-        optionId: 1,
-        optionText: Scale.ONE,
-      },
-    },
-  ],
 };

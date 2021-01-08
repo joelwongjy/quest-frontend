@@ -1,6 +1,6 @@
 import { AnswerPostData, AnswerData } from './answers';
 import { DiscardableData } from './base';
-import { QuestionnaireWindowData } from './questionnaires';
+import { QuestionnaireType, QuestionnaireWindowData } from './questionnaires';
 import { UserData } from './users';
 
 export interface AttemptPostData {
@@ -13,14 +13,17 @@ export interface AttemptListData extends DiscardableData {
   windowId: number;
 }
 
+export interface SharedQnnaireAnswerData {
+  answersBefore: AnswerData[];
+  answersAfter: AnswerData[];
+  sharedAnswersBefore: AnswerData[];
+  sharedAnswersAfter: AnswerData[];
+}
+
 export interface AttemptFullData {
   user: UserData;
+  title: string;
+  type: QuestionnaireType;
   questionnaireWindow: QuestionnaireWindowData;
-  answers?: AnswerData[];
-  answersShared?: {
-    sharedAnswersBefore: AnswerData[];
-    sharedAnswersAfter: AnswerData[];
-  };
-  answersBefore?: AnswerData[];
-  answersAfter?: AnswerData[];
+  answers: AnswerData[] | SharedQnnaireAnswerData;
 }
