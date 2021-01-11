@@ -24,6 +24,6 @@ export interface AttemptFullData {
   user: UserData;
   title: string;
   type: QuestionnaireType;
-  questionnaireWindow: QuestionnaireWindowData;
+  questionnaireWindow: QuestionnaireWindowData | QuestionnaireWindowData[];
   answers: AnswerData[] | SharedQnnaireAnswerData;
 }
