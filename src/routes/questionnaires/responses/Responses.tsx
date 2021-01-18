@@ -91,42 +91,61 @@ const Responses: React.FunctionComponent = () => {
 
   const [isPre, setIsPre] = useState<boolean>(true);
 
+  const setAccessibleProgrammes = (questionnaire: QuestionnaireFullData) => {
+    const programmes: { id: number; name: string }[] = [];
+    questionnaire.classes.forEach((c) => {
+      user!.programmes.forEach((p) => {
+        if (
+          p.classes.filter((x) => x.id === c.id).length > 0 &&
+          programmes.find((p2) => p2.id === p.id) === undefined
+        ) {
+          programmes.push({ id: p.id, name: p.name });
+        }
+      });
+    });
+    setState({ accessibleProgrammes: programmes });
+  };
+
+  const retrieveUniqueStudentsFromAttempts = (attempts: AttemptFullData[]) => {
+    const users = attempts.map((a) => a.user);
+    const students: UserData[] = [];
+    users.forEach((user) => {
+      if (students.filter((s) => s.id === user.id).length === 0) {
+        students.push(user);
+      }
+    });
+    setState({ students });
+  };
+
   useEffect(() => {
     let didCancel = false;
 
+    const fetchQuestionnaire = async (): Promise<QuestionnaireFullData> => {
+      const response = await ApiService.get(`questionnaires/${id}`);
+      return response.data as QuestionnaireFullData;
+    };
+
+    const fetchAttempts = async (
+      questionnaireId: number
+    ): Promise<AttemptFullData[]> => {
+      const response = await ApiService.get(
+        `questionnaires/${questionnaireId}/submissions`
+      );
+      return response.data as AttemptFullData[];
+    };
+
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`questionnaires/${id}`);
-        const questionnaire = response.data as QuestionnaireFullData;
+        const questionnaire = await fetchQuestionnaire();
         if (!didCancel) {
           if (parseInt(id, 10) === questionnaire.questionnaireId) {
             setState({
               questionnaire,
             });
-            const programmes: { id: number; name: string }[] = [];
-            questionnaire.classes.forEach((c) => {
-              user!.programmes.forEach((p) => {
-                if (
-                  p.classes.filter((x) => x.id === c.id).length > 0 &&
-                  programmes.find((p2) => p2.id === p.id) === undefined
-                ) {
-                  programmes.push({ id: p.id, name: p.name });
-                }
-              });
-            });
-            setState({ accessibleProgrammes: programmes });
-            const attemptsResponse = await ApiService.get(
-              `questionnaires/${questionnaire?.questionnaireId}/submissions`
-            );
-            const attempts = attemptsResponse.data as AttemptFullData[];
-            const users = attempts.map((a) => a.user);
-            const students: UserData[] = [];
-            users.forEach((user) => {
-              if (students.filter((s) => s.id === user.id).length === 0) {
-                students.push(user);
-              }
-            });
-            setState({ attempts, isLoading: false, students });
+            setAccessibleProgrammes(questionnaire);
+            const attempts = await fetchAttempts(questionnaire.questionnaireId);
+            retrieveUniqueStudentsFromAttempts(attempts);
+            setState({ attempts, isLoading: false });
           } else {
             setState({
               isLoading: false,
@@ -151,24 +170,6 @@ const Responses: React.FunctionComponent = () => {
       didCancel = true;
     };
   }, []);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fetchAttempt = async (id: number) => {
-    try {
-      const response = await ApiService.get(
-        `questionnaires/${state.questionnaire?.questionnaireId}/submissions`
-      );
-      const attempt = response.data as AttemptFullData;
-      setState({ currentAttempt: attempt });
-    } catch (error) {
-      setState({
-        isAlertOpen: true,
-        hasConfirm: false,
-        alertHeader: 'Something went wrong',
-        alertMessage: 'Please refresh and try again later.',
-      });
-    }
-  };
 
   const alertCallback = getAlertCallback(setState);
 
