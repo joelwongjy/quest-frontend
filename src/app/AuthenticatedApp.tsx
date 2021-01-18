@@ -18,6 +18,7 @@ import {
   RESPONSES,
   EDIT,
   DUPLICATE,
+  ADD,
   QUESTS,
 } from 'constants/routes';
 import Home from 'routes/home';
@@ -29,11 +30,13 @@ import Programmes from 'routes/programmes';
 import CreateProgrammes from 'routes/programmes/create';
 import Classes from 'routes/programmes/classes';
 import CreateClass from 'routes/programmes/classes/create';
+import ClassStudents from 'routes/programmes/classes/students/';
 import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
 import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
+import AddStudents from 'routes/programmes/classes/students/add';
 import { useUser } from 'contexts/UserContext';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 
@@ -97,6 +100,12 @@ const AuthenticatedApp: React.FunctionComponent = () => {
           </Route>
           <Route path={`${PROGRAMMES}/:id${CLASSES}${CREATE}`}>
             <CreateClass />
+          </Route>
+          <Route exact path={`${PROGRAMMES}/:id${CLASSES}/:id${STUDENTS}`}>
+            <ClassStudents />
+          </Route>
+          <Route path={`${PROGRAMMES}/:id${CLASSES}/:id${STUDENTS}${ADD}`}>
+            <AddStudents />
           </Route>
           <Route exact path={CLASSES} component={Home} />
           <Route exact path={STUDENTS} component={Students} />

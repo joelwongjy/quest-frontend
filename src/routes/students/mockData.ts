@@ -50,3 +50,22 @@ export const students: PersonListData[] = [
     // email: 'tony.stark@gmail.com',
   },
 ];
+
+export const teachers: PersonListData[] = [
+  {
+    ...mockBaseData,
+    id: 0,
+    name: 'Rick Stoner',
+    // gender: 'M',
+    // birthday: new Date(1979, 12, 12),
+    // email: 'rick.stoner@gmail.com',
+  },
+  {
+    ...mockBaseData,
+    id: 1,
+    name: 'Timothy Dugan',
+    // gender: 'M',
+    // birthday: new Date(1928, 12, 6),
+    // email: 'timothy.dugan@gmail.com',
+  },
+];
