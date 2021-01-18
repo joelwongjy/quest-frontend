@@ -31,7 +31,7 @@ import {
 import ViewQuestionCard from 'components/questionCard/view';
 
 import { AnswerData } from 'interfaces/models/answers';
-import { attempt } from '../mockData';
+import { UserData } from 'interfaces/models/users';
 import { useStyles } from './responses.styles';
 
 interface RouteParams {
@@ -41,6 +41,8 @@ interface RouteParams {
 interface ResponsesState extends RouteState {
   questionnaire: QuestionnaireFullData | undefined;
   accessibleProgrammes: { id: number; name: string }[];
+  attempts: AttemptFullData[];
+  students: UserData[];
   currentAttempt: AttemptFullData | undefined;
   currentProgrammeId: number | undefined;
   currentClassId: number | undefined;
@@ -63,7 +65,9 @@ const Responses: React.FunctionComponent = () => {
     {
       questionnaire: undefined,
       accessibleProgrammes: [],
-      currentAttempt: attempt,
+      attempts: [],
+      students: [],
+      currentAttempt: undefined,
       currentProgrammeId: undefined,
       currentClassId: undefined,
       currentStudentId: undefined,
@@ -97,7 +101,6 @@ const Responses: React.FunctionComponent = () => {
         if (!didCancel) {
           if (parseInt(id, 10) === questionnaire.questionnaireId) {
             setState({
-              isLoading: false,
               questionnaire,
             });
             const programmes: { id: number; name: string }[] = [];
@@ -112,6 +115,18 @@ const Responses: React.FunctionComponent = () => {
               });
             });
             setState({ accessibleProgrammes: programmes });
+            const attemptsResponse = await ApiService.get(
+              `questionnaires/${questionnaire?.questionnaireId}/submissions`
+            );
+            const attempts = attemptsResponse.data as AttemptFullData[];
+            const users = attempts.map((a) => a.user);
+            const students: UserData[] = [];
+            users.forEach((user) => {
+              if (students.filter((s) => s.id === user.id).length === 0) {
+                students.push(user);
+              }
+            });
+            setState({ attempts, isLoading: false, students });
           } else {
             setState({
               isLoading: false,
@@ -137,10 +152,11 @@ const Responses: React.FunctionComponent = () => {
     };
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchAttempt = async (id: number) => {
     try {
       const response = await ApiService.get(
-        `questionnaires/${state.questionnaire!.questionnaireId}/student/${id}`
+        `questionnaires/${state.questionnaire?.questionnaireId}/submissions`
       );
       const attempt = response.data as AttemptFullData;
       setState({ currentAttempt: attempt });
@@ -320,6 +336,24 @@ const Responses: React.FunctionComponent = () => {
     return <>{result}</>;
   };
 
+  if (state.attempts.length <= 0) {
+    return (
+      <PageContainer>
+        <PageHeader breadcrumbs={breadcrumbs} />
+        <Grid container justify="center">
+          <Typography variant="h5" className={classes.title}>
+            {state.questionnaire?.title
+              ? `${state.questionnaire?.title} - Responses`
+              : 'Loading...'}
+          </Typography>
+        </Grid>
+        <Grid container justify="center" style={{ marginTop: '1rem' }}>
+          <Typography>No attempts found for this questionnaire!</Typography>
+        </Grid>
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
@@ -431,22 +465,29 @@ const Responses: React.FunctionComponent = () => {
               }
               onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
                 setState({ currentStudentId: event.target.value as number });
-                fetchAttempt(event.target.value as number);
+                setState({
+                  currentAttempt: state.attempts.find(
+                    (attempt) =>
+                      attempt.user.id === (event.target.value as number)
+                  ),
+                });
               }}
               label="Student"
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {state.students.map((s) => {
+                return (
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.name}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
       </Grid>
       {state.currentProgrammeId === undefined ||
-      state.currentClassId === undefined ? (
+      state.currentClassId === undefined ||
+      state.currentStudentId === undefined ? (
         <Grid container justify="center" style={{ marginTop: '2rem' }}>
           <Typography>
             Please specify the programme, class and student to view the attempt.
