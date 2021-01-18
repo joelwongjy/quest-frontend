@@ -4,7 +4,10 @@ import { useRouteMatch } from 'react-router-dom';
 import PageContainer from 'components/pageContainer';
 import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import { AttemptFullData } from 'interfaces/models/attempts';
+import {
+  AttemptFullData,
+  SharedQnnaireAnswerData,
+} from 'interfaces/models/attempts';
 import { RouteState } from 'interfaces/routes/common';
 import { useUser } from 'contexts/UserContext';
 import ApiService from 'services/apiService';
@@ -23,9 +26,11 @@ import {
 import {
   QuestionAccessibility,
   QuestionnaireFullData,
+  QuestionnaireType,
 } from 'interfaces/models/questionnaires';
 import ViewQuestionCard from 'components/questionCard/view';
 
+import { AnswerData } from 'interfaces/models/answers';
 import { attempt } from '../mockData';
 import { useStyles } from './responses.styles';
 
@@ -159,12 +164,85 @@ const Responses: React.FunctionComponent = () => {
     },
   ];
 
+  const renderOneTime = () => {
+    const answers = state.currentAttempt?.answers as AnswerData[];
+    return (
+      <>
+        {answers
+          ?.sort((x, y) => x.questionOrder.order - y.questionOrder.order)
+          .map((ans) => {
+            const question = ans.questionOrder;
+            return (
+              <ViewQuestionCard
+                key={`single-answer-${ans.answerId}`}
+                question={question}
+                answer={ans}
+                accessibility={QuestionAccessibility.PRE}
+                alertCallback={alertCallback}
+                headerStyles={classes.sharedHeader}
+              />
+            );
+          })}
+      </>
+    );
+  };
+
+  const renderPre = () => {
+    const answersShared = state.currentAttempt
+      ?.answers as SharedQnnaireAnswerData;
+    return (
+      <>
+        {answersShared.answersBefore
+          ?.sort((x, y) => x.questionOrder.order - y.questionOrder.order)
+          .map((ans) => {
+            const question = ans.questionOrder;
+            return (
+              <ViewQuestionCard
+                key={`pre-answer-${ans.answerId}`}
+                question={question}
+                answer={ans}
+                accessibility={QuestionAccessibility.PRE}
+                alertCallback={alertCallback}
+                headerStyles={classes.preHeader}
+              />
+            );
+          })}
+      </>
+    );
+  };
+
+  const renderPost = () => {
+    const answersShared = state.currentAttempt
+      ?.answers as SharedQnnaireAnswerData;
+    return (
+      <>
+        {answersShared.answersAfter
+          ?.sort((x, y) => x.questionOrder.order - y.questionOrder.order)
+          .map((ans) => {
+            const question = ans.questionOrder;
+            return (
+              <ViewQuestionCard
+                key={`pre-answer-${ans.answerId}`}
+                question={question}
+                answer={ans}
+                accessibility={QuestionAccessibility.POST}
+                alertCallback={alertCallback}
+                headerStyles={classes.postHeader}
+              />
+            );
+          })}
+      </>
+    );
+  };
+
   const renderShared = () => {
-    const preArray = state.currentAttempt?.answersShared?.sharedAnswersBefore
+    const answersShared = state.currentAttempt
+      ?.answers as SharedQnnaireAnswerData;
+    const preArray = answersShared.sharedAnswersBefore
       .slice()
       .sort((x, y) => x.questionOrder.order - y.questionOrder.order);
 
-    const postArray = state.currentAttempt?.answersShared?.sharedAnswersAfter
+    const postArray = answersShared.sharedAnswersAfter
       .slice()
       .sort((x, y) => x.questionOrder.order - y.questionOrder.order);
 
@@ -376,32 +454,14 @@ const Responses: React.FunctionComponent = () => {
         </Grid>
       ) : (
         <>
-          {state.currentAttempt?.answers && (
+          {state.currentAttempt?.type === QuestionnaireType.ONE_TIME && (
             <Grid container justify="center">
               <Grid item xs={12} sm={10} md={9}>
-                <div className={classes.root}>
-                  {attempt.answers
-                    ?.sort(
-                      (x, y) => x.questionOrder.order - y.questionOrder.order
-                    )
-                    .map((ans) => {
-                      const question = ans.questionOrder;
-                      return (
-                        <ViewQuestionCard
-                          key={`single-answer-${ans.answerId}`}
-                          question={question}
-                          answer={ans}
-                          accessibility={QuestionAccessibility.PRE}
-                          alertCallback={alertCallback}
-                          headerStyles={classes.sharedHeader}
-                        />
-                      );
-                    })}
-                </div>
+                <div className={classes.root}>{renderOneTime()}</div>
               </Grid>
             </Grid>
           )}
-          {state.currentAttempt?.answersShared && (
+          {state.currentAttempt?.type === QuestionnaireType.PRE_POST && (
             <Grid container justify="center">
               <Grid item xs={12} sm={10} md={9}>
                 <Paper className={classes.paper}>
@@ -447,43 +507,7 @@ const Responses: React.FunctionComponent = () => {
                     </div>
                   </Grid>
                   <div className={classes.root}>
-                    {isPre
-                      ? state.currentAttempt?.answersBefore
-                          ?.sort(
-                            (x, y) =>
-                              x.questionOrder.order - y.questionOrder.order
-                          )
-                          .map((ans) => {
-                            const question = ans.questionOrder;
-                            return (
-                              <ViewQuestionCard
-                                key={`pre-answer-${ans.answerId}`}
-                                question={question}
-                                answer={ans}
-                                accessibility={QuestionAccessibility.PRE}
-                                alertCallback={alertCallback}
-                                headerStyles={classes.preHeader}
-                              />
-                            );
-                          })
-                      : state.currentAttempt?.answersAfter
-                          ?.sort(
-                            (x, y) =>
-                              x.questionOrder.order - y.questionOrder.order
-                          )
-                          .map((ans) => {
-                            const question = ans.questionOrder;
-                            return (
-                              <ViewQuestionCard
-                                key={`pre-answer-${ans.answerId}`}
-                                question={question}
-                                answer={ans}
-                                accessibility={QuestionAccessibility.POST}
-                                alertCallback={alertCallback}
-                                headerStyles={classes.postHeader}
-                              />
-                            );
-                          })}
+                    {isPre ? renderPre() : renderPost()}
                   </div>
                 </Paper>
               </Grid>
