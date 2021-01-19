@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
+import { QUESTIONNAIRES, RESPONSES, SUBMISSIONS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import {
   AttemptFullData,
@@ -121,7 +121,7 @@ const Responses: React.FunctionComponent = () => {
     let didCancel = false;
 
     const fetchQuestionnaire = async (): Promise<QuestionnaireFullData> => {
-      const response = await ApiService.get(`questionnaires/${id}`);
+      const response = await ApiService.get(`${QUESTIONNAIRES}/${id}`);
       return response.data as QuestionnaireFullData;
     };
 
@@ -129,7 +129,7 @@ const Responses: React.FunctionComponent = () => {
       questionnaireId: number
     ): Promise<AttemptFullData[]> => {
       const response = await ApiService.get(
-        `questionnaires/${questionnaireId}/submissions`
+        `${QUESTIONNAIRES}/${questionnaireId}${SUBMISSIONS}`
       );
       return response.data as AttemptFullData[];
     };
