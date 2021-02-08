@@ -13,9 +13,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
-import { ClassPostData, ClassListData } from 'interfaces/models/classes';
+import { ClassListData } from 'interfaces/models/classes';
 import { ClassMode } from 'interfaces/components/classForm';
-import { ProgrammeData } from 'interfaces/models/programmes';
+import {
+  ProgrammeData,
+  ProgrammePatchData,
+} from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
 import ApiService from 'services/apiService';
 
@@ -37,7 +40,7 @@ interface ClassFormProps {
   ) => void;
 }
 
-export type ClassFormState = ClassPostData;
+export type ClassFormState = ProgrammePatchData;
 
 const ClassForm: React.FC<ClassFormProps> = ({
   mode,
@@ -46,7 +49,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
   cancelCallback,
   alertCallback,
 }) => {
-  const classes = useStyles();
+  const styles = useStyles();
   const { hasError, setHasError } = useError();
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
@@ -57,8 +60,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
     }),
     {
       name: questClass?.name ?? '',
-      studentIds: [],
-      teacherIds: [],
+      description: questClass?.description ?? '',
     }
   );
 
@@ -89,9 +91,22 @@ const ClassForm: React.FC<ClassFormProps> = ({
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(
+      const newClasses = programme.classes.slice().map((c) => {
+        return {
+          name: c.name,
+          description: c.description,
+        };
+      });
+      newClasses.push({
+        name: state.name!,
+        description: state.description,
+      });
+      const programmePatchData: ProgrammePatchData = {
+        classes: newClasses,
+      };
+      const response = await ApiService.patch(
         `programmes/${programme.id}`,
-        state
+        programmePatchData
       );
       if (response.status === 200) {
         setIsSuccessful(true);
@@ -139,13 +154,13 @@ const ClassForm: React.FC<ClassFormProps> = ({
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
-              className={classes.button}
+              className={styles.button}
               variant="outlined"
               onClick={handleCancel}
             >
               Cancel
             </QuestButton>
-            <QuestButton className={classes.button} onClick={handleAdd}>
+            <QuestButton className={styles.button} onClick={handleAdd}>
               Add Class
             </QuestButton>
           </Grid>
@@ -154,13 +169,13 @@ const ClassForm: React.FC<ClassFormProps> = ({
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
-              className={classes.button}
+              className={styles.button}
               variant="outlined"
               onClick={handleCancel}
             >
               Discard Changes
             </QuestButton>
-            <QuestButton className={classes.button} onClick={handleEdit}>
+            <QuestButton className={styles.button} onClick={handleEdit}>
               Save Changes
             </QuestButton>
           </Grid>
@@ -183,7 +198,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
             item
             container
             xs={12}
-            className={isSuccessful ? classes.headerSuccess : classes.header}
+            className={isSuccessful ? styles.headerSuccess : styles.header}
           >
             <Grid container alignItems="center" justify="space-between">
               {mode === ClassMode.NEW && (
@@ -210,9 +225,9 @@ const ClassForm: React.FC<ClassFormProps> = ({
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <List className={classes.list}>
+            <List className={styles.list}>
               <ListItem>
-                <Typography variant="h6" className={classes.subheader}>
+                <Typography variant="h6" className={styles.subheader}>
                   {programme.name}
                 </Typography>
               </ListItem>
@@ -222,7 +237,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
                     <Typography variant="subtitle1">Name of Class: </Typography>
                   </Grid>
                   <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
+                    <div className={styles.textfieldContainer}>
                       <FormControl
                         style={{ width: '100%' }}
                         error={hasError && state.name === ''}
@@ -231,11 +246,38 @@ const ClassForm: React.FC<ClassFormProps> = ({
                           required
                           size="small"
                           value={state.name}
-                          className={classes.textfield}
+                          className={styles.textfield}
                           label="Class Name"
                           variant="outlined"
                           disabled={isSuccessful}
                           onChange={(e) => setState({ name: e.target.value })}
+                        />
+                      </FormControl>
+                    </div>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography variant="subtitle1">Descirption: </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <div className={styles.textfieldContainer}>
+                      <FormControl
+                        style={{ width: '100%' }}
+                        error={hasError && state.name === ''}
+                      >
+                        <QuestTextField
+                          size="small"
+                          value={state.description}
+                          className={styles.textfield}
+                          label="Description"
+                          variant="outlined"
+                          disabled={isSuccessful}
+                          onChange={(e) =>
+                            setState({ description: e.target.value })
+                          }
                         />
                         {hasError && state.name === '' && (
                           <FormHelperText>
@@ -250,7 +292,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
               {isSuccessful ? (
                 <Grid container spacing={2} justify="flex-end">
                   <QuestButton
-                    className={classes.button}
+                    className={styles.button}
                     variant="outlined"
                     onClick={handleCancel}
                   >
