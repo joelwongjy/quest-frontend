@@ -90,7 +90,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
     // TODO: Add loading
     try {
       const response = await ApiService.post(
-        `programmes/${programme.id}/classes/create`,
+        `programmes/${programme.id}`,
         state
       );
       if (response.status === 200) {
