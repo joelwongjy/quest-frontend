@@ -1,6 +1,7 @@
 import { DiscardableData } from 'interfaces/models/base';
-import { ClassListData } from 'interfaces/models/classes';
+import { ClassData, ClassListData } from 'interfaces/models/classes';
 import { ProgrammeData, ProgrammeListData } from 'interfaces/models/programmes';
+import { students, teachers } from 'routes/students/mockData';
 
 const mockBaseData: DiscardableData = {
   id: 0,
@@ -83,4 +84,12 @@ export const sampleProgramme: ProgrammeData = {
   classes: questClasses,
   studentCount: 6,
   teacherCount: 2,
+};
+
+export const sampleClass: ClassData = {
+  ...questClasses[0],
+  programmeName: programmes[0].name,
+  programmeId: programmes[0].id,
+  students: [students[0], students[1]],
+  teachers,
 };

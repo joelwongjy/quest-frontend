@@ -80,9 +80,10 @@ const Questionnaires: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
-  const [hasIncompleteQuestionnaire, setHasIncompleteQuestionnare] = useState<
-    boolean
-  >(!isEmptyQuestionnaire(questionnaire));
+  const [
+    hasIncompleteQuestionnaire,
+    setHasIncompleteQuestionnare,
+  ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
   const [selectedProgrammes, setSelectedProgrammes] = useState<
     { id: number; name: string }[]
