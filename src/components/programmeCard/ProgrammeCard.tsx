@@ -116,7 +116,10 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
             size="small"
             className={classes.button}
             component={Link}
-            to={`${PROGRAMMES}/${programme.id}/${QUESTIONNAIRES}`}
+            to={{
+              pathname: `${PROGRAMMES}/${programme.id}${QUESTIONNAIRES}`,
+              state: { id: programme.id, name: programme.name },
+            }}
           >
             Questionnaires
           </Button>
