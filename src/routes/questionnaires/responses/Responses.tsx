@@ -31,7 +31,6 @@ import {
 import ViewQuestionCard from 'components/questionCard/view';
 
 import { AnswerData } from 'interfaces/models/answers';
-import { attempt } from '../mockData';
 import { useStyles } from './responses.styles';
 
 interface RouteParams {
@@ -63,7 +62,7 @@ const Responses: React.FunctionComponent = () => {
     {
       questionnaire: undefined,
       accessibleProgrammes: [],
-      currentAttempt: attempt,
+      currentAttempt: undefined,
       currentProgrammeId: undefined,
       currentClassId: undefined,
       currentStudentId: undefined,
@@ -95,11 +94,12 @@ const Responses: React.FunctionComponent = () => {
         const response = await ApiService.get(`questionnaires/${id}`);
         const questionnaire = response.data as QuestionnaireFullData;
         if (!didCancel) {
+          setState({
+            isLoading: false,
+            questionnaire,
+          });
+
           if (parseInt(id, 10) === questionnaire.questionnaireId) {
-            setState({
-              isLoading: false,
-              questionnaire,
-            });
             const programmes: { id: number; name: string }[] = [];
             questionnaire.classes.forEach((c) => {
               user!.programmes.forEach((p) => {
@@ -112,11 +112,6 @@ const Responses: React.FunctionComponent = () => {
               });
             });
             setState({ accessibleProgrammes: programmes });
-          } else {
-            setState({
-              isLoading: false,
-              questionnaire,
-            });
           }
         }
       } catch (error) {

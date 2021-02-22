@@ -9,12 +9,14 @@ import { useStyles } from './pageContainer.styles';
 interface PageContainerProps {
   appBarChildren?: React.ReactNode;
   hasDrawer?: boolean;
+  hasToolbarPadding?: boolean;
   hasContentPadding?: boolean;
 }
 
 const PageContainer: React.FunctionComponent<PageContainerProps> = ({
   hasDrawer = true,
   appBarChildren,
+  hasToolbarPadding = true,
   hasContentPadding = true,
   children,
 }) => {
@@ -45,7 +47,7 @@ const PageContainer: React.FunctionComponent<PageContainerProps> = ({
         />
       )}
       <main className={contentClassName}>
-        {hasContentPadding && <div className={classes.toolbar} />}
+        {hasToolbarPadding && <div className={classes.toolbar} />}
         {children}
       </main>
     </div>

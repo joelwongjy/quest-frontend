@@ -14,9 +14,11 @@ import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
 import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
 import ExitIcon from '@material-ui/icons/ExitToAppRounded';
+import SecurityIcon from '@material-ui/icons/Security';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
+  CASTLE,
   HOME,
   PROGRAMMES,
   QUESTIONNAIRES,
@@ -64,34 +66,51 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
     <>
       <div className={classes.toolbar} />
       <List>
-        <ListItem
-          button
-          key="Home"
-          selected={pathname === HOME}
-          component={Link}
-          to={HOME}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <HomeIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem
-          button
-          key="Quests"
-          selected={pathname === QUESTS}
-          component={Link}
-          to={QUESTS}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <QuestIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Quests" />
-        </ListItem>
+        {!isStaff && (
+          <>
+            <ListItem
+              button
+              key="Castle"
+              selected={pathname === CASTLE}
+              component={Link}
+              to={CASTLE}
+              className={classes.listItem}
+            >
+              <ListItemIcon>
+                <SecurityIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Castle" />
+            </ListItem>
+            <ListItem
+              button
+              key="Quests"
+              selected={pathname === QUESTS}
+              component={Link}
+              to={QUESTS}
+              className={classes.listItem}
+            >
+              <ListItemIcon>
+                <QuestIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Quests" />
+            </ListItem>
+          </>
+        )}
         {isStaff && (
           <>
+            <ListItem
+              button
+              key="Home"
+              selected={pathname === HOME}
+              component={Link}
+              to={HOME}
+              className={classes.listItem}
+            >
+              <ListItemIcon>
+                <HomeIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
             <ListItem
               button
               key="Questionnaires"

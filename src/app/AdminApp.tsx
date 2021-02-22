@@ -37,38 +37,11 @@ import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
 import AddStudents from 'routes/programmes/classes/students/add';
-import { useUser } from 'contexts/UserContext';
-import { ClassUserRole } from 'interfaces/models/classUsers';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
 
-const AuthenticatedApp: React.FunctionComponent = () => {
-  const user = useUser();
-
-  const isStaff =
-    user &&
-    (user.highestClassRole === ClassUserRole.ADMIN ||
-      user.highestClassRole === ClassUserRole.TEACHER);
-
-  if (!isStaff) {
-    return (
-      <Router>
-        <div className="app">
-          <Switch>
-            <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
-            <Route path={HOME} component={Home} />
-            <Route exact path={QUESTS} component={Quests} />
-            <Route path={`${QUESTS}/:id/window/:windowId`}>
-              <QuestAttempt />
-            </Route>
-            <Route path="/" render={redirectToHome} />
-          </Switch>
-        </div>
-      </Router>
-    );
-  }
-
+const AdminApp: React.FunctionComponent = () => {
   return (
     <Router>
       <div className="app">
@@ -126,4 +99,4 @@ const AuthenticatedApp: React.FunctionComponent = () => {
   );
 };
 
-export default AuthenticatedApp;
+export default AdminApp;
