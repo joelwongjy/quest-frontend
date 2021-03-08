@@ -67,7 +67,10 @@ const Students: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`classes/${state.questClass.id}`);
         if (!didCancel) {
-          setState({ questClass: response.data, isLoading: false });
+          setState({
+            questClass: response.data as ClassData,
+            isLoading: false,
+          });
           // dispatch(updateSecurities(securitiesResponse.data));
         }
       } catch (error) {

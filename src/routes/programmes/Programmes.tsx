@@ -64,10 +64,10 @@ const Programme: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const response = await ApiService.get('programmes');
+        const programmes = response.data.programmes as ProgrammeListData[];
         if (!didCancel) {
-          setState({ programmes: response.data.programmes, isLoading: false });
+          setState({ programmes, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
