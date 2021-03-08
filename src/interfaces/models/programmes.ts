@@ -5,12 +5,20 @@ import { DiscardableData } from './base';
 export interface ProgrammePatchData {
   name?: string;
   description?: string;
+  classes?: {
+    name: string;
+    description?: string;
+  }[];
 }
 
 // POST /programmes/create
 export interface ProgrammePostData {
   name: string;
   description?: string;
+  classes?: {
+    name: string;
+    description?: string;
+  }[];
 }
 
 // GET /programmes

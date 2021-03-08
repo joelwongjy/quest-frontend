@@ -17,7 +17,6 @@ import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
 import { getAlertCallback } from 'utils/alertUtils';
 
-import { programmes } from './mockData';
 import { useStyles } from './programmes.styles';
 
 interface ProgrammesState extends RouteState {
@@ -37,7 +36,7 @@ const Programme: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      programmes,
+      programmes: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,

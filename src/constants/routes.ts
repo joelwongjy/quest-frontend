@@ -19,3 +19,4 @@ export const EDIT = '/edit';
 export const DUPLICATE = '/duplicate';
 export const VIEW = '/view';
 export const RESPONSES = '/responses';
+export const SUBMISSIONS = '/submissions';
