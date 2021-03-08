@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, STUDENTS } from 'constants/routes';
+import { CREATE, PERSONS, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
@@ -61,10 +61,9 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('students');
+        const response = await ApiService.get(`${PERSONS}/students`);
         if (!didCancel) {
-          setState({ students: response.data, isLoading: false });
-          // dispatch(updateSecurities(securitiesResponse.data));
+          setState({ students: response.data.persons, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -94,7 +93,7 @@ const Students: React.FunctionComponent = () => {
   const handleEdit = async (student: PersonListData) => {
     setState({ isLoading: true });
     try {
-      const response = await ApiService.get(`persons/${student.id}`);
+      const response = await ApiService.get(`${PERSONS}/${student.id}/user`);
       if (response.status === 200) {
         setState({
           isEditing: true,

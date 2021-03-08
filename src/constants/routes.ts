@@ -11,6 +11,7 @@ export const QUESTS = '/quests';
 export const PROGRAMMES = '/programmes';
 export const CLASSES = '/classes';
 export const STUDENTS = '/students';
+export const PERSONS = '/persons';
 
 // Sub-routes
 export const CREATE = '/create';
