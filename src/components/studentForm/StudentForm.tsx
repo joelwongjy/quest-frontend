@@ -28,7 +28,7 @@ import {
 } from 'utils/studentUtils';
 import { useUser } from 'contexts/UserContext';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
-import { PERSONS, STUDENTS } from 'constants/routes';
+import { STUDENTS } from 'constants/routes';
 
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import ApiService from 'services/apiService';
