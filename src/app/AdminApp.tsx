@@ -68,12 +68,22 @@ const AdminApp: React.FunctionComponent = () => {
             path={`${PROGRAMMES}${CREATE}`}
             component={CreateProgrammes}
           />
+          <Route
+            exact
+            path={`${PROGRAMMES}/:id${QUESTIONNAIRES}`}
+            component={Questionnaires}
+          />
           <Route exact path={`${PROGRAMMES}/:id${CLASSES}`}>
             <Classes />
           </Route>
           <Route path={`${PROGRAMMES}/:id${CLASSES}${CREATE}`}>
             <CreateClass />
           </Route>
+          <Route
+            exact
+            path={`${PROGRAMMES}/:id${CLASSES}/:id${QUESTIONNAIRES}`}
+            component={Questionnaires}
+          />
           <Route exact path={`${PROGRAMMES}/:id${CLASSES}/:id${STUDENTS}`}>
             <ClassStudents />
           </Route>

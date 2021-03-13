@@ -17,7 +17,6 @@ import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
 import { getAlertCallback } from 'utils/alertUtils';
 
-import { programmes } from './mockData';
 import { useStyles } from './programmes.styles';
 
 interface ProgrammesState extends RouteState {
@@ -37,7 +36,7 @@ const Programme: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      programmes,
+      programmes: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -65,11 +64,10 @@ const Programme: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const response = await ApiService.get('programmes');
+        const programmes = response.data.programmes as ProgrammeListData[];
         if (!didCancel) {
           setState({ programmes, isLoading: false });
-          // dispatch here
         }
       } catch (error) {
         if (!didCancel) {

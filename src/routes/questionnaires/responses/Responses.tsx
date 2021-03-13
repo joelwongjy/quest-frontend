@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import { QUESTIONNAIRES, RESPONSES } from 'constants/routes';
+import { QUESTIONNAIRES, RESPONSES, SUBMISSIONS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import {
   AttemptFullData,
@@ -31,6 +31,7 @@ import {
 import ViewQuestionCard from 'components/questionCard/view';
 
 import { AnswerData } from 'interfaces/models/answers';
+import { UserData } from 'interfaces/models/users';
 import { useStyles } from './responses.styles';
 
 interface RouteParams {
@@ -40,6 +41,8 @@ interface RouteParams {
 interface ResponsesState extends RouteState {
   questionnaire: QuestionnaireFullData | undefined;
   accessibleProgrammes: { id: number; name: string }[];
+  attempts: AttemptFullData[];
+  students: UserData[];
   currentAttempt: AttemptFullData | undefined;
   currentProgrammeId: number | undefined;
   currentClassId: number | undefined;
@@ -62,6 +65,8 @@ const Responses: React.FunctionComponent = () => {
     {
       questionnaire: undefined,
       accessibleProgrammes: [],
+      attempts: [],
+      students: [],
       currentAttempt: undefined,
       currentProgrammeId: undefined,
       currentClassId: undefined,
@@ -86,13 +91,52 @@ const Responses: React.FunctionComponent = () => {
 
   const [isPre, setIsPre] = useState<boolean>(true);
 
+  const setAccessibleProgrammes = (questionnaire: QuestionnaireFullData) => {
+    const programmes: { id: number; name: string }[] = [];
+    questionnaire.classes.forEach((c) => {
+      user!.programmes.forEach((p) => {
+        if (
+          p.classes.filter((x) => x.id === c.id).length > 0 &&
+          programmes.find((p2) => p2.id === p.id) === undefined
+        ) {
+          programmes.push({ id: p.id, name: p.name });
+        }
+      });
+    });
+    setState({ accessibleProgrammes: programmes });
+  };
+
+  const retrieveUniqueStudentsFromAttempts = (attempts: AttemptFullData[]) => {
+    const users = attempts.map((a) => a.user);
+    const students: UserData[] = [];
+    users.forEach((user) => {
+      if (students.filter((s) => s.id === user.id).length === 0) {
+        students.push(user);
+      }
+    });
+    setState({ students });
+  };
+
   useEffect(() => {
     let didCancel = false;
 
+    const fetchQuestionnaire = async (): Promise<QuestionnaireFullData> => {
+      const response = await ApiService.get(`${QUESTIONNAIRES}/${id}`);
+      return response.data as QuestionnaireFullData;
+    };
+
+    const fetchAttempts = async (
+      questionnaireId: number
+    ): Promise<AttemptFullData[]> => {
+      const response = await ApiService.get(
+        `${QUESTIONNAIRES}/${questionnaireId}${SUBMISSIONS}`
+      );
+      return response.data as AttemptFullData[];
+    };
+
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`questionnaires/${id}`);
-        const questionnaire = response.data as QuestionnaireFullData;
+        const questionnaire = await fetchQuestionnaire();
         if (!didCancel) {
           setState({
             isLoading: false,
@@ -100,18 +144,10 @@ const Responses: React.FunctionComponent = () => {
           });
 
           if (parseInt(id, 10) === questionnaire.questionnaireId) {
-            const programmes: { id: number; name: string }[] = [];
-            questionnaire.classes.forEach((c) => {
-              user!.programmes.forEach((p) => {
-                if (
-                  p.classes.filter((x) => x.id === c.id).length > 0 &&
-                  programmes.find((p2) => p2.id === p.id) === undefined
-                ) {
-                  programmes.push({ id: p.id, name: p.name });
-                }
-              });
-            });
-            setState({ accessibleProgrammes: programmes });
+            setAccessibleProgrammes(questionnaire);
+            const attempts = await fetchAttempts(questionnaire.questionnaireId);
+            retrieveUniqueStudentsFromAttempts(attempts);
+            setState({ attempts, isLoading: false });
           }
         }
       } catch (error) {
@@ -131,23 +167,6 @@ const Responses: React.FunctionComponent = () => {
       didCancel = true;
     };
   }, []);
-
-  const fetchAttempt = async (id: number) => {
-    try {
-      const response = await ApiService.get(
-        `questionnaires/${state.questionnaire!.questionnaireId}/student/${id}`
-      );
-      const attempt = response.data as AttemptFullData;
-      setState({ currentAttempt: attempt });
-    } catch (error) {
-      setState({
-        isAlertOpen: true,
-        hasConfirm: false,
-        alertHeader: 'Something went wrong',
-        alertMessage: 'Please refresh and try again later.',
-      });
-    }
-  };
 
   const alertCallback = getAlertCallback(setState);
 
@@ -315,6 +334,24 @@ const Responses: React.FunctionComponent = () => {
     return <>{result}</>;
   };
 
+  if (state.attempts.length <= 0) {
+    return (
+      <PageContainer>
+        <PageHeader breadcrumbs={breadcrumbs} />
+        <Grid container justify="center">
+          <Typography variant="h5" className={classes.title}>
+            {state.questionnaire?.title
+              ? `${state.questionnaire?.title} - Responses`
+              : 'Loading...'}
+          </Typography>
+        </Grid>
+        <Grid container justify="center" style={{ marginTop: '1rem' }}>
+          <Typography>No attempts found for this questionnaire!</Typography>
+        </Grid>
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
@@ -426,22 +463,29 @@ const Responses: React.FunctionComponent = () => {
               }
               onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
                 setState({ currentStudentId: event.target.value as number });
-                fetchAttempt(event.target.value as number);
+                setState({
+                  currentAttempt: state.attempts.find(
+                    (attempt) =>
+                      attempt.user.id === (event.target.value as number)
+                  ),
+                });
               }}
               label="Student"
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {state.students.map((s) => {
+                return (
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.name}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
       </Grid>
       {state.currentProgrammeId === undefined ||
-      state.currentClassId === undefined ? (
+      state.currentClassId === undefined ||
+      state.currentStudentId === undefined ? (
         <Grid container justify="center" style={{ marginTop: '2rem' }}>
           <Typography>
             Please specify the programme, class and student to view the attempt.

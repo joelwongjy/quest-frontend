@@ -173,7 +173,7 @@ const Classes: React.FunctionComponent = () => {
           cancelCallback={() => setState({ isEditing: false })}
         />
       ) : (
-        <div>
+        <div style={{ padding: '1rem' }}>
           <Grid container spacing={3}>
             {state.programme.classCount > 0 &&
               state.programme.classes.map((c) => {

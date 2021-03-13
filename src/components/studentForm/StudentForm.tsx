@@ -28,6 +28,7 @@ import {
 } from 'utils/studentUtils';
 import { useUser } from 'contexts/UserContext';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
+import { PERSONS, STUDENTS } from 'constants/routes';
 
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import ApiService from 'services/apiService';
@@ -93,15 +94,12 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 
   const condenseProgrammes = (
     programmes: PersonPostData['programmes']
-  ): PersonPostData['programmes'] => {
-    const result: PersonPostData['programmes'] = [];
+  ): number[] => {
+    const result: number[] = [];
     programmes.forEach((p) => {
-      const index = result.findIndex((r) => r.id === p.id);
-      if (index === -1) {
-        result.push(p);
-      } else {
-        result[index].classes.push(p.classes[0]);
-      }
+      p.classes.forEach((c) => {
+        result.push(c.id);
+      });
     });
     return result;
   };
@@ -170,9 +168,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(`persons`, {
+      const response = await ApiService.post(`${PERSONS}${STUDENTS}`, {
         ...state,
-        programmes: condenseProgrammes(state.programmes),
+        classIds: condenseProgrammes(state.programmes),
       });
       if (response.status === 200) {
         setIsSuccessful(true);

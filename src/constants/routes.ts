@@ -10,6 +10,7 @@ export const QUESTIONNAIRES = '/questionnaires';
 export const PROGRAMMES = '/programmes';
 export const CLASSES = '/classes';
 export const STUDENTS = '/students';
+export const PERSONS = '/persons';
 
 // Authed student routes
 export const CASTLE = '/castle';
@@ -22,3 +23,4 @@ export const EDIT = '/edit';
 export const DUPLICATE = '/duplicate';
 export const VIEW = '/view';
 export const RESPONSES = '/responses';
+export const SUBMISSIONS = '/submissions';
