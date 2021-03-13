@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import ApiService from 'services/apiService';
 import { MenuOption } from 'interfaces/components/programmeCard';
@@ -60,20 +59,17 @@ const Classes: React.FunctionComponent = () => {
 
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     let didCancel = false;
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`programmes/${id}`);
+        const response = await ApiService.get(`${PROGRAMMES}/${id}`);
         if (!didCancel) {
           setState({
             programme: response.data as ProgrammeData,
             isLoading: false,
           });
-          // dispatch if required
         }
       } catch (error) {
         if (!didCancel) {
@@ -94,7 +90,7 @@ const Classes: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, []);
 
   const breadcrumbs = [
     { text: 'Programmes', href: `${PROGRAMMES}` },
