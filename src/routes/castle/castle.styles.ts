@@ -1,5 +1,5 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import backgroundImage from 'assets/images/background.png';
+import backgroundImage from 'assets/images/student/background.png';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
