@@ -81,13 +81,13 @@ const AdminApp: React.FunctionComponent = () => {
           </Route>
           <Route
             exact
-            path={`${PROGRAMMES}/:id${CLASSES}/:id${QUESTIONNAIRES}`}
+            path={`${PROGRAMMES}/:id${CLASSES}/:classId${QUESTIONNAIRES}`}
             component={Questionnaires}
           />
-          <Route exact path={`${PROGRAMMES}/:id${CLASSES}/:id${STUDENTS}`}>
+          <Route exact path={`${PROGRAMMES}/:id${CLASSES}/:classId${STUDENTS}`}>
             <ClassStudents />
           </Route>
-          <Route path={`${PROGRAMMES}/:id${CLASSES}/:id${STUDENTS}${ADD}`}>
+          <Route path={`${PROGRAMMES}/:id${CLASSES}/:classId${STUDENTS}${ADD}`}>
             <AddStudents />
           </Route>
           <Route exact path={CLASSES} component={Home} />

@@ -1,13 +1,19 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button } from '@material-ui/core';
-import { Link, Redirect } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, Redirect, useParams } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import { PROGRAMMES, CLASSES, ADD, HOME, STUDENTS } from 'constants/routes';
+import {
+  PROGRAMMES,
+  CLASSES,
+  ADD,
+  HOME,
+  STUDENTS,
+  PERSONS,
+} from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
-import { RouteState } from 'interfaces/routes/common';
+import { ClassRouteParams, RouteState } from 'interfaces/routes/common';
 import { StudentMode } from 'interfaces/models/users';
 import { ClassData } from 'interfaces/models/classes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
@@ -17,12 +23,13 @@ import StudentList from 'components/studentList';
 import { useUser } from 'contexts/UserContext';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import { getAlertCallback } from 'utils/alertUtils';
-import { sampleClass } from 'routes/programmes/mockData';
+import { ProgrammeData } from 'interfaces/models/programmes';
 
 import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
-  questClass: ClassData;
+  programme: ProgrammeData | null;
+  questClass: ClassData | null;
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -33,13 +40,15 @@ interface StudentsState extends RouteState {
 
 const Students: React.FunctionComponent = () => {
   const user = useUser();
+  const { id, classId } = useParams<ClassRouteParams>();
   const [state, setState] = useReducer(
     (s: StudentsState, a: Partial<StudentsState>) => ({
       ...s,
       ...a,
     }),
     {
-      questClass: sampleClass,
+      programme: null,
+      questClass: null,
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -57,7 +66,6 @@ const Students: React.FunctionComponent = () => {
       selectedStudent: undefined,
     }
   );
-  const dispatch = useDispatch();
   const classes = useStyles();
 
   useEffect(() => {
@@ -65,13 +73,13 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`classes/${state.questClass.id}`);
+        const response = await ApiService.get(`${PROGRAMMES}/${id}`);
         if (!didCancel) {
           setState({
-            questClass: response.data as ClassData,
+            programme: response.data as ProgrammeData,
+            // questClass: response.data as ClassData,
             isLoading: false,
           });
-          // dispatch(updateSecurities(securitiesResponse.data));
         }
       } catch (error) {
         if (!didCancel) {
@@ -92,25 +100,31 @@ const Students: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, []);
 
   const breadcrumbs = [
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
-      text: state.isLoading ? 'Loading' : state.questClass.programmeName,
-      href: `${PROGRAMMES}/${state.questClass.programmeId}${CLASSES}`,
+      text:
+        state.isLoading || state.programme == null
+          ? 'Loading'
+          : state.programme.name,
+      href: `${PROGRAMMES}/${id}${CLASSES}`,
     },
     {
       text: 'Classes',
-      href: `${PROGRAMMES}/${state.questClass.programmeId}${CLASSES}`,
+      href: `${PROGRAMMES}/${id}${CLASSES}`,
     },
     {
-      text: state.isLoading ? 'Loading' : state.questClass.name,
-      href: `${PROGRAMMES}/${state.questClass.programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}`,
+      text:
+        state.isLoading || state.questClass == null
+          ? 'Loading'
+          : state.questClass.name,
+      href: `${PROGRAMMES}/${id}${CLASSES}/${classId}${STUDENTS}`,
     },
     {
       text: 'Students',
-      href: `${PROGRAMMES}/${state.questClass.programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}`,
+      href: `${PROGRAMMES}/${id}${CLASSES}/${classId}${STUDENTS}`,
     },
   ];
 
@@ -119,11 +133,11 @@ const Students: React.FunctionComponent = () => {
   const handleEdit = async (student: PersonListData) => {
     setState({ isLoading: true });
     try {
-      const response = await ApiService.get(`persons/${student.id}`);
+      const response = await ApiService.get(`${PERSONS}/${student.id}`);
       if (response.status === 200) {
         setState({
           isEditing: true,
-          selectedStudent: response.data as PersonData,
+          selectedStudent: response.data.person as PersonData,
         });
       }
     } catch (e) {
@@ -134,18 +148,28 @@ const Students: React.FunctionComponent = () => {
   };
 
   const handleDelete = (student: PersonListData) => {
+    const { questClass } = state;
+    if (questClass == null) {
+      return;
+    }
+
     alertCallback(
       true,
       true,
       'Are you sure?',
       'You will not be able to retrieve deleted students.',
       () => {
-        // TODO: Send a DELETE request to backend
-        const index = state.questClass.students.indexOf(student);
-        const newStudents = state.questClass.students.slice();
+        // TODO: Add error handling to deletion
+        ApiService.delete(`${STUDENTS}`, {
+          data: {
+            persons: [student.id],
+          },
+        });
+        const index = questClass.students.indexOf(student);
+        const newStudents = questClass.students.slice();
         newStudents.splice(index, 1);
         setState({
-          questClass: { ...state.questClass, students: newStudents },
+          questClass: { ...questClass, students: newStudents },
         });
       },
       undefined
@@ -167,7 +191,7 @@ const Students: React.FunctionComponent = () => {
               color="secondary"
               className={classes.button}
               component={Link}
-              to={`${PROGRAMMES}/${state.questClass.programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}${ADD}`}
+              to={`${PROGRAMMES}/${id}${CLASSES}/${classId}${STUDENTS}${ADD}`}
             >
               Add Students
             </Button>
@@ -183,7 +207,7 @@ const Students: React.FunctionComponent = () => {
         />
       ) : (
         <StudentList
-          students={state.questClass.students}
+          students={state.questClass?.students ?? []}
           editCallback={handleEdit}
           deleteCallback={handleDelete}
         />
