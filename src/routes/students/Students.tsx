@@ -14,7 +14,6 @@ import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
 import StudentList from 'components/studentList';
 import { getAlertCallback } from 'utils/alertUtils';
-import { students } from './mockData';
 
 import { useStyles } from './students.styles';
 
@@ -35,7 +34,7 @@ const Students: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      students: students.slice(),
+      students: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -61,7 +60,7 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${PERSONS}/students`);
+        const response = await ApiService.get(`${STUDENTS}`);
         if (!didCancel) {
           setState({ students: response.data.persons, isLoading: false });
         }
@@ -86,18 +85,23 @@ const Students: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Students', href: STUDENTS }];
+  const breadcrumbs = state.isEditing
+    ? [
+        { text: 'Students', href: STUDENTS },
+        { text: 'Edit', href: STUDENTS },
+      ]
+    : [{ text: 'Students', href: STUDENTS }];
 
   const alertCallback = getAlertCallback(setState);
 
   const handleEdit = async (student: PersonListData) => {
     setState({ isLoading: true });
     try {
-      const response = await ApiService.get(`${PERSONS}/${student.id}/user`);
+      const response = await ApiService.get(`${PERSONS}/${student.id}`);
       if (response.status === 200) {
         setState({
           isEditing: true,
-          selectedStudent: response.data as PersonData,
+          selectedStudent: response.data.person as PersonData,
         });
       }
     } catch (e) {
@@ -114,7 +118,12 @@ const Students: React.FunctionComponent = () => {
       'Are you sure?',
       'You will not be able to retrieve deleted students.',
       () => {
-        // TODO: Send a DELETE request to backend
+        // TODO: Add error handling to deletion
+        ApiService.delete(`${STUDENTS}`, {
+          data: {
+            persons: [student.id],
+          },
+        });
         const index = state.students.indexOf(student);
         const newStudents = state.students.slice();
         newStudents.splice(index, 1);

@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ApiService from 'services/apiService';
@@ -11,7 +10,6 @@ import { ClassData } from 'interfaces/models/classes';
 import { PersonListData } from 'interfaces/models/persons';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import { students } from 'routes/students/mockData';
 import { sampleClass } from 'routes/programmes/mockData';
 import { getAlertCallback } from 'utils/alertUtils';
 
@@ -32,7 +30,7 @@ const AddStudents: React.FunctionComponent = () => {
     }),
     {
       questClass: sampleClass,
-      students,
+      students: [],
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -51,21 +49,19 @@ const AddStudents: React.FunctionComponent = () => {
     }
   );
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     let didCancel = false;
 
     const fetchData = async () => {
       try {
-        // To be replaced with `programmes/${id}/students`
-        const response = await ApiService.get(`programmes/${id}/classes/${id}`);
+        const responseOne = await ApiService.get(`${STUDENTS}`);
+        // TODO: To add class fetching with responseTwo
         if (!didCancel) {
           setState({
-            questClass: response.data as ClassData,
+            // questClass: responseTwo.data as ClassData,
+            students: responseOne.data.persons as PersonListData[],
             isLoading: false,
           });
-          // do dispatch here if necessary
         }
       } catch (error) {
         if (!didCancel) {
@@ -86,7 +82,7 @@ const AddStudents: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, []);
 
   const breadcrumbs = [
     { text: 'Programmes', href: `${PROGRAMMES}` },

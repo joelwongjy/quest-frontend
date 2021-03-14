@@ -28,7 +28,7 @@ import {
 } from 'utils/studentUtils';
 import { useUser } from 'contexts/UserContext';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
-import { PERSONS, STUDENTS } from 'constants/routes';
+import { STUDENTS } from 'constants/routes';
 
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import ApiService from 'services/apiService';
@@ -168,7 +168,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(`${PERSONS}${STUDENTS}`, {
+      const response = await ApiService.post(`${STUDENTS}`, {
         ...state,
         classIds: condenseProgrammes(state.programmes),
       });
@@ -364,8 +364,8 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           setState({ gender: event.target.value as string });
                         }}
                       >
-                        <MenuItem value="M">Male</MenuItem>
-                        <MenuItem value="F">Female</MenuItem>
+                        <MenuItem value={Gender.MALE}>Male</MenuItem>
+                        <MenuItem value={Gender.FEMALE}>Female</MenuItem>
                       </Select>
                       {hasError && state.gender === '' && (
                         <FormHelperText>

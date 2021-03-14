@@ -21,6 +21,7 @@ import QuestButton from 'componentWrappers/questButton';
 import { PersonListData } from 'interfaces/models/persons';
 import { ClassData } from 'interfaces/models/classes';
 import ApiService from 'services/apiService';
+import { sortByName } from 'utils/sortingUtils';
 
 import { useStyles } from './ClassStudentForm.styles';
 
@@ -53,8 +54,8 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
   const classes = useStyles();
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
-  const availableStudents = students.filter((s) =>
-    questClass.students.includes(s)
+  const availableStudents = students.filter(
+    (s) => !questClass.students.includes(s)
   );
 
   const [state, setState] = useReducer(
@@ -179,59 +180,65 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
               <Grid item container justify="space-between" spacing={2}>
                 <Grid item xs>
                   <List>
-                    {availableStudents.map((s, index) => {
-                      const labelId = `checkbox-list-label-${index}`;
-                      return (
-                        <ListItem
-                          key={`${s}`}
-                          dense
-                          button
-                          onClick={() => handleToggleStudent(s, index)}
-                        >
-                          <ListItemAvatar>
-                            <Avatar>
-                              <EmojiPeopleIcon />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText primary={s.name} />
-                          <ListItemIcon>
-                            <Checkbox
-                              edge="start"
-                              checked={state.checked.indexOf(index) !== -1}
-                              tabIndex={-1}
-                              disableRipple
-                              inputProps={{ 'aria-labelledby': labelId }}
-                            />
-                          </ListItemIcon>
-                        </ListItem>
-                      );
-                    })}
+                    {availableStudents
+                      .slice()
+                      .sort(sortByName)
+                      .map((s, index) => {
+                        const labelId = `checkbox-list-label-${index}`;
+                        return (
+                          <ListItem
+                            key={`${s}`}
+                            dense
+                            button
+                            onClick={() => handleToggleStudent(s, index)}
+                          >
+                            <ListItemAvatar>
+                              <Avatar>
+                                <EmojiPeopleIcon />
+                              </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={s.name} />
+                            <ListItemIcon>
+                              <Checkbox
+                                edge="start"
+                                checked={state.checked.indexOf(index) !== -1}
+                                tabIndex={-1}
+                                disableRipple
+                                inputProps={{ 'aria-labelledby': labelId }}
+                              />
+                            </ListItemIcon>
+                          </ListItem>
+                        );
+                      })}
                   </List>
                 </Grid>
                 <Grid item xs>
                   <List>
-                    {state.students.map((s, index) => {
-                      return (
-                        <ListItem key={`${s}`}>
-                          <ListItemAvatar>
-                            <Avatar>
-                              <EmojiPeopleIcon />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText primary={s.name} />
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              style={{ color: 'red', marginBottom: '0.5rem' }}
-                              onClick={() => handleDeleteStudent(index)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      );
-                    })}
+                    {state.students
+                      .slice()
+                      .sort(sortByName)
+                      .map((s, index) => {
+                        return (
+                          <ListItem dense key={`${s}`}>
+                            <ListItemAvatar>
+                              <Avatar>
+                                <EmojiPeopleIcon />
+                              </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={s.name} />
+                            <ListItemSecondaryAction>
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                style={{ color: 'red', marginBottom: '0.5rem' }}
+                                onClick={() => handleDeleteStudent(index)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                        );
+                      })}
                   </List>
                 </Grid>
               </Grid>

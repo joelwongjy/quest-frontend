@@ -13,3 +13,8 @@ export interface RouteState {
 export interface RouteParams {
   id: string;
 }
+
+export interface ClassRouteParams {
+  id: string;
+  classId: string;
+}
