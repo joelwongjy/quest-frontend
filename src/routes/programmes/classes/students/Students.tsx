@@ -23,12 +23,10 @@ import StudentList from 'components/studentList';
 import { useUser } from 'contexts/UserContext';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import { getAlertCallback } from 'utils/alertUtils';
-import { ProgrammeData } from 'interfaces/models/programmes';
 
 import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
-  programme: ProgrammeData | null;
   questClass: ClassData | null;
   hasConfirm: boolean;
   closeHandler: () => void;
@@ -47,7 +45,6 @@ const Students: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      programme: null,
       questClass: null,
       isAlertOpen: false,
       isLoading: true,
@@ -73,11 +70,10 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${PROGRAMMES}/${id}`);
+        const response = await ApiService.get(`${CLASSES}/${id}`);
         if (!didCancel) {
           setState({
-            programme: response.data as ProgrammeData,
-            // questClass: response.data as ClassData,
+            questClass: response.data as ClassData,
             isLoading: false,
           });
         }
@@ -106,9 +102,9 @@ const Students: React.FunctionComponent = () => {
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
       text:
-        state.isLoading || state.programme == null
+        state.isLoading || state.questClass == null
           ? 'Loading'
-          : state.programme.name,
+          : state.questClass.programmeName,
       href: `${PROGRAMMES}/${id}${CLASSES}`,
     },
     {
@@ -138,6 +134,7 @@ const Students: React.FunctionComponent = () => {
         setState({
           isEditing: true,
           selectedStudent: response.data.person as PersonData,
+          isLoading: false,
         });
       }
     } catch (e) {
