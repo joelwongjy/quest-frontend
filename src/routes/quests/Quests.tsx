@@ -2,8 +2,6 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { QUESTS } from 'constants/routes';
-import PageHeader from 'components/pageHeader';
 import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
