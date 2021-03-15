@@ -10,14 +10,17 @@ import { UNAUTHED_ROUTES, ROOT, QUESTS, CASTLE } from 'constants/routes';
 import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import Castle from 'routes/castle';
+import { useStyles } from './app.styles';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToCastle = (): React.ReactNode => <Redirect to={CASTLE} />;
 
 const StudentApp: React.FunctionComponent = () => {
+  const classes = useStyles();
+
   return (
     <Router>
-      <div className="app">
+      <div className={classes.student}>
         <Switch>
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
           <Route path={CASTLE} component={Castle} />

@@ -9,13 +9,16 @@ import {
 import Login from 'routes/login';
 
 import { LOGIN, ROOT } from 'constants/routes';
+import { useStyles } from './app.styles';
 
 const redirectToLogin = (): React.ReactNode => <Redirect to={LOGIN} />;
 
 const UnauthenticatedApp: React.FunctionComponent = () => {
+  const classes = useStyles();
+
   return (
     <Router>
-      <div className="app unauth">
+      <div className={classes.admin}>
         <Switch>
           <Route path={LOGIN}>
             <Login />

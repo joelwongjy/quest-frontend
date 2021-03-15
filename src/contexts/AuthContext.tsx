@@ -59,7 +59,10 @@ const AuthProvider: React.FunctionComponent = (props) => {
         return Promise.reject(new Error(e.message));
       });
 
-  const logout = (): Promise<void> => AuthService.logout().then(reload);
+  const logout = (): Promise<void> =>
+    AuthService.logout()
+      .then(reload)
+      .then(() => window.location.replace(window.location.href));
 
   return (
     <AuthContext.Provider value={{ data, signup, login, logout }} {...props} />

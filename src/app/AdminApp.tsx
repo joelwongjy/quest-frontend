@@ -37,14 +37,17 @@ import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
 import AddStudents from 'routes/programmes/classes/students/add';
+import { useStyles } from './app.styles';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
 
 const AdminApp: React.FunctionComponent = () => {
+  const classes = useStyles();
+
   return (
     <Router>
-      <div className="app">
+      <div className={classes.admin}>
         <Switch>
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
           <Route exact path={QUESTIONNAIRES} component={Questionnaires} />

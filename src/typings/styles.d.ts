@@ -5,6 +5,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     fontFamily: {
       roboto: CSSProperties;
       metropolis: CSSProperties;
+      vt323: CSSProperties;
     };
     icon: {
       iconColor: string;
@@ -22,6 +23,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     fontFamily?: {
       roboto?: CSSProperties;
       metropolis?: CSSProperties;
+      vt323?: CSSProperties;
     };
     icon?: {
       iconColor?: string;

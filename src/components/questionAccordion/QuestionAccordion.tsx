@@ -5,7 +5,7 @@ import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { theme } from 'styles/theme';
+import { adminTheme } from 'styles/theme';
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 
 import { useStyles } from './questionAccordion.styles';
@@ -35,13 +35,13 @@ const AccordionSummary = withStyles({
       borderBottomRightRadius: 0,
       borderBottomLeftRadius: 0,
     },
-    [theme.breakpoints.down('md')]: {
+    [adminTheme.breakpoints.down('md')]: {
       paddingLeft: 8,
       paddingRight: 8,
     },
   },
   content: {
-    [theme.breakpoints.down('md')]: {
+    [adminTheme.breakpoints.down('md')]: {
       flexDirection: 'column-reverse',
     },
     '&$expanded': {
@@ -68,12 +68,12 @@ const AccordionDetails = withStyles((theme) => ({
 const getBackgroundColor = (accessibility: QuestionAccessibility) => {
   switch (accessibility) {
     case QuestionAccessibility.PRE:
-      return theme.custom.questionBackground.pre;
+      return adminTheme.custom.questionBackground.pre;
     case QuestionAccessibility.POST:
-      return theme.custom.questionBackground.post;
+      return adminTheme.custom.questionBackground.post;
     case QuestionAccessibility.SHARED:
     default:
-      return theme.custom.questionBackground.shared;
+      return adminTheme.custom.questionBackground.shared;
   }
 };
 
