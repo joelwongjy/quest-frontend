@@ -37,6 +37,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     card: {
       backgroundColor: '#F7F6DA',
     },
+    scrollable: {
+      padding: '0 0.5rem',
+      margin: 0,
+      height: '100%',
+      overflow: 'scroll',
+    },
     mascotContainer: {
       position: 'absolute',
       zIndex: 2,
