@@ -154,7 +154,7 @@ const Quests: React.FC = () => {
                     <Typography variant="h6">Completed</Typography>
                   </Button>
                 </Grid>
-                <Grid container spacing={0} justify="space-around">
+                <Grid container spacing={0} justify="flex-start">
                   {tabValue === 0 &&
                     getNewQuestsWindow(state.newQuestsWindowIndex).map((q) => {
                       return (
@@ -165,7 +165,8 @@ const Quests: React.FC = () => {
                           md={6}
                           key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                           style={{
-                            margin: '1rem',
+                            margin: '0',
+                            padding: '1rem',
                           }}
                         >
                           <QuestionnaireCard
@@ -177,7 +178,7 @@ const Quests: React.FC = () => {
                         </Grid>
                       );
                     })}
-                  <Grid container spacing={0} justify="space-around">
+                  <Grid container spacing={0} justify="flex-start">
                     {tabValue === 1 &&
                       getCompletedQuestsWindow(
                         state.completedQuestsWindowIndex
@@ -186,11 +187,12 @@ const Quests: React.FC = () => {
                           <Grid
                             item
                             xs={12}
-                            sm={8}
-                            md={5}
+                            sm={9}
+                            md={6}
                             key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                             style={{
-                              margin: '1rem',
+                              margin: '0',
+                              padding: '1rem',
                             }}
                           >
                             <QuestionnaireCard

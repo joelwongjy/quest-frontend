@@ -12,7 +12,7 @@ import hammer from '../assets/images/student/hammer.png';
 import shield from '../assets/images/student/shield.png';
 
 const questImages = [sword, hammer, shield];
-const questHeaderColors = ['#FB6B1D', '#C5C8B1', '#40A2E9'];
+const questHeaderColors = ['#FB6B1D', '#c6c9b3', '#40A2E9'];
 
 export const getQuestStyle = (): string[] => {
   const index = Math.floor(Math.random() * questImages.length);

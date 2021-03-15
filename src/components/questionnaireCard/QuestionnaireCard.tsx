@@ -119,18 +119,21 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
         <CardHeader
           title={
             <Grid container justify="center">
-              <Typography variant="h4">{questionnaire.name}</Typography>
+              <Typography variant="h4" className={classes.studentTitle}>
+                {questionnaire.name}
+              </Typography>
             </Grid>
           }
           style={{
             backgroundColor: questCardStyle[1],
+            padding: '0.5rem',
           }}
         />
-        <CardContent>
+        <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
+          {renderProgramme()}
           <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
             <img src={questCardStyle[0]} alt="icon" />
           </Grid>
-          {renderProgramme()}
           <Grid container justify="center">
             <Typography
               className={classes.dates}
@@ -139,7 +142,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             >
               {isAttempted
                 ? 'Completed'
-                : `Closes At: ${format(
+                : `Complete by: ${format(
                     questionnaire.endAt as Date,
                     'd MMM y'
                   )}`}

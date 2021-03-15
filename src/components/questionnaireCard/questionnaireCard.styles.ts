@@ -10,6 +10,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
       color: theme.custom.icon.iconColor,
     },
+    studentTitle: {
+      fontSize: '1.4rem',
+      color: 'white',
+    },
     statusDraft: {
       textAlign: 'center',
       color: '#FF6500',

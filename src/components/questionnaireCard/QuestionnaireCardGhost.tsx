@@ -1,54 +1,96 @@
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 import {
+  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
+  Grid,
   IconButton,
   Typography,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { CardMode } from 'interfaces/components/questionnaireCard';
+import QuestCard from 'componentWrappers/questCard';
+import { getQuestStyle } from 'utils/questUtils';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questionnaireCard.styles';
 
-interface QuestionnaireCardGhostProps {
+interface QuestionnaireCardGhostProps extends QuestComponentProps {
   mode?: CardMode;
 }
 
 const QuestionnaireCardGhost: React.FC<QuestionnaireCardGhostProps> = ({
   mode = CardMode.STAFF,
+  className = '',
 }) => {
   const classes = useStyles();
+
+  if (mode === CardMode.STUDENT) {
+    const questCardStyle = getQuestStyle();
+    return (
+      <QuestCard className={className}>
+        <CardHeader
+          title={
+            <Grid container justify="center">
+              <Typography variant="h4" className={classes.studentTitle}>
+                <Skeleton width={120} />
+              </Typography>
+            </Grid>
+          }
+          style={{
+            backgroundColor: questCardStyle[1],
+            padding: '0.5rem',
+          }}
+        />
+        <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
+          <Grid container justify="center">
+            <Skeleton width={100} />
+          </Grid>
+          <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
+            <img src={questCardStyle[0]} alt="icon" />
+          </Grid>
+          <Grid container justify="center">
+            <Typography
+              className={classes.dates}
+              color="textSecondary"
+              gutterBottom
+            >
+              <Skeleton width={150} />
+            </Typography>
+          </Grid>
+        </CardContent>
+        <CardActions className={classes.actions}>
+          <Button size="small">
+            <Skeleton width={50} />
+          </Button>
+        </CardActions>
+      </QuestCard>
+    );
+  }
+
   return (
     <>
-      {mode !== CardMode.STUDENT && (
-        <Typography
-          className={classes.dates}
-          color="textSecondary"
-          gutterBottom
-        >
-          <Skeleton />
-        </Typography>
-      )}
+      <Typography className={classes.dates} color="textSecondary" gutterBottom>
+        <Skeleton />
+      </Typography>
 
       <Card>
         <CardHeader
           title={<Skeleton />}
           action={
-            mode !== CardMode.STUDENT && (
-              <>
-                <IconButton
-                  aria-label="more options"
-                  aria-controls="more options"
-                  aria-haspopup="true"
-                >
-                  <MoreVertIcon />
-                </IconButton>
-              </>
-            )
+            <>
+              <IconButton
+                aria-label="more options"
+                aria-controls="more options"
+                aria-haspopup="true"
+              >
+                <MoreVertIcon />
+              </IconButton>
+            </>
           }
         />
         <CardContent>
