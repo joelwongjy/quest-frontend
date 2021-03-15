@@ -3,16 +3,13 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
   useScrollTrigger,
   Button,
 } from '@material-ui/core';
-import {
-  AccountCircleOutlined as AccountsIcon,
-  Menu as MenuIcon,
-} from '@material-ui/icons';
+import { Menu as MenuIcon } from '@material-ui/icons';
 
 import logo from 'assets/images/logo.png';
+import profile from 'assets/images/profile.png';
 import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questAppBar.styles';
@@ -81,10 +78,8 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
             aria-controls={menuId}
             aria-haspopup="true"
           >
-            <AccountsIcon htmlColor={theme!.custom.icon.iconColor} />
-            <Typography variant="body2" className={classes.account}>
-              Account
-            </Typography>
+            {/* <AccountsIcon htmlColor={theme!.custom.icon.iconColor} /> */}
+            <img src={profile} alt="Profile" className={classes.profile} />
           </Button>
         </div>
       </Toolbar>

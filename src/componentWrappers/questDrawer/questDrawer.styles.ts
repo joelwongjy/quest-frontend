@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.secondary.main,
       color: theme.palette.primary.main,
     },
+    studentDrawerPaper: {
+      backgroundColor: '#394F57',
+    },
     listItem: {
       '&.Mui-selected': {
         color: theme.palette.primary.main,
@@ -26,11 +29,30 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&.Mui-selected .MuiListItemIcon-root': {
         color: theme.palette.primary.main,
       },
+      fontFamily: theme.custom.fontFamily.metropolis.fontFamily,
+    },
+    studentListItem: {
+      '&.Mui-selected': {
+        backgroundColor: '#394F57',
+        textDecoration: 'underline',
+        color: 'white',
+      },
+      '&.Mui-selected:hover': {
+        backgroundColor: '#394F57',
+      },
+      color: 'white',
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
+    studentToolbar: {
+      backgroundColor: '#394F57',
+    },
     icon: {
       color: theme.palette.primary.main,
+    },
+    studentIcon: {
+      height: '24px',
+      color: 'white',
     },
   })
 );
