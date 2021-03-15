@@ -119,7 +119,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
         <CardHeader
           title={
             <Grid container justify="center">
-              <Typography variant="h4">{questionnaire.name}</Typography>
+              <Typography variant="h5">{questionnaire.name}</Typography>
             </Grid>
           }
           style={{
