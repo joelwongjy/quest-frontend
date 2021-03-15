@@ -12,7 +12,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundPosition: 'center',
       padding: theme.spacing(3),
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
+      width: '100%',
     },
     main: {
       paddingLeft: '1rem',
@@ -30,10 +31,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: '1rem',
     },
     quests: {
-      minHeight: '75%',
-      maxWidth: '75%',
-      minWidth: '75%',
       overflow: 'hidden',
+      width: '100%',
     },
     card: {
       backgroundColor: '#F7F6DA',
