@@ -7,6 +7,17 @@ import {
   QuestionnaireOneWindowData,
 } from 'interfaces/models/questionnaires';
 import { QuestionData, QuestionType } from 'interfaces/models/questions';
+import sword from '../assets/images/student/sword.png';
+import hammer from '../assets/images/student/hammer.png';
+import shield from '../assets/images/student/shield.png';
+
+const questImages = [sword, hammer, shield];
+const questHeaderColors = ['#FB6B1D', '#C5C8B1', '#40A2E9'];
+
+export const getQuestStyle = (): string[] => {
+  const index = Math.floor(Math.random() * questImages.length);
+  return [questImages[index], questHeaderColors[index]];
+};
 
 const pairQuestsWithProgrammes = (
   quests: QuestionnaireListData[],
