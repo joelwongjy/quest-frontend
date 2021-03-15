@@ -1,7 +1,18 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import backgroundImage from 'assets/images/student/background.png';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      minHeight: 'calc(100vh - 56px)',
+      background: `url(${backgroundImage})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      padding: theme.spacing(3),
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
     main: {
       paddingLeft: '1rem',
       paddingRight: '1rem',
@@ -18,7 +29,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: '1rem',
     },
     quests: {
-      maxHeight: '75%',
       minHeight: '75%',
       maxWidth: '75%',
       minWidth: '75%',
@@ -47,7 +57,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     mascotSpeech: {
       backgroundColor: '#D5E6EC',
-      width: '50%',
+      width: '60%',
       borderRadius: '1rem',
       padding: '1rem',
       position: 'relative',

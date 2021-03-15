@@ -25,7 +25,6 @@ interface QuestState extends RouteState {
 }
 
 const Quests: React.FC = () => {
-  const breadcrumbs = [{ text: 'Quests', href: QUESTS }];
   const classes = useStyles();
   const { user } = useUser();
   const [tabValue, setTabValue] = useState<number>(0);
@@ -113,85 +112,86 @@ const Quests: React.FC = () => {
   );
 
   return (
-    <PageContainer>
-      <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container justify="center">
-        <StudentBoard title="Quests" className={classes.quests}>
-          <Grid container className={classes.main}>
-            <Grid container justify="center" style={{ margin: '1rem' }}>
-              <Button
-                style={{
-                  textTransform: 'none',
-                  textDecoration: tabValue === 0 ? 'underline' : undefined,
-                  color: tabValue === 0 ? '#DA3501' : undefined,
-                }}
-                onClick={() => setTabValue(0)}
-              >
-                <Typography variant="h6">New</Typography>
-              </Button>
-              <Button
-                style={{
-                  textTransform: 'none',
-                  textDecoration: tabValue === 1 ? 'underline' : undefined,
-                  color: tabValue === 1 ? '#DA3501' : undefined,
-                }}
-                onClick={() => setTabValue(1)}
-              >
-                <Typography variant="h6">Completed</Typography>
-              </Button>
+    <PageContainer hasContentPadding={false}>
+      <div className={classes.root}>
+        <Grid container justify="center">
+          <StudentBoard title="Quests" className={classes.quests}>
+            <Grid container className={classes.main}>
+              <Grid container justify="center" style={{ margin: '1rem' }}>
+                <Button
+                  style={{
+                    textTransform: 'none',
+                    textDecoration: tabValue === 0 ? 'underline' : undefined,
+                    color: tabValue === 0 ? '#DA3501' : undefined,
+                  }}
+                  onClick={() => setTabValue(0)}
+                >
+                  <Typography variant="h6">New</Typography>
+                </Button>
+                <Button
+                  style={{
+                    textTransform: 'none',
+                    textDecoration: tabValue === 1 ? 'underline' : undefined,
+                    color: tabValue === 1 ? '#DA3501' : undefined,
+                  }}
+                  onClick={() => setTabValue(1)}
+                >
+                  <Typography variant="h6">Completed</Typography>
+                </Button>
+              </Grid>
+              <Grid container spacing={0} justify="space-around">
+                {tabValue === 0 &&
+                  newQuests.map((q) => {
+                    return (
+                      <Grid
+                        item
+                        xs={5}
+                        key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
+                        style={{ marginBottom: '2rem' }}
+                      >
+                        <QuestionnaireCard
+                          questionnaire={q.quest}
+                          mode={CardMode.STUDENT}
+                          programmeName={q.programme}
+                          className={classes.card}
+                        />
+                      </Grid>
+                    );
+                  })}
+                {tabValue === 1 &&
+                  completedQuests.map((q) => {
+                    return (
+                      <Grid
+                        item
+                        xs={6}
+                        key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
+                      >
+                        <QuestionnaireCard
+                          questionnaire={q.quest}
+                          mode={CardMode.STUDENT}
+                          programmeName={q.programme}
+                          isAttempted
+                        />
+                      </Grid>
+                    );
+                  })}
+              </Grid>
             </Grid>
-            <Grid container spacing={0} justify="space-around">
-              {tabValue === 0 &&
-                newQuests.map((q) => {
-                  return (
-                    <Grid
-                      item
-                      xs={5}
-                      key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                      style={{ marginBottom: '2rem' }}
-                    >
-                      <QuestionnaireCard
-                        questionnaire={q.quest}
-                        mode={CardMode.STUDENT}
-                        programmeName={q.programme}
-                        className={classes.card}
-                      />
-                    </Grid>
-                  );
-                })}
-              {tabValue === 1 &&
-                completedQuests.map((q) => {
-                  return (
-                    <Grid
-                      item
-                      xs={6}
-                      key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                    >
-                      <QuestionnaireCard
-                        questionnaire={q.quest}
-                        mode={CardMode.STUDENT}
-                        programmeName={q.programme}
-                        isAttempted
-                      />
-                    </Grid>
-                  );
-                })}
-            </Grid>
-          </Grid>
-        </StudentBoard>
-        <div className={classes.mascotContainer}>
-          <div className={classes.mascotInnerContainer}>
-            <div className={classes.mascotSpeech}>
-              Knight, get ready to take on your quests!
+          </StudentBoard>
+          <div className={classes.mascotContainer}>
+            <div className={classes.mascotInnerContainer}>
+              <div className={classes.mascotSpeech}>
+                Knight, get ready to take on your quests!
+              </div>
+              <img
+                src={mascotImage}
+                alt="Mascot"
+                className={classes.mascotImage}
+              />
             </div>
-            <img
-              src={mascotImage}
-              alt="Mascot"
-              className={classes.mascotImage}
-            />
           </div>
-        </div>
-      </Grid>
+        </Grid>
+      </div>
     </PageContainer>
   );
 };
