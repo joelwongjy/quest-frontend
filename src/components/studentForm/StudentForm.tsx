@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   FormControl,
   FormHelperText,
@@ -26,12 +27,14 @@ import {
   isValidMobileNumber,
   validateStudentInfo,
 } from 'utils/studentUtils';
-import { useUser } from 'contexts/UserContext';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
 import { STUDENTS } from 'constants/routes';
-
+import { sortByName } from 'utils/sortingUtils';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import ApiService from 'services/apiService';
+import { MiscDux } from 'reducers/miscDux';
+import { RootState } from 'reducers/rootReducer';
+
 import { useStyles } from './StudentForm.styles';
 
 interface StudentFormProps {
@@ -61,7 +64,8 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 }) => {
   const classes = useStyles();
   const { hasError, setHasError } = useError();
-  const { user } = useUser();
+  const selectMisc = (state: RootState): MiscDux => state.misc;
+  const { user } = useSelector(selectMisc);
 
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
@@ -525,140 +529,149 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   Activities:
                 </Typography>
               </ListItem>
-              {state.programmes.map((p, index) => {
-                return p.classes.map((c) => {
-                  return (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Grid container key={`${p}-${index}`}>
-                      <ListItem>
-                        <Grid
-                          container
-                          justify="space-between"
-                          alignItems="center"
-                        >
-                          <Grid item xs={4}>
-                            <Typography variant="subtitle1">
-                              Programme:
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={8}>
-                            <FormControl
-                              variant="outlined"
-                              size="small"
-                              className={classes.textfieldContainer}
-                              color="secondary"
-                            >
-                              <Select
-                                id="select-programmes"
-                                value={p.id}
-                                onChange={(
-                                  event: React.ChangeEvent<{ value: unknown }>
-                                ) =>
-                                  handleProgrammeChange(
-                                    index,
-                                    Number(event.target.value)
-                                  )
-                                }
-                                disabled={isSuccessful}
-                              >
-                                {user!.programmes.map((p) => {
-                                  return (
-                                    <MenuItem
-                                      value={p.id}
-                                      key={`programme-${p.id}`}
-                                    >
-                                      {p.name}
-                                    </MenuItem>
-                                  );
-                                })}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </ListItem>
-                      <ListItem>
-                        <Grid
-                          container
-                          justify="space-between"
-                          alignItems="center"
-                        >
-                          <Grid item xs={4}>
-                            <Typography variant="subtitle1">Class:</Typography>
-                          </Grid>
-                          <Grid item xs={8}>
-                            <FormControl
-                              variant="outlined"
-                              size="small"
-                              className={classes.textfieldContainer}
-                              color="secondary"
-                            >
-                              <Select
-                                id="select-programmes"
-                                value={c.id}
-                                onChange={(
-                                  event: React.ChangeEvent<{ value: unknown }>
-                                ) =>
-                                  handleClassChange(
-                                    index,
-                                    Number(event.target.value)
-                                  )
-                                }
-                                disabled={isSuccessful}
-                              >
-                                {user!.programmes
-                                  .find((p2) => p2.id === p.id)!
-                                  .classes.map((c2) => {
-                                    return (
-                                      <MenuItem
-                                        value={c2.id}
-                                        key={`class-${c2.id}`}
-                                      >
-                                        {c2.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </ListItem>
-                      {!isSuccessful && (
-                        <Grid container alignItems="center">
-                          <Grid item xs={4}>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              style={{ color: 'red', marginBottom: '0.5rem' }}
-                              onClick={() => handleDeleteActivity(index)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Grid>
+              {state.programmes
+                .filter((p) =>
+                  user!.programmes.map((p2) => p2.id).includes(p.id)
+                )
+                .map((p, index) => {
+                  return p.classes.map((c) => {
+                    return (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <Grid container key={`${p}-${index}`}>
+                        <ListItem>
                           <Grid
-                            item
-                            xs={8}
-                            style={{
-                              paddingLeft: '0.5rem',
-                              marginBottom: '0.75rem',
-                            }}
+                            container
+                            justify="space-between"
+                            alignItems="center"
                           >
-                            {hasError &&
-                              state.programmes.filter(
-                                (x) =>
-                                  x.id === p.id &&
-                                  x.classes[0].id === p.classes[0].id
-                              ).length > 1 && (
-                                <FormHelperText style={{ color: 'red' }}>
-                                  This activity is duplicated!
-                                </FormHelperText>
-                              )}
+                            <Grid item xs={4}>
+                              <Typography variant="subtitle1">
+                                Programme:
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <FormControl
+                                variant="outlined"
+                                size="small"
+                                className={classes.textfieldContainer}
+                                color="secondary"
+                              >
+                                <Select
+                                  id="select-programmes"
+                                  value={p.id}
+                                  onChange={(
+                                    event: React.ChangeEvent<{ value: unknown }>
+                                  ) =>
+                                    handleProgrammeChange(
+                                      index,
+                                      Number(event.target.value)
+                                    )
+                                  }
+                                  disabled={isSuccessful}
+                                >
+                                  {user!.programmes
+                                    .slice()
+                                    .sort(sortByName)
+                                    .map((p) => {
+                                      return (
+                                        <MenuItem
+                                          value={p.id}
+                                          key={`programme-${p.id}`}
+                                        >
+                                          {p.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                </Select>
+                              </FormControl>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      )}
-                    </Grid>
-                  );
-                });
-              })}
+                        </ListItem>
+                        <ListItem>
+                          <Grid
+                            container
+                            justify="space-between"
+                            alignItems="center"
+                          >
+                            <Grid item xs={4}>
+                              <Typography variant="subtitle1">
+                                Class:
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                              <FormControl
+                                variant="outlined"
+                                size="small"
+                                className={classes.textfieldContainer}
+                                color="secondary"
+                              >
+                                <Select
+                                  id="select-classes"
+                                  value={c.id}
+                                  onChange={(
+                                    event: React.ChangeEvent<{ value: unknown }>
+                                  ) =>
+                                    handleClassChange(
+                                      index,
+                                      Number(event.target.value)
+                                    )
+                                  }
+                                  disabled={isSuccessful}
+                                >
+                                  {user!.programmes
+                                    .find((p2) => p2.id === p.id)!
+                                    .classes.map((c2) => {
+                                      return (
+                                        <MenuItem
+                                          value={c2.id}
+                                          key={`class-${c2.id}`}
+                                        >
+                                          {c2.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                </Select>
+                              </FormControl>
+                            </Grid>
+                          </Grid>
+                        </ListItem>
+                        {!isSuccessful && (
+                          <Grid container alignItems="center">
+                            <Grid item xs={4}>
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                style={{ color: 'red', marginBottom: '0.5rem' }}
+                                onClick={() => handleDeleteActivity(index)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid
+                              item
+                              xs={8}
+                              style={{
+                                paddingLeft: '0.5rem',
+                                marginBottom: '0.75rem',
+                              }}
+                            >
+                              {hasError &&
+                                state.programmes.filter(
+                                  (x) =>
+                                    x.id === p.id &&
+                                    x.classes[0].id === p.classes[0].id
+                                ).length > 1 && (
+                                  <FormHelperText style={{ color: 'red' }}>
+                                    This activity is duplicated!
+                                  </FormHelperText>
+                                )}
+                            </Grid>
+                          </Grid>
+                        )}
+                      </Grid>
+                    );
+                  });
+                })}
               {!isSuccessful && (
                 <FormControl
                   style={{

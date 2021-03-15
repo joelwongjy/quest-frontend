@@ -16,6 +16,8 @@ import ProgrammeCard from 'components/programmeCard';
 import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
 import { getAlertCallback } from 'utils/alertUtils';
+import { sortByName } from 'utils/sortingUtils';
+import AuthService from 'services/authService';
 
 import { useStyles } from './programmes.styles';
 
@@ -126,6 +128,7 @@ const Programme: React.FunctionComponent = () => {
           const index = newProgrammes.map((p) => p.id).indexOf(p.id);
           newProgrammes.splice(index, 1);
           setState({ programmes: newProgrammes });
+          await AuthService.getUser();
         } else {
           // TODO: Handle error
         }
@@ -182,14 +185,17 @@ const Programme: React.FunctionComponent = () => {
         <div style={{ padding: '1rem' }}>
           <Grid container spacing={6}>
             {state.programmes.length > 0 &&
-              state.programmes.map((p) => {
-                const menuOptions = getMenuOptions(p);
-                return (
-                  <Grid item xs={12} sm={6} lg={4} key={p.name}>
-                    <ProgrammeCard programme={p} menuOptions={menuOptions} />
-                  </Grid>
-                );
-              })}
+              state.programmes
+                .slice()
+                .sort(sortByName)
+                .map((p) => {
+                  const menuOptions = getMenuOptions(p);
+                  return (
+                    <Grid item xs={12} sm={6} lg={4} key={p.name}>
+                      <ProgrammeCard programme={p} menuOptions={menuOptions} />
+                    </Grid>
+                  );
+                })}
           </Grid>
         </div>
       )}

@@ -21,6 +21,7 @@ import {
 } from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
 import ApiService from 'services/apiService';
+import AuthService from 'services/authService';
 
 import { useStyles } from './ClassForm.styles';
 
@@ -118,6 +119,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
           top: 0,
           behavior: 'smooth',
         });
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -144,6 +146,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
           top: 0,
           behavior: 'auto',
         });
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console

@@ -23,6 +23,7 @@ import { useError } from 'contexts/ErrorContext';
 import { programmeFormIsChanged } from 'utils/programmeUtils';
 import ApiService from 'services/apiService';
 import { PROGRAMMES } from 'constants/routes';
+import AuthService from 'services/authService';
 
 import { useStyles } from './ProgrammeForm.styles';
 
@@ -95,6 +96,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
           behavior: 'smooth',
         });
         setIsSuccessful(true);
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -121,6 +123,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
           behavior: 'auto',
         });
         setIsSuccessful(true);
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console

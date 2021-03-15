@@ -15,13 +15,17 @@ import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCa
 import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
 import QuestAlert from 'componentWrappers/questAlert';
 import { getAlertCallback } from 'utils/alertUtils';
-import { ProgrammeData } from 'interfaces/models/programmes';
+import {
+  ProgrammeData,
+  ProgrammePatchData,
+} from 'interfaces/models/programmes';
+import { sortByName } from 'utils/sortingUtils';
+import AuthService from 'services/authService';
 
-import { sampleProgramme } from '../mockData';
 import { useStyles } from './classes.styles';
 
 interface ClassesState extends RouteState {
-  programme: ProgrammeData;
+  programme: ProgrammeData | null;
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -38,7 +42,7 @@ const Classes: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      programme: sampleProgramme,
+      programme: null,
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -95,10 +99,13 @@ const Classes: React.FunctionComponent = () => {
   const breadcrumbs = [
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
-      text: state.isLoading ? 'Loading' : state.programme.name,
-      href: `${PROGRAMMES}/${state.programme.id}${CLASSES}`,
+      text:
+        state.isLoading || state.programme == null
+          ? 'Loading'
+          : state.programme.name,
+      href: `${PROGRAMMES}/${id}${CLASSES}`,
     },
-    { text: 'Classes', href: `${PROGRAMMES}/${state.programme.id}${CLASSES}` },
+    { text: 'Classes', href: `${PROGRAMMES}/${id}${CLASSES}` },
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -130,12 +137,30 @@ const Classes: React.FunctionComponent = () => {
       'Are you sure?',
       'You will not be able to recover the deleted programme.',
       async () => {
-        const response = await ApiService.patch(`${PROGRAMMES}/${id}`, {});
+        if (state.programme == null) {
+          return;
+        }
+        const patchData: ProgrammePatchData = {
+          name: state.programme.name,
+          description: state.programme.description,
+          classes: state.programme.classes
+            .filter((pc) => pc.id !== c.id)
+            .map((c) => ({
+              id: c.id,
+              name: c.name,
+              description: c.description,
+            })),
+        };
+        const response = await ApiService.patch(
+          `${PROGRAMMES}/${id}`,
+          patchData
+        );
         if (response.status === 200) {
           const newClasses = state.programme.classes.slice();
           const index = newClasses.map((c) => c.id).indexOf(c.id);
           newClasses.splice(index, 1);
           setState({ programme: { ...state.programme, classes: newClasses } });
+          await AuthService.getUser();
         } else {
           // TODO: Handle error
         }
@@ -162,6 +187,29 @@ const Classes: React.FunctionComponent = () => {
       },
     ];
   };
+
+  if (state.programme === null) {
+    return (
+      <PageContainer>
+        <PageHeader
+          breadcrumbs={breadcrumbs}
+          action={
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}/${id}${CLASSES}${CREATE}`}
+              disabled
+            >
+              Create Class
+            </Button>
+          }
+        />
+        Loading...
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer>
@@ -192,19 +240,22 @@ const Classes: React.FunctionComponent = () => {
       ) : (
         <div style={{ padding: '1rem' }}>
           <Grid container spacing={3}>
-            {state.programme.classCount > 0 &&
-              state.programme.classes.map((c) => {
-                const menuOptions = getMenuOptions(c);
-                return (
-                  <Grid item xs={12} sm={6} lg={4} key={c.name}>
-                    <ClassCard
-                      questClass={c}
-                      menuOptions={menuOptions}
-                      programmeId={state.programme.id}
-                    />
-                  </Grid>
-                );
-              })}
+            {(state.programme?.classCount ?? 0) > 0 &&
+              state.programme?.classes
+                .slice()
+                .sort(sortByName)
+                .map((c) => {
+                  const menuOptions = getMenuOptions(c);
+                  return (
+                    <Grid item xs={12} sm={6} lg={4} key={c.name}>
+                      <ClassCard
+                        questClass={c}
+                        menuOptions={menuOptions}
+                        programmeId={state.programme!.id}
+                      />
+                    </Grid>
+                  );
+                })}
           </Grid>
         </div>
       )}
