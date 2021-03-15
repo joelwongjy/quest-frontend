@@ -123,6 +123,27 @@ const Classes: React.FunctionComponent = () => {
     );
   }
 
+  const handleDelete = (c: ClassListData): void => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to recover the deleted programme.',
+      async () => {
+        const response = await ApiService.patch(`${PROGRAMMES}/${id}`, {});
+        if (response.status === 200) {
+          const newClasses = state.programme.classes.slice();
+          const index = newClasses.map((c) => c.id).indexOf(c.id);
+          newClasses.splice(index, 1);
+          setState({ programme: { ...state.programme, classes: newClasses } });
+        } else {
+          // TODO: Handle error
+        }
+      },
+      undefined
+    );
+  };
+
   const getMenuOptions = (c: ClassListData): MenuOption[] => {
     return [
       {
@@ -137,7 +158,7 @@ const Classes: React.FunctionComponent = () => {
       {
         text: 'Delete',
         // eslint-disable-next-line no-console
-        callback: () => console.log('TODO: Delete'),
+        callback: () => handleDelete(c),
       },
     ];
   };
