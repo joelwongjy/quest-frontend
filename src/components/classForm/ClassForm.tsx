@@ -91,16 +91,20 @@ const ClassForm: React.FC<ClassFormProps> = ({
     setHasError(false);
     // TODO: Add loading
     try {
-      const newClasses = programme.classes.slice().map((c) => {
-        return {
-          name: c.name,
-          description: c.description,
-        };
-      });
+      const newClasses: ProgrammePatchData['classes'] = programme.classes
+        .slice()
+        .map((c) => {
+          return {
+            id: c.id,
+            name: c.name,
+            description: c.description,
+          };
+        });
       newClasses.push({
         name: state.name!,
         description: state.description,
       });
+
       const programmePatchData: ProgrammePatchData = {
         classes: newClasses,
       };
