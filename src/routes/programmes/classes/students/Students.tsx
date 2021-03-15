@@ -70,7 +70,7 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${CLASSES}/${id}`);
+        const response = await ApiService.get(`${CLASSES}/${classId}`);
         if (!didCancel) {
           setState({
             questClass: response.data as ClassData,
