@@ -13,7 +13,6 @@ import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
 import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
 import ExitIcon from '@material-ui/icons/ExitToAppRounded';
-import SecurityIcon from '@material-ui/icons/Security';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
