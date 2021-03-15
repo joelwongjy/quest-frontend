@@ -128,7 +128,7 @@ const Quests: React.FC = () => {
   return (
     <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
-        <Grid container justify="center">
+        <Grid xs={12} sm={10} md={9} lg={8} container justify="center">
           <StudentBoard title="Quests" className={classes.quests}>
             <ul className={classes.scrollable}>
               <Grid container className={classes.main}>
@@ -161,8 +161,8 @@ const Quests: React.FC = () => {
                         <Grid
                           item
                           xs={12}
-                          sm={8}
-                          md={5}
+                          sm={9}
+                          md={6}
                           key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                           style={{
                             margin: '1rem',
