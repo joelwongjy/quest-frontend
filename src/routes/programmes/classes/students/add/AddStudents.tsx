@@ -8,19 +8,18 @@ import PageHeader from 'components/pageHeader';
 import { PROGRAMMES, CLASSES, STUDENTS } from 'constants/routes';
 import { ClassData } from 'interfaces/models/classes';
 import { PersonListData } from 'interfaces/models/persons';
-import { RouteParams, RouteState } from 'interfaces/routes/common';
+import { ClassRouteParams, RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import { sampleClass } from 'routes/programmes/mockData';
 import { getAlertCallback } from 'utils/alertUtils';
 
 interface AddStudentsState extends RouteState {
-  questClass: ClassData;
+  questClass: ClassData | null;
   students: PersonListData[];
 }
 
 const AddStudents: React.FunctionComponent = () => {
   const history = useHistory();
-  const { id } = useParams<RouteParams>();
+  const { id, classId } = useParams<ClassRouteParams>();
   const programmeId = parseInt(id, 10);
 
   const [state, setState] = useReducer(
@@ -29,7 +28,7 @@ const AddStudents: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      questClass: sampleClass,
+      questClass: null,
       students: [],
       isLoading: true,
       isError: false,
@@ -55,10 +54,10 @@ const AddStudents: React.FunctionComponent = () => {
     const fetchData = async () => {
       try {
         const responseOne = await ApiService.get(`${STUDENTS}`);
-        // TODO: To add class fetching with responseTwo
+        const responseTwo = await ApiService.get(`${CLASSES}/${classId}`);
         if (!didCancel) {
           setState({
-            // questClass: responseTwo.data as ClassData,
+            questClass: responseTwo.data as ClassData,
             students: responseOne.data.persons as PersonListData[],
             isLoading: false,
           });
@@ -87,17 +86,23 @@ const AddStudents: React.FunctionComponent = () => {
   const breadcrumbs = [
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
-      text: state.isLoading ? 'Loading' : state.questClass.programmeName,
+      text:
+        state.isLoading || state.questClass == null
+          ? 'Loading'
+          : state.questClass.programmeName,
       href: `${PROGRAMMES}/${programmeId}${CLASSES}`,
     },
     { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
     {
-      text: state.isLoading ? 'Loading' : state.questClass.name,
-      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}`,
+      text:
+        state.isLoading || state.questClass == null
+          ? 'Loading'
+          : state.questClass.name,
+      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${classId}${STUDENTS}`,
     },
     {
       text: 'Students',
-      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}`,
+      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${classId}${STUDENTS}`,
     },
     {
       text: 'Add',
@@ -109,16 +114,18 @@ const AddStudents: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <ClassStudentForm
-        questClass={state.questClass}
-        students={state.students}
-        alertCallback={alertCallback}
-        cancelCallback={() =>
-          history.push(
-            `${PROGRAMMES}/${programmeId}${CLASSES}/${state.questClass.id}${STUDENTS}`
-          )
-        }
-      />
+      {state.questClass && (
+        <ClassStudentForm
+          questClass={state.questClass}
+          students={state.students}
+          alertCallback={alertCallback}
+          cancelCallback={() =>
+            history.push(
+              `${PROGRAMMES}/${programmeId}${CLASSES}/${classId}${STUDENTS}`
+            )
+          }
+        />
+      )}
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm!}

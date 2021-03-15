@@ -6,7 +6,8 @@ export interface ProgrammePatchData {
   name?: string;
   description?: string;
   classes?: {
-    name: string;
+    id?: number;
+    name?: string;
     description?: string;
   }[];
 }
@@ -15,10 +16,6 @@ export interface ProgrammePatchData {
 export interface ProgrammePostData {
   name: string;
   description?: string;
-  classes?: {
-    name: string;
-    description?: string;
-  }[];
 }
 
 // GET /programmes
