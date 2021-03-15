@@ -36,7 +36,6 @@ import QuestionnaireTabs from 'components/questionnaireTabs';
 
 import ProgrammeClassPicker from 'components/programmeClassPicker';
 import { useUser } from 'contexts/UserContext';
-import { questionnaires } from './mockData';
 import {
   getQuestionnairesToRender,
   breadcrumbs,
@@ -56,7 +55,7 @@ const Questionnaires: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      questionnaires,
+      questionnaires: [],
       isLoading: true,
       isError: false,
       isAlertOpen: false,
