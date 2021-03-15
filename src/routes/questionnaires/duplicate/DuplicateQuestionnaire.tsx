@@ -105,7 +105,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`questionnaires/show/${id}`);
+        const response = await ApiService.get(`questionnaires/${id}`);
         const questionnaire = convertToQuestionnaireDux(
           response.data as QuestionnaireFullData,
           QuestionnaireMode.DUPLICATE
