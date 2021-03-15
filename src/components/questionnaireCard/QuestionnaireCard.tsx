@@ -86,7 +86,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
     return (
       <Typography
         className={classes.statusPublished}
-        variant="body2"
+        variant="body1"
         component="p"
       >
         {programmeName}

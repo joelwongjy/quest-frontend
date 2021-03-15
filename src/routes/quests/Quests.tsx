@@ -160,7 +160,8 @@ const Quests: React.FC = () => {
                       <Grid
                         item
                         xs={12}
-                        sm={5}
+                        sm={9}
+                        md={6}
                         key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                         style={{
                           margin: '1rem',
@@ -184,7 +185,8 @@ const Quests: React.FC = () => {
                         <Grid
                           item
                           xs={12}
-                          sm={5}
+                          sm={8}
+                          md={5}
                           key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                           style={{
                             margin: '1rem',
