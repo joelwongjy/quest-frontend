@@ -2,8 +2,6 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { QUESTS } from 'constants/routes';
-import PageHeader from 'components/pageHeader';
 import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import ApiService from 'services/apiService';
@@ -22,6 +20,10 @@ import QuestsGhost from './QuestsGhost';
 interface QuestState extends RouteState {
   quests: QuestionnaireListData[];
   attempts: AttemptListData[];
+  newQuestsWindow: QuestionnaireListData[];
+  completedQuestsWindow: QuestionnaireListData[];
+  newQuestsWindowIndex: number;
+  completedQuestsWindowIndex: number;
 }
 
 const Quests: React.FC = () => {
@@ -51,6 +53,10 @@ const Quests: React.FC = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
+      newQuestsWindow: [],
+      completedQuestsWindow: [],
+      newQuestsWindowIndex: 0,
+      completedQuestsWindowIndex: 0,
     }
   );
 
@@ -111,6 +117,14 @@ const Quests: React.FC = () => {
     user!.programmes
   );
 
+  const getNewQuestsWindow = (windowIndex: number) => {
+    return newQuests.slice(windowIndex * 4, windowIndex * 4 + 4);
+  };
+
+  const getCompletedQuestsWindow = (windowIndex: number) => {
+    return completedQuests.slice(windowIndex * 4, windowIndex * 4 + 4);
+  };
+
   return (
     <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
@@ -141,13 +155,16 @@ const Quests: React.FC = () => {
               </Grid>
               <Grid container spacing={0} justify="space-around">
                 {tabValue === 0 &&
-                  newQuests.map((q) => {
+                  getNewQuestsWindow(state.newQuestsWindowIndex).map((q) => {
                     return (
                       <Grid
                         item
-                        xs={5}
+                        xs={12}
+                        sm={5}
                         key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                        style={{ marginBottom: '2rem' }}
+                        style={{
+                          margin: '1rem',
+                        }}
                       >
                         <QuestionnaireCard
                           questionnaire={q.quest}
@@ -158,25 +175,148 @@ const Quests: React.FC = () => {
                       </Grid>
                     );
                   })}
-                {tabValue === 1 &&
-                  completedQuests.map((q) => {
-                    return (
-                      <Grid
-                        item
-                        xs={6}
-                        key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                      >
-                        <QuestionnaireCard
-                          questionnaire={q.quest}
-                          mode={CardMode.STUDENT}
-                          programmeName={q.programme}
-                          isAttempted
-                        />
-                      </Grid>
-                    );
-                  })}
+                <Grid container spacing={0} justify="space-around">
+                  {tabValue === 1 &&
+                    getCompletedQuestsWindow(
+                      state.completedQuestsWindowIndex
+                    ).map((q) => {
+                      return (
+                        <Grid
+                          item
+                          xs={12}
+                          sm={5}
+                          key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
+                          style={{
+                            margin: '1rem',
+                          }}
+                        >
+                          <QuestionnaireCard
+                            questionnaire={q.quest}
+                            mode={CardMode.STUDENT}
+                            programmeName={q.programme}
+                            isAttempted
+                          />
+                        </Grid>
+                      );
+                    })}
+                </Grid>
               </Grid>
             </Grid>
+            {tabValue === 0 && newQuests.length > 4 && (
+              <Grid container className={classes.main}>
+                <Grid container justify="center" style={{ margin: '1rem' }}>
+                  <Button
+                    onClick={() => {
+                      if (state.newQuestsWindowIndex > 0) {
+                        setState({
+                          newQuestsWindowIndex: state.newQuestsWindowIndex - 1,
+                        });
+                      }
+                    }}
+                    style={{
+                      textTransform: 'none',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      style={{
+                        color:
+                          state.newQuestsWindowIndex <= 0 ? 'gray' : undefined,
+                      }}
+                    >
+                      Previous
+                    </Typography>
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (
+                        state.newQuestsWindowIndex <
+                        newQuests.length / 4 - 1
+                      ) {
+                        setState({
+                          newQuestsWindowIndex: state.newQuestsWindowIndex + 1,
+                        });
+                      }
+                    }}
+                    style={{
+                      textTransform: 'none',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      style={{
+                        color:
+                          state.newQuestsWindowIndex >= newQuests.length / 4 - 1
+                            ? 'gray'
+                            : undefined,
+                      }}
+                    >
+                      Next
+                    </Typography>
+                  </Button>
+                </Grid>
+              </Grid>
+            )}
+            {tabValue === 1 && completedQuests.length > 4 && (
+              <Grid container className={classes.main}>
+                <Grid container justify="center" style={{ margin: '1rem' }}>
+                  <Button
+                    onClick={() => {
+                      if (state.completedQuestsWindowIndex > 0) {
+                        setState({
+                          completedQuestsWindowIndex:
+                            state.completedQuestsWindowIndex - 1,
+                        });
+                      }
+                    }}
+                    style={{
+                      textTransform: 'none',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      style={{
+                        color:
+                          state.completedQuestsWindowIndex <= 0
+                            ? 'gray'
+                            : undefined,
+                      }}
+                    >
+                      Previous
+                    </Typography>
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (
+                        state.completedQuestsWindowIndex <
+                        completedQuests.length / 4 - 1
+                      ) {
+                        setState({
+                          completedQuestsWindowIndex:
+                            state.completedQuestsWindowIndex + 1,
+                        });
+                      }
+                    }}
+                    style={{
+                      textTransform: 'none',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      style={{
+                        color:
+                          state.completedQuestsWindowIndex >=
+                          completedQuests.length / 4 - 1
+                            ? 'gray'
+                            : undefined,
+                      }}
+                    >
+                      Next
+                    </Typography>
+                  </Button>
+                </Grid>
+              </Grid>
+            )}
           </StudentBoard>
           <div className={classes.mascotContainer}>
             <div className={classes.mascotInnerContainer}>
