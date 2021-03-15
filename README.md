@@ -229,7 +229,7 @@ import { useUser } from 'contexts/UserContext';
 ```tsx
 // App.tsx
 const App = () => {
-  const user = useUser();
+  const { user } = useUser();
 
   return user ? <AuthenticatedApp /> : <UnauthenticatedApp />;
 };

@@ -48,7 +48,7 @@ import { useStyles } from './questionnaires.styles';
 import QuestionnairesGhost from './QuestionnairesGhost';
 
 const Questionnaires: React.FunctionComponent = () => {
-  const user = useUser()!;
+  const { user } = useUser();
   const [tabValue, setTabValue] = useState<number>(0);
   const [state, setState] = useReducer(
     (s: QuestionnairesState, a: Partial<QuestionnairesState>) => ({

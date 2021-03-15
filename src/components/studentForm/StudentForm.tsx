@@ -61,7 +61,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 }) => {
   const classes = useStyles();
   const { hasError, setHasError } = useError();
-  const user = useUser();
+  const { user } = useUser();
 
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 

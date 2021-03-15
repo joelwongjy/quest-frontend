@@ -26,7 +26,7 @@ interface QuestState extends RouteState {
 const Quests: React.FC = () => {
   const breadcrumbs = [{ text: 'Quests', href: QUESTS }];
   const classes = useStyles();
-  const user = useUser();
+  const { user } = useUser();
   const [tabValue, setTabValue] = useState<number>(0);
   const tabs = ['New', 'Completed'];
   const [state, setState] = useReducer(

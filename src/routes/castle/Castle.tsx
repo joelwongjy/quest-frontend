@@ -7,7 +7,8 @@ import ApiService from 'services/apiService';
 import { useStyles } from './castle.styles';
 
 const Castle: React.FunctionComponent = () => {
-  const { name } = useUser()!;
+  const { user } = useUser();
+  const { name } = user!;
   const classes = useStyles();
 
   return (

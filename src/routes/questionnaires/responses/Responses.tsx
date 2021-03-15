@@ -55,7 +55,7 @@ const Responses: React.FunctionComponent = () => {
   })!.params;
 
   const classes = useStyles();
-  const user = useUser();
+  const { user } = useUser();
 
   const [state, setState] = useReducer(
     (s: ResponsesState, a: Partial<ResponsesState>) => ({

@@ -31,7 +31,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({
   listClassName,
   buttonClassName,
 }) => {
-  const user = useUser();
+  const { user } = useUser();
   const { title, programmes, classes } = questionnaire;
   return (
     <PageContainer>

@@ -39,7 +39,7 @@ interface StudentsState extends RouteState {
 }
 
 const Students: React.FunctionComponent = () => {
-  const user = useUser();
+  const { user } = useUser();
   const { id, classId } = useParams<ClassRouteParams>();
   const [state, setState] = useReducer(
     (s: StudentsState, a: Partial<StudentsState>) => ({

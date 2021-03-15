@@ -62,7 +62,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
-  const user = useUser();
+  const { user } = useUser();
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();
