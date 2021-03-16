@@ -161,7 +161,6 @@ const Quests: React.FC = () => {
                         <Grid
                           item
                           xs={12}
-                          sm={9}
                           md={6}
                           key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                           style={{
@@ -187,7 +186,6 @@ const Quests: React.FC = () => {
                           <Grid
                             item
                             xs={12}
-                            sm={9}
                             md={6}
                             key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
                             style={{
