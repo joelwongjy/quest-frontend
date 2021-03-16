@@ -7,9 +7,9 @@ import {
   PROGRAMMES,
   CLASSES,
   ADD,
-  HOME,
   STUDENTS,
   PERSONS,
+  CASTLE,
 } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
@@ -174,7 +174,7 @@ const Students: React.FunctionComponent = () => {
   };
 
   if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
-    return <Redirect to={HOME} />;
+    return <Redirect to={CASTLE} />;
   }
 
   return (
