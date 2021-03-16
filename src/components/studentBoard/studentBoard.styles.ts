@@ -39,6 +39,10 @@ export const useStyles = makeStyles(() =>
       left: '1rem',
       zIndex: 0,
     },
+    accessoryContainer: {
+      width: 'calc(100% - 5rem)',
+      zIndex: 1,
+    },
     innerContainer: {
       backgroundColor: '#d3b488',
       height: '100%',

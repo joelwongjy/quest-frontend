@@ -6,11 +6,13 @@ import { useStyles } from './studentBoard.styles';
 
 interface StudentBoardProps extends QuestComponentProps {
   title: string;
+  accessory?: React.ReactNode;
 }
 
 const StudentBoard: React.FC<StudentBoardProps> = ({
   title,
   children,
+  accessory = null,
   className = '',
 }) => {
   const classes = useStyles();
@@ -23,7 +25,7 @@ const StudentBoard: React.FC<StudentBoardProps> = ({
       </div>
 
       <div className={classes.innerBorder}>&nbsp;</div>
-
+      <div className={classes.accessoryContainer}>{accessory}</div>
       <div className={classes.innerContainer}>{children}</div>
     </div>
   );
