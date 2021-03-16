@@ -22,10 +22,17 @@ import { AnswerPostData } from 'interfaces/models/answers';
 import { isQuestComplete, isQuestionComplete } from 'utils/questUtils';
 import { useError } from 'contexts/ErrorContext';
 import StudentBoard from 'components/studentBoard';
+import QuestAlert from 'componentWrappers/questAlert';
+import { getAlertCallback } from 'utils/alertUtils';
+import medalImage from 'assets/images/student/medal.png';
 
 import ProgressBar from './ProgressBar';
 import AttemptGhost from './AttemptGhost';
 import { useStyles } from './attempt.styles';
+
+interface AttemptState extends RouteState {
+  isComplete: boolean;
+}
 
 const Attempt: React.FC = () => {
   const { id, windowId } = useParams<WindowRouteParams>();
@@ -38,11 +45,12 @@ const Attempt: React.FC = () => {
   const { quest, attempt, index } = useSelector(selectAttempt);
 
   const [state, setState] = useReducer(
-    (s: RouteState, a: Partial<RouteState>) => ({
+    (s: AttemptState, a: Partial<AttemptState>) => ({
       ...s,
       ...a,
     }),
     {
+      isComplete: false,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -88,6 +96,8 @@ const Attempt: React.FC = () => {
     };
   }, [windowId, dispatch]);
 
+  const alertCallback = getAlertCallback(setState);
+
   const clearAttemptPromise = (
     myDispatch: Dispatch<{ payload: undefined; type: string }>
   ) =>
@@ -108,11 +118,22 @@ const Attempt: React.FC = () => {
         attempt
       );
       if (response.status === 200) {
-        clearAttemptPromise(dispatch).then(() => history.push(QUESTS));
+        setState({ isComplete: true });
+      } else {
+        alertCallback(
+          true,
+          false,
+          'Uh oh!',
+          'Something went wrong! Please refresh and try again!'
+        );
       }
     } catch (error) {
       setState({ isError: true });
     }
+  };
+
+  const handleBackToQuests = async () => {
+    clearAttemptPromise(dispatch).then(() => history.push(QUESTS));
   };
 
   if (state.isLoading) {
@@ -164,7 +185,7 @@ const Attempt: React.FC = () => {
       <div className={classes.root}>
         <Grid xs={12} sm={10} md={9} lg={8} item justify="center">
           <StudentBoard
-            title="Quests"
+            title={quest?.title ?? 'Loading'}
             className={classes.board}
             accessory={
               <ProgressBar current={index + 1} total={questions.length} />
@@ -172,32 +193,73 @@ const Attempt: React.FC = () => {
           >
             <div className={classes.body}>
               <div className={classes.question}>
-                <AttemptQuestionCard
-                  question={questions[index]}
-                  answer={
-                    attempt?.answers.find(
-                      (a) => a.questionOrderId === questions[index].qnOrderId
-                    ) ?? undefined
-                  }
-                  answerCallback={answerCallback}
-                />
+                {state.isComplete ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div style={{ fontSize: '2rem' }}>Congratulations!</div>
+                    <img
+                      src={medalImage}
+                      alt="Medal"
+                      style={{ height: '15rem', margin: '1rem 0' }}
+                    />
+                    <div style={{ fontSize: '2rem' }}>
+                      You have completed {quest?.title ?? 'the quest'}!
+                    </div>
+                  </div>
+                ) : (
+                  <AttemptQuestionCard
+                    question={questions[index]}
+                    answer={
+                      attempt?.answers.find(
+                        (a) => a.questionOrderId === questions[index].qnOrderId
+                      ) ?? undefined
+                    }
+                    answerCallback={answerCallback}
+                  />
+                )}
               </div>
-              <Grid container justify="space-between">
-                <Button onClick={handlePrevious} className={classes.button}>
-                  <Typography variant="h6">
-                    {index > 0 ? 'Previous' : 'Back to Quests'}
-                  </Typography>
-                </Button>
-                <Button onClick={handleNext} className={classes.button}>
-                  <Typography variant="h6">
-                    {index < questions.length - 1 ? 'Next' : 'Finish Quest'}
-                  </Typography>
-                </Button>
-              </Grid>
+              {state.isComplete ? (
+                <Grid container justify="flex-end">
+                  <Button
+                    onClick={handleBackToQuests}
+                    className={classes.button}
+                  >
+                    <Typography variant="h6">View Other Quests</Typography>
+                  </Button>
+                </Grid>
+              ) : (
+                <Grid container justify="space-between">
+                  <Button onClick={handlePrevious} className={classes.button}>
+                    <Typography variant="h6">
+                      {index > 0 ? 'Previous' : 'Back to Quests'}
+                    </Typography>
+                  </Button>
+                  <Button onClick={handleNext} className={classes.button}>
+                    <Typography variant="h6">
+                      {index < questions.length - 1 ? 'Next' : 'Finish Quest'}
+                    </Typography>
+                  </Button>
+                </Grid>
+              )}
             </div>
           </StudentBoard>
         </Grid>
       </div>
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
