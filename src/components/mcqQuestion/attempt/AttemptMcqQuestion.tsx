@@ -3,6 +3,8 @@ import { FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData } from 'interfaces/models/questions';
+import { useError } from 'contexts/ErrorContext';
+
 import { useStyles } from './attemptMcqQuestion.styles';
 
 interface AttemptMcqQuestionProps {
@@ -17,6 +19,9 @@ const AttemptMcqQuestion: React.FC<AttemptMcqQuestionProps> = ({
   answer,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
+
+  const showWarning = hasError && answer?.optionId === undefined;
 
   return (
     <div className={classes.top}>
@@ -45,6 +50,9 @@ const AttemptMcqQuestion: React.FC<AttemptMcqQuestionProps> = ({
           </div>
         ))}
       </RadioGroup>
+      {showWarning && (
+        <div className={classes.warning}>Please select an option above!</div>
+      )}
     </div>
   );
 };

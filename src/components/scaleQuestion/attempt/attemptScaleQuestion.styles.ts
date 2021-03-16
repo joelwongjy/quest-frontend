@@ -61,5 +61,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    warning: {
+      color: '#c74c35',
+      marginTop: '0.5rem',
+    },
   })
 );

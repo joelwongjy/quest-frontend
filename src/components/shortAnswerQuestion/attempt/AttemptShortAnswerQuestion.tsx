@@ -3,6 +3,8 @@ import React from 'react';
 import QuestTextField from 'componentWrappers/questTextField';
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData } from 'interfaces/models/questions';
+import { useError } from 'contexts/ErrorContext';
+
 import { useStyles } from './attemptShortAnswerQuestion.styles';
 
 interface AttemptShortAnswerQuestionProps {
@@ -17,6 +19,11 @@ const AttemptShortAnswerQuestion: React.FC<AttemptShortAnswerQuestionProps> = ({
   answer,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
+
+  const showWarning =
+    hasError &&
+    (answer?.textResponse === undefined || answer.textResponse.length === 0);
 
   return (
     <div className={classes.top}>
@@ -35,6 +42,9 @@ const AttemptShortAnswerQuestion: React.FC<AttemptShortAnswerQuestionProps> = ({
         }}
         className={classes.textfield}
       />
+      {showWarning && (
+        <div className={classes.warning}>Please fill in the textbox above!</div>
+      )}
     </div>
   );
 };

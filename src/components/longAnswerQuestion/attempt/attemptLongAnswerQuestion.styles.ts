@@ -34,5 +34,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     questionText: {
       fontSize: '2rem',
     },
+    warning: {
+      color: '#c74c35',
+      marginTop: '0.5rem',
+    },
   })
 );

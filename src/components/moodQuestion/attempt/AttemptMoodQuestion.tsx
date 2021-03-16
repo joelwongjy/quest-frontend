@@ -8,6 +8,7 @@ import sadImage from 'assets/images/student/sad.png';
 import neutralImage from 'assets/images/student/neutral.png';
 import happyImage from 'assets/images/student/happy.png';
 import veryHappyImage from 'assets/images/student/very-happy.png';
+import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './attemptMoodQuestion.styles';
 
@@ -23,6 +24,9 @@ const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
   answer,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
+
+  const showWarning = hasError && answer?.optionId === undefined;
 
   const optionToIdMap = question.options.reduce((obj, o) => {
     // eslint-disable-next-line no-param-reassign
@@ -73,6 +77,11 @@ const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
           );
         })}
       </div>
+      {showWarning && (
+        <div className={classes.warning}>
+          Please select how you&apos;re feeling above!
+        </div>
+      )}
     </div>
   );
 };

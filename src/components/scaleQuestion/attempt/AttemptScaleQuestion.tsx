@@ -4,6 +4,7 @@ import QuestSlider from 'componentWrappers/questSlider';
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData, Scale } from 'interfaces/models/questions';
 import sliderThumbImage from 'assets/images/student/slider-circle.png';
+import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './attemptScaleQuestion.styles';
 
@@ -29,6 +30,7 @@ const AttemptScaleQuestion: React.FC<AttemptScaleQuestionProps> = ({
   }, []);
 
   const classes = useStyles();
+  const { hasError } = useError();
 
   const scaleToNumberMap: { [key: string]: number } = {
     [Scale.ONE]: 1,
@@ -79,6 +81,8 @@ const AttemptScaleQuestion: React.FC<AttemptScaleQuestionProps> = ({
     );
   };
 
+  const showWarning = hasError && answer?.optionId === undefined;
+
   return (
     <div className={classes.top}>
       <div className={classes.textfieldContainer}>
@@ -110,6 +114,11 @@ const AttemptScaleQuestion: React.FC<AttemptScaleQuestionProps> = ({
           <div>I love it</div>
         </div>
       </div>
+      {showWarning && (
+        <div className={classes.warning}>
+          Please use the slider to select an option above!
+        </div>
+      )}
     </div>
   );
 };

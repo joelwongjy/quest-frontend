@@ -44,5 +44,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: '#323351',
       },
     },
+    warning: {
+      color: '#c74c35',
+      marginTop: '0.5rem',
+    },
   })
 );
