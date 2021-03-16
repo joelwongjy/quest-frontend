@@ -177,32 +177,57 @@ const Quests: React.FC = () => {
                         </Grid>
                       );
                     })}
-                  <Grid container spacing={0} justify="flex-start">
-                    {tabValue === 1 &&
-                      getCompletedQuestsWindow(
-                        state.completedQuestsWindowIndex
-                      ).map((q) => {
-                        return (
-                          <Grid
-                            item
-                            xs={12}
-                            md={6}
-                            key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                            style={{
-                              margin: '0',
-                              padding: '1rem',
-                            }}
-                          >
-                            <QuestionnaireCard
-                              questionnaire={q.quest}
-                              mode={CardMode.STUDENT}
-                              programmeName={q.programme}
-                              isAttempted
-                            />
-                          </Grid>
-                        );
-                      })}
-                  </Grid>
+                  {tabValue === 0 && newQuests.length === 0 && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      You have completed all quests! Amazing!
+                    </div>
+                  )}
+                  {tabValue === 1 &&
+                    getCompletedQuestsWindow(
+                      state.completedQuestsWindowIndex
+                    ).map((q) => {
+                      return (
+                        <Grid
+                          item
+                          xs={12}
+                          md={6}
+                          key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
+                          style={{
+                            margin: '0',
+                            padding: '1rem',
+                          }}
+                        >
+                          <QuestionnaireCard
+                            questionnaire={q.quest}
+                            mode={CardMode.STUDENT}
+                            programmeName={q.programme}
+                            isAttempted
+                            attemptId={
+                              state.attempts.find(
+                                (a) => a.windowId === q.quest.windowId
+                              )?.id ?? -1
+                            }
+                          />
+                        </Grid>
+                      );
+                    })}
+                  {tabValue === 1 && completedQuests.length === 0 && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      You have no completed quests. Starting doing them now!
+                    </div>
+                  )}
                 </Grid>
               </Grid>
               {tabValue === 0 && newQuests.length > 4 && (
