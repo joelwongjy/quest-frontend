@@ -173,10 +173,6 @@ const Students: React.FunctionComponent = () => {
     );
   };
 
-  if (!user || user.highestClassRole === ClassUserRole.STUDENT) {
-    return <Redirect to={CASTLE} />;
-  }
-
   return (
     <PageContainer>
       <PageHeader
