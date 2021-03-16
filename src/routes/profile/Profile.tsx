@@ -325,7 +325,7 @@ const Profile: React.FC = () => {
               <Grid container style={{ alignItems: 'center' }}>
                 <Grid item xs={6}>
                   <QuestCard className={classes.card}>
-                    <Grid container justify="center">
+                    <Grid container justify="center" alignItems="center">
                       <img
                         src={
                           user!.gender === Gender.MALE
