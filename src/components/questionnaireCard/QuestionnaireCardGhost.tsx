@@ -36,7 +36,7 @@ const QuestionnaireCardGhost: React.FC<QuestionnaireCardGhostProps> = ({
         <CardHeader
           title={
             <Grid container justify="center">
-              <Typography variant="h4" className={classes.studentTitle}>
+              <Typography variant="h5" className={classes.studentTitle}>
                 <Skeleton width={120} />
               </Typography>
             </Grid>
