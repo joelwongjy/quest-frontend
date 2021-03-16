@@ -27,7 +27,7 @@ const Profile: React.FC = () => {
     <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
         <Grid xs={12} sm={10} md={9} lg={8} container justify="center">
-          <StudentBoard title="Quests" className={classes.profile}>
+          <StudentBoard title="Profile" className={classes.profile}>
             <ul className={classes.scrollable}>
               <Grid container style={{ alignItems: 'center' }}>
                 <Grid item xs={6}>
