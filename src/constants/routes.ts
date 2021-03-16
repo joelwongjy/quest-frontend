@@ -15,6 +15,7 @@ export const PERSONS = '/persons';
 // Authed student routes
 export const CASTLE = '/castle';
 export const QUESTS = '/quests';
+export const PROFILE = '/profile';
 
 // Sub-routes
 export const CREATE = '/create';
