@@ -1,10 +1,10 @@
 import React, { Dispatch, useEffect, useReducer } from 'react';
-import { Redirect, useHistory, useRouteMatch } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Grid, Typography } from '@material-ui/core';
 
 import { QUESTS } from 'constants/routes';
-import { RouteState } from 'interfaces/routes/common';
+import { RouteState, WindowRouteParams } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import PageContainer from 'components/pageContainer';
 import { RootState } from 'reducers/rootReducer';
@@ -27,15 +27,8 @@ import ProgressBar from './ProgressBar';
 import AttemptGhost from './AttemptGhost';
 import { useStyles } from './attempt.styles';
 
-interface RouteParams {
-  id: string;
-  windowId: string;
-}
-
 const Attempt: React.FC = () => {
-  const { id, windowId } = useRouteMatch<RouteParams>({
-    path: `${QUESTS}/:id/window/:windowId`,
-  })!.params;
+  const { id, windowId } = useParams<WindowRouteParams>();
   const classes = useStyles();
   const { setHasError } = useError();
   const history = useHistory();
