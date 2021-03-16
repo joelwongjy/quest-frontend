@@ -12,6 +12,8 @@ import logo from 'assets/images/logo.png';
 import profile from 'assets/images/profile.png';
 import { QuestComponentProps } from 'interfaces/components/common';
 
+import { PROFILE } from 'constants/routes';
+import { useHistory } from 'react-router-dom';
 import { useStyles } from './questAppBar.styles';
 
 const LogoContainer: React.FunctionComponent = () => {
@@ -43,6 +45,7 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
 }) => {
   const menuId = 'primary-search-account-menu';
   const classes = useStyles();
+  const history = useHistory();
   const profileMenuRef = useRef<HTMLButtonElement | null>(null);
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -77,6 +80,9 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
             aria-label="User Profile Picture"
             aria-controls={menuId}
             aria-haspopup="true"
+            onClick={() => {
+              history.push(PROFILE);
+            }}
           >
             {/* <AccountsIcon htmlColor={theme!.custom.icon.iconColor} /> */}
             <img src={profile} alt="Profile" className={classes.profile} />
