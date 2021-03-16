@@ -1,16 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button } from '@material-ui/core';
-import { Link, Redirect, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import {
-  PROGRAMMES,
-  CLASSES,
-  ADD,
-  STUDENTS,
-  PERSONS,
-  CASTLE,
-} from 'constants/routes';
+import { PROGRAMMES, CLASSES, ADD, STUDENTS, PERSONS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { ClassRouteParams, RouteState } from 'interfaces/routes/common';
@@ -20,8 +13,6 @@ import { PersonData, PersonListData } from 'interfaces/models/persons';
 import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
 import StudentList from 'components/studentList';
-import { useUser } from 'contexts/UserContext';
-import { ClassUserRole } from 'interfaces/models/classUsers';
 import { getAlertCallback } from 'utils/alertUtils';
 
 import { useStyles } from './students.styles';
@@ -37,7 +28,6 @@ interface StudentsState extends RouteState {
 }
 
 const Students: React.FunctionComponent = () => {
-  const { user } = useUser();
   const { id, classId } = useParams<ClassRouteParams>();
   const [state, setState] = useReducer(
     (s: StudentsState, a: Partial<StudentsState>) => ({
