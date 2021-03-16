@@ -1,6 +1,4 @@
 import React from 'react';
-import PageContainer from 'components/pageContainer';
-
 import {
   Grid,
   List,
@@ -8,21 +6,24 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core';
+import { differenceInCalendarYears } from 'date-fns';
+
+import PageContainer from 'components/pageContainer';
 import StudentBoard from 'components/studentBoard';
 import QuestCard from 'componentWrappers/questCard';
 import { useUser } from 'contexts/UserContext';
-import { differenceInCalendarYears } from 'date-fns';
-import { useStyles } from './profile.styles';
+import { Gender } from 'interfaces/models/persons';
 
-import maleKnight from '../../assets/images/student/male-knight.png';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import femaleKnight from '../../assets/images/student/female-knight.png';
-import programmeBar from '../../assets/images/student/programme-bar.png';
-import sword from '../../assets/images/student/sword-black.png';
+import maleKnight from 'assets/images/student/male-knight.png';
+import femaleKnight from 'assets/images/student/female-knight.png';
+import programmeBar from 'assets/images/student/programme-bar.png';
+import sword from 'assets/images/student/sword-black.png';
+import { useStyles } from './profile.styles';
 
 const Profile: React.FC = () => {
   const { user } = useUser();
   const classes = useStyles();
+
   return (
     <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
@@ -34,7 +35,11 @@ const Profile: React.FC = () => {
                   <QuestCard className={classes.card}>
                     <Grid container justify="center">
                       <img
-                        src={maleKnight}
+                        src={
+                          user!.gender === Gender.MALE
+                            ? maleKnight
+                            : femaleKnight
+                        }
                         alt="Knight"
                         className={classes.avatar}
                       />
