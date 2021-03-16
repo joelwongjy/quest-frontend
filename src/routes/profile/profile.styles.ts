@@ -72,6 +72,25 @@ export const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       overflow: 'scroll',
     },
+    list: {
+      marginTop: '0.5rem',
+      marginBottom: '0.5rem',
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
+    },
+    header: {
+      backgroundColor: '#044682',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '1rem',
+    },
+    textfield: {
+      flex: 1,
+    },
+    textfieldContainer: {
+      display: 'flex',
+    },
     mascotContainer: {
       position: 'absolute',
       zIndex: 2,
