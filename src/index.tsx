@@ -12,19 +12,19 @@ import App from './app';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <AppProviders>
+  <AppProviders>
+    <React.StrictMode>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
           <CssBaseline>
             <BrowserRouter>
               <App />
             </BrowserRouter>
           </CssBaseline>
-        </AppProviders>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+        </PersistGate>
+      </Provider>
+    </React.StrictMode>
+  </AppProviders>,
   document.getElementById('root')
 );
 
