@@ -41,7 +41,6 @@ const QuestsGhost: React.FC = () => {
                   <Grid
                     item
                     xs={12}
-                    sm={9}
                     md={6}
                     style={{
                       margin: '0',
@@ -56,7 +55,6 @@ const QuestsGhost: React.FC = () => {
                   <Grid
                     item
                     xs={12}
-                    sm={9}
                     md={6}
                     style={{
                       margin: '0',
