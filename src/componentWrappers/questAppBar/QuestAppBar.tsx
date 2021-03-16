@@ -87,7 +87,6 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
                 history.push(PROFILE);
               }}
             >
-              {/* <AccountsIcon htmlColor={theme!.custom.icon.iconColor} /> */}
               <img src={profile} alt="Profile" className={classes.profile} />
             </Button>
           </div>
