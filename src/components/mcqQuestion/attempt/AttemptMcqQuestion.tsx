@@ -11,12 +11,14 @@ interface AttemptMcqQuestionProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted: boolean;
 }
 
 const AttemptMcqQuestion: React.FC<AttemptMcqQuestionProps> = ({
   question,
   answerCallback,
   answer,
+  isAttempted,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -40,6 +42,7 @@ const AttemptMcqQuestion: React.FC<AttemptMcqQuestionProps> = ({
               style={{ width: '100%' }}
               control={<Radio className={classes.radio} size="medium" />}
               label={option.optionText}
+              disabled={isAttempted}
               onClick={() => {
                 answerCallback({
                   questionOrderId: question.qnOrderId,

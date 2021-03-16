@@ -10,12 +10,14 @@ interface AttemptLongAnswerQuestionProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted: boolean;
 }
 
 const AttemptLongAnswerQuestion: React.FC<AttemptLongAnswerQuestionProps> = ({
   question,
   answerCallback,
   answer,
+  isAttempted,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -41,6 +43,7 @@ const AttemptLongAnswerQuestion: React.FC<AttemptLongAnswerQuestionProps> = ({
           });
         }}
         className={classes.textfield}
+        disabled={isAttempted}
       />
       {showWarning && (
         <div className={classes.warning}>Please fill in the textbox above!</div>

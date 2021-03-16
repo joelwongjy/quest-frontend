@@ -11,12 +11,14 @@ interface AttemptShortAnswerQuestionProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted: boolean;
 }
 
 const AttemptShortAnswerQuestion: React.FC<AttemptShortAnswerQuestionProps> = ({
   question,
   answerCallback,
   answer,
+  isAttempted,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -41,6 +43,7 @@ const AttemptShortAnswerQuestion: React.FC<AttemptShortAnswerQuestionProps> = ({
           });
         }}
         className={classes.textfield}
+        disabled={isAttempted}
       />
       {showWarning && (
         <div className={classes.warning}>Please fill in the textbox above!</div>

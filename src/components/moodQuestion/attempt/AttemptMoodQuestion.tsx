@@ -16,12 +16,14 @@ interface AttemptMoodQuestionProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted: boolean;
 }
 
 const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
   question,
   answerCallback,
   answer,
+  isAttempted,
 }) => {
   const classes = useStyles();
   const { hasError } = useError();
@@ -45,10 +47,12 @@ const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
   };
 
   const handleClick = (mood: Mood) => {
-    answerCallback({
-      questionOrderId: question.qnOrderId,
-      optionId: optionToIdMap[mood],
-    });
+    if (!isAttempted) {
+      answerCallback({
+        questionOrderId: question.qnOrderId,
+        optionId: optionToIdMap[mood],
+      });
+    }
   };
 
   return (

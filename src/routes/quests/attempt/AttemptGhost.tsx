@@ -15,7 +15,7 @@ const AttemptGhost: React.FC = () => {
   return (
     <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
-        <Grid xs={12} sm={10} md={9} lg={8} item justify="center">
+        <Grid xs={12} sm={10} md={9} lg={8} item>
           <StudentBoard
             title="Quests"
             className={classes.board}

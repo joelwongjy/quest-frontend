@@ -12,12 +12,14 @@ interface AttemptScaleQuestionProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted: boolean;
 }
 
 const AttemptScaleQuestion: React.FC<AttemptScaleQuestionProps> = ({
   question,
   answerCallback,
   answer,
+  isAttempted,
 }) => {
   useEffect(() => {
     if (!answer || !answer?.optionId) {
@@ -105,6 +107,7 @@ const AttemptScaleQuestion: React.FC<AttemptScaleQuestionProps> = ({
           onChange={handleSliderChange}
           ThumbComponent={thumbComponent}
           track={false}
+          disabled={isAttempted}
         />
         <div className={classes.valueContainer}>
           <div>I hate it</div>

@@ -14,7 +14,8 @@ import {
   PROFILE,
 } from 'constants/routes';
 import Quests from 'routes/quests';
-import QuestAttempt from 'routes/quests/attempt';
+import Attempt from 'routes/quests/attempt';
+import Attempted from 'routes/quests/attempt/Attempted';
 import Castle from 'routes/castle';
 import Profile from 'routes/profile';
 import { useStyles } from './app.styles';
@@ -34,7 +35,10 @@ const StudentApp: React.FunctionComponent = () => {
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />
           <Route path={`${QUESTS}/:id/window/:windowId`}>
-            <QuestAttempt />
+            <Attempt />
+          </Route>
+          <Route path={`${QUESTS}/attempt/:id`}>
+            <Attempted />
           </Route>
           <Route path="/" render={redirectToCastle} />
         </Switch>

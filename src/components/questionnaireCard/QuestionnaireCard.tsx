@@ -33,6 +33,7 @@ interface QuestionnaireCardProps extends QuestComponentProps {
   mode?: CardMode;
   programmeName?: string;
   isAttempted?: boolean;
+  attemptId?: number;
   className?: string;
 }
 
@@ -42,6 +43,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
   mode = CardMode.STAFF,
   programmeName = '',
   isAttempted = false,
+  attemptId = -1,
   className = '',
 }) => {
   const classes = useStyles();
@@ -154,7 +156,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             <Button
               size="small"
               component={Link}
-              to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
+              to={`${QUESTS}/attempt/${attemptId}`}
             >
               View Attempt
             </Button>
