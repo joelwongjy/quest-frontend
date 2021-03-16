@@ -23,17 +23,17 @@ const AttemptMcqQuestion: React.FC<AttemptMcqQuestionProps> = ({
       <div className={classes.textfieldContainer}>
         <div className={classes.questionText}>{question.questionText}</div>
       </div>
-      <RadioGroup>
+      <RadioGroup className={classes.options}>
         {question.options.map((option) => (
           <div
+            className={classes.option}
             key={`option-${option.optionId}-${question.qnOrderId}`}
-            style={{ width: '100%', display: 'flex', alignItems: 'center' }}
           >
             <FormControlLabel
               checked={answer && option.optionId === answer?.optionId}
               value={option.optionText}
               style={{ width: '100%' }}
-              control={<Radio />}
+              control={<Radio className={classes.radio} size="medium" />}
               label={option.optionText}
               onClick={() => {
                 answerCallback({
