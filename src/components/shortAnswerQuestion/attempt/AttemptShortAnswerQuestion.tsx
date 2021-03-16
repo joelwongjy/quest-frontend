@@ -25,7 +25,7 @@ const AttemptShortAnswerQuestion: React.FC<AttemptShortAnswerQuestionProps> = ({
       </div>
       <QuestTextField
         placeholder="Short Answer"
-        label="Answer"
+        label=""
         value={answer?.textResponse ?? ''}
         onChange={(event) => {
           answerCallback({
@@ -33,6 +33,7 @@ const AttemptShortAnswerQuestion: React.FC<AttemptShortAnswerQuestionProps> = ({
             textResponse: event.target.value,
           });
         }}
+        className={classes.textfield}
       />
     </div>
   );
