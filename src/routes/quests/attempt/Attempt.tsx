@@ -24,6 +24,7 @@ import { useError } from 'contexts/ErrorContext';
 import StudentBoard from 'components/studentBoard';
 
 import ProgressBar from './ProgressBar';
+import AttemptGhost from './AttemptGhost';
 import { useStyles } from './attempt.styles';
 
 interface RouteParams {
@@ -71,10 +72,6 @@ const Attempt: React.FC = () => {
     let didCancel = false;
 
     const fetchData = async () => {
-      if (quest && quest.windowId === Number(windowId)) {
-        setState({ isLoading: false });
-        return;
-      }
       try {
         const response = await ApiService.get(
           `questionnaires/${id}/window/${windowId}`
@@ -96,7 +93,7 @@ const Attempt: React.FC = () => {
     return () => {
       didCancel = true;
     };
-  }, [quest, windowId, dispatch]);
+  }, [windowId, dispatch]);
 
   const clearAttemptPromise = (
     myDispatch: Dispatch<{ payload: undefined; type: string }>
@@ -126,8 +123,7 @@ const Attempt: React.FC = () => {
   };
 
   if (state.isLoading) {
-    // return <AttemptGhost />
-    return <></>;
+    return <AttemptGhost />;
   }
 
   if (state.isError) {
@@ -173,7 +169,7 @@ const Attempt: React.FC = () => {
   return (
     <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
-        <Grid xs={12} sm={10} md={9} lg={8} container justify="center">
+        <Grid xs={12} sm={10} md={9} lg={8} item justify="center">
           <StudentBoard
             title="Quests"
             className={classes.board}

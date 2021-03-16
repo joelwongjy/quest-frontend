@@ -26,10 +26,15 @@ const attempt = createSlice({
       action: PayloadAction<QuestionnaireOneWindowData>
     ): void => {
       state.quest = { ...action.payload };
-      state.attempt = {
-        qnnaireWindowId: action.payload.windowId,
-        answers: [],
-      };
+      if (
+        state.attempt === null ||
+        action.payload.windowId !== state.attempt.qnnaireWindowId
+      ) {
+        state.attempt = {
+          qnnaireWindowId: action.payload.windowId,
+          answers: [],
+        };
+      }
       state.index = 0;
     },
     updateAnswer: (state, action: PayloadAction<AnswerPostData>): void => {
