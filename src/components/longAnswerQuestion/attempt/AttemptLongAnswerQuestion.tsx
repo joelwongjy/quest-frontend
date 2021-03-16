@@ -25,7 +25,7 @@ const AttemptLongAnswerQuestion: React.FC<AttemptLongAnswerQuestionProps> = ({
       </div>
       <QuestTextField
         placeholder="Long Answer"
-        label="Answer"
+        label=""
         value={answer?.textResponse ?? ''}
         multiline
         rows={3}
@@ -35,6 +35,7 @@ const AttemptLongAnswerQuestion: React.FC<AttemptLongAnswerQuestionProps> = ({
             textResponse: event.target.value,
           });
         }}
+        className={classes.textfield}
       />
     </div>
   );
