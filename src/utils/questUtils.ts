@@ -82,7 +82,10 @@ export const getCompletedQuests = (
   return pairQuestsWithProgrammes(completedQuests, programmes);
 };
 
-const isQuestionComplete = (q: QuestionData, answers: AnswerPostData[]) => {
+export const isQuestionComplete = (
+  q: QuestionData,
+  answers: AnswerPostData[]
+): boolean => {
   const answer = answers.find((a) => a.questionOrderId === q.qnOrderId);
   if (!answer) {
     return false;
@@ -91,9 +94,9 @@ const isQuestionComplete = (q: QuestionData, answers: AnswerPostData[]) => {
     q.questionType === QuestionType.LONG_ANSWER ||
     q.questionType === QuestionType.SHORT_ANSWER
   ) {
-    return answer.textResponse && answer.textResponse.length > 0;
+    return answer.textResponse !== undefined && answer.textResponse.length > 0;
   }
-  return answer.optionId && typeof answer.optionId === 'number';
+  return answer.optionId !== undefined && typeof answer.optionId === 'number';
 };
 
 export const isQuestComplete = (
