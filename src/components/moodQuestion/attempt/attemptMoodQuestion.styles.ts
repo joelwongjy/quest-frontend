@@ -2,10 +2,11 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    card: {},
     top: {
       display: 'flex',
       flexDirection: 'column',
+      width: '100%',
+      alignItems: 'center',
     },
     textfield: {
       flex: 1,
@@ -15,11 +16,26 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     questionText: {
-      fontSize: '1.1rem',
+      fontSize: '2rem',
     },
     emojiContainer: {
       display: 'flex',
       justifyContent: 'space-around',
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        width: '80%',
+      },
+    },
+    button: {
+      width: '20%',
+    },
+    image: {
+      width: '100%',
+      opacity: 0.5,
+
+      '&.is-selected': {
+        opacity: 1,
+      },
     },
   })
 );
