@@ -12,7 +12,7 @@ import { useStyles } from './quests.styles';
 const QuestsGhost: React.FC = () => {
   const classes = useStyles();
   return (
-    <PageContainer hasContentPadding={false}>
+    <PageContainer hasContentPadding={false} isLoggedIn>
       <div className={classes.root}>
         <Grid xs={12} sm={10} md={9} lg={8} item>
           <StudentBoard title="Quests" className={classes.quests}>

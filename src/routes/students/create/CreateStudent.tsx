@@ -51,7 +51,7 @@ const CreateStudent: React.FunctionComponent = () => {
   const alertCallback = getAlertCallback(setState);
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <PageHeader breadcrumbs={breadcrumbs} />
       <StudentForm
         mode={StudentMode.NEW}

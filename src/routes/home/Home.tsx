@@ -19,7 +19,7 @@ const Home: React.FunctionComponent = () => {
   const breadcrumbs = [{ text: 'Home', href: HOME }];
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <QuestBreadcrumbs breadcrumbs={breadcrumbs} />
       <div>You&apos;re logged in, {name}!</div>
       <br />

@@ -113,7 +113,7 @@ const Classes: React.FunctionComponent = () => {
 
   if (state.isLoading) {
     return (
-      <PageContainer>
+      <PageContainer isLoggedIn>
         <PageHeader breadcrumbs={breadcrumbs} />
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} lg={4}>
@@ -190,7 +190,7 @@ const Classes: React.FunctionComponent = () => {
 
   if (state.programme === null) {
     return (
-      <PageContainer>
+      <PageContainer isLoggedIn>
         <PageHeader
           breadcrumbs={breadcrumbs}
           action={
@@ -212,7 +212,7 @@ const Classes: React.FunctionComponent = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={

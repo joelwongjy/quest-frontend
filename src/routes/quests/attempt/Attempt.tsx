@@ -167,7 +167,7 @@ const Attempt: React.FC = () => {
   };
 
   return (
-    <PageContainer hasContentPadding={false}>
+    <PageContainer hasContentPadding={false} isLoggedIn>
       <div className={classes.root}>
         <Grid xs={12} sm={10} md={9} lg={8} item justify="center">
           <StudentBoard

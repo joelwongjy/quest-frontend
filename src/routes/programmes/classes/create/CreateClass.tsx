@@ -98,7 +98,7 @@ const CreateClass: React.FunctionComponent = () => {
   const alertCallback = getAlertCallback(setState);
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <PageHeader breadcrumbs={breadcrumbs} />
       {state.programme !== null && (
         <ClassForm

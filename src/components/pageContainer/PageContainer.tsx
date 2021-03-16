@@ -11,6 +11,7 @@ interface PageContainerProps {
   hasDrawer?: boolean;
   hasToolbarPadding?: boolean;
   hasContentPadding?: boolean;
+  isLoggedIn?: boolean;
 }
 
 const PageContainer: React.FunctionComponent<PageContainerProps> = ({
@@ -18,6 +19,7 @@ const PageContainer: React.FunctionComponent<PageContainerProps> = ({
   appBarChildren,
   hasToolbarPadding = true,
   hasContentPadding = true,
+  isLoggedIn = false,
   children,
 }) => {
   const classes = useStyles();
@@ -36,6 +38,7 @@ const PageContainer: React.FunctionComponent<PageContainerProps> = ({
         theme={theme}
         hasDrawer={hasDrawer}
         toggleDrawer={toggleDrawer}
+        isLoggedIn={isLoggedIn}
       >
         {appBarChildren}
       </QuestAppBar>

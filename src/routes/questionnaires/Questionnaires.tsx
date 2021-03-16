@@ -208,7 +208,7 @@ const Questionnaires: React.FunctionComponent = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       {hasIncompleteQuestionnaire && (
         <QuestBanner
           severity="warning"

@@ -13,7 +13,7 @@ import { useStyles } from './questionnaires.styles';
 const QuestionnairesGhost: React.FC = () => {
   const classes = useStyles();
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <PageHeader breadcrumbs={breadcrumbs} />
       <Grid container className={classes.main}>
         <QuestionnaireTabs

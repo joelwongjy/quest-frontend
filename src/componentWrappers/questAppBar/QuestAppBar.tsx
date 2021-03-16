@@ -35,6 +35,7 @@ const ChildrenContainer: React.FunctionComponent<QuestComponentProps> = ({
 interface QuestAppBarProps extends QuestComponentProps {
   hasDrawer: boolean;
   toggleDrawer: () => void;
+  isLoggedIn: boolean;
 }
 
 const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
@@ -42,6 +43,7 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
   theme,
   toggleDrawer,
   children,
+  isLoggedIn = false,
 }) => {
   const menuId = 'primary-search-account-menu';
   const classes = useStyles();
@@ -74,20 +76,22 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
           {children}
         </ChildrenContainer>
         <div className={classes.grow} />
-        <div>
-          <Button
-            ref={profileMenuRef}
-            aria-label="User Profile Picture"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={() => {
-              history.push(PROFILE);
-            }}
-          >
-            {/* <AccountsIcon htmlColor={theme!.custom.icon.iconColor} /> */}
-            <img src={profile} alt="Profile" className={classes.profile} />
-          </Button>
-        </div>
+        {isLoggedIn && (
+          <div>
+            <Button
+              ref={profileMenuRef}
+              aria-label="User Profile Picture"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={() => {
+                history.push(PROFILE);
+              }}
+            >
+              {/* <AccountsIcon htmlColor={theme!.custom.icon.iconColor} /> */}
+              <img src={profile} alt="Profile" className={classes.profile} />
+            </Button>
+          </div>
+        )}
       </Toolbar>
     </AppBar>
   );

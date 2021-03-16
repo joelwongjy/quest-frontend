@@ -336,7 +336,7 @@ const Responses: React.FunctionComponent = () => {
 
   if (state.attempts.length <= 0) {
     return (
-      <PageContainer>
+      <PageContainer isLoggedIn>
         <PageHeader breadcrumbs={breadcrumbs} />
         <Grid container justify="center">
           <Typography variant="h5" className={classes.title}>
@@ -353,7 +353,7 @@ const Responses: React.FunctionComponent = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <PageHeader breadcrumbs={breadcrumbs} />
       <Grid container justify="center">
         <Typography variant="h5" className={classes.title}>

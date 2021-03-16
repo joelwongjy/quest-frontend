@@ -184,7 +184,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
   };
   const renderQuestionnaire = () => {
     return (
-      <PageContainer>
+      <PageContainer isLoggedIn>
         <SampleQuestionMenu type={questionnaire.type} />
         <PageHeader breadcrumbs={breadcrumbs} />
         <div

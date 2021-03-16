@@ -112,7 +112,7 @@ const AddStudents: React.FunctionComponent = () => {
   const alertCallback = getAlertCallback(setState);
 
   return (
-    <PageContainer>
+    <PageContainer isLoggedIn>
       <PageHeader breadcrumbs={breadcrumbs} />
       {state.questClass && (
         <ClassStudentForm

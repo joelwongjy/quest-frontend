@@ -153,7 +153,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
 
   const renderQuestionnaire = () => {
     return (
-      <PageContainer>
+      <PageContainer isLoggedIn>
         {state.isTypeSelected && (
           <SampleQuestionMenu type={questionnaire.type} />
         )}
