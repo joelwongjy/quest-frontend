@@ -32,8 +32,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     profile: {
       overflow: 'hidden',
-      width: '90%',
-      height: '90%',
     },
     avatar: {
       maxWidth: '50%',
