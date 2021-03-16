@@ -22,6 +22,7 @@ import { PersonListData } from 'interfaces/models/persons';
 import { ClassData } from 'interfaces/models/classes';
 import ApiService from 'services/apiService';
 import { sortByName } from 'utils/sortingUtils';
+import { CLASSES } from 'constants/routes';
 
 import { useStyles } from './ClassStudentForm.styles';
 
@@ -55,7 +56,7 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
   const availableStudents = students.filter(
-    (s) => !questClass.students.includes(s)
+    (s) => !questClass.students.map((qs) => qs.id).includes(s.id)
   );
 
   const [state, setState] = useReducer(
@@ -117,11 +118,13 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
   };
 
   const handleEdit = async () => {
-    // TODO: Add loading
     try {
-      const response = await ApiService.patch(`classes/${questClass.id}`, {
-        ...questClass,
-        students: [...questClass.students, state.students],
+      const response = await ApiService.patch(`${CLASSES}/${questClass.id}`, {
+        studentIds: [
+          ...questClass.students.map((s) => s.id),
+          ...state.students.map((s) => s.id),
+        ],
+        teacherIds: questClass.teachers.map((t) => t.id),
       });
       if (response.status === 200) {
         setIsSuccessful(true);
@@ -187,7 +190,7 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
                         const labelId = `checkbox-list-label-${index}`;
                         return (
                           <ListItem
-                            key={`${s}`}
+                            key={`student-item-${s.id}`}
                             dense
                             button
                             onClick={() => handleToggleStudent(s, index)}
@@ -226,16 +229,21 @@ const ClassStudentForm: React.FunctionComponent<ClassStudentFormProps> = ({
                               </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={s.name} />
-                            <ListItemSecondaryAction>
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                style={{ color: 'red', marginBottom: '0.5rem' }}
-                                onClick={() => handleDeleteStudent(index)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </ListItemSecondaryAction>
+                            {!isSuccessful && (
+                              <ListItemSecondaryAction>
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  style={{
+                                    color: 'red',
+                                    marginBottom: '0.5rem',
+                                  }}
+                                  onClick={() => handleDeleteStudent(index)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </ListItemSecondaryAction>
+                            )}
                           </ListItem>
                         );
                       })}

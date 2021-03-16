@@ -3,6 +3,7 @@ import MetropolisBoldFont from './fonts/Metropolis-SemiBold.woff';
 import RobotoRegularFont from './fonts/Roboto-Regular.woff';
 import RobotoMediumFont from './fonts/Roboto-Medium.woff';
 import RobotoBoldFont from './fonts/Roboto-Bold.woff';
+import Vt323Font from './fonts/VT323-Regular.woff';
 
 const MetropolisRegular = {
   fontFamily: 'Metropolis',
@@ -59,10 +60,22 @@ const RobotoBold = {
     `,
 };
 
+const Vt323Regular = {
+  fontFamily: 'VT323',
+  fontStyle: 'normal',
+  fontDisplay: 'swap' as const,
+  fontWeight: 400,
+  src: `
+      local('VT323-Regular'),
+      url(${Vt323Font}) format('woff')
+  `,
+};
+
 export default {
   MetropolisRegular,
   MetropolisBold,
   RobotoRegular,
   RobotoMedium,
   RobotoBold,
+  Vt323Regular,
 };

@@ -16,6 +16,8 @@ import ProgrammeCard from 'components/programmeCard';
 import QuestAlert from 'componentWrappers/questAlert';
 import ProgrammeForm from 'components/programmeForm';
 import { getAlertCallback } from 'utils/alertUtils';
+import { sortByName } from 'utils/sortingUtils';
+import AuthService from 'services/authService';
 
 import { useStyles } from './programmes.styles';
 
@@ -64,7 +66,7 @@ const Programme: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get('programmes');
+        const response = await ApiService.get(`${PROGRAMMES}`);
         const programmes = response.data.programmes as ProgrammeListData[];
         if (!didCancel) {
           setState({ programmes, isLoading: false });
@@ -113,6 +115,28 @@ const Programme: React.FunctionComponent = () => {
     );
   }
 
+  const handleDelete = (p: ProgrammeListData): void => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to recover the deleted programme.',
+      async () => {
+        const response = await ApiService.delete(`${PROGRAMMES}/${p.id}`);
+        if (response.status === 200) {
+          const newProgrammes = state.programmes.slice();
+          const index = newProgrammes.map((p) => p.id).indexOf(p.id);
+          newProgrammes.splice(index, 1);
+          setState({ programmes: newProgrammes });
+          await AuthService.getUser();
+        } else {
+          // TODO: Handle error
+        }
+      },
+      undefined
+    );
+  };
+
   const getMenuOptions = (p: ProgrammeListData): MenuOption[] => {
     return [
       {
@@ -127,7 +151,7 @@ const Programme: React.FunctionComponent = () => {
       {
         text: 'Delete',
         // eslint-disable-next-line no-console
-        callback: () => console.log('TODO: Delete'),
+        callback: () => handleDelete(p),
       },
     ];
   };
@@ -161,14 +185,17 @@ const Programme: React.FunctionComponent = () => {
         <div style={{ padding: '1rem' }}>
           <Grid container spacing={6}>
             {state.programmes.length > 0 &&
-              state.programmes.map((p) => {
-                const menuOptions = getMenuOptions(p);
-                return (
-                  <Grid item xs={12} sm={6} lg={4} key={p.name}>
-                    <ProgrammeCard programme={p} menuOptions={menuOptions} />
-                  </Grid>
-                );
-              })}
+              state.programmes
+                .slice()
+                .sort(sortByName)
+                .map((p) => {
+                  const menuOptions = getMenuOptions(p);
+                  return (
+                    <Grid item xs={12} sm={6} lg={4} key={p.name}>
+                      <ProgrammeCard programme={p} menuOptions={menuOptions} />
+                    </Grid>
+                  );
+                })}
           </Grid>
         </div>
       )}

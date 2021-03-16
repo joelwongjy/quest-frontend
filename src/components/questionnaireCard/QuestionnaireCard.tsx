@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -23,6 +24,7 @@ import {
   QuestionnaireStatus,
 } from 'interfaces/models/questionnaires';
 
+import { getQuestStyle } from 'utils/questUtils';
 import { useStyles } from './questionnaireCard.styles';
 
 interface QuestionnaireCardProps extends QuestComponentProps {
@@ -31,6 +33,8 @@ interface QuestionnaireCardProps extends QuestComponentProps {
   mode?: CardMode;
   programmeName?: string;
   isAttempted?: boolean;
+  attemptId?: number;
+  className?: string;
 }
 
 const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
@@ -39,6 +43,8 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
   mode = CardMode.STAFF,
   programmeName = '',
   isAttempted = false,
+  attemptId = -1,
+  className = '',
 }) => {
   const classes = useStyles();
   const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
@@ -82,7 +88,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
     return (
       <Typography
         className={classes.statusPublished}
-        variant="body2"
+        variant="body1"
         component="p"
       >
         {programmeName}
@@ -109,52 +115,54 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
   };
 
   if (mode === CardMode.STUDENT) {
+    const questCardStyle = getQuestStyle();
     return (
-      <QuestCard>
+      <QuestCard className={className}>
         <CardHeader
           title={
-            <>
-              <Typography
-                className={classes.dates}
-                color="textSecondary"
-                gutterBottom
-              >
-                {isAttempted
-                  ? 'Completed'
-                  : `Closes At: ${format(
-                      questionnaire.endAt as Date,
-                      'd MMM y'
-                    )}`}
+            <Grid container justify="center">
+              <Typography variant="h5" className={classes.studentTitle}>
+                {questionnaire.name}
               </Typography>
-            </>
+            </Grid>
           }
+          style={{
+            backgroundColor: questCardStyle[1],
+            padding: '0.5rem',
+          }}
         />
-        <CardContent>
-          <Typography
-            className={classes.title}
-            variant="h5"
-            component="h2"
-            noWrap
-          >
-            {questionnaire.name}
-          </Typography>
+        <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
           {renderProgramme()}
-          <Typography>{renderType(questionnaire.type)}</Typography>
+          <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
+            <img src={questCardStyle[0]} alt="icon" />
+          </Grid>
+          <Grid container justify="center">
+            <Typography
+              className={classes.dates}
+              color="textSecondary"
+              gutterBottom
+            >
+              {isAttempted
+                ? 'Completed'
+                : `Complete by: ${format(
+                    questionnaire.endAt as Date,
+                    'd MMM y'
+                  )}`}
+            </Typography>
+          </Grid>
         </CardContent>
         <CardActions className={classes.actions}>
           {isAttempted ? (
             <Button
               size="small"
-              className={classes.button}
               component={Link}
-              to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
+              to={`${QUESTS}/attempt/${attemptId}`}
             >
               View Attempt
             </Button>
           ) : (
             <Button
               size="small"
-              className={classes.button}
               component={Link}
               to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
             >

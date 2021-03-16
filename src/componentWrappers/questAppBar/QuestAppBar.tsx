@@ -3,17 +3,17 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
   useScrollTrigger,
   Button,
 } from '@material-ui/core';
-import {
-  AccountCircleOutlined as AccountsIcon,
-  Menu as MenuIcon,
-} from '@material-ui/icons';
+import { Menu as MenuIcon } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 import logo from 'assets/images/logo.png';
+import profile from 'assets/images/profile.png';
 import { QuestComponentProps } from 'interfaces/components/common';
+import { PROFILE } from 'constants/routes';
+import { useUser } from 'contexts/UserContext';
 
 import { useStyles } from './questAppBar.styles';
 
@@ -46,6 +46,8 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
 }) => {
   const menuId = 'primary-search-account-menu';
   const classes = useStyles();
+  const history = useHistory();
+  const { user } = useUser();
   const profileMenuRef = useRef<HTMLButtonElement | null>(null);
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -74,19 +76,21 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
           {children}
         </ChildrenContainer>
         <div className={classes.grow} />
-        <div>
-          <Button
-            ref={profileMenuRef}
-            aria-label="User Profile Picture"
-            aria-controls={menuId}
-            aria-haspopup="true"
-          >
-            <AccountsIcon htmlColor={theme!.custom.icon.iconColor} />
-            <Typography variant="body2" className={classes.account}>
-              Account
-            </Typography>
-          </Button>
-        </div>
+        {user && (
+          <div>
+            <Button
+              ref={profileMenuRef}
+              aria-label="User Profile Picture"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={() => {
+                history.push(PROFILE);
+              }}
+            >
+              <img src={profile} alt="Profile" className={classes.profile} />
+            </Button>
+          </div>
+        )}
       </Toolbar>
     </AppBar>
   );

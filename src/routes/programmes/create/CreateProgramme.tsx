@@ -22,7 +22,7 @@ import { useStyles } from './createProgramme.styles';
 interface CreateProgrammeState extends RouteState {}
 
 const CreateProgramme: React.FunctionComponent = () => {
-  const user = useUser();
+  const { user } = useUser();
   const classes = useStyles();
   const history = useHistory();
   const { setHasError } = useError();

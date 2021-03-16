@@ -13,6 +13,11 @@ export interface AttemptListData extends DiscardableData {
   windowId: number;
 }
 
+export interface AttemptData {
+  questionnaireWindow: QuestionnaireWindowData;
+  answers: AnswerData[];
+}
+
 export interface SharedQnnaireAnswerData {
   answersBefore: AnswerData[];
   answersAfter: AnswerData[];

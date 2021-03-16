@@ -20,6 +20,7 @@ import {
   DUPLICATE,
   ADD,
   QUESTS,
+  PROFILE,
 } from 'constants/routes';
 import Home from 'routes/home';
 import Questionnaires from 'routes/questionnaires';
@@ -37,41 +38,18 @@ import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
 import AddStudents from 'routes/programmes/classes/students/add';
-import { useUser } from 'contexts/UserContext';
-import { ClassUserRole } from 'interfaces/models/classUsers';
+import Profile from 'routes/profile';
+import { useStyles } from './app.styles';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
 
-const AuthenticatedApp: React.FunctionComponent = () => {
-  const user = useUser();
-
-  const isStaff =
-    user &&
-    (user.highestClassRole === ClassUserRole.ADMIN ||
-      user.highestClassRole === ClassUserRole.TEACHER);
-
-  if (!isStaff) {
-    return (
-      <Router>
-        <div className="app">
-          <Switch>
-            <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
-            <Route path={HOME} component={Home} />
-            <Route exact path={QUESTS} component={Quests} />
-            <Route path={`${QUESTS}/:id/window/:windowId`}>
-              <QuestAttempt />
-            </Route>
-            <Route path="/" render={redirectToHome} />
-          </Switch>
-        </div>
-      </Router>
-    );
-  }
+const AdminApp: React.FunctionComponent = () => {
+  const classes = useStyles();
 
   return (
     <Router>
-      <div className="app">
+      <div className={classes.admin}>
         <Switch>
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
           <Route exact path={QUESTIONNAIRES} component={Questionnaires} />
@@ -126,6 +104,7 @@ const AuthenticatedApp: React.FunctionComponent = () => {
           />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
+          <Route exact path={PROFILE} component={Profile} />
           <Route path={`${QUESTS}/:id/window/:windowId`}>
             <QuestAttempt />
           </Route>
@@ -136,4 +115,4 @@ const AuthenticatedApp: React.FunctionComponent = () => {
   );
 };
 
-export default AuthenticatedApp;
+export default AdminApp;

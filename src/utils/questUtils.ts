@@ -7,6 +7,17 @@ import {
   QuestionnaireOneWindowData,
 } from 'interfaces/models/questionnaires';
 import { QuestionData, QuestionType } from 'interfaces/models/questions';
+import sword from '../assets/images/student/sword.png';
+import hammer from '../assets/images/student/hammer.png';
+import shield from '../assets/images/student/shield.png';
+
+const questImages = [sword, hammer, shield];
+const questHeaderColors = ['#FB6B1D', '#c6c9b3', '#40A2E9'];
+
+export const getQuestStyle = (): string[] => {
+  const index = Math.floor(Math.random() * questImages.length);
+  return [questImages[index], questHeaderColors[index]];
+};
 
 const pairQuestsWithProgrammes = (
   quests: QuestionnaireListData[],
@@ -71,7 +82,10 @@ export const getCompletedQuests = (
   return pairQuestsWithProgrammes(completedQuests, programmes);
 };
 
-const isQuestionComplete = (q: QuestionData, answers: AnswerPostData[]) => {
+export const isQuestionComplete = (
+  q: QuestionData,
+  answers: AnswerPostData[]
+): boolean => {
   const answer = answers.find((a) => a.questionOrderId === q.qnOrderId);
   if (!answer) {
     return false;
@@ -80,9 +94,9 @@ const isQuestionComplete = (q: QuestionData, answers: AnswerPostData[]) => {
     q.questionType === QuestionType.LONG_ANSWER ||
     q.questionType === QuestionType.SHORT_ANSWER
   ) {
-    return answer.textResponse && answer.textResponse.length > 0;
+    return answer.textResponse !== undefined && answer.textResponse.length > 0;
   }
-  return answer.optionId && typeof answer.optionId === 'number';
+  return answer.optionId !== undefined && typeof answer.optionId === 'number';
 };
 
 export const isQuestComplete = (

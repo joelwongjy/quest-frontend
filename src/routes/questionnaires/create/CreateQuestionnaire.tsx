@@ -54,7 +54,7 @@ interface CreateQuestionnaireState extends RouteState {
 }
 
 const CreateQuestionnaire: React.FunctionComponent = () => {
-  const user = useUser();
+  const { user } = useUser();
   const muiClasses = useStyles();
   const history = useHistory();
   const { setHasError } = useError();

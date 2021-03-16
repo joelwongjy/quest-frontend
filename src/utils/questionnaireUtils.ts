@@ -299,6 +299,7 @@ const processEditQuestionOrders = (
           order: questionOrder.order,
           questionText: questionOrder.questionText,
           questionType: questionOrder.questionType,
+          options: questionOrder.options,
         };
         finalQuestionOrder.push(newQuestionOrder);
         pushed = true;

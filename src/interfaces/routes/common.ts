@@ -18,3 +18,8 @@ export interface ClassRouteParams {
   id: string;
   classId: string;
 }
+
+export interface WindowRouteParams {
+  id: string;
+  windowId: string;
+}

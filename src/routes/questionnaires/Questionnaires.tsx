@@ -36,7 +36,6 @@ import QuestionnaireTabs from 'components/questionnaireTabs';
 
 import ProgrammeClassPicker from 'components/programmeClassPicker';
 import { useUser } from 'contexts/UserContext';
-import { questionnaires } from './mockData';
 import {
   getQuestionnairesToRender,
   breadcrumbs,
@@ -48,7 +47,7 @@ import { useStyles } from './questionnaires.styles';
 import QuestionnairesGhost from './QuestionnairesGhost';
 
 const Questionnaires: React.FunctionComponent = () => {
-  const user = useUser()!;
+  const { user } = useUser();
   const [tabValue, setTabValue] = useState<number>(0);
   const [state, setState] = useReducer(
     (s: QuestionnairesState, a: Partial<QuestionnairesState>) => ({
@@ -56,7 +55,7 @@ const Questionnaires: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      questionnaires,
+      questionnaires: [],
       isLoading: true,
       isError: false,
       isAlertOpen: false,

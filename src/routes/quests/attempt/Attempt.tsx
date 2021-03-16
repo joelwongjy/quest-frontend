@@ -1,52 +1,56 @@
 import React, { Dispatch, useEffect, useReducer } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 
 import { QUESTS } from 'constants/routes';
-import { RouteState } from 'interfaces/routes/common';
+import { RouteState, WindowRouteParams } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import PageContainer from 'components/pageContainer';
-import PageHeader from 'components/pageHeader';
 import { RootState } from 'reducers/rootReducer';
 import {
   AttemptDux,
   clearAttempt,
   setAttempt,
   updateAnswer,
+  previousQuestion,
+  nextQuestion,
 } from 'reducers/attemptDux';
 import AttemptQuestionCard from 'components/questionCard/attempt';
 import { sortByOrder } from 'utils/sortingUtils';
 import { AnswerPostData } from 'interfaces/models/answers';
-import QuestButton from 'componentWrappers/questButton';
-import { isQuestComplete } from 'utils/questUtils';
+import { isQuestComplete, isQuestionComplete } from 'utils/questUtils';
 import { useError } from 'contexts/ErrorContext';
+import StudentBoard from 'components/studentBoard';
+import QuestAlert from 'componentWrappers/questAlert';
+import { getAlertCallback } from 'utils/alertUtils';
+import medalImage from 'assets/images/student/medal.png';
 
+import ProgressBar from './ProgressBar';
+import AttemptGhost from './AttemptGhost';
 import { useStyles } from './attempt.styles';
 
-interface RouteParams {
-  id: string;
-  windowId: string;
+interface AttemptState extends RouteState {
+  isComplete: boolean;
 }
 
 const Attempt: React.FC = () => {
-  const { id, windowId } = useRouteMatch<RouteParams>({
-    path: `${QUESTS}/:id/window/:windowId`,
-  })!.params;
+  const { id, windowId } = useParams<WindowRouteParams>();
   const classes = useStyles();
   const { setHasError } = useError();
   const history = useHistory();
 
   const dispatch = useDispatch();
   const selectAttempt = (state: RootState): AttemptDux => state.attempt;
-  const { quest, attempt } = useSelector(selectAttempt);
+  const { quest, attempt, index } = useSelector(selectAttempt);
 
   const [state, setState] = useReducer(
-    (s: RouteState, a: Partial<RouteState>) => ({
+    (s: AttemptState, a: Partial<AttemptState>) => ({
       ...s,
       ...a,
     }),
     {
+      isComplete: false,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -69,10 +73,6 @@ const Attempt: React.FC = () => {
     let didCancel = false;
 
     const fetchData = async () => {
-      if (quest && quest.windowId === Number(windowId)) {
-        setState({ isLoading: false });
-        return;
-      }
       try {
         const response = await ApiService.get(
           `questionnaires/${id}/window/${windowId}`
@@ -94,15 +94,9 @@ const Attempt: React.FC = () => {
     return () => {
       didCancel = true;
     };
-  }, [quest, windowId, dispatch]);
+  }, [windowId, dispatch]);
 
-  const breadcrumbs = [
-    { text: 'Quests', href: QUESTS },
-    {
-      text: quest ? `Attempting ${quest.title}` : 'Loading',
-      href: `${QUESTS}/${id}/window/${windowId}`,
-    },
-  ];
+  const alertCallback = getAlertCallback(setState);
 
   const clearAttemptPromise = (
     myDispatch: Dispatch<{ payload: undefined; type: string }>
@@ -124,16 +118,26 @@ const Attempt: React.FC = () => {
         attempt
       );
       if (response.status === 200) {
-        clearAttemptPromise(dispatch).then(() => history.push(QUESTS));
+        setState({ isComplete: true });
+      } else {
+        alertCallback(
+          true,
+          false,
+          'Uh oh!',
+          'Something went wrong! Please refresh and try again!'
+        );
       }
     } catch (error) {
       setState({ isError: true });
     }
   };
 
+  const handleBackToQuests = async () => {
+    clearAttemptPromise(dispatch).then(() => history.push(QUESTS));
+  };
+
   if (state.isLoading) {
-    // return <AttemptGhost />
-    return <></>;
+    return <AttemptGhost />;
   }
 
   if (state.isError) {
@@ -144,59 +148,118 @@ const Attempt: React.FC = () => {
     dispatch(updateAnswer(answer));
   };
 
+  const questions = [
+    ...(quest?.sharedQuestions?.questions.slice().sort(sortByOrder) ?? []),
+    ...(quest?.questions.slice().sort(sortByOrder) ?? []),
+  ];
+
+  const question = questions[index];
+
+  if (questions.length === 0 || !question) {
+    return <Redirect to={QUESTS} />;
+  }
+
+  const handlePrevious = () => {
+    if (index > 0) {
+      dispatch(previousQuestion());
+    } else {
+      window.location.href = QUESTS;
+    }
+  };
+
+  const handleNext = () => {
+    if (!isQuestionComplete(question, attempt?.answers ?? [])) {
+      setHasError(true);
+      return;
+    }
+    setHasError(false);
+    if (index < questions.length - 1) {
+      dispatch(nextQuestion());
+    } else {
+      handleSubmit();
+    }
+  };
+
   return (
-    <PageContainer>
-      <PageHeader breadcrumbs={breadcrumbs} />
-      <Typography align="center" variant="h5" className={classes.title}>
-        {quest?.title}
-      </Typography>
-      {quest?.sharedQuestions?.questions &&
-        quest?.sharedQuestions.questions
-          .slice()
-          .sort(sortByOrder)
-          .map((q) => {
-            const answer =
-              attempt?.answers?.find(
-                (a) => a.questionOrderId === q.qnOrderId
-              ) ?? undefined;
-            return (
-              <div key={`question-card-${q.qnOrderId}`}>
-                <AttemptQuestionCard
-                  question={q}
-                  answer={answer}
-                  answerCallback={answerCallback}
-                />
-              </div>
-            );
-          })}
-      {quest?.questions
-        .slice()
-        .sort(sortByOrder)
-        .map((q) => {
-          const answer =
-            attempt?.answers?.find((a) => a.questionOrderId === q.qnOrderId) ??
-            undefined;
-          return (
-            <div key={`question-card-${q.qnOrderId}`}>
-              <AttemptQuestionCard
-                question={q}
-                answer={answer}
-                answerCallback={answerCallback}
-              />
-            </div>
-          );
-        })}
-      <Grid container spacing={6} justify="center">
-        <Grid item xs={12} sm={8}>
-          <QuestButton
-            fullWidth
-            className={classes.button}
-            onClick={handleSubmit}
+    <PageContainer hasContentPadding={false}>
+      <div className={classes.root}>
+        <Grid xs={12} sm={10} md={9} lg={8} item justify="center">
+          <StudentBoard
+            title={quest?.title ?? 'Loading'}
+            className={classes.board}
+            accessory={
+              <ProgressBar current={index + 1} total={questions.length} />
+            }
           >
-            Complete Quest!
-          </QuestButton>
+            <div className={classes.body}>
+              <div className={classes.question}>
+                {state.isComplete ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div style={{ fontSize: '2rem' }}>Congratulations!</div>
+                    <img
+                      src={medalImage}
+                      alt="Medal"
+                      style={{ height: '15rem', margin: '1rem 0' }}
+                    />
+                    <div style={{ fontSize: '2rem' }}>
+                      You have completed {quest?.title ?? 'the quest'}!
+                    </div>
+                  </div>
+                ) : (
+                  <AttemptQuestionCard
+                    question={questions[index]}
+                    answer={
+                      attempt?.answers.find(
+                        (a) => a.questionOrderId === questions[index].qnOrderId
+                      ) ?? undefined
+                    }
+                    answerCallback={answerCallback}
+                  />
+                )}
+              </div>
+              {state.isComplete ? (
+                <Grid container justify="flex-end">
+                  <Button
+                    onClick={handleBackToQuests}
+                    className={classes.button}
+                  >
+                    <Typography variant="h6">View Other Quests</Typography>
+                  </Button>
+                </Grid>
+              ) : (
+                <Grid container justify="space-between">
+                  <Button onClick={handlePrevious} className={classes.button}>
+                    <Typography variant="h6">
+                      {index > 0 ? 'Previous' : 'Back to Quests'}
+                    </Typography>
+                  </Button>
+                  <Button onClick={handleNext} className={classes.button}>
+                    <Typography variant="h6">
+                      {index < questions.length - 1 ? 'Next' : 'Finish Quest'}
+                    </Typography>
+                  </Button>
+                </Grid>
+              )}
+            </div>
+          </StudentBoard>
         </Grid>
-      </Grid>
+      </div>
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };

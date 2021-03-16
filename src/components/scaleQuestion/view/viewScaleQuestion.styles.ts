@@ -1,5 +1,5 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { theme } from 'styles/theme';
+import { adminTheme } from 'styles/theme';
 
 const toggleBlueStyles = {
   backgroundColor: '#1160A8',
@@ -50,7 +50,7 @@ const beforeLabelStyles = {
     color: '#1160A8',
     position: 'absolute',
     bottom: -28,
-    fontFamily: theme.custom.fontFamily.metropolis.fontFamily,
+    fontFamily: adminTheme.custom.fontFamily.metropolis.fontFamily,
     fontWeight: 'bold',
   },
 };
@@ -68,7 +68,7 @@ const beforeTopLabelStyles = {
     color: '#A53636',
     position: 'absolute',
     bottom: -28,
-    fontFamily: theme.custom.fontFamily.metropolis.fontFamily,
+    fontFamily: adminTheme.custom.fontFamily.metropolis.fontFamily,
     fontWeight: 'bold',
   },
 
@@ -76,7 +76,7 @@ const beforeTopLabelStyles = {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: '0.7rem',
-    fontFamily: theme.custom.fontFamily.metropolis.fontFamily,
+    fontFamily: adminTheme.custom.fontFamily.metropolis.fontFamily,
     color: '#1160A8',
   },
 };
@@ -88,7 +88,7 @@ const afterLabelStyles = {
     color: '#A53636',
     position: 'absolute',
     bottom: -28,
-    fontFamily: theme.custom.fontFamily.metropolis.fontFamily,
+    fontFamily: adminTheme.custom.fontFamily.metropolis.fontFamily,
     fontWeight: 'bold',
   },
 };

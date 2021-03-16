@@ -17,6 +17,7 @@ interface AttemptQuestionCardProps extends QuestComponentProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted?: boolean;
 }
 
 const InputMuiTheme = createMuiTheme({
@@ -31,6 +32,7 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
   question,
   answer,
   answerCallback,
+  isAttempted = false,
   className,
 }) => {
   const classes = useStyles();
@@ -43,6 +45,7 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
             question={question}
             answer={answer}
             answerCallback={answerCallback}
+            isAttempted={isAttempted}
           />
         );
       case QuestionType.LONG_ANSWER:
@@ -51,6 +54,7 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
             question={question}
             answer={answer}
             answerCallback={answerCallback}
+            isAttempted={isAttempted}
           />
         );
       case QuestionType.MOOD:
@@ -59,6 +63,7 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
             question={question}
             answer={answer}
             answerCallback={answerCallback}
+            isAttempted={isAttempted}
           />
         );
       case QuestionType.SCALE:
@@ -67,6 +72,7 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
             question={question}
             answer={answer}
             answerCallback={answerCallback}
+            isAttempted={isAttempted}
           />
         );
       case QuestionType.MULTIPLE_CHOICE:
@@ -76,6 +82,7 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
             question={question}
             answer={answer}
             answerCallback={answerCallback}
+            isAttempted={isAttempted}
           />
         );
     }
@@ -87,9 +94,8 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
       key={`attempt-${question.qnOrderId}`}
       container
       justify="center"
-      spacing={6}
     >
-      <Grid item xs={12} sm={8}>
+      <Grid item xs={12}>
         <MuiThemeProvider theme={InputMuiTheme}>
           {renderQuestion()}
         </MuiThemeProvider>

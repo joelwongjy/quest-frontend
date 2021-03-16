@@ -1,16 +1,14 @@
 import React from 'react';
-import { IconButton, SvgIconTypeMap } from '@material-ui/core';
-import {
-  SentimentDissatisfied,
-  SentimentSatisfied,
-  SentimentSatisfiedAlt,
-  SentimentVeryDissatisfied,
-  SentimentVerySatisfied,
-} from '@material-ui/icons';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
+import { IconButton } from '@material-ui/core';
 
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData, Mood } from 'interfaces/models/questions';
+import verySadImage from 'assets/images/student/very-sad.png';
+import sadImage from 'assets/images/student/sad.png';
+import neutralImage from 'assets/images/student/neutral.png';
+import happyImage from 'assets/images/student/happy.png';
+import veryHappyImage from 'assets/images/student/very-happy.png';
+import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './attemptMoodQuestion.styles';
 
@@ -18,14 +16,19 @@ interface AttemptMoodQuestionProps {
   question: QuestionData;
   answerCallback: (answer: AnswerPostData) => void;
   answer?: AnswerPostData;
+  isAttempted: boolean;
 }
 
 const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
   question,
   answerCallback,
   answer,
+  isAttempted,
 }) => {
   const classes = useStyles();
+  const { hasError } = useError();
+
+  const showWarning = hasError && answer?.optionId === undefined;
 
   const optionToIdMap = question.options.reduce((obj, o) => {
     // eslint-disable-next-line no-param-reassign
@@ -34,20 +37,22 @@ const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
   }, {} as { [o: string]: number });
 
   const moods: {
-    [mood: string]: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>;
+    [mood: string]: string;
   } = {
-    [Mood.VERY_BAD]: SentimentVeryDissatisfied,
-    [Mood.BAD]: SentimentDissatisfied,
-    [Mood.NORMAL]: SentimentSatisfied,
-    [Mood.GOOD]: SentimentSatisfiedAlt,
-    [Mood.VERY_GOOD]: SentimentVerySatisfied,
+    [Mood.VERY_BAD]: verySadImage,
+    [Mood.BAD]: sadImage,
+    [Mood.NORMAL]: neutralImage,
+    [Mood.GOOD]: happyImage,
+    [Mood.VERY_GOOD]: veryHappyImage,
   };
 
   const handleClick = (mood: Mood) => {
-    answerCallback({
-      questionOrderId: question.qnOrderId,
-      optionId: optionToIdMap[mood],
-    });
+    if (!isAttempted) {
+      answerCallback({
+        questionOrderId: question.qnOrderId,
+        optionId: optionToIdMap[mood],
+      });
+    }
   };
 
   return (
@@ -57,21 +62,30 @@ const AttemptMoodQuestion: React.FC<AttemptMoodQuestionProps> = ({
       </div>
       <div className={classes.emojiContainer}>
         {Object.keys(moods).map((m) => {
-          const Icon = moods[m];
+          const imageSrc = moods[m];
           return (
             <IconButton
               key={`${question.qnOrderId}-${m}`}
               aria-label={m}
-              color={
-                optionToIdMap[m] === answer?.optionId ? 'primary' : undefined
-              }
               onClick={() => handleClick(m as Mood)}
+              className={classes.button}
             >
-              <Icon fontSize="large" />
+              <img
+                src={imageSrc}
+                alt="m"
+                className={`${classes.image} ${
+                  optionToIdMap[m] === answer?.optionId ? 'is-selected' : ''
+                }`}
+              />
             </IconButton>
           );
         })}
       </div>
+      {showWarning && (
+        <div className={classes.warning}>
+          Please select how you&apos;re feeling above!
+        </div>
+      )}
     </div>
   );
 };

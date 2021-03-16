@@ -90,6 +90,7 @@ const EditMcqQuestion: React.FunctionComponent<EditMcqQuestionProps> = ({
               value={option.optionText}
               onChange={(e) => updateOption(e.target.value, index)}
               className={classes.option}
+              size="small"
             />
             {hasOptionError && index === 0 && (
               <FormHelperText>At least one option is required!</FormHelperText>

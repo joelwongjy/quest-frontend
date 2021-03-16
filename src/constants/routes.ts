@@ -4,14 +4,18 @@ export const ROOT = '/';
 export const LOGIN = '/login';
 export const UNAUTHED_ROUTES = [LOGIN];
 
-// Authed routes
+// Authed admin routes
 export const HOME = '/home';
 export const QUESTIONNAIRES = '/questionnaires';
-export const QUESTS = '/quests';
 export const PROGRAMMES = '/programmes';
 export const CLASSES = '/classes';
 export const STUDENTS = '/students';
 export const PERSONS = '/persons';
+
+// Authed student routes
+export const CASTLE = '/castle';
+export const QUESTS = '/quests';
+export const PROFILE = '/profile';
 
 // Sub-routes
 export const CREATE = '/create';

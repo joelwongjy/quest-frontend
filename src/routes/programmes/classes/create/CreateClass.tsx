@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ApiService from 'services/apiService';
@@ -11,11 +10,10 @@ import { ClassMode } from 'interfaces/components/classForm';
 import { ProgrammeData } from 'interfaces/models/programmes';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import { sampleProgramme } from 'routes/programmes/mockData';
 import { getAlertCallback } from 'utils/alertUtils';
 
 interface CreateClassState extends RouteState {
-  programme: ProgrammeData;
+  programme: ProgrammeData | null;
 }
 
 const CreateClass: React.FunctionComponent = () => {
@@ -29,7 +27,7 @@ const CreateClass: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      programme: sampleProgramme,
+      programme: null,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -48,21 +46,17 @@ const CreateClass: React.FunctionComponent = () => {
     }
   );
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     let didCancel = false;
 
     const fetchData = async () => {
       try {
-        // To be replaced with `programmes/${id}/students`
         const response = await ApiService.get(`programmes/${id}`);
         if (!didCancel) {
           setState({
             programme: response.data as ProgrammeData,
             isLoading: false,
           });
-          // do dispatch here if necessary
         }
       } catch (error) {
         if (!didCancel) {
@@ -83,12 +77,15 @@ const CreateClass: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, []);
 
   const breadcrumbs = [
     { text: 'Programmes', href: PROGRAMMES },
     {
-      text: state.isLoading ? 'Loading' : state.programme.name,
+      text:
+        state.isLoading || state.programme === null
+          ? 'Loading'
+          : state.programme.name,
       href: `${PROGRAMMES}/${programmeId}${CLASSES}`,
     },
     { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
@@ -103,14 +100,14 @@ const CreateClass: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <ClassForm
-        mode={ClassMode.NEW}
-        programme={state.programme}
-        alertCallback={alertCallback}
-        cancelCallback={() =>
-          history.push(`${PROGRAMMES}/${state.programme.id}${CLASSES}`)
-        }
-      />
+      {state.programme !== null && (
+        <ClassForm
+          mode={ClassMode.NEW}
+          programme={state.programme}
+          alertCallback={alertCallback}
+          cancelCallback={() => history.push(`${PROGRAMMES}/${id}${CLASSES}`)}
+        />
+      )}
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm!}

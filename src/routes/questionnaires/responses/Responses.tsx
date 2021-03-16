@@ -55,7 +55,7 @@ const Responses: React.FunctionComponent = () => {
   })!.params;
 
   const classes = useStyles();
-  const user = useUser();
+  const { user } = useUser();
 
   const [state, setState] = useReducer(
     (s: ResponsesState, a: Partial<ResponsesState>) => ({
@@ -138,19 +138,16 @@ const Responses: React.FunctionComponent = () => {
       try {
         const questionnaire = await fetchQuestionnaire();
         if (!didCancel) {
+          setState({
+            isLoading: false,
+            questionnaire,
+          });
+
           if (parseInt(id, 10) === questionnaire.questionnaireId) {
-            setState({
-              questionnaire,
-            });
             setAccessibleProgrammes(questionnaire);
             const attempts = await fetchAttempts(questionnaire.questionnaireId);
             retrieveUniqueStudentsFromAttempts(attempts);
             setState({ attempts, isLoading: false });
-          } else {
-            setState({
-              isLoading: false,
-              questionnaire,
-            });
           }
         }
       } catch (error) {

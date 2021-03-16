@@ -9,7 +9,6 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/HomeRounded';
-import QuestIcon from '@material-ui/icons/ColorizeRounded';
 import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
 import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
@@ -17,6 +16,7 @@ import ExitIcon from '@material-ui/icons/ExitToAppRounded';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 import {
+  CASTLE,
   HOME,
   PROGRAMMES,
   QUESTIONNAIRES,
@@ -26,8 +26,9 @@ import {
 import { useAuth } from 'contexts/AuthContext';
 import QuestAlert from 'componentWrappers/questAlert';
 import { useUser } from 'contexts/UserContext';
+import homeIcon from 'assets/images/student/house.png';
+import swordIcon from 'assets/images/student/sword-white.png';
 
-import { ClassUserRole } from 'interfaces/models/classUsers';
 import { useStyles } from './questDrawer.styles';
 
 interface QuestDrawerProps extends QuestComponentProps {
@@ -42,7 +43,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
 }) => {
   const classes = useStyles();
   const { logout } = useAuth();
-  const user = useUser();
+  const { isStaff } = useUser();
   const pathname = `/${useLocation().pathname.split('/')[1]}`;
 
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
@@ -55,50 +56,82 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
     setIsAlertOpen(true);
   };
 
-  const isStaff =
-    user &&
-    (user.highestClassRole === ClassUserRole.ADMIN ||
-      user.highestClassRole === ClassUserRole.TEACHER);
+  const toolbarClasses = `${classes.toolbar}${
+    isStaff ? `` : ` ${classes.studentToolbar}`
+  }`;
+
+  const drawerClasses = `${classes.drawerPaper}${
+    isStaff ? '' : ` ${classes.studentDrawerPaper}`
+  }`;
+
+  const listItemClasses = `${classes.listItem}${
+    isStaff ? '' : ` ${classes.studentListItem}`
+  }`;
 
   const drawer = (
     <>
-      <div className={classes.toolbar} />
+      <div className={toolbarClasses} />
       <List>
-        <ListItem
-          button
-          key="Home"
-          selected={pathname === HOME}
-          component={Link}
-          to={HOME}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <HomeIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem
-          button
-          key="Quests"
-          selected={pathname === QUESTS}
-          component={Link}
-          to={QUESTS}
-          className={classes.listItem}
-        >
-          <ListItemIcon>
-            <QuestIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Quests" />
-        </ListItem>
+        {!isStaff && (
+          <>
+            <ListItem
+              button
+              key="Castle"
+              selected={pathname === CASTLE}
+              component={Link}
+              to={CASTLE}
+              className={listItemClasses}
+            >
+              <ListItemIcon>
+                <img
+                  src={homeIcon}
+                  alt="Quests"
+                  className={classes.studentIcon}
+                />
+              </ListItemIcon>
+              <ListItemText primary="Castle" />
+            </ListItem>
+            <ListItem
+              button
+              key="Quests"
+              selected={pathname === QUESTS}
+              component={Link}
+              to={QUESTS}
+              className={listItemClasses}
+            >
+              <ListItemIcon>
+                <img
+                  src={swordIcon}
+                  alt="Quests"
+                  className={classes.studentIcon}
+                />
+              </ListItemIcon>
+              <ListItemText primary="Quests" />
+            </ListItem>
+          </>
+        )}
         {isStaff && (
           <>
+            <ListItem
+              button
+              key="Home"
+              selected={pathname === HOME}
+              component={Link}
+              to={HOME}
+              className={listItemClasses}
+            >
+              <ListItemIcon>
+                <HomeIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
             <ListItem
               button
               key="Questionnaires"
               selected={pathname === QUESTIONNAIRES}
               component={Link}
               to={QUESTIONNAIRES}
-              className={classes.listItem}
+              className={listItemClasses}
             >
               <ListItemIcon>
                 <QuestionIcon className={classes.icon} />
@@ -111,7 +144,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
               selected={pathname === PROGRAMMES}
               component={Link}
               to={PROGRAMMES}
-              className={classes.listItem}
+              className={listItemClasses}
             >
               <ListItemIcon>
                 <StarIcon className={classes.icon} />
@@ -125,7 +158,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
               selected={pathname === STUDENTS}
               component={Link}
               to={STUDENTS}
-              className={classes.listItem}
+              className={listItemClasses}
             >
               <ListItemIcon>
                 <PersonIcon className={classes.icon} />
@@ -137,7 +170,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
         <ListItem
           button
           key="Logout"
-          className={classes.listItem}
+          className={listItemClasses}
           onClick={handleLogOut}
         >
           <ListItemIcon>
@@ -162,7 +195,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
           open={isDrawerOpen}
           onClose={toggleDrawer}
           classes={{
-            paper: classes.drawerPaper,
+            paper: drawerClasses,
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
@@ -174,7 +207,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
       <Hidden smDown implementation="css">
         <Drawer
           classes={{
-            paper: classes.drawerPaper,
+            paper: drawerClasses,
           }}
           variant="permanent"
           open

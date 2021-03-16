@@ -21,6 +21,7 @@ import {
 } from 'interfaces/models/programmes';
 import { useError } from 'contexts/ErrorContext';
 import ApiService from 'services/apiService';
+import AuthService from 'services/authService';
 
 import { useStyles } from './ClassForm.styles';
 
@@ -91,16 +92,20 @@ const ClassForm: React.FC<ClassFormProps> = ({
     setHasError(false);
     // TODO: Add loading
     try {
-      const newClasses = programme.classes.slice().map((c) => {
-        return {
-          name: c.name,
-          description: c.description,
-        };
-      });
+      const newClasses: ProgrammePatchData['classes'] = programme.classes
+        .slice()
+        .map((c) => {
+          return {
+            id: c.id,
+            name: c.name,
+            description: c.description,
+          };
+        });
       newClasses.push({
         name: state.name!,
         description: state.description,
       });
+
       const programmePatchData: ProgrammePatchData = {
         classes: newClasses,
       };
@@ -114,6 +119,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
           top: 0,
           behavior: 'smooth',
         });
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -140,6 +146,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
           top: 0,
           behavior: 'auto',
         });
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console

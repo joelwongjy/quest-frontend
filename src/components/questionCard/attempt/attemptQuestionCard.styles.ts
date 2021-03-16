@@ -4,7 +4,6 @@ export const useStyles = makeStyles(() =>
   createStyles({
     container: {
       marginTop: 16,
-      marginBottom: 32,
     },
   })
 );

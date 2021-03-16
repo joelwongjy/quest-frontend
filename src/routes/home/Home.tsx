@@ -11,7 +11,8 @@ import ApiService from 'services/apiService';
 import { useStyles } from './home.styles';
 
 const Home: React.FunctionComponent = () => {
-  const { name } = useUser()!;
+  const { user } = useUser();
+  const { name } = user!;
   const { logout } = useAuth();
   const classes = useStyles();
 

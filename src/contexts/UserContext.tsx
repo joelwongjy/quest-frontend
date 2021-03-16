@@ -1,5 +1,6 @@
 import React from 'react';
 import UserContextInterface from 'interfaces/contexts/userContext';
+import { ClassUserRole } from 'interfaces/models/classUsers';
 import { useAuth } from './AuthContext';
 
 const UserContext = React.createContext<UserContextInterface | undefined>(
@@ -9,7 +10,12 @@ const UserContext = React.createContext<UserContextInterface | undefined>(
 // Allows user data to be accessible from everywhere
 const UserProvider: React.FunctionComponent = (props) => {
   const { data } = useAuth();
-  return <UserContext.Provider value={data} {...props} />;
+  const isStaff =
+    data !== null &&
+    (data.highestClassRole === ClassUserRole.ADMIN ||
+      data.highestClassRole === ClassUserRole.TEACHER);
+
+  return <UserContext.Provider value={{ user: data, isStaff }} {...props} />;
 };
 
 const useUser = (): UserContextInterface => {
