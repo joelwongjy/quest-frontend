@@ -7,13 +7,14 @@ import {
   Button,
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 import logo from 'assets/images/logo.png';
 import profile from 'assets/images/profile.png';
 import { QuestComponentProps } from 'interfaces/components/common';
-
 import { PROFILE } from 'constants/routes';
-import { useHistory } from 'react-router-dom';
+import { useUser } from 'contexts/UserContext';
+
 import { useStyles } from './questAppBar.styles';
 
 const LogoContainer: React.FunctionComponent = () => {
@@ -35,7 +36,6 @@ const ChildrenContainer: React.FunctionComponent<QuestComponentProps> = ({
 interface QuestAppBarProps extends QuestComponentProps {
   hasDrawer: boolean;
   toggleDrawer: () => void;
-  isLoggedIn: boolean;
 }
 
 const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
@@ -43,11 +43,11 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
   theme,
   toggleDrawer,
   children,
-  isLoggedIn = false,
 }) => {
   const menuId = 'primary-search-account-menu';
   const classes = useStyles();
   const history = useHistory();
+  const { user } = useUser();
   const profileMenuRef = useRef<HTMLButtonElement | null>(null);
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -76,7 +76,7 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
           {children}
         </ChildrenContainer>
         <div className={classes.grow} />
-        {isLoggedIn && (
+        {user && (
           <div>
             <Button
               ref={profileMenuRef}

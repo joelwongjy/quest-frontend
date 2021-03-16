@@ -59,7 +59,7 @@ const CreateProgramme: React.FunctionComponent = () => {
   const alertCallback = getAlertCallback(setState);
 
   return (
-    <PageContainer isLoggedIn>
+    <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
       <ProgrammeForm
         mode={ProgrammeMode.NEW}

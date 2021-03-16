@@ -207,7 +207,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
 
   const renderQuestionnaire = () => {
     return (
-      <PageContainer isLoggedIn>
+      <PageContainer>
         <SampleQuestionMenu type={questionnaire.type} />
         <PageHeader breadcrumbs={breadcrumbs} />
         <div

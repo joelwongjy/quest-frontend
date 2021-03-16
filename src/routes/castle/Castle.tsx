@@ -16,7 +16,7 @@ const Castle: React.FunctionComponent = () => {
   const classes = useStyles();
 
   return (
-    <PageContainer hasContentPadding={false} isLoggedIn>
+    <PageContainer hasContentPadding={false}>
       <div className={classes.root}>
         <Grid xs={12} md={9} lg={6}>
           <StudentBoard title="Announcements" className={classes.announcements}>

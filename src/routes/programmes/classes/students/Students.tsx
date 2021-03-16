@@ -164,7 +164,7 @@ const Students: React.FunctionComponent = () => {
   };
 
   return (
-    <PageContainer isLoggedIn>
+    <PageContainer>
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
