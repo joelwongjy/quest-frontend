@@ -87,9 +87,8 @@ const AttemptQuestionCard: React.FC<AttemptQuestionCardProps> = ({
       key={`attempt-${question.qnOrderId}`}
       container
       justify="center"
-      spacing={6}
     >
-      <Grid item xs={12} sm={8}>
+      <Grid item xs={12}>
         <MuiThemeProvider theme={InputMuiTheme}>
           {renderQuestion()}
         </MuiThemeProvider>
