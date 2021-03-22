@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       backgroundColor: '#976b3e',
@@ -38,10 +38,17 @@ export const useStyles = makeStyles(() =>
       top: '1rem',
       left: '1rem',
       zIndex: 0,
+      [theme.breakpoints.down('sm')]: {
+        borderLeft: 'none',
+        borderRight: 'none',
+      },
     },
     accessoryContainer: {
       width: 'calc(100% - 5rem)',
       zIndex: 1,
+      [theme.breakpoints.down('sm')]: {
+        width: 'calc(100% - 2rem)',
+      },
     },
     innerContainer: {
       backgroundColor: '#d3b488',
@@ -50,6 +57,9 @@ export const useStyles = makeStyles(() =>
       border: '#a6957d 0.25rem solid',
       zIndex: 1,
       overflow: 'hidden',
+      [theme.breakpoints.down('sm')]: {
+        width: 'calc(100% - 2rem)',
+      },
     },
   })
 );

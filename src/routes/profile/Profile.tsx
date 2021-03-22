@@ -322,7 +322,11 @@ const Profile: React.FC = () => {
         <Grid xs={12} sm={10} md={9} lg={8} item>
           <StudentBoard title="Profile" className={classes.profile}>
             <ul className={classes.scrollable}>
-              <Grid container style={{ alignItems: 'center' }}>
+              <Grid
+                container
+                alignItems="center"
+                className={classes.topContainer}
+              >
                 <Grid item xs={6}>
                   <QuestCard className={classes.card}>
                     <Grid container justify="center" alignItems="center">
@@ -389,11 +393,11 @@ const Profile: React.FC = () => {
                 container
                 spacing={0}
                 justify="center"
-                style={{ padding: '1rem' }}
+                className={classes.programmeClassCardContainer}
               >
                 {user?.programmes.map((p) => {
                   return (
-                    <Grid item xs={12} sm={11} md={10} lg={6} key={p.id}>
+                    <Grid item xs={12} md={10} lg={6} key={p.id}>
                       <QuestCard className={classes.programmeClassCard}>
                         <Grid
                           container

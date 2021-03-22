@@ -163,10 +163,7 @@ const Quests: React.FC = () => {
                           xs={12}
                           md={6}
                           key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                          style={{
-                            margin: '0',
-                            padding: '1rem',
-                          }}
+                          className={classes.cardContainer}
                         >
                           <QuestionnaireCard
                             questionnaire={q.quest}
@@ -183,6 +180,7 @@ const Quests: React.FC = () => {
                         display: 'flex',
                         width: '100%',
                         justifyContent: 'center',
+                        textAlign: 'center',
                       }}
                     >
                       You have completed all quests! Amazing!
@@ -198,10 +196,7 @@ const Quests: React.FC = () => {
                           xs={12}
                           md={6}
                           key={`${q.quest.type}-${q.quest.name}-${q.quest.id}`}
-                          style={{
-                            margin: '0',
-                            padding: '1rem',
-                          }}
+                          className={classes.cardContainer}
                         >
                           <QuestionnaireCard
                             questionnaire={q.quest}
@@ -223,6 +218,7 @@ const Quests: React.FC = () => {
                         display: 'flex',
                         width: '100%',
                         justifyContent: 'center',
+                        textAlign: 'center',
                       }}
                     >
                       You have no completed quests. Starting doing them now!

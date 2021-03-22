@@ -14,10 +14,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       width: '100%',
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1),
+      },
     },
     main: {
       paddingLeft: '1rem',
       paddingRight: '1rem',
+      [theme.breakpoints.down('sm')]: {
+        padding: 0,
+      },
     },
     button: {
       margin: theme.spacing(1.5, 0, 1.5, 1.5),
@@ -33,9 +39,19 @@ export const useStyles = makeStyles((theme: Theme) =>
     quests: {
       overflow: 'hidden',
       width: '100%',
+      [theme.breakpoints.down('sm')]: {
+        height: '70%',
+      },
     },
     card: {
       backgroundColor: '#F7F6DA',
+    },
+    cardContainer: {
+      margin: '0',
+      padding: '1rem',
+      [theme.breakpoints.down('sm')]: {
+        padding: '0.5rem',
+      },
     },
     scrollable: {
       padding: '0 0.5rem',
@@ -49,6 +65,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       right: 10,
       bottom: 20,
       height: '40%',
+      [theme.breakpoints.down('xs')]: {
+        height: '35%',
+      },
     },
     mascotInnerContainer: {
       position: 'relative',
@@ -60,6 +79,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       bottom: 0,
       right: 0,
+      [theme.breakpoints.down('xs')]: {
+        height: '60%',
+      },
     },
     mascotSpeech: {
       backgroundColor: '#D5E6EC',
@@ -67,6 +89,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '1rem',
       padding: '1rem',
       position: 'relative',
+      zIndex: 3,
       '&:after': {
         content: "''",
         display: 'block' /* reduce the damage in FF3.0 */,
@@ -77,7 +100,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         borderWidth: '25px 8px 0 8px',
         borderStyle: 'solid',
         borderColor: '#D5E6EC transparent',
-        zIndex: -1,
+        zIndex: 2,
         transform: 'rotate(-35deg)',
       },
     },

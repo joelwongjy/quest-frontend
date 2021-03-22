@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       width: '100%',
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1),
+      },
     },
     board: {
       overflow: 'hidden',

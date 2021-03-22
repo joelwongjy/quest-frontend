@@ -14,10 +14,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       width: '100%',
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1),
+      },
     },
     main: {
       paddingLeft: '1rem',
       paddingRight: '1rem',
+    },
+    topContainer: {
+      padding: '0 1rem',
     },
     button: {
       margin: theme.spacing(1.5, 0, 1.5, 1.5),
@@ -40,6 +46,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     card: {
       backgroundColor: '#B6A17A',
       margin: '2rem',
+      [theme.breakpoints.down('sm')]: {
+        margin: '1rem',
+      },
     },
     item: {
       padding: 0,
@@ -60,12 +69,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       left: '50%',
       transform: 'translate(-50%, -50%)',
     },
+    programmeClassCardContainer: {
+      padding: '1.5rem',
+      [theme.breakpoints.down('sm')]: {
+        padding: '0.5rem',
+      },
+    },
     programmeClassCard: {
       backgroundColor: '#D3CFCF',
-      margin: '1rem',
+      margin: '0.5rem',
     },
     scrollable: {
-      padding: '0 0.5rem',
+      padding: 0,
       margin: 0,
       height: '100%',
       overflow: 'scroll',
