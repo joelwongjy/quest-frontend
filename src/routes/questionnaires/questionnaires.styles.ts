@@ -5,6 +5,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     main: {
       paddingLeft: '1rem',
       paddingRight: '1rem',
+      [theme.breakpoints.down('sm')]: {
+        padding: 0,
+      },
     },
     button: {
       margin: theme.spacing(1.5, 0, 1.5, 1.5),

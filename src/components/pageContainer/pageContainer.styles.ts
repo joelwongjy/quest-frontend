@@ -11,6 +11,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     contentPadding: {
       padding: theme.spacing(3),
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(2),
+      },
     },
     toolbar: { ...theme.mixins.toolbar, minHeight: '4rem' },
   })

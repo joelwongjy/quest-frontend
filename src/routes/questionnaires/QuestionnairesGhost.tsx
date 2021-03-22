@@ -4,7 +4,6 @@ import { Button, Grid } from '@material-ui/core';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
-import QuestButton from 'componentWrappers/questButton';
 import QuestionnaireTabs from 'components/questionnaireTabs';
 
 import { breadcrumbs, tabs } from './helpers';
@@ -32,16 +31,16 @@ const QuestionnairesGhost: React.FC = () => {
               Create Questionnaire
             </Button>
           }
-          buttonLeft={
-            <QuestButton
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              disabled
-            >
-              Manage Sample Questions
-            </QuestButton>
-          }
+          // buttonLeft={
+          //   <QuestButton
+          //     variant="contained"
+          //     color="secondary"
+          //     className={classes.button}
+          //     disabled
+          //   >
+          //     Manage Sample Questions
+          //   </QuestButton>
+          // }
         />
         <Grid container spacing={6}>
           <Grid item xs={12} sm={6} lg={4}>

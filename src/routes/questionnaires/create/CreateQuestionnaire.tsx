@@ -159,12 +159,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
         )}
         <PageHeader breadcrumbs={breadcrumbs} />
         {!state.isTypeSelected ? (
-          <>
-            <Grid
-              container
-              justify="center"
-              style={{ marginTop: '3rem', marginBottom: '2rem' }}
-            >
+          <div style={{ marginTop: '1rem' }}>
+            <Grid container justify="center">
               <Typography
                 style={{ fontSize: 24, fontWeight: 'bold', color: 'grey' }}
                 align="center"
@@ -202,7 +198,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
                 </QuestCard>
               </Grid>
             </Grid>
-          </>
+          </div>
         ) : (
           <div
             style={{

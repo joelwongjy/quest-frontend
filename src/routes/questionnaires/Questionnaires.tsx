@@ -19,7 +19,6 @@ import PageHeader from 'components/pageHeader';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
 import ApiService from 'services/apiService';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
-import QuestButton from 'componentWrappers/questButton';
 
 import QuestAlert from 'componentWrappers/questAlert';
 import { RootState } from 'reducers/rootReducer';
@@ -222,7 +221,7 @@ const Questionnaires: React.FunctionComponent = () => {
         breadcrumbs={breadcrumbs}
         action={
           <ButtonGroup className={classes.buttonGroup}>
-            <QuestButton
+            {/* <QuestButton
               variant="contained"
               color="secondary"
               className={classes.button}
@@ -230,14 +229,14 @@ const Questionnaires: React.FunctionComponent = () => {
               disabled
             >
               Manage Sample Questions
-            </QuestButton>
+            </QuestButton> */}
             <Button
               variant="contained"
               color="secondary"
               className={classes.button}
               onClick={handleCreate}
             >
-              Create Questionnaire
+              Create
             </Button>
           </ButtonGroup>
         }
