@@ -1,5 +1,6 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import backgroundImage from 'assets/images/student/background.png';
+import programmeBarImage from 'assets/images/student/programme-bar.png';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,20 +55,18 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 0,
       fontSize: '1.5vw',
     },
-    programmeBar: {
-      maxWidth: '90%',
-      minHeight: '100%',
-    },
     programmeBarContainer: {
       position: 'relative',
       textAlign: 'center',
+      width: 'calc(100% - 2rem)',
       color: 'white',
+      background: `url(${programmeBarImage})`,
+      backgroundSize: '100% 100%',
+      margin: '0 1rem',
     },
-    centered: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+    programmeBarText: {
+      fontSize: '1rem',
+      padding: '0.3rem 0',
     },
     programmeClassCardContainer: {
       padding: '1.5rem',

@@ -21,7 +21,6 @@ import { Gender, PersonPostData } from 'interfaces/models/persons';
 
 import maleKnight from 'assets/images/student/male-knight.png';
 import femaleKnight from 'assets/images/student/female-knight.png';
-import programmeBar from 'assets/images/student/programme-bar.png';
 import sword from 'assets/images/student/sword-black.png';
 import { DefaultUserRole } from 'interfaces/models/users';
 import QuestTextField from 'componentWrappers/questTextField';
@@ -377,18 +376,11 @@ const Profile: React.FC = () => {
                   </List>
                 </Grid>
               </Grid>
-              <Grid container justify="center">
-                <div className={classes.programmeBarContainer}>
-                  <img
-                    src={programmeBar}
-                    alt="bar"
-                    className={classes.programmeBar}
-                  />
-                  <div className={classes.centered}>
-                    <Typography>Programmes & Classes</Typography>
-                  </div>
+              <div className={classes.programmeBarContainer}>
+                <div className={classes.programmeBarText}>
+                  Programmes & Classes
                 </div>
-              </Grid>
+              </div>
               <Grid
                 container
                 spacing={0}
