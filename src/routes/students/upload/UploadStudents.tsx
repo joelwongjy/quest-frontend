@@ -1,10 +1,10 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 // import { useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
 import { ADD, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-// import StudentForm from 'components/studentForm';
+import QuestButton from 'componentWrappers/questButton';
 // import { StudentMode } from 'interfaces/models/users';
 // import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
@@ -48,6 +48,24 @@ const UploadStudents: React.FunctionComponent = () => {
     }
   );
 
+  const [selectedFile, setSelectedFile] = useState<File>();
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = event.target.files;
+    if (fileList) {
+      setSelectedFile(fileList[0]);
+    }
+  };
+
+  const handleSubmission = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('File', selectedFile);
+      // eslint-disable-next-line no-console
+      console.log(formData);
+    }
+  };
+
   // const alertCallback = getAlertCallback(setState);
 
   return (
@@ -67,6 +85,21 @@ const UploadStudents: React.FunctionComponent = () => {
         confirmHandler={state.confirmHandler}
         cancelHandler={state.cancelHandler}
       />
+      <div>
+        <input type="file" name="file" onChange={changeHandler} />
+        {selectedFile ? (
+          <div>
+            <p>Filename: {selectedFile.name}</p>
+            <p>Filetype: {selectedFile.type}</p>
+            <p>Size in bytes: {selectedFile.size}</p>
+          </div>
+        ) : (
+          <p>Select a file to show details</p>
+        )}
+        <div>
+          <QuestButton onClick={handleSubmission}>Submit</QuestButton>
+        </div>
+      </div>
     </PageContainer>
   );
 };
