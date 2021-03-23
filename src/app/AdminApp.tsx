@@ -34,6 +34,7 @@ import CreateClass from 'routes/programmes/classes/create';
 import ClassStudents from 'routes/programmes/classes/students/';
 import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
+import UploadStudents from 'routes/students/upload';
 import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
@@ -102,6 +103,7 @@ const AdminApp: React.FunctionComponent = () => {
             path={`${STUDENTS}${CREATE}`}
             component={CreateStudents}
           />
+          <Route exact path={`${STUDENTS}${ADD}`} component={UploadStudents} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />
