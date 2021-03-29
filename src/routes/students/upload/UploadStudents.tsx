@@ -53,14 +53,12 @@ const UploadStudents: React.FunctionComponent = () => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [columns, setColumns] = useState([
     { field: 'id', headerName: 'id', width: 70 },
-    { field: 'firstName', headerName: 'First Name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 90,
-    },
+    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'gender', headerName: 'Gender', width: 70 },
+    { field: 'birthday', headerName: 'Birthday', type: 'date', width: 130 },
+    { field: 'mobile', headerName: 'Mobile Number', width: 130 },
+    { field: 'home', headerName: 'Home Number', width: 130 },
+    { field: 'email', headerName: 'Email', width: 200 },
   ]);
   const [rows, setRows] = useState([]);
 
@@ -80,13 +78,17 @@ const UploadStudents: React.FunctionComponent = () => {
         if (error) {
           console.log(error);
         } else {
+          console.log(response.rows);
           setRows(
             response.rows.slice(1).map((row: any, index: any) => {
               return {
                 id: index,
-                firstName: row[0],
-                lastName: row[1],
-                age: row[2],
+                name: row[0],
+                gender: row[1],
+                birthday: row[2],
+                mobile: row[3],
+                home: row[4],
+                email: row[5],
               };
             })
           );
