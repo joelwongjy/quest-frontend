@@ -6,7 +6,7 @@ import {
   GridColDef,
   GridToolbarContainer,
   GridToolbarExport,
-  // GridCellClassParams,
+  GridCellClassParams,
   // GridValueFormatterParams,
 } from '@material-ui/data-grid';
 // import { useHistory } from 'react-router-dom';
@@ -18,12 +18,12 @@ import QuestButton from 'componentWrappers/questButton';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
 
-// import { useStyles } from './uploadStudents.styles';
+import { useStyles } from './uploadStudents.styles';
 
 type UploadStudentsState = RouteState;
 
 const UploadStudents: React.FunctionComponent = () => {
-  // const classes = useStyles();
+  const classes = useStyles();
   // const history = useHistory();
   // const { setHasError } = useError();
 
@@ -63,7 +63,15 @@ const UploadStudents: React.FunctionComponent = () => {
   const [columns, setColumns] = useState<GridColDef[]>([
     { field: 'id', headerName: 'id', width: 70 },
     { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'gender', headerName: 'Gender', width: 70 },
+    {
+      field: 'gender',
+      headerName: 'Gender',
+      width: 100,
+      cellClassName: (params: GridCellClassParams) =>
+        (params.value as string) !== 'M' && (params.value as string) !== 'F'
+          ? classes.error
+          : '',
+    },
     {
       field: 'birthday',
       headerName: 'Birthday',
@@ -71,11 +79,11 @@ const UploadStudents: React.FunctionComponent = () => {
       // valueFormatter: (params: GridValueFormatterParams) =>
       //   (params.value as Date).toDateString(),
     },
-    { field: 'mobile', headerName: 'Mobile Number', width: 130 },
+    { field: 'mobile', headerName: 'Mobile Number', width: 200 },
     {
       field: 'home',
       headerName: 'Home Number',
-      width: 130,
+      width: 200,
       // cellClassName: (params: GridCellClassParams) =>
       //   (params.value as string).length !== 8 ? classes.error : '',
     },
@@ -141,15 +149,6 @@ const UploadStudents: React.FunctionComponent = () => {
       />
       <div>
         <input type="file" name="file" onChange={fileHandler} />
-        {selectedFile ? (
-          <div>
-            <p>Filename: {selectedFile.name}</p>
-            <p>Filetype: {selectedFile.type}</p>
-            <p>Size in bytes: {selectedFile.size}</p>
-          </div>
-        ) : (
-          <p>Select a file to show details</p>
-        )}
         <div>
           <QuestButton onClick={handleSubmission}>Upload</QuestButton>
         </div>
