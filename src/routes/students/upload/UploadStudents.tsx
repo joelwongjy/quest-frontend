@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useReducer, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 // import { useHistory } from 'react-router-dom';
 
@@ -112,6 +113,11 @@ const UploadStudents: React.FunctionComponent = () => {
         cancelHandler={state.cancelHandler}
       />
       <div>
+        <div>
+          <Link to="/BlankTemplate.xlsx" target="_blank" download>
+            Download Template Excel
+          </Link>
+        </div>
         <input type="file" name="file" onChange={fileHandler} />
         {selectedFile ? (
           <div>
