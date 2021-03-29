@@ -25,5 +25,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       margin: '1.5rem',
     },
+    error: {
+      backgroundColor: '#d47483',
+      color: '#1a3e72',
+    },
   })
 );

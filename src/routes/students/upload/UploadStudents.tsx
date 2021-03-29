@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useReducer, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { DataGrid } from '@material-ui/data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridToolbarExport,
+  // GridCellClassParams,
+  // GridValueFormatterParams,
+} from '@material-ui/data-grid';
 // import { useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
@@ -11,6 +17,8 @@ import PageHeader from 'components/pageHeader';
 import QuestButton from 'componentWrappers/questButton';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
+
+// import { useStyles } from './uploadStudents.styles';
 
 type UploadStudentsState = RouteState;
 
@@ -52,13 +60,25 @@ const UploadStudents: React.FunctionComponent = () => {
   );
 
   const [selectedFile, setSelectedFile] = useState<File>();
-  const [columns, setColumns] = useState([
+  const [columns, setColumns] = useState<GridColDef[]>([
     { field: 'id', headerName: 'id', width: 70 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'gender', headerName: 'Gender', width: 70 },
-    { field: 'birthday', headerName: 'Birthday', type: 'date', width: 130 },
+    {
+      field: 'birthday',
+      headerName: 'Birthday',
+      width: 130,
+      // valueFormatter: (params: GridValueFormatterParams) =>
+      //   (params.value as Date).toDateString(),
+    },
     { field: 'mobile', headerName: 'Mobile Number', width: 130 },
-    { field: 'home', headerName: 'Home Number', width: 130 },
+    {
+      field: 'home',
+      headerName: 'Home Number',
+      width: 130,
+      // cellClassName: (params: GridCellClassParams) =>
+      //   (params.value as string).length !== 8 ? classes.error : '',
+    },
     { field: 'email', headerName: 'Email', width: 200 },
   ]);
   const [rows, setRows] = useState([]);
@@ -99,6 +119,13 @@ const UploadStudents: React.FunctionComponent = () => {
   };
 
   // const alertCallback = getAlertCallback(setState);
+  function ExportTool() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarExport />
+      </GridToolbarContainer>
+    );
+  }
 
   return (
     <PageContainer>
@@ -113,11 +140,6 @@ const UploadStudents: React.FunctionComponent = () => {
         cancelHandler={state.cancelHandler}
       />
       <div>
-        <div>
-          <Link to="/BlankTemplate.xlsx" target="_blank" download>
-            Download Template Excel
-          </Link>
-        </div>
         <input type="file" name="file" onChange={fileHandler} />
         {selectedFile ? (
           <div>
@@ -129,16 +151,15 @@ const UploadStudents: React.FunctionComponent = () => {
           <p>Select a file to show details</p>
         )}
         <div>
-          <QuestButton onClick={handleSubmission}>Submit</QuestButton>
+          <QuestButton onClick={handleSubmission}>Upload</QuestButton>
         </div>
         <div style={{ height: 400, width: '100%' }}>
-          {/* <excelRenderer.OutTable
-            data={rows}
+          <DataGrid
+            rows={rows}
             columns={columns}
-            tableClassName="ExcelTable2007"
-            tableHeaderRowClass="heading"
-          /> */}
-          <DataGrid rows={rows} columns={columns} pageSize={5} />
+            pageSize={5}
+            components={{ Toolbar: ExportTool }}
+          />
         </div>
       </div>
     </PageContainer>
