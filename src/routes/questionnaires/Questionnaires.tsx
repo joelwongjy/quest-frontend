@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -17,8 +17,10 @@ import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
 import QuestionnaireCard from 'components/questionnaireCard';
 import PageHeader from 'components/pageHeader';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
+import { ClassRouteParams } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
+import { ProgrammeData } from 'interfaces/models/programmes';
 
 import QuestAlert from 'componentWrappers/questAlert';
 import { RootState } from 'reducers/rootReducer';
@@ -72,6 +74,7 @@ const Questionnaires: React.FunctionComponent = () => {
       },
     }
   );
+  const { id, classId } = useParams<ClassRouteParams>();
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -101,6 +104,25 @@ const Questionnaires: React.FunctionComponent = () => {
         const questionnaires = convertDateOfQuestionnaires(
           response.data.questionnaires as QuestionnaireListData[]
         );
+        if (id) {
+          const programmeResponse = await ApiService.get(`programmes/${id}`);
+          const programme = programmeResponse.data as ProgrammeData;
+          if (!didCancel) {
+            if (!classId) {
+              setSelectedProgrammes([{ id: Number(id), name: programme.name }]);
+            }
+            const questClasses = classId
+              ? programme.classes
+                  .filter((c) => c.id === Number(classId))
+                  .map((c) => {
+                    return { id: c.id, name: c.name };
+                  })
+              : programme.classes.map((c) => {
+                  return { id: c.id, name: c.name };
+                });
+            setSelectedClasses(questClasses);
+          }
+        }
         if (!didCancel) {
           setState({
             questionnaires,
@@ -219,7 +241,7 @@ const Questionnaires: React.FunctionComponent = () => {
       )}
       <PageHeader
         breadcrumbs={breadcrumbs}
-        action={
+        action={(
           <ButtonGroup className={classes.buttonGroup}>
             {/* <QuestButton
               variant="contained"
@@ -239,7 +261,7 @@ const Questionnaires: React.FunctionComponent = () => {
               Create
             </Button>
           </ButtonGroup>
-        }
+        )}
       />
       <Grid container className={classes.main}>
         <QuestionnaireTabs

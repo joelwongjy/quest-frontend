@@ -22,7 +22,7 @@ const QuestBanner: React.FunctionComponent<QuestBannerProps> = ({
   return (
     <Alert
       severity={severity}
-      action={
+      action={(
         <Button
           color="inherit"
           size="small"
@@ -30,7 +30,7 @@ const QuestBanner: React.FunctionComponent<QuestBannerProps> = ({
         >
           {actionMessage}
         </Button>
-      }
+      )}
     >
       {alertMessage}
     </Alert>

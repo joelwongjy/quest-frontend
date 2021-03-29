@@ -33,7 +33,10 @@ const Castle: React.FunctionComponent = () => {
           <div className={classes.mascotContainer}>
             <div className={classes.mascotInnerContainer}>
               <div className={classes.mascotSpeech}>
-                Welcome {name}! Have you checked out the latest happenings in
+                Welcome 
+                {' '}
+                {name}
+                ! Have you checked out the latest happenings in
                 town?
               </div>
               <img
