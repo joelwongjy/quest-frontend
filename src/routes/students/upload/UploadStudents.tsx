@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 import React, { useReducer, useState } from 'react';
 // import { useHistory } from 'react-router-dom';
 
@@ -18,6 +20,9 @@ const UploadStudents: React.FunctionComponent = () => {
   // const classes = useStyles();
   // const history = useHistory();
   // const { setHasError } = useError();
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+  const excelRenderer = require('react-excel-renderer');
 
   const breadcrumbs = [
     { text: 'Students', href: STUDENTS },
@@ -49,8 +54,26 @@ const UploadStudents: React.FunctionComponent = () => {
   );
 
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [columns, setColumns] = useState([
+    {
+      title: 'NAME',
+      dataIndex: 'name',
+      editable: false,
+    },
+    {
+      title: 'AGE',
+      dataIndex: 'age',
+      editable: false,
+    },
+    {
+      title: 'GENDER',
+      dataIndex: 'gender',
+      editable: false,
+    },
+  ]);
+  const [rows, setRows] = useState([]);
 
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const fileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
     if (fileList) {
       setSelectedFile(fileList[0]);
@@ -61,8 +84,18 @@ const UploadStudents: React.FunctionComponent = () => {
     if (selectedFile) {
       const formData = new FormData();
       formData.append('File', selectedFile);
-      // eslint-disable-next-line no-console
       console.log(formData);
+      excelRenderer.ExcelRenderer(selectedFile, (error: any, response: any) => {
+        if (error) {
+          console.log(error);
+        } else {
+          // setColumns(response.cols);
+          console.log(response.cols);
+          console.log(response.rows[0]);
+          setColumns(response.cols);
+          setRows(response.rows.slice(1));
+        }
+      });
     }
   };
 
@@ -86,7 +119,7 @@ const UploadStudents: React.FunctionComponent = () => {
         cancelHandler={state.cancelHandler}
       />
       <div>
-        <input type="file" name="file" onChange={changeHandler} />
+        <input type="file" name="file" onChange={fileHandler} />
         {selectedFile ? (
           <div>
             <p>Filename: {selectedFile.name}</p>
@@ -98,6 +131,14 @@ const UploadStudents: React.FunctionComponent = () => {
         )}
         <div>
           <QuestButton onClick={handleSubmission}>Submit</QuestButton>
+        </div>
+        <div>
+          <excelRenderer.OutTable
+            data={rows}
+            columns={columns}
+            tableClassName="ExcelTable2007"
+            tableHeaderRowClass="heading"
+          />
         </div>
       </div>
     </PageContainer>
