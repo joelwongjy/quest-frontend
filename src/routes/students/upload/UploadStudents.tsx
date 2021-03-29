@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import React, { useReducer, useState } from 'react';
+import { DataGrid } from '@material-ui/data-grid';
 // import { useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
 import { ADD, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import QuestButton from 'componentWrappers/questButton';
-// import { StudentMode } from 'interfaces/models/users';
-// import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-// import { getAlertCallback } from 'utils/alertUtils';
-// import { useStyles } from './UploadStudents.styles';
 
 type UploadStudentsState = RouteState;
 
@@ -55,20 +52,14 @@ const UploadStudents: React.FunctionComponent = () => {
 
   const [selectedFile, setSelectedFile] = useState<File>();
   const [columns, setColumns] = useState([
+    { field: 'id', headerName: 'id', width: 70 },
+    { field: 'firstName', headerName: 'First Name', width: 130 },
+    { field: 'lastName', headerName: 'Last name', width: 130 },
     {
-      title: 'NAME',
-      dataIndex: 'name',
-      editable: false,
-    },
-    {
-      title: 'AGE',
-      dataIndex: 'age',
-      editable: false,
-    },
-    {
-      title: 'GENDER',
-      dataIndex: 'gender',
-      editable: false,
+      field: 'age',
+      headerName: 'Age',
+      type: 'number',
+      width: 90,
     },
   ]);
   const [rows, setRows] = useState([]);
@@ -89,11 +80,16 @@ const UploadStudents: React.FunctionComponent = () => {
         if (error) {
           console.log(error);
         } else {
-          // setColumns(response.cols);
-          console.log(response.cols);
-          console.log(response.rows[0]);
-          setColumns(response.cols);
-          setRows(response.rows.slice(1));
+          setRows(
+            response.rows.slice(1).map((row: any, index: any) => {
+              return {
+                id: index,
+                firstName: row[0],
+                lastName: row[1],
+                age: row[2],
+              };
+            })
+          );
         }
       });
     }
@@ -104,11 +100,6 @@ const UploadStudents: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      {/* <StudentForm
-        mode={StudentMode.NEW}
-        alertCallback={alertCallback}
-        cancelCallback={() => history.push(STUDENTS)}
-      /> */}
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm!}
@@ -132,13 +123,14 @@ const UploadStudents: React.FunctionComponent = () => {
         <div>
           <QuestButton onClick={handleSubmission}>Submit</QuestButton>
         </div>
-        <div>
-          <excelRenderer.OutTable
+        <div style={{ height: 400, width: '100%' }}>
+          {/* <excelRenderer.OutTable
             data={rows}
             columns={columns}
             tableClassName="ExcelTable2007"
             tableHeaderRowClass="heading"
-          />
+          /> */}
+          <DataGrid rows={rows} columns={columns} pageSize={5} />
         </div>
       </div>
     </PageContainer>
