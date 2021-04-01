@@ -191,9 +191,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Programme 
-                  {' '}
-                  {isSuccessful && ' - Successful'}
+                  Add Programme{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               {mode === ProgrammeMode.EDIT && (
@@ -202,9 +200,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Programme 
-                  {' '}
-                  {isSuccessful && ' - Successful'}
+                  Edit Programme{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>
@@ -265,7 +261,8 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                         variant="outlined"
                         disabled={isSuccessful}
                         onChange={(e) =>
-                          setState({ description: e.target.value })}
+                          setState({ description: e.target.value })
+                        }
                       />
                     </div>
                   </Grid>

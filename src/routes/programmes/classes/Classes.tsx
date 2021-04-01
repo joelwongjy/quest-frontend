@@ -193,7 +193,7 @@ const Classes: React.FunctionComponent = () => {
       <PageContainer>
         <PageHeader
           breadcrumbs={breadcrumbs}
-          action={(
+          action={
             <Button
               variant="contained"
               color="secondary"
@@ -204,7 +204,7 @@ const Classes: React.FunctionComponent = () => {
             >
               Create Class
             </Button>
-          )}
+          }
         />
         Loading...
       </PageContainer>

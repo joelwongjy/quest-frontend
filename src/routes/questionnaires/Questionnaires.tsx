@@ -241,7 +241,7 @@ const Questionnaires: React.FunctionComponent = () => {
       )}
       <PageHeader
         breadcrumbs={breadcrumbs}
-        action={(
+        action={
           <ButtonGroup className={classes.buttonGroup}>
             {/* <QuestButton
               variant="contained"
@@ -261,7 +261,7 @@ const Questionnaires: React.FunctionComponent = () => {
               Create
             </Button>
           </ButtonGroup>
-        )}
+        }
       />
       <Grid container className={classes.main}>
         <QuestionnaireTabs

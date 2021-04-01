@@ -214,9 +214,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Class 
-                  {' '}
-                  {isSuccessful && ' - Successful'}
+                  Add Class{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               {mode === ClassMode.EDIT && (
@@ -225,9 +223,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Class 
-                  {' '}
-                  {isSuccessful && ' - Successful'}
+                  Edit Class{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>
@@ -287,7 +283,8 @@ const ClassForm: React.FC<ClassFormProps> = ({
                           variant="outlined"
                           disabled={isSuccessful}
                           onChange={(e) =>
-                            setState({ description: e.target.value })}
+                            setState({ description: e.target.value })
+                          }
                         />
                         {hasError && state.name === '' && (
                           <FormHelperText>
