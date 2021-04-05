@@ -8,6 +8,7 @@ import {
   Menu,
   MenuItem,
   Typography,
+  Link as MuiLink,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
@@ -85,34 +86,43 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
             )
           }
         />
-        <CardContent>
-          <Typography
-            className={classes.title}
-            variant="h5"
-            component="h2"
-            noWrap
-          >
-            {questClass.name}
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions}>
-          <Button
-            size="small"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
-          >
-            Students
-          </Button>
-          <Button
-            size="small"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${QUESTIONNAIRES}`}
-          >
-            Questionnaires
-          </Button>
-        </CardActions>
+        <MuiLink
+          underline="none"
+          component={Link}
+          to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
+        >
+          <CardContent>
+            <Typography className={classes.status} component="p">
+              {`${questClass.studentCount} Students`}
+            </Typography>
+            <Typography
+              className={classes.title}
+              variant="h5"
+              component="h2"
+              noWrap
+            >
+              {questClass.name}
+            </Typography>
+            <Typography
+              className={classes.description}
+              variant="body2"
+              component="p"
+              color="textSecondary"
+            >
+              {questClass.description ?? 'No description'}
+            </Typography>
+          </CardContent>
+          <CardActions className={classes.actions}>
+            <Button
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${QUESTIONNAIRES}`}
+            >
+              Questionnaires
+            </Button>
+          </CardActions>
+        </MuiLink>
       </QuestCard>
     </>
   );
