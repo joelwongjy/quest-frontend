@@ -50,7 +50,7 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
 
   return (
     <>
-      <QuestCard>
+      <QuestCard hover>
         <CardHeader
           title={
             <Typography className={classes.status} color="textSecondary">

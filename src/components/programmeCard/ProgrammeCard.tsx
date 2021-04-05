@@ -42,7 +42,7 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
   };
 
   return (
-    <QuestCard>
+    <QuestCard hover>
       <CardHeader
         title={
           <Typography className={classes.status} color="textSecondary">
