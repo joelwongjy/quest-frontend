@@ -11,8 +11,7 @@ export const useStyles = makeStyles(() =>
     status: {
       marginLeft: 10,
       textAlign: 'left',
-      fontSize: '1.2rem',
-      color: '#bdbdbd',
+      fontSize: 14,
     },
     actions: {
       display: 'flex',

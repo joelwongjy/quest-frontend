@@ -52,6 +52,11 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
     <>
       <QuestCard>
         <CardHeader
+          title={
+            <Typography className={classes.status} color="textSecondary">
+              {`${questClass.studentCount} Students`}
+            </Typography>
+          }
           action={
             menuOptions && (
               <>
@@ -92,9 +97,6 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
           to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
         >
           <CardContent>
-            <Typography className={classes.status} component="p">
-              {`${questClass.studentCount} Students`}
-            </Typography>
             <Typography
               className={classes.title}
               variant="h5"

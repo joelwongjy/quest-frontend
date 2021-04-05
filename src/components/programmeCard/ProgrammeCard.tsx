@@ -44,6 +44,11 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
   return (
     <QuestCard>
       <CardHeader
+        title={
+          <Typography className={classes.status} color="textSecondary">
+            {`${programme.classCount} Classes`}
+          </Typography>
+        }
         action={
           menuOptions && (
             <>
@@ -78,15 +83,13 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
           )
         }
       />
+
       <MuiLink
         underline="none"
         component={Link}
         to={`${PROGRAMMES}/${programme.id}${CLASSES}`}
       >
         <CardContent>
-          <Typography className={classes.status} component="p">
-            {`${programme.classCount} Classes`}
-          </Typography>
           <Typography
             className={classes.title}
             variant="h5"
