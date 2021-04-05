@@ -13,7 +13,15 @@ import {
 import FilterIcon from '@material-ui/icons/FilterList';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import {
+  CLASSES,
+  CREATE,
+  DUPLICATE,
+  EDIT,
+  PROGRAMMES,
+  QUESTIONNAIRES,
+  STUDENTS,
+} from 'constants/routes';
 import QuestionnaireCard from 'components/questionnaireCard';
 import PageHeader from 'components/pageHeader';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
@@ -39,7 +47,6 @@ import ProgrammeClassPicker from 'components/programmeClassPicker';
 import { useUser } from 'contexts/UserContext';
 import {
   getQuestionnairesToRender,
-  breadcrumbs,
   tabs,
   QuestionnairesState,
   getMenuOptions,
@@ -86,6 +93,7 @@ const Questionnaires: React.FunctionComponent = () => {
     setHasIncompleteQuestionnare,
   ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [programme, setProgramme] = useState<{ id: number; name: string }>();
   const [selectedProgrammes, setSelectedProgrammes] = useState<
     { id: number; name: string }[]
   >([]);
@@ -111,6 +119,7 @@ const Questionnaires: React.FunctionComponent = () => {
             if (!classId) {
               setSelectedProgrammes([{ id: Number(id), name: programme.name }]);
             }
+            setProgramme({ id: Number(id), name: programme.name });
             const questClasses = classId
               ? programme.classes
                   .filter((c) => c.id === Number(classId))
@@ -148,6 +157,36 @@ const Questionnaires: React.FunctionComponent = () => {
       didCancel = true;
     };
   }, []);
+
+  const breadcrumbs = id
+    ? [
+        { text: 'Programmes', href: `${PROGRAMMES}` },
+        {
+          text:
+            state.isLoading || programme == null ? 'Loading' : programme.name,
+          href: `${PROGRAMMES}/${id}${CLASSES}`,
+        },
+        ...(classId
+          ? [
+              {
+                text: 'Classes',
+                href: `${PROGRAMMES}/${id}${CLASSES}`,
+              },
+              {
+                text:
+                  state.isLoading || selectedClasses[0] == null
+                    ? 'Loading'
+                    : selectedClasses[0].name,
+                href: `${PROGRAMMES}/${id}${CLASSES}/${classId}${STUDENTS}`,
+              },
+            ]
+          : []),
+        {
+          text: 'Questionnaires',
+          href: `${PROGRAMMES}/${id}${QUESTIONNAIRES}`,
+        },
+      ]
+    : [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
 
   if (state.isLoading) {
     return <QuestionnairesGhost />;
