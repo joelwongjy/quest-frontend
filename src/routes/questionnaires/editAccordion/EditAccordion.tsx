@@ -73,7 +73,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({
         )}
         {type === QuestionnaireType.PRE_POST && (
           <>
-            <Typography variant="h6" className={classes.typography}>
+            <Typography className={classes.subheading}>
               Shared Questions
             </Typography>
             <Grid item xs={12}>
@@ -88,7 +88,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({
               justify="space-between"
               alignItems="center"
             >
-              <Typography variant="h6">
+              <Typography className={classes.subheading}>
                 {isPre ? 'Pre-Programme Questions' : 'Post-Programme Questions'}
               </Typography>
               <div className={classes.modeSwitch}>

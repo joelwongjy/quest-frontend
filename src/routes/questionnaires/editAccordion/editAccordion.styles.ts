@@ -11,6 +11,11 @@ export const useStyles = makeStyles((theme) =>
       width: '100%',
       marginBottom: '10px',
     },
+    subheading: {
+      fontSize: 18,
+      marginTop: '1rem',
+      marginLeft: '0.5rem',
+    },
     input: {
       '& input': {
         textAlign: 'center',
