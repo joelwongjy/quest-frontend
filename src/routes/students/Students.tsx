@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, PERSONS, STUDENTS } from 'constants/routes';
+import { CREATE, EDIT, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
@@ -53,6 +53,7 @@ const Students: React.FunctionComponent = () => {
     }
   );
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
@@ -88,27 +89,14 @@ const Students: React.FunctionComponent = () => {
   const breadcrumbs = state.isEditing
     ? [
         { text: 'Students', href: STUDENTS },
-        { text: 'Edit', href: STUDENTS },
+        { text: 'Edit', href: `${STUDENTS}${EDIT}` },
       ]
     : [{ text: 'Students', href: STUDENTS }];
 
   const alertCallback = getAlertCallback(setState);
 
   const handleEdit = async (student: PersonListData) => {
-    setState({ isLoading: true });
-    try {
-      const response = await ApiService.get(`${PERSONS}/${student.id}`);
-      if (response.status === 200) {
-        setState({
-          isEditing: true,
-          selectedStudent: response.data.person as PersonData,
-        });
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-      setState({ isLoading: false, isError: true });
-    }
+    history.push(`${STUDENTS}/${student.id}${EDIT}`);
   };
 
   const handleDelete = (student: PersonListData) => {

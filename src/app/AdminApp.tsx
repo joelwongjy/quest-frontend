@@ -38,6 +38,7 @@ import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
 import AddStudents from 'routes/programmes/classes/students/add';
+import EditStudents from 'routes/students/edit';
 import Profile from 'routes/profile';
 import { useStyles } from './app.styles';
 
@@ -101,6 +102,11 @@ const AdminApp: React.FunctionComponent = () => {
             exact
             path={`${STUDENTS}${CREATE}`}
             component={CreateStudents}
+          />
+          <Route
+            exact
+            path={`${STUDENTS}/:id${EDIT}`}
+            component={EditStudents}
           />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
