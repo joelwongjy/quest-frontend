@@ -179,6 +179,11 @@ const Questionnaires: React.FunctionComponent = () => {
     }
   };
 
+  const handleDiscard = (): void => {
+    setHasIncompleteQuestionnare(false);
+    dispatch(clearQuestionnaire());
+  };
+
   const handleCreate = (): void => {
     if (hasIncompleteQuestionnaire) {
       setState({
@@ -214,6 +219,8 @@ const Questionnaires: React.FunctionComponent = () => {
           hasAction
           action={handleContinue}
           actionMessage="Continue"
+          discard={handleDiscard}
+          discardMessage="Discard"
           alertMessage={renderBannerMessage()}
         />
       )}
