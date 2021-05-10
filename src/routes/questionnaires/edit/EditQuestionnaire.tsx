@@ -1,49 +1,50 @@
 import React, { Dispatch, useEffect, useReducer } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { EDIT, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import QuestAlert from 'componentWrappers/questAlert';
+import QuestButton from 'componentWrappers/questButton';
+import { EDIT, QUESTIONNAIRES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
-import {
-  setPreStartTime,
-  setPreEndTime,
-  setPostStartTime,
-  setPostEndTime,
-  clearQuestionnaire,
-  QuestionnaireDux,
-  setQuestionnaire,
-  setProgrammes,
-  setClasses,
-} from 'reducers/questionnaireDux';
-import ApiService from 'services/apiService';
-import { RouteState } from 'interfaces/routes/common';
-import QuestButton from 'componentWrappers/questButton';
 import {
   QuestionnaireFullData,
   QuestionnaireMode,
   QuestionnairePatchData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
+import { RouteState } from 'interfaces/routes/common';
 import {
-  processEditQuestionnaire,
-  isValidQuestionnaire,
-  convertToQuestionnaireDux,
-} from 'utils/questionnaireUtils';
+  clearQuestionnaire,
+  QuestionnaireDux,
+  setClasses,
+  setPostEndTime,
+  setPostStartTime,
+  setPreEndTime,
+  setPreStartTime,
+  setProgrammes,
+  setQuestionnaire,
+} from 'reducers/questionnaireDux';
 import { RootState } from 'reducers/rootReducer';
-import QuestAlert from 'componentWrappers/questAlert';
-
-import SampleQuestionMenu from 'components/sampleQuestionMenu';
-import { useWindowSize } from 'utils/windowUtils';
+import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
-import { useStyles } from './editQuestionnaire.styles';
-import EditAccordion from '../editAccordion';
+import {
+  convertToQuestionnaireDux,
+  isValidQuestionnaire,
+  processEditQuestionnaire,
+} from 'utils/questionnaireUtils';
+import { useWindowSize } from 'utils/windowUtils';
+
 import AssignAccordion from '../assignAccordion';
-import DateAccordion from '../dateAccordion';
 import ConfirmationPage from '../ConfirmationPage';
+import DateAccordion from '../dateAccordion';
+import EditAccordion from '../editAccordion';
+
+import { useStyles } from './editQuestionnaire.styles';
 
 interface RouteParams {
   id: string;
@@ -68,14 +69,8 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   const { setHasError } = useError();
   const { width } = useWindowSize();
 
-  const {
-    questionnaireId,
-    title,
-    type,
-    questionWindows,
-    classes,
-    programmes,
-  } = questionnaire;
+  const { questionnaireId, title, type, questionWindows, classes, programmes } =
+    questionnaire;
 
   const [state, setState] = useReducer(
     (s: EditQuestionnaireState, a: Partial<EditQuestionnaireState>) => ({

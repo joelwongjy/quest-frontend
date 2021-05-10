@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   FormControl,
   FormHelperText,
@@ -6,19 +7,19 @@ import {
   Switch,
   Typography,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 
 import QuestAccordion from 'componentWrappers/questAccordion';
 import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import { QuestionnaireDux, setTitle } from 'reducers/questionnaireDux';
-import { useError } from 'contexts/ErrorContext';
 
-import SingleEdit from './SingleEdit';
-import SharedEdit from './SharedEdit';
-import PreEdit from './PreEdit';
-import { useStyles } from './editAccordion.styles';
 import PostEdit from './PostEdit';
+import PreEdit from './PreEdit';
+import SharedEdit from './SharedEdit';
+import SingleEdit from './SingleEdit';
+
+import { useStyles } from './editAccordion.styles';
 
 interface EditAccordionProps {
   questionnaire: QuestionnaireDux;
@@ -73,7 +74,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({
         )}
         {type === QuestionnaireType.PRE_POST && (
           <>
-            <Typography variant="h6" className={classes.typography}>
+            <Typography className={classes.subheading}>
               Shared Questions
             </Typography>
             <Grid item xs={12}>
@@ -88,7 +89,7 @@ const EditAccordion: React.FC<EditAccordionProps> = ({
               justify="space-between"
               alignItems="center"
             >
-              <Typography variant="h6">
+              <Typography className={classes.subheading}>
                 {isPre ? 'Pre-Programme Questions' : 'Post-Programme Questions'}
               </Typography>
               <div className={classes.modeSwitch}>

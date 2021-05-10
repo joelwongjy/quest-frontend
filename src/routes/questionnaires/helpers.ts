@@ -1,15 +1,15 @@
 import { isAfter, isBefore } from 'date-fns';
 import { History } from 'history';
+
 import store from 'app/store';
 import { DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { MenuOption } from 'interfaces/components/questionnaireCard';
 import {
   QuestionnaireListData,
   QuestionnaireMode,
 } from 'interfaces/models/questionnaires';
-import { QuestionnaireDux, setMode } from 'reducers/questionnaireDux';
-import { MenuOption } from 'interfaces/components/questionnaireCard';
-
 import { RouteState } from 'interfaces/routes/common';
+import { QuestionnaireDux, setMode } from 'reducers/questionnaireDux';
 
 export const tabs = ['Current', 'Upcoming', 'Past'];
 export const breadcrumbs = [{ text: 'Questionnaires', href: QUESTIONNAIRES }];

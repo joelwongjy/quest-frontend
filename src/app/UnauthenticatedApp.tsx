@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
   Redirect,
+  Route,
+  Switch,
 } from 'react-router-dom';
 
+import { LOGIN, ROOT } from 'constants/routes';
 import Login from 'routes/login';
 
-import { LOGIN, ROOT } from 'constants/routes';
 import { useStyles } from './app.styles';
 
 const redirectToLogin = (): React.ReactNode => <Redirect to={LOGIN} />;

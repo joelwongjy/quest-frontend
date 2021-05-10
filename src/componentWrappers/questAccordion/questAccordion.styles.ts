@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     heading: {
       fontWeight: theme.typography.fontWeightBold,
       color: theme.custom.icon.iconColor,
+      fontSize: 18,
     },
   })
 );

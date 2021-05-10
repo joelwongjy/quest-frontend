@@ -1,11 +1,12 @@
 import React from 'react';
+
 import UserContextInterface from 'interfaces/contexts/userContext';
 import { ClassUserRole } from 'interfaces/models/classUsers';
+
 import { useAuth } from './AuthContext';
 
-const UserContext = React.createContext<UserContextInterface | undefined>(
-  undefined
-);
+const UserContext =
+  React.createContext<UserContextInterface | undefined>(undefined);
 
 // Allows user data to be accessible from everywhere
 const UserProvider: React.FunctionComponent = (props) => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormGroup, IconButton } from '@material-ui/core';
 import {
-  SentimentVerySatisfied,
-  SentimentSatisfiedAlt,
-  SentimentSatisfied,
   SentimentDissatisfied,
+  SentimentSatisfied,
+  SentimentSatisfiedAlt,
   SentimentVeryDissatisfied,
+  SentimentVerySatisfied,
 } from '@material-ui/icons/';
 
 import { AnswerData } from 'interfaces/models/answers';

@@ -3,6 +3,7 @@ import { FormGroup, Grid, Typography } from '@material-ui/core';
 
 import QuestTextField from 'componentWrappers/questTextField';
 import { AnswerData } from 'interfaces/models/answers';
+
 import { useStyles } from './viewLongAnswerQuestion.styles';
 
 interface ViewLongAnswerQuestionProps {
@@ -11,100 +12,97 @@ interface ViewLongAnswerQuestionProps {
   answerAfter?: AnswerData;
 }
 
-const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProps> = ({
-  answer,
-  answerBefore,
-  answerAfter,
-}) => {
-  const classes = useStyles();
+const ViewLongAnswerQuestion: React.FunctionComponent<ViewLongAnswerQuestionProps> =
+  ({ answer, answerBefore, answerAfter }) => {
+    const classes = useStyles();
 
-  const renderQuestion = () => {
-    if (answer) {
-      return (
-        <div className={`${classes.top} is-single`}>
-          <QuestTextField
-            disabled
-            label="Answer"
-            value={answer.textResponse}
-            multiline
-            rows={3}
-            className={classes.textfield}
-          />
-        </div>
-      );
-    }
+    const renderQuestion = () => {
+      if (answer) {
+        return (
+          <div className={`${classes.top} is-single`}>
+            <QuestTextField
+              disabled
+              label="Answer"
+              value={answer.textResponse}
+              multiline
+              rows={3}
+              className={classes.textfield}
+            />
+          </div>
+        );
+      }
 
-    if (answerBefore !== undefined || answerAfter !== undefined) {
-      return (
-        <div className={classes.top}>
-          <Grid container justify="space-between">
-            <Grid item xs={12} md={6} className={classes.leftAnswer}>
-              <Grid
-                container
-                justify="center"
-                alignItems="center"
-                direction="column"
-              >
-                <Typography variant="h6" className={classes.beforeAfter}>
-                  Before
-                </Typography>
+      if (answerBefore !== undefined || answerAfter !== undefined) {
+        return (
+          <div className={classes.top}>
+            <Grid container justify="space-between">
+              <Grid item xs={12} md={6} className={classes.leftAnswer}>
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  direction="column"
+                >
+                  <Typography variant="h6" className={classes.beforeAfter}>
+                    Before
+                  </Typography>
 
-                {answerBefore !== undefined ? (
-                  <QuestTextField
-                    disabled
-                    value={answerBefore.textResponse}
-                    rows={3}
-                    multiline
-                    className={classes.textfield}
-                  />
-                ) : (
-                  <div className={classes.noOptionContainer}>
-                    <Typography className={classes.noOption}>
-                      This question was added after the student attempted the
-                      pre-programme questionnaire.
-                    </Typography>
-                  </div>
-                )}
+                  {answerBefore !== undefined ? (
+                    <QuestTextField
+                      disabled
+                      value={answerBefore.textResponse}
+                      rows={3}
+                      multiline
+                      className={classes.textfield}
+                    />
+                  ) : (
+                    <div className={classes.noOptionContainer}>
+                      <Typography className={classes.noOption}>
+                        This question was added after the student attempted the
+                        pre-programme questionnaire.
+                      </Typography>
+                    </div>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid item xs={12} md={6} className={classes.rightAnswer}>
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  direction="column"
+                >
+                  <Typography variant="h6" className={classes.beforeAfter}>
+                    After
+                  </Typography>
+
+                  {answerAfter !== undefined ? (
+                    <QuestTextField
+                      disabled
+                      value={answerAfter.textResponse}
+                      rows={3}
+                      multiline
+                      className={`${classes.textfield} is-right`}
+                    />
+                  ) : (
+                    <div className={classes.noOptionContainer}>
+                      <Typography className={classes.noOption}>
+                        This question has been modified or deleted after the
+                        student attempted the pre-programme questionnaire.
+                      </Typography>
+                    </div>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} md={6} className={classes.rightAnswer}>
-              <Grid
-                container
-                justify="center"
-                alignItems="center"
-                direction="column"
-              >
-                <Typography variant="h6" className={classes.beforeAfter}>
-                  After
-                </Typography>
+          </div>
+        );
+      }
 
-                {answerAfter !== undefined ? (
-                  <QuestTextField
-                    disabled
-                    value={answerAfter.textResponse}
-                    rows={3}
-                    multiline
-                    className={`${classes.textfield} is-right`}
-                  />
-                ) : (
-                  <div className={classes.noOptionContainer}>
-                    <Typography className={classes.noOption}>
-                      This question has been modified or deleted after the
-                      student attempted the pre-programme questionnaire.
-                    </Typography>
-                  </div>
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
-        </div>
-      );
-    }
+      return <></>;
+    };
 
-    return <></>;
+    return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
   };
-
-  return <FormGroup className={classes.card}>{renderQuestion()}</FormGroup>;
-};
 
 export default ViewLongAnswerQuestion;

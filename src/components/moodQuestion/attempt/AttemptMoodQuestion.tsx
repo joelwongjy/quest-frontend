@@ -1,14 +1,14 @@
 import React from 'react';
 import { IconButton } from '@material-ui/core';
 
-import { AnswerPostData } from 'interfaces/models/answers';
-import { QuestionData, Mood } from 'interfaces/models/questions';
-import verySadImage from 'assets/images/student/very-sad.png';
-import sadImage from 'assets/images/student/sad.png';
-import neutralImage from 'assets/images/student/neutral.png';
 import happyImage from 'assets/images/student/happy.png';
+import neutralImage from 'assets/images/student/neutral.png';
+import sadImage from 'assets/images/student/sad.png';
 import veryHappyImage from 'assets/images/student/very-happy.png';
+import verySadImage from 'assets/images/student/very-sad.png';
 import { useError } from 'contexts/ErrorContext';
+import { AnswerPostData } from 'interfaces/models/answers';
+import { Mood, QuestionData } from 'interfaces/models/questions';
 
 import { useStyles } from './attemptMoodQuestion.styles';
 

@@ -10,21 +10,21 @@ import {
   MuiThemeProvider,
   Select,
 } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 import DuplicateIcon from '@material-ui/icons/AddToPhotos';
-import UpIcon from '@material-ui/icons/ArrowUpward';
 import DownIcon from '@material-ui/icons/ArrowDownward';
+import UpIcon from '@material-ui/icons/ArrowUpward';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import EditMcqQuestion from 'components/mcqQuestion/edit';
-import { QuestComponentProps } from 'interfaces/components/common';
-import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import EditMoodQuestion from 'components/moodQuestion/edit';
-import EditScaleQuestion from 'components/scaleQuestion/edit';
-import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
-import { QuestionType } from 'interfaces/models/questions';
 import QuestionAccordion from 'components/questionAccordion';
+import EditScaleQuestion from 'components/scaleQuestion/edit';
 import QuestTextField from 'componentWrappers/questTextField';
 import { useError } from 'contexts/ErrorContext';
+import { QuestComponentProps } from 'interfaces/components/common';
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
+import { QuestionType } from 'interfaces/models/questions';
+import { QuestionnaireDuxQuestion } from 'reducers/questionnaireDux';
 
 import { useStyles } from './editQuestionCard.styles';
 

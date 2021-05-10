@@ -1,19 +1,19 @@
 import React, { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   AppBar,
-  Toolbar,
-  IconButton,
-  useScrollTrigger,
   Button,
+  IconButton,
+  Toolbar,
+  useScrollTrigger,
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
 
 import logo from 'assets/images/logo.png';
 import profile from 'assets/images/profile.png';
-import { QuestComponentProps } from 'interfaces/components/common';
 import { PROFILE } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questAppBar.styles';
 

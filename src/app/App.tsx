@@ -3,10 +3,10 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { LocalizationProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@material-ui/pickers/adapter/date-fns';
 
-import { useUser } from 'contexts/UserContext';
 import Loading from 'components/loading';
-import { retryPromise } from 'utils/promiseUtils';
+import { useUser } from 'contexts/UserContext';
 import { adminTheme, studentTheme } from 'styles/theme';
+import { retryPromise } from 'utils/promiseUtils';
 
 // Code splitting with React.lazy and Suspense
 type ModuleType = typeof import('./AdminApp');

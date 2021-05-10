@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
-import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
+import { withStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { adminTheme } from 'styles/theme';
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
+import { adminTheme } from 'styles/theme';
 
 import { useStyles } from './questionAccordion.styles';
 

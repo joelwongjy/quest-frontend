@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-  FormGroup,
-  RadioGroup,
-  Radio,
   FormControlLabel,
+  FormGroup,
   Grid,
+  Radio,
+  RadioGroup,
   Typography,
 } from '@material-ui/core';
 
 import { AnswerData } from 'interfaces/models/answers';
+
 import { useStyles } from './viewMcqQuestion.styles';
 
 interface ViewMcqQuestionProps {

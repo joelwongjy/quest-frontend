@@ -1,14 +1,14 @@
 import React from 'react';
-import { format } from 'date-fns';
 import { Grid, List, ListItem, Typography } from '@material-ui/core';
+import { format } from 'date-fns';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import QuestCard from 'componentWrappers/questCard';
 import QuestButton from 'componentWrappers/questButton';
-import { QuestionnaireDux } from 'reducers/questionnaireDux';
+import QuestCard from 'componentWrappers/questCard';
 import { useUser } from 'contexts/UserContext';
 import { QuestionnaireMode } from 'interfaces/models/questionnaires';
+import { QuestionnaireDux } from 'reducers/questionnaireDux';
 
 interface ConfirmationPageProps {
   breadcrumbs: { text: string; href: string }[];

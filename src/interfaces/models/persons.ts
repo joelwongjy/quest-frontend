@@ -1,7 +1,7 @@
-import { ClassUserRole } from './classUsers';
 import { DiscardableData } from './base';
-import { UserData } from './users';
+import { ClassUserRole } from './classUsers';
 import { RelationshipType } from './relationships';
+import { UserData } from './users';
 
 /* ==================
   TYPES FROM BACKEND

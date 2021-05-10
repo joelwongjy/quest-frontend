@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Avatar, Link, Paper, Grid, Typography } from '@material-ui/core';
+import { Avatar, Grid, Link, Paper, Typography } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import { useAuth } from 'contexts/AuthContext';
 import PageContainer from 'components/pageContainer';
-
-import QuestTextField from 'componentWrappers/questTextField';
 import QuestButton from 'componentWrappers/questButton';
+import QuestTextField from 'componentWrappers/questTextField';
 import { LOGIN } from 'constants/routes';
+import { useAuth } from 'contexts/AuthContext';
 
 import { useStyles } from './login.styles';
 

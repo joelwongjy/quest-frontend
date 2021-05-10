@@ -1,18 +1,18 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { PROGRAMMES, CLASSES, ADD, STUDENTS, PERSONS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import ApiService from 'services/apiService';
-import { ClassRouteParams, RouteState } from 'interfaces/routes/common';
-import { StudentMode } from 'interfaces/models/users';
-import { ClassData } from 'interfaces/models/classes';
-import { PersonData, PersonListData } from 'interfaces/models/persons';
-import QuestAlert from 'componentWrappers/questAlert';
 import StudentForm from 'components/studentForm';
 import StudentList from 'components/studentList';
+import QuestAlert from 'componentWrappers/questAlert';
+import { ADD, CLASSES, PERSONS, PROGRAMMES, STUDENTS } from 'constants/routes';
+import { ClassData } from 'interfaces/models/classes';
+import { PersonData, PersonListData } from 'interfaces/models/persons';
+import { StudentMode } from 'interfaces/models/users';
+import { ClassRouteParams, RouteState } from 'interfaces/routes/common';
+import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
 
 import { useStyles } from './students.styles';

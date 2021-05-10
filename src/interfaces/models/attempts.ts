@@ -1,4 +1,4 @@
-import { AnswerPostData, AnswerData } from './answers';
+import { AnswerData, AnswerPostData } from './answers';
 import { DiscardableData } from './base';
 import { QuestionnaireType, QuestionnaireWindowData } from './questionnaires';
 import { UserData } from './users';

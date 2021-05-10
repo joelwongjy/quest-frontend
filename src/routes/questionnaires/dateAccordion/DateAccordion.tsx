@@ -3,8 +3,8 @@ import { Chip, FormControl, FormHelperText, Grid } from '@material-ui/core';
 import { addMinutes, isAfter, isBefore } from 'date-fns';
 import { differenceInMinutes } from 'date-fns/esm';
 
-import QuestDateTimePicker from 'componentWrappers/questDateTimePicker';
 import QuestAccordion from 'componentWrappers/questAccordion';
+import QuestDateTimePicker from 'componentWrappers/questDateTimePicker';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 
 import { useStyles } from './dateAccordion.styles';

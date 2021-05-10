@@ -1,18 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-
-import PageContainer from 'components/pageContainer';
-import { QUESTIONNAIRES, RESPONSES, SUBMISSIONS } from 'constants/routes';
-import PageHeader from 'components/pageHeader';
-import {
-  AttemptFullData,
-  SharedQnnaireAnswerData,
-} from 'interfaces/models/attempts';
-import { RouteState } from 'interfaces/routes/common';
-import { useUser } from 'contexts/UserContext';
-import ApiService from 'services/apiService';
-import { getAlertCallback } from 'utils/alertUtils';
-import QuestAlert from 'componentWrappers/questAlert';
 import {
   FormControl,
   Grid,
@@ -23,15 +10,28 @@ import {
   Switch,
   Typography,
 } from '@material-ui/core';
+
+import PageContainer from 'components/pageContainer';
+import PageHeader from 'components/pageHeader';
+import ViewQuestionCard from 'components/questionCard/view';
+import QuestAlert from 'componentWrappers/questAlert';
+import { QUESTIONNAIRES, RESPONSES, SUBMISSIONS } from 'constants/routes';
+import { useUser } from 'contexts/UserContext';
+import { AnswerData } from 'interfaces/models/answers';
+import {
+  AttemptFullData,
+  SharedQnnaireAnswerData,
+} from 'interfaces/models/attempts';
 import {
   QuestionAccessibility,
   QuestionnaireFullData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import ViewQuestionCard from 'components/questionCard/view';
-
-import { AnswerData } from 'interfaces/models/answers';
 import { UserData } from 'interfaces/models/users';
+import { RouteState } from 'interfaces/routes/common';
+import ApiService from 'services/apiService';
+import { getAlertCallback } from 'utils/alertUtils';
+
 import { useStyles } from './responses.styles';
 
 interface RouteParams {

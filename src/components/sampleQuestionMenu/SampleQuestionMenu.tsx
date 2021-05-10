@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useDispatch } from 'react-redux';
 import {
   Button,
   CardActionArea,
@@ -22,14 +22,14 @@ import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 import QuestCard from 'componentWrappers/questCard';
-import { useWindowSize } from 'utils/windowUtils';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
-import { useDispatch } from 'react-redux';
 import {
   addSampleQuestionToPost,
   addSampleQuestionToPre,
   addSampleQuestionToShared,
 } from 'reducers/questionnaireDux';
+import { useWindowSize } from 'utils/windowUtils';
+
 import { useStyles } from './sampleQuestionMenu.styles';
 
 interface SampleQuestionMenuProps {

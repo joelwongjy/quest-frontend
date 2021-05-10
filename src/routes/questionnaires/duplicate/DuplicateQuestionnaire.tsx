@@ -1,49 +1,50 @@
 import React, { Dispatch, useEffect, useReducer } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { Grid, Paper } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { DUPLICATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import QuestAlert from 'componentWrappers/questAlert';
+import QuestButton from 'componentWrappers/questButton';
+import { DUPLICATE, QUESTIONNAIRES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
-import {
-  setPreStartTime,
-  setPreEndTime,
-  setPostStartTime,
-  setPostEndTime,
-  clearQuestionnaire,
-  QuestionnaireDux,
-  setQuestionnaire,
-  setClasses,
-  setProgrammes,
-} from 'reducers/questionnaireDux';
-import ApiService from 'services/apiService';
-import { RouteParams, RouteState } from 'interfaces/routes/common';
 import {
   QuestionnaireFullData,
   QuestionnaireMode,
   QuestionnairePostData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import QuestButton from 'componentWrappers/questButton';
+import { RouteParams, RouteState } from 'interfaces/routes/common';
+import {
+  clearQuestionnaire,
+  QuestionnaireDux,
+  setClasses,
+  setPostEndTime,
+  setPostStartTime,
+  setPreEndTime,
+  setPreStartTime,
+  setProgrammes,
+  setQuestionnaire,
+} from 'reducers/questionnaireDux';
+import { RootState } from 'reducers/rootReducer';
+import ApiService from 'services/apiService';
+import { getAlertCallback } from 'utils/alertUtils';
 import {
   convertToQuestionnaireDux,
   isValidQuestionnaire,
   processCreateQuestionnaire,
 } from 'utils/questionnaireUtils';
-import { RootState } from 'reducers/rootReducer';
-import QuestAlert from 'componentWrappers/questAlert';
-import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import { useWindowSize } from 'utils/windowUtils';
-import { getAlertCallback } from 'utils/alertUtils';
+
+import AssignAccordion from '../assignAccordion';
+import ConfirmationPage from '../ConfirmationPage';
+import DateAccordion from '../dateAccordion';
+import EditAccordion from '../editAccordion';
 
 import { useStyles } from './duplicateQuestionnaire.styles';
-import EditAccordion from '../editAccordion';
-import AssignAccordion from '../assignAccordion';
-import DateAccordion from '../dateAccordion';
-import ConfirmationPage from '../ConfirmationPage';
 
 interface DuplicateQuestionnaireState extends RouteState {
   isCompleted: boolean;
@@ -168,9 +169,8 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
   };
 
   const handleSubmit = async () => {
-    const data: QuestionnairePostData = processCreateQuestionnaire(
-      questionnaire
-    );
+    const data: QuestionnairePostData =
+      processCreateQuestionnaire(questionnaire);
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];

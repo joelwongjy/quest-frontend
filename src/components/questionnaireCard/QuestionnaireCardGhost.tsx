@@ -1,5 +1,4 @@
 import React from 'react';
-import Skeleton from '@material-ui/lab/Skeleton';
 import {
   Button,
   Card,
@@ -11,11 +10,12 @@ import {
   Typography,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Skeleton from '@material-ui/lab/Skeleton';
 
-import { CardMode } from 'interfaces/components/questionnaireCard';
 import QuestCard from 'componentWrappers/questCard';
-import { getQuestStyle } from 'utils/questUtils';
 import { QuestComponentProps } from 'interfaces/components/common';
+import { CardMode } from 'interfaces/components/questionnaireCard';
+import { getQuestStyle } from 'utils/questUtils';
 
 import { useStyles } from './questionnaireCard.styles';
 
