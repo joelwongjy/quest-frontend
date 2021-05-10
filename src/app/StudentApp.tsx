@@ -1,23 +1,24 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
   Redirect,
+  Route,
+  Switch,
 } from 'react-router-dom';
 
 import {
-  UNAUTHED_ROUTES,
-  ROOT,
-  QUESTS,
   CASTLE,
   PROFILE,
+  QUESTS,
+  ROOT,
+  UNAUTHED_ROUTES,
 } from 'constants/routes';
+import Castle from 'routes/castle';
+import Profile from 'routes/profile';
 import Quests from 'routes/quests';
 import Attempt from 'routes/quests/attempt';
 import Attempted from 'routes/quests/attempt/Attempted';
-import Castle from 'routes/castle';
-import Profile from 'routes/profile';
+
 import { useStyles } from './app.styles';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;

@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   IconButton,
-  Paper,
   List,
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
+  Paper,
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import { QuestComponentProps } from 'interfaces/components/common';

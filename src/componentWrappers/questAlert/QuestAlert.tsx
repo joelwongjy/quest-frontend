@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Button,
   Dialog,
@@ -8,6 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@material-ui/core';
+
 import { QuestComponentProps } from 'interfaces/components/common';
 
 interface QuestAlertProps extends QuestComponentProps {

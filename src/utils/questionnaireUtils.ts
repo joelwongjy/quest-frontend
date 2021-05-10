@@ -2,14 +2,14 @@ import { isBefore } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 
 import {
+  QuestionnaireFullData,
+  QuestionnaireListData,
+  QuestionnaireMode,
+  QuestionnairePatchData,
   QuestionnairePostData,
   QuestionnaireType,
-  QuestionnaireListData,
-  QuestionnaireFullData,
-  QuestionnaireMode,
   QuestionnaireWindowData,
   QuestionnaireWindowPostData,
-  QuestionnairePatchData,
 } from 'interfaces/models/questionnaires';
 import {
   OptionData,
@@ -316,9 +316,8 @@ export const processEditQuestionnaire = (
   questionnaire: QuestionnaireDux,
   original: QuestionnaireFullData
 ): QuestionnairePatchData => {
-  const noEmptyOptions: QuestionnairePostData = processCreateQuestionnaire(
-    questionnaire
-  );
+  const noEmptyOptions: QuestionnairePostData =
+    processCreateQuestionnaire(questionnaire);
   const changesIdentified: QuestionnairePatchData = {
     ...noEmptyOptions,
     questionnaireId: original.questionnaireId,

@@ -1,16 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, EDIT, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import ApiService from 'services/apiService';
-import { RouteState } from 'interfaces/routes/common';
-import { PersonData, PersonListData } from 'interfaces/models/persons';
-import QuestAlert from 'componentWrappers/questAlert';
 import StudentList from 'components/studentList';
+import QuestAlert from 'componentWrappers/questAlert';
+import { CREATE, EDIT, STUDENTS } from 'constants/routes';
+import { PersonData, PersonListData } from 'interfaces/models/persons';
+import { RouteState } from 'interfaces/routes/common';
+import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
 
 import { useStyles } from './students.styles';

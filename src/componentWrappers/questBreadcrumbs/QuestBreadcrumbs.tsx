@@ -1,9 +1,9 @@
 import React from 'react';
-import { Breadcrumbs, Link, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import { Breadcrumbs, Link, Typography } from '@material-ui/core';
 
-import { QuestComponentProps } from 'interfaces/components/common';
 import { Breadcrumb } from 'interfaces/components/breadcrumbs';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questBreadcrumbs.styles';
 

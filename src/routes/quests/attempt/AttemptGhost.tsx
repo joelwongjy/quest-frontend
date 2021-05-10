@@ -3,10 +3,10 @@ import { Button, Grid, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import PageContainer from 'components/pageContainer';
-
 import StudentBoard from 'components/studentBoard';
 
 import ProgressBar from './ProgressBar';
+
 import { useStyles } from './attempt.styles';
 
 const AttemptGhost: React.FC = () => {

@@ -1,8 +1,8 @@
 import MetropolisMediumFont from './fonts/Metropolis-Medium.woff';
 import MetropolisBoldFont from './fonts/Metropolis-SemiBold.woff';
-import RobotoRegularFont from './fonts/Roboto-Regular.woff';
-import RobotoMediumFont from './fonts/Roboto-Medium.woff';
 import RobotoBoldFont from './fonts/Roboto-Bold.woff';
+import RobotoMediumFont from './fonts/Roboto-Medium.woff';
+import RobotoRegularFont from './fonts/Roboto-Regular.woff';
 import Vt323Font from './fonts/VT323-Regular.woff';
 
 const MetropolisRegular = {

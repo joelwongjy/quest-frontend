@@ -2,19 +2,19 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
-import { QuestionAccessibility } from 'interfaces/models/questionnaires';
-import {
-  transferQuestionToPre,
-  transferQuestionToShared,
-  deleteQuestionInPost,
-  addQuestionToPost,
-  updateQuestionInPost,
-  shiftQuestionInPost,
-  duplicateQuestionInPost,
-  QuestionnaireDuxQuestion,
-} from 'reducers/questionnaireDux';
 import QuestionCard from 'components/questionCard/edit';
 import QuestCard from 'componentWrappers/questCard';
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
+import {
+  addQuestionToPost,
+  deleteQuestionInPost,
+  duplicateQuestionInPost,
+  QuestionnaireDuxQuestion,
+  shiftQuestionInPost,
+  transferQuestionToPre,
+  transferQuestionToShared,
+  updateQuestionInPost,
+} from 'reducers/questionnaireDux';
 import { isEmptyQuestion } from 'utils/questionnaireUtils';
 
 import { useStyles } from './editAccordion.styles';

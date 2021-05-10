@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, FormControl, FormHelperText } from '@material-ui/core';
+import { FormControl, FormHelperText, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import QuestButton from 'componentWrappers/questButton';

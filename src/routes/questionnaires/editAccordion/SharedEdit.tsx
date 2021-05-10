@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
+import QuestionCard from 'components/questionCard/edit';
+import QuestCard from 'componentWrappers/questCard';
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToShared,
@@ -14,10 +15,8 @@ import {
   transferQuestionToPre,
   updateQuestionInShared,
 } from 'reducers/questionnaireDux';
-import QuestionCard from 'components/questionCard/edit';
-import QuestCard from 'componentWrappers/questCard';
-
 import { isEmptyQuestion } from 'utils/questionnaireUtils';
+
 import { useStyles } from './editAccordion.styles';
 
 interface SharedEditProps {

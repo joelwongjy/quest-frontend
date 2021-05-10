@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { Dispatch, useReducer, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Paper, Typography } from '@material-ui/core';
-import SingleIcon from '@material-ui/icons/DescriptionOutlined';
-import PostIcon from '@material-ui/icons/Description';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Grid, Paper, Typography } from '@material-ui/core';
+import PostIcon from '@material-ui/icons/Description';
+import SingleIcon from '@material-ui/icons/DescriptionOutlined';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, PROGRAMMES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ProgrammeForm from 'components/programmeForm';
-import { ProgrammeMode } from 'interfaces/components/programmeForm';
-import { useUser } from 'contexts/UserContext';
-import { useError } from 'contexts/ErrorContext';
-import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
+import { CREATE, PROGRAMMES } from 'constants/routes';
+import { useError } from 'contexts/ErrorContext';
+import { useUser } from 'contexts/UserContext';
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
+import { RouteState } from 'interfaces/routes/common';
 import { getAlertCallback } from 'utils/alertUtils';
+
 import { useStyles } from './createProgramme.styles';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

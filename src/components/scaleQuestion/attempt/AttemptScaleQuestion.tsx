@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
+import sliderThumbImage from 'assets/images/student/slider-circle.png';
 import QuestSlider from 'componentWrappers/questSlider';
+import { useError } from 'contexts/ErrorContext';
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData, Scale } from 'interfaces/models/questions';
-import sliderThumbImage from 'assets/images/student/slider-circle.png';
-import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './attemptScaleQuestion.styles';
 

@@ -1,5 +1,7 @@
-import { subDays, addDays } from 'date-fns';
+import { addDays, subDays } from 'date-fns';
 
+import { DiscardableData } from 'interfaces/models/base';
+import { PersonListData } from 'interfaces/models/persons';
 import {
   QuestionnaireListData,
   QuestionnaireListDataType,
@@ -7,9 +9,7 @@ import {
   QuestionnaireStatus,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { DiscardableData } from 'interfaces/models/base';
 import { QuestionSetData, QuestionType } from 'interfaces/models/questions';
-import { PersonListData } from 'interfaces/models/persons';
 
 const mockBaseData: DiscardableData = {
   id: 0,

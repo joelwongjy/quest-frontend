@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormGroup } from '@material-ui/core';
 
-import { AnswerData } from 'interfaces/models/answers';
 import QuestSlider from 'componentWrappers/questSlider';
+import { AnswerData } from 'interfaces/models/answers';
 import { Scale } from 'interfaces/models/questions';
 
 import { useStyles } from './viewScaleQuestion.styles';

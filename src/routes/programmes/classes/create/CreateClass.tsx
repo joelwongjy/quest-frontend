@@ -1,15 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import ApiService from 'services/apiService';
 import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import { PROGRAMMES, CLASSES, CREATE } from 'constants/routes';
+import QuestAlert from 'componentWrappers/questAlert';
+import { CLASSES, CREATE, PROGRAMMES } from 'constants/routes';
 import { ClassMode } from 'interfaces/components/classForm';
 import { ProgrammeData } from 'interfaces/models/programmes';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
-import QuestAlert from 'componentWrappers/questAlert';
+import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
 
 interface CreateClassState extends RouteState {

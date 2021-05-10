@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
 import QuestionCard from 'components/questionCard/edit';
+import QuestCard from 'componentWrappers/questCard';
 import { QuestionAccessibility } from 'interfaces/models/questionnaires';
 import {
   addQuestionToPre,
@@ -12,9 +13,8 @@ import {
   shiftQuestionInPre,
   updateQuestionInPre,
 } from 'reducers/questionnaireDux';
-import QuestCard from 'componentWrappers/questCard';
-
 import { isEmptyQuestion } from 'utils/questionnaireUtils';
+
 import { useStyles } from './editAccordion.styles';
 
 interface SingleEditProps {

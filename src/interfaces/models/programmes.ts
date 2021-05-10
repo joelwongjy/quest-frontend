@@ -1,5 +1,5 @@
-import { ClassListData } from './classes';
 import { DiscardableData } from './base';
+import { ClassListData } from './classes';
 
 // PATCH /programmes/:programmeId
 export interface ProgrammePatchData {

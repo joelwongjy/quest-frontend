@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonProps, ButtonBaseProps } from '@material-ui/core';
+import { Button, ButtonBaseProps, ButtonProps } from '@material-ui/core';
 
 import { useStyles } from './questButton.styles';
 

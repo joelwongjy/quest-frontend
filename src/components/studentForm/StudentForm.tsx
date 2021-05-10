@@ -4,36 +4,36 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  Typography,
+  IconButton,
   List,
   ListItem,
-  Select,
   MenuItem,
+  Select,
   TextField,
-  IconButton,
+  Typography,
 } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
-import { DatePicker } from '@material-ui/pickers';
-import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { DatePicker } from '@material-ui/pickers';
 
+import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
-import QuestButton from 'componentWrappers/questButton';
-import { StudentMode } from 'interfaces/models/users';
+import { STUDENTS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
+import { ClassUserRole } from 'interfaces/models/classUsers';
+import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
+import { StudentMode } from 'interfaces/models/users';
+import { MiscDux } from 'reducers/miscDux';
+import { RootState } from 'reducers/rootReducer';
+import ApiService from 'services/apiService';
+import { sortByName } from 'utils/sortingUtils';
 import {
   isValidEmail,
   isValidMobileNumber,
   validateStudentInfo,
 } from 'utils/studentUtils';
-import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
-import { STUDENTS } from 'constants/routes';
-import { sortByName } from 'utils/sortingUtils';
-import { ClassUserRole } from 'interfaces/models/classUsers';
-import ApiService from 'services/apiService';
-import { MiscDux } from 'reducers/miscDux';
-import { RootState } from 'reducers/rootReducer';
 
 import { useStyles } from './StudentForm.styles';
 
