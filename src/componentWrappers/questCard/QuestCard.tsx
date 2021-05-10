@@ -5,7 +5,12 @@ import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questCard.styles';
 
-const QuestCard: React.FunctionComponent<QuestComponentProps & CardProps> = ({
+interface QuestCardProps extends QuestComponentProps {
+  hover?: boolean;
+}
+
+const QuestCard: React.FunctionComponent<QuestCardProps & CardProps> = ({
+  hover,
   className,
   children,
   ...props
@@ -13,7 +18,10 @@ const QuestCard: React.FunctionComponent<QuestComponentProps & CardProps> = ({
   const classes = useStyles();
 
   return (
-    <Card className={`${classes.root} ${className}`} {...props}>
+    <Card
+      className={`${hover ? classes.hover : classes.root} ${className}`}
+      {...props}
+    >
       {children}
     </Card>
   );

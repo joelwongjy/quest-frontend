@@ -2,17 +2,16 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(() =>
   createStyles({
-    dates: {
-      fontSize: 14,
-    },
     title: {
-      marginTop: 24,
-      marginBottom: 40,
-      textAlign: 'center',
+      padding: '0.6rem',
+      textAlign: 'left',
+      fontWeight: 600,
+      color: 'black',
     },
     status: {
-      marginBottom: 16,
-      textAlign: 'center',
+      marginLeft: 10,
+      textAlign: 'left',
+      fontSize: 14,
     },
     actions: {
       display: 'flex',
@@ -22,9 +21,11 @@ export const useStyles = makeStyles(() =>
       fullWidth: true,
       padding: '0.6rem',
     },
-    buttonHidden: {
-      padding: '0.6rem',
-      visibility: 'hidden',
+    description: {
+      marginLeft: 10,
+      textAlign: 'left',
+      fontSize: '0.8rem',
+      color: 'text.secondary',
     },
   })
 );
