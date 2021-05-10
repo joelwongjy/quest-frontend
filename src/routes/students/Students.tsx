@@ -1,17 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, PERSONS, STUDENTS } from 'constants/routes';
+import { CREATE, EDIT, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
 import ApiService from 'services/apiService';
 import { RouteState } from 'interfaces/routes/common';
-import { StudentMode } from 'interfaces/models/users';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import QuestAlert from 'componentWrappers/questAlert';
-import StudentForm from 'components/studentForm';
 import StudentList from 'components/studentList';
 import { getAlertCallback } from 'utils/alertUtils';
 
@@ -23,7 +21,6 @@ interface StudentsState extends RouteState {
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
-  isEditing: boolean;
   selectedStudent: PersonData | undefined;
 }
 
@@ -48,11 +45,11 @@ const Students: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
-      isEditing: false,
       selectedStudent: undefined,
     }
   );
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
@@ -85,30 +82,12 @@ const Students: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = state.isEditing
-    ? [
-        { text: 'Students', href: STUDENTS },
-        { text: 'Edit', href: STUDENTS },
-      ]
-    : [{ text: 'Students', href: STUDENTS }];
+  const breadcrumbs = [{ text: 'Students', href: STUDENTS }];
 
   const alertCallback = getAlertCallback(setState);
 
   const handleEdit = async (student: PersonListData) => {
-    setState({ isLoading: true });
-    try {
-      const response = await ApiService.get(`${PERSONS}/${student.id}`);
-      if (response.status === 200) {
-        setState({
-          isEditing: true,
-          selectedStudent: response.data.person as PersonData,
-        });
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-      setState({ isLoading: false, isError: true });
-    }
+    history.push(`${STUDENTS}/${student.id}${EDIT}`);
   };
 
   const handleDelete = (student: PersonListData) => {
@@ -138,33 +117,22 @@ const Students: React.FunctionComponent = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         action={
-          state.isEditing ? undefined : (
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              component={Link}
-              to={`${STUDENTS}${CREATE}`}
-            >
-              Create Student
-            </Button>
-          )
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            component={Link}
+            to={`${STUDENTS}${CREATE}`}
+          >
+            Create Student
+          </Button>
         }
       />
-      {state.isEditing ? (
-        <StudentForm
-          mode={StudentMode.EDIT}
-          student={state.selectedStudent}
-          alertCallback={alertCallback}
-          cancelCallback={() => setState({ isEditing: false })}
-        />
-      ) : (
-        <StudentList
-          students={state.students}
-          editCallback={handleEdit}
-          deleteCallback={handleDelete}
-        />
-      )}
+      <StudentList
+        students={state.students}
+        editCallback={handleEdit}
+        deleteCallback={handleDelete}
+      />
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm}
