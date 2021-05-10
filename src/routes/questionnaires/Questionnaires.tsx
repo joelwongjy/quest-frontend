@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -13,12 +13,22 @@ import {
 import FilterIcon from '@material-ui/icons/FilterList';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import {
+  CLASSES,
+  CREATE,
+  DUPLICATE,
+  EDIT,
+  PROGRAMMES,
+  QUESTIONNAIRES,
+  STUDENTS,
+} from 'constants/routes';
 import QuestionnaireCard from 'components/questionnaireCard';
 import PageHeader from 'components/pageHeader';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
+import { ClassRouteParams } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
+import { ProgrammeData } from 'interfaces/models/programmes';
 
 import QuestAlert from 'componentWrappers/questAlert';
 import { RootState } from 'reducers/rootReducer';
@@ -37,7 +47,6 @@ import ProgrammeClassPicker from 'components/programmeClassPicker';
 import { useUser } from 'contexts/UserContext';
 import {
   getQuestionnairesToRender,
-  breadcrumbs,
   tabs,
   QuestionnairesState,
   getMenuOptions,
@@ -72,6 +81,7 @@ const Questionnaires: React.FunctionComponent = () => {
       },
     }
   );
+  const { id, classId } = useParams<ClassRouteParams>();
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -83,6 +93,7 @@ const Questionnaires: React.FunctionComponent = () => {
     setHasIncompleteQuestionnare,
   ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [programme, setProgramme] = useState<{ id: number; name: string }>();
   const [selectedProgrammes, setSelectedProgrammes] = useState<
     { id: number; name: string }[]
   >([]);
@@ -101,6 +112,26 @@ const Questionnaires: React.FunctionComponent = () => {
         const questionnaires = convertDateOfQuestionnaires(
           response.data.questionnaires as QuestionnaireListData[]
         );
+        if (id) {
+          const programmeResponse = await ApiService.get(`programmes/${id}`);
+          const programme = programmeResponse.data as ProgrammeData;
+          if (!didCancel) {
+            if (!classId) {
+              setSelectedProgrammes([{ id: Number(id), name: programme.name }]);
+            }
+            setProgramme({ id: Number(id), name: programme.name });
+            const questClasses = classId
+              ? programme.classes
+                  .filter((c) => c.id === Number(classId))
+                  .map((c) => {
+                    return { id: c.id, name: c.name };
+                  })
+              : programme.classes.map((c) => {
+                  return { id: c.id, name: c.name };
+                });
+            setSelectedClasses(questClasses);
+          }
+        }
         if (!didCancel) {
           setState({
             questionnaires,
@@ -126,6 +157,36 @@ const Questionnaires: React.FunctionComponent = () => {
       didCancel = true;
     };
   }, []);
+
+  const breadcrumbs = id
+    ? [
+        { text: 'Programmes', href: `${PROGRAMMES}` },
+        {
+          text:
+            state.isLoading || programme == null ? 'Loading' : programme.name,
+          href: `${PROGRAMMES}/${id}${CLASSES}`,
+        },
+        ...(classId
+          ? [
+              {
+                text: 'Classes',
+                href: `${PROGRAMMES}/${id}${CLASSES}`,
+              },
+              {
+                text:
+                  state.isLoading || selectedClasses[0] == null
+                    ? 'Loading'
+                    : selectedClasses[0].name,
+                href: `${PROGRAMMES}/${id}${CLASSES}/${classId}${STUDENTS}`,
+              },
+            ]
+          : []),
+        {
+          text: 'Questionnaires',
+          href: `${PROGRAMMES}/${id}${QUESTIONNAIRES}`,
+        },
+      ]
+    : [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
 
   if (state.isLoading) {
     return <QuestionnairesGhost />;
