@@ -244,9 +244,11 @@ const Questionnaires: React.FunctionComponent = () => {
     if (hasIncompleteQuestionnaire) {
       setState({
         isAlertOpen: true,
-        alertHeader: 'You have an incomplete questionnaire',
+        alertHeader: 'Waning',
         alertMessage:
-          'Are you sure you would like to start a new questionnaire?',
+          'You have an incomplete questionnaire. By creating a new questionnaire, ' +
+          'the previous incomplete questionnaire will be discarded. ' +
+          'Are you sure you want to create a new questionnaire?',
         hasConfirm: true,
         confirmHandler: () => {
           setHasIncompleteQuestionnare(false);
