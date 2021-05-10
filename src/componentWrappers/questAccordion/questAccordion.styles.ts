@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     heading: {
       fontWeight: theme.typography.fontWeightBold,
       color: theme.custom.icon.iconColor,
+      fontSize: 18,
     },
   })
 );
