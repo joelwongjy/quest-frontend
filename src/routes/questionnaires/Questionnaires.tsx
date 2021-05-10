@@ -42,9 +42,10 @@ import {
   convertDateOfQuestionnaires,
 } from 'utils/questionnaireUtils';
 import QuestionnaireTabs from 'components/questionnaireTabs';
-
+import { getAlertCallback } from 'utils/alertUtils';
 import ProgrammeClassPicker from 'components/programmeClassPicker';
 import { useUser } from 'contexts/UserContext';
+
 import {
   getQuestionnairesToRender,
   tabs,
@@ -88,10 +89,8 @@ const Questionnaires: React.FunctionComponent = () => {
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
-  const [
-    hasIncompleteQuestionnaire,
-    setHasIncompleteQuestionnare,
-  ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
+  const [hasIncompleteQuestionnaire, setHasIncompleteQuestionnare] =
+    useState<boolean>(!isEmptyQuestionnaire(questionnaire));
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
   const [programme, setProgramme] = useState<{ id: number; name: string }>();
   const [selectedProgrammes, setSelectedProgrammes] = useState<
@@ -192,6 +191,8 @@ const Questionnaires: React.FunctionComponent = () => {
     return <QuestionnairesGhost />;
   }
 
+  const alertCallback = getAlertCallback(setState);
+
   const renderedQuestionnaires = getQuestionnairesToRender(
     state.questionnaires,
     tabValue,
@@ -241,26 +242,33 @@ const Questionnaires: React.FunctionComponent = () => {
   };
 
   const handleDiscard = (): void => {
-    setHasIncompleteQuestionnare(false);
-    dispatch(clearQuestionnaire());
+    alertCallback(
+      true,
+      true,
+      'Warning',
+      'Are you sure you wish to discard the ongoing questionnaire?',
+      () => {
+        setHasIncompleteQuestionnare(false);
+        dispatch(clearQuestionnaire());
+      }
+    );
   };
 
   const handleCreate = (): void => {
     if (hasIncompleteQuestionnaire) {
-      setState({
-        isAlertOpen: true,
-        alertHeader: 'Waning',
-        alertMessage:
-          'You have an incomplete questionnaire. By creating a new questionnaire, ' +
+      alertCallback(
+        true,
+        true,
+        'Warning',
+        'You have an incomplete questionnaire. By creating a new questionnaire, ' +
           'the previous incomplete questionnaire will be discarded. ' +
           'Are you sure you want to create a new questionnaire?',
-        hasConfirm: true,
-        confirmHandler: () => {
+        () => {
           setHasIncompleteQuestionnare(false);
           dispatch(clearQuestionnaire());
           history.push(`${QUESTIONNAIRES}${CREATE}`);
-        },
-      });
+        }
+      );
     } else {
       history.push(`${QUESTIONNAIRES}${CREATE}`);
     }
