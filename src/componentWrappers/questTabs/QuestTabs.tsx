@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Tab, createStyles, Theme } from '@material-ui/core';
+import { createStyles, Tab, Tabs, Theme } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
 import { QuestComponentProps } from 'interfaces/components/common';

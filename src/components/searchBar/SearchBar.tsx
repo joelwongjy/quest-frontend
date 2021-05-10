@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import {
-  Search as SearchIcon,
-  CloseOutlined as CloseOutlinedIcon,
-} from '@material-ui/icons';
-import {
   Box,
   ClickAwayListener,
   IconButton,
   InputBase,
 } from '@material-ui/core';
+import {
+  CloseOutlined as CloseOutlinedIcon,
+  Search as SearchIcon,
+} from '@material-ui/icons';
 
 import { QuestComponentProps } from 'interfaces/components/common';
 

@@ -1,52 +1,52 @@
 import React, { Dispatch, useReducer } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Typography } from '@material-ui/core';
-import SingleIcon from '@material-ui/icons/DescriptionOutlined';
-import PostIcon from '@material-ui/icons/Description';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Grid, Typography } from '@material-ui/core';
+import PostIcon from '@material-ui/icons/Description';
+import SingleIcon from '@material-ui/icons/DescriptionOutlined';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, QUESTIONNAIRES } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
+import SampleQuestionMenu from 'components/sampleQuestionMenu';
+import QuestAlert from 'componentWrappers/questAlert';
 import QuestButton from 'componentWrappers/questButton';
+import QuestCard from 'componentWrappers/questCard';
+import { CREATE, QUESTIONNAIRES } from 'constants/routes';
+import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
-import { RootState } from 'reducers/rootReducer';
 import {
+  QuestionnaireMode,
+  QuestionnairePostData,
+  QuestionnaireType,
+} from 'interfaces/models/questionnaires';
+import { RouteState } from 'interfaces/routes/common';
+import {
+  clearQuestionnaire,
   QuestionnaireDux,
+  setClasses,
   setPostEndTime,
   setPostStartTime,
   setPreEndTime,
   setPreStartTime,
-  setType,
-  clearQuestionnaire,
   setProgrammes,
-  setClasses,
+  setType,
 } from 'reducers/questionnaireDux';
-import QuestCard from 'componentWrappers/questCard';
-import {
-  QuestionnaireMode,
-  QuestionnaireType,
-  QuestionnairePostData,
-} from 'interfaces/models/questionnaires';
+import { RootState } from 'reducers/rootReducer';
 import ApiService from 'services/apiService';
-
-import { useError } from 'contexts/ErrorContext';
+import { getAlertCallback } from 'utils/alertUtils';
 import {
   isEmptyQuestionnaire,
-  processCreateQuestionnaire,
   isValidQuestionnaire,
+  processCreateQuestionnaire,
 } from 'utils/questionnaireUtils';
-import { RouteState } from 'interfaces/routes/common';
-import QuestAlert from 'componentWrappers/questAlert';
-
 import { useWindowSize } from 'utils/windowUtils';
-import SampleQuestionMenu from 'components/sampleQuestionMenu';
-import { getAlertCallback } from 'utils/alertUtils';
-import DateAccordion from '../dateAccordion';
+
 import AssignAccordion from '../assignAccordion';
-import EditAccordion from '../editAccordion';
-import { useStyles } from './createQuestionnaire.styles';
 import ConfirmationPage from '../ConfirmationPage';
+import DateAccordion from '../dateAccordion';
+import EditAccordion from '../editAccordion';
+
+import { useStyles } from './createQuestionnaire.styles';
 
 interface CreateQuestionnaireState extends RouteState {
   isTypeSelected: boolean;
@@ -136,9 +136,8 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   };
 
   const handleSubmit = async () => {
-    const data: QuestionnairePostData = processCreateQuestionnaire(
-      questionnaire
-    );
+    const data: QuestionnairePostData =
+      processCreateQuestionnaire(questionnaire);
     if (data.type === QuestionnaireType.ONE_TIME) {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];

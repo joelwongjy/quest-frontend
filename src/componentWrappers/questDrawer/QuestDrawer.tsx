@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Drawer,
   Hidden,
@@ -8,13 +8,15 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
+import ExitIcon from '@material-ui/icons/ExitToAppRounded';
 import HomeIcon from '@material-ui/icons/HomeRounded';
 import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
-import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
-import ExitIcon from '@material-ui/icons/ExitToAppRounded';
 
-import { QuestComponentProps } from 'interfaces/components/common';
+import homeIcon from 'assets/images/student/house.png';
+import swordIcon from 'assets/images/student/sword-white.png';
+import QuestAlert from 'componentWrappers/questAlert';
 import {
   CASTLE,
   HOME,
@@ -24,10 +26,8 @@ import {
   STUDENTS,
 } from 'constants/routes';
 import { useAuth } from 'contexts/AuthContext';
-import QuestAlert from 'componentWrappers/questAlert';
 import { useUser } from 'contexts/UserContext';
-import homeIcon from 'assets/images/student/house.png';
-import swordIcon from 'assets/images/student/sword-white.png';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questDrawer.styles';
 

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { PersonData } from 'interfaces/models/persons';
 
 export interface MiscDux {

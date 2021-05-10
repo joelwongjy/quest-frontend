@@ -2,14 +2,13 @@
 import React from 'react';
 import { useAsync } from 'react-async';
 
-import AuthContextInterface from 'interfaces/contexts/authContext';
-import AuthService from 'services/authService';
 import Loading from 'components/loading';
+import AuthContextInterface from 'interfaces/contexts/authContext';
 import { UserPostData } from 'interfaces/models/users';
+import AuthService from 'services/authService';
 
-const AuthContext = React.createContext<AuthContextInterface | undefined>(
-  undefined
-);
+const AuthContext =
+  React.createContext<AuthContextInterface | undefined>(undefined);
 
 const AuthProvider: React.FunctionComponent = (props) => {
   const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);

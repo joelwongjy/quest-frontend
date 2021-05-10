@@ -1,9 +1,9 @@
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
 import {
-  ProgrammePostData,
   ProgrammeListData,
   ProgrammePatchData,
+  ProgrammePostData,
 } from 'interfaces/models/programmes';
-import { ProgrammeMode } from 'interfaces/components/programmeForm';
 
 export const programmeFormIsChanged = (
   mode: ProgrammeMode,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   FormControl,
   FormHelperText,
@@ -6,19 +7,19 @@ import {
   Switch,
   Typography,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 
 import QuestAccordion from 'componentWrappers/questAccordion';
 import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 import { QuestionnaireType } from 'interfaces/models/questionnaires';
 import { QuestionnaireDux, setTitle } from 'reducers/questionnaireDux';
-import { useError } from 'contexts/ErrorContext';
 
-import SingleEdit from './SingleEdit';
-import SharedEdit from './SharedEdit';
-import PreEdit from './PreEdit';
-import { useStyles } from './editAccordion.styles';
 import PostEdit from './PostEdit';
+import PreEdit from './PreEdit';
+import SharedEdit from './SharedEdit';
+import SingleEdit from './SingleEdit';
+
+import { useStyles } from './editAccordion.styles';
 
 interface EditAccordionProps {
   questionnaire: QuestionnaireDux;

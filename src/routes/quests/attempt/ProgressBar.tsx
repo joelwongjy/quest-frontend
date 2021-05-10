@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { QuestComponentProps } from 'interfaces/components/common';
 import flagImage from 'assets/images/student/flag.png';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './attempt.styles';
 

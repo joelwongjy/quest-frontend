@@ -1,8 +1,9 @@
-import { red, grey } from '@material-ui/core/colors';
+import { grey, red } from '@material-ui/core/colors';
 import {
-  unstable_createMuiStrictModeTheme as createMuiTheme,
   responsiveFontSizes,
+  unstable_createMuiStrictModeTheme as createMuiTheme,
 } from '@material-ui/core/styles';
+
 import fonts from 'assets/fonts';
 
 const fontFamilyRoboto = {

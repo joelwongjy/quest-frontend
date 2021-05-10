@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Button,
   ButtonGroup,
@@ -13,6 +13,12 @@ import {
 import FilterIcon from '@material-ui/icons/FilterList';
 
 import PageContainer from 'components/pageContainer';
+import PageHeader from 'components/pageHeader';
+import ProgrammeClassPicker from 'components/programmeClassPicker';
+import QuestionnaireCard from 'components/questionnaireCard';
+import QuestionnaireTabs from 'components/questionnaireTabs';
+import QuestAlert from 'componentWrappers/questAlert';
+import QuestBanner from 'componentWrappers/questBanner';
 import {
   CLASSES,
   CREATE,
@@ -22,38 +28,32 @@ import {
   QUESTIONNAIRES,
   STUDENTS,
 } from 'constants/routes';
-import QuestionnaireCard from 'components/questionnaireCard';
-import PageHeader from 'components/pageHeader';
+import { useUser } from 'contexts/UserContext';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
-import { ClassRouteParams } from 'interfaces/routes/common';
-import ApiService from 'services/apiService';
-import { QuestionnaireListData } from 'interfaces/models/questionnaires';
 import { ProgrammeData } from 'interfaces/models/programmes';
-
-import QuestAlert from 'componentWrappers/questAlert';
-import { RootState } from 'reducers/rootReducer';
+import { QuestionnaireListData } from 'interfaces/models/questionnaires';
+import { ClassRouteParams } from 'interfaces/routes/common';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
 } from 'reducers/questionnaireDux';
-import QuestBanner from 'componentWrappers/questBanner';
-import {
-  isEmptyQuestionnaire,
-  convertDateOfQuestionnaires,
-} from 'utils/questionnaireUtils';
-import QuestionnaireTabs from 'components/questionnaireTabs';
+import { RootState } from 'reducers/rootReducer';
+import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
-import ProgrammeClassPicker from 'components/programmeClassPicker';
-import { useUser } from 'contexts/UserContext';
+import {
+  convertDateOfQuestionnaires,
+  isEmptyQuestionnaire,
+} from 'utils/questionnaireUtils';
 
 import {
-  getQuestionnairesToRender,
-  tabs,
-  QuestionnairesState,
   getMenuOptions,
+  getQuestionnairesToRender,
+  QuestionnairesState,
+  tabs,
 } from './helpers';
-import { useStyles } from './questionnaires.styles';
 import QuestionnairesGhost from './QuestionnairesGhost';
+
+import { useStyles } from './questionnaires.styles';
 
 const Questionnaires: React.FunctionComponent = () => {
   const { user } = useUser();

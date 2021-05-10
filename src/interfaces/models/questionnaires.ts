@@ -1,5 +1,5 @@
-import { ClassData } from './classes';
 import { DiscardableData } from './base';
+import { ClassData } from './classes';
 import { ProgrammeData } from './programmes';
 import {
   QuestionPostData,

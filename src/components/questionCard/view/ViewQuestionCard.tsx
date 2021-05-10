@@ -7,18 +7,18 @@ import {
   MuiThemeProvider,
 } from '@material-ui/core';
 
-import QuestCard from 'componentWrappers/questCard';
-import { QuestComponentProps } from 'interfaces/components/common';
-import { QuestionAccessibility } from 'interfaces/models/questionnaires';
-
-import { AnswerData } from 'interfaces/models/answers';
-import { QuestionData, QuestionType } from 'interfaces/models/questions';
-import ViewMcqQuestion from 'components/mcqQuestion/view';
-import ViewScaleQuestion from 'components/scaleQuestion/view';
-import ViewMoodQuestion from 'components/moodQuestion/view';
 import ViewLongAnswerQuestion from 'components/longAnswerQuestion/view';
+import ViewMcqQuestion from 'components/mcqQuestion/view';
+import ViewMoodQuestion from 'components/moodQuestion/view';
+import ViewScaleQuestion from 'components/scaleQuestion/view';
 import ViewShortAnswerQuestion from 'components/shortAnswerQuestion/view';
+import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
+import { QuestComponentProps } from 'interfaces/components/common';
+import { AnswerData } from 'interfaces/models/answers';
+import { QuestionAccessibility } from 'interfaces/models/questionnaires';
+import { QuestionData, QuestionType } from 'interfaces/models/questions';
+
 import { useStyles } from './viewQuestionCard.styles';
 
 interface ViewQuestionCardProps extends QuestComponentProps {

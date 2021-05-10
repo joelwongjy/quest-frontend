@@ -1,8 +1,8 @@
 import React from 'react';
+import { Button } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 import { QuestComponentProps } from 'interfaces/components/common';
-import Alert from '@material-ui/lab/Alert';
-import { Button } from '@material-ui/core';
 
 interface QuestBannerProps extends QuestComponentProps {
   severity: 'success' | 'info' | 'warning' | 'error' | undefined;

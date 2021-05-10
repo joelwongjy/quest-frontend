@@ -1,13 +1,14 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 
-import { useUser } from 'contexts/UserContext';
+import mascotImage from 'assets/images/student/mascot.png';
 import PageContainer from 'components/pageContainer';
 // import ApiService from 'services/apiService';
 import StudentBoard from 'components/studentBoard';
-import mascotImage from 'assets/images/student/mascot.png';
+import { useUser } from 'contexts/UserContext';
 
 import AnnouncementListItem from './AnnouncementListItem';
+
 import { useStyles } from './castle.styles';
 
 const Castle: React.FunctionComponent = () => {

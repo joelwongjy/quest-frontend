@@ -11,24 +11,24 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import { differenceInCalendarYears } from 'date-fns';
 
+import femaleKnight from 'assets/images/student/female-knight.png';
+import maleKnight from 'assets/images/student/male-knight.png';
+import sword from 'assets/images/student/sword-black.png';
 import PageContainer from 'components/pageContainer';
 import StudentBoard from 'components/studentBoard';
+import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
+import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import { Gender, PersonPostData } from 'interfaces/models/persons';
-
-import maleKnight from 'assets/images/student/male-knight.png';
-import femaleKnight from 'assets/images/student/female-knight.png';
-import sword from 'assets/images/student/sword-black.png';
 import { DefaultUserRole } from 'interfaces/models/users';
-import QuestTextField from 'componentWrappers/questTextField';
-import { DatePicker } from '@material-ui/pickers';
-import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
-import { useError } from 'contexts/ErrorContext';
 import { validatePersonInfo } from 'utils/personUtils';
-import QuestButton from 'componentWrappers/questButton';
+import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
+
 import { useStyles } from './profile.styles';
 
 export interface ProfileState extends Omit<PersonPostData, 'birthday'> {

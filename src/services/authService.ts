@@ -1,11 +1,10 @@
 import store from 'app/store';
-import TokenUtils from 'utils/tokenUtils';
-import { setUser, clearUser } from 'reducers/miscDux';
-import ApiService from 'services/apiService';
-import { UserPostData } from 'interfaces/models/users';
-
 import { GENERAL_ERROR } from 'constants/messages';
 import { PersonData } from 'interfaces/models/persons';
+import { UserPostData } from 'interfaces/models/users';
+import { clearUser, setUser } from 'reducers/miscDux';
+import ApiService from 'services/apiService';
+import TokenUtils from 'utils/tokenUtils';
 
 const logout = (): Promise<void> => {
   TokenUtils.removeToken();

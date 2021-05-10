@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   CardActions,
@@ -10,17 +11,16 @@ import {
   Typography,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Link } from 'react-router-dom';
 
 import QuestCard from 'componentWrappers/questCard';
-import { QuestComponentProps } from 'interfaces/components/common';
-import { MenuOption } from 'interfaces/components/programmeCard';
 import {
-  QUESTIONNAIRES,
-  PROGRAMMES,
   CLASSES,
+  PROGRAMMES,
+  QUESTIONNAIRES,
   STUDENTS,
 } from 'constants/routes';
+import { QuestComponentProps } from 'interfaces/components/common';
+import { MenuOption } from 'interfaces/components/programmeCard';
 import { ClassListData } from 'interfaces/models/classes';
 
 import { useStyles } from './classCard.styles';

@@ -1,4 +1,5 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
 import backgroundImage from 'assets/images/student/background.png';
 import programmeBarImage from 'assets/images/student/programme-bar.png';
 

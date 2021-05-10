@@ -2,20 +2,22 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
-import { RouteState } from 'interfaces/routes/common';
+import QuestionnaireCard from 'components/questionnaireCard';
+import StudentBoard from 'components/studentBoard';
+import { useUser } from 'contexts/UserContext';
+import { CardMode } from 'interfaces/components/questionnaireCard';
+import { AttemptListData } from 'interfaces/models/attempts';
 import { QuestionnaireListData } from 'interfaces/models/questionnaires';
+import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { convertDateOfQuestionnaires } from 'utils/questionnaireUtils';
-import { AttemptListData } from 'interfaces/models/attempts';
-import { useUser } from 'contexts/UserContext';
 import { getCompletedQuests, getNewQuests } from 'utils/questUtils';
-import QuestionnaireCard from 'components/questionnaireCard';
-import { CardMode } from 'interfaces/components/questionnaireCard';
 
-import StudentBoard from 'components/studentBoard';
 import mascotImage from '../../assets/images/student/mascot.png';
-import { useStyles } from './quests.styles';
+
 import QuestsGhost from './QuestsGhost';
+
+import { useStyles } from './quests.styles';
 
 interface QuestState extends RouteState {
   quests: QuestionnaireListData[];
