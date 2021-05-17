@@ -138,6 +138,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({
                     <QuestButton
                       className={buttonClassName ?? ''}
                       onClick={handleSubmit}
+                      disableElevation
                     >
                       Proceed
                     </QuestButton>
