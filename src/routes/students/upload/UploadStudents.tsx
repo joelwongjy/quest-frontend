@@ -256,7 +256,7 @@ const UploadStudents: React.FunctionComponent = () => {
             rows={rows}
             columns={columns}
             pageSize={20}
-            components={{ Toolbar: ExportTool }}
+            // components={{ Toolbar: ExportTool }}
           />
         </div>
         <div>
