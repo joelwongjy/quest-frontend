@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+      boxShadow: 'rgba(149, 157, 165, 0.1) 0px 4px 12px;',
       borderRadius: 12,
       marginBottom: '2rem',
       borderTop: 'none',

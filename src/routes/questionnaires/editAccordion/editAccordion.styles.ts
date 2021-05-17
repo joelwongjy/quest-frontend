@@ -29,7 +29,7 @@ export const useStyles = makeStyles((theme) =>
       border: 0,
       outline: 0,
       borderRadius: 12,
-      boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+      boxShadow: 'rgba(149, 157, 165, 0.1) 0px 4px 12px;',
       '& fieldset': {
         display: 'none',
       },
