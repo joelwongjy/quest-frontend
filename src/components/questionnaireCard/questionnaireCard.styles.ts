@@ -4,6 +4,9 @@ export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dates: {
       fontSize: 14,
+      '&.is-student': {
+        marginBottom: 0,
+      },
     },
     title: {
       textAlign: 'center',
@@ -27,6 +30,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     actions: {
       display: 'flex',
       justifyContent: 'center',
+
+      '&.is-student': {
+        paddingTop: 0,
+      },
     },
     button: {
       padding: '0.6rem',
