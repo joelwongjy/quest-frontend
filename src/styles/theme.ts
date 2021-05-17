@@ -99,7 +99,7 @@ const adminMuiTheme = createMuiTheme({
     },
     icon: {
       iconColor: '#695F5F',
-      iconBorderColor: '#FFF2E5',
+      iconBorderColor: '#F4F2F2',
       iconHighlight: grey[900],
     },
     questionBackground: {
@@ -174,7 +174,7 @@ const studentMuiTheme = createMuiTheme({
     },
     icon: {
       iconColor: '#695F5F',
-      iconBorderColor: '#FFF2E5',
+      iconBorderColor: '#F4F2F2',
       iconHighlight: grey[900],
     },
     questionBackground: {

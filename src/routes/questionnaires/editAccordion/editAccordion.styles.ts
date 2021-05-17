@@ -19,6 +19,7 @@ export const useStyles = makeStyles((theme) =>
     input: {
       '& input': {
         textAlign: 'center',
+        fontWeight: 'bold',
       },
       width: '80%',
       [theme.breakpoints.down('md')]: {
@@ -30,7 +31,6 @@ export const useStyles = makeStyles((theme) =>
       border: 0,
       outline: 0,
       borderRadius: 12,
-      boxShadow: 'rgba(149, 157, 165, 0.1) 0px 4px 12px;',
       '& fieldset': {
         display: 'none',
       },
