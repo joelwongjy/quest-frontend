@@ -24,6 +24,7 @@ export const useStyles = makeStyles((theme) =>
       [theme.breakpoints.down('md')]: {
         width: '100%',
       },
+      marginTop: 0,
       backgroundColor: theme.custom.icon.iconBorderColor,
       color: theme.custom.icon.iconColor,
       border: 0,
