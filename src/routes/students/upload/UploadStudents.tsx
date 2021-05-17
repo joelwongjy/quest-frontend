@@ -7,7 +7,7 @@ import {
   GridToolbarContainer,
   GridToolbarExport,
   GridCellClassParams,
-  // GridValueFormatterParams,
+  GridValueFormatterParams,
 } from '@material-ui/data-grid';
 // import { useHistory } from 'react-router-dom';
 
@@ -112,6 +112,8 @@ const UploadStudents: React.FunctionComponent = () => {
       width: 130,
       cellClassName: (params: GridCellClassParams) =>
         !isValidDate(params.value as Date) ? classes.error : '',
+      valueFormatter: (params: GridValueFormatterParams) =>
+        (params.value as Date).toLocaleDateString(),
     },
     {
       field: 'mobile',
