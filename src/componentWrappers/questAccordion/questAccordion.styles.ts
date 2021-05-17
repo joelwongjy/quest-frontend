@@ -14,6 +14,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&.Mui-expanded': {
         marginBottom: '2rem',
       },
+      '&.MuiAccordion-rounded:first-child': {
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+      },
     },
     heading: {
       fontWeight: theme.typography.fontWeightBold,
