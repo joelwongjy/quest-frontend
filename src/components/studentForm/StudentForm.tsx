@@ -637,21 +637,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                         </ListItem>
                         {!isSuccessful && (
                           <Grid container alignItems="center">
-                            <Grid item xs={4}>
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                style={{ color: 'red', marginBottom: '0.5rem' }}
-                                onClick={() => handleDeleteActivity(index)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </Grid>
                             <Grid
                               item
                               xs={8}
                               style={{
-                                paddingLeft: '0.5rem',
+                                paddingLeft: '1rem',
                                 marginBottom: '0.75rem',
                               }}
                             >
@@ -665,6 +655,20 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                                     This activity is duplicated!
                                   </FormHelperText>
                                 )}
+                            </Grid>
+                            <Grid item xs={4}>
+                              <Grid container justify="flex-end">
+                                <IconButton
+                                  aria-label="delete"
+                                  style={{
+                                    color: 'red',
+                                    marginBottom: '0.5rem',
+                                  }}
+                                  onClick={() => handleDeleteActivity(index)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </Grid>
                             </Grid>
                           </Grid>
                         )}
