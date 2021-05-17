@@ -84,6 +84,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: 0,
       height: '100%',
       overflow: 'scroll',
+      '-ms-overflow-style': 'none', // IE and Edge
+      scrollbarWidth: 'none', // Firefox
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
     },
     list: {
       marginTop: '0.5rem',
