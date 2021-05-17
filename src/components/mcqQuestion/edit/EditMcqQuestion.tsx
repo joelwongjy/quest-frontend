@@ -107,7 +107,11 @@ const EditMcqQuestion: React.FunctionComponent<EditMcqQuestionProps> = ({
           )}
         </div>
       ))}
-      <QuestButton onClick={addOption} className={classes.optionButton}>
+      <QuestButton
+        onClick={addOption}
+        className={classes.optionButton}
+        disableElevation
+      >
         Add Option
       </QuestButton>
     </div>
