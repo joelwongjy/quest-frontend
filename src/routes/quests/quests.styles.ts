@@ -62,6 +62,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       '-ms-overflow-style': 'none', // IE and Edge
       scrollbarWidth: 'none', // Firefox
       '&::-webkit-scrollbar': {
+        // Chrome, Safari and Opera
         display: 'none',
       },
     },
