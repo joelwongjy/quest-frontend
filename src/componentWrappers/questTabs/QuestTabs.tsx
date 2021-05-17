@@ -38,7 +38,7 @@ const CustomTab = withStyles((theme: Theme) =>
       },
       '&$selected': {
         color: '#4B4646',
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: theme.typography.fontWeightBold,
         backgroundColor: '#FFDC6E',
         borderRadius: '25% 25% 0 0',
         textDecoration: 'underline',
