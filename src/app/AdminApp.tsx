@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
+  useLocation,
 } from 'react-router-dom';
 
 import {
@@ -22,6 +23,7 @@ import {
   STUDENTS,
   UNAUTHED_ROUTES,
 } from 'constants/routes';
+import { useError } from 'contexts/ErrorContext';
 import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
@@ -47,7 +49,13 @@ const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
 
 const AdminApp: React.FunctionComponent = () => {
+  const { pathname } = useLocation();
+  const { setHasError } = useError();
   const classes = useStyles();
+
+  useEffect(() => {
+    setHasError(false);
+  }, [pathname]);
 
   return (
     <Router>
