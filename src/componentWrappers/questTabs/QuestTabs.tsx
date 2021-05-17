@@ -31,6 +31,7 @@ const CustomTab = withStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightRegular,
       paddingLeft: '1rem',
       paddingRight: '1rem',
+      minHeight: '38px',
       '&:hover': {
         color: '#4B4646',
         opacity: 1,
