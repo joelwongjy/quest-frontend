@@ -62,6 +62,9 @@ const UploadStudents: React.FunctionComponent = () => {
     }
   );
   const alertCallback = getAlertCallback(setState);
+  const [duplicatedStudents, setDuplicatedStudents] = useState<Set<string>>(
+    new Set<string>()
+  );
 
   const isValidGender = (gender: string): boolean => {
     return gender === 'M' || gender === 'F';
@@ -97,7 +100,10 @@ const UploadStudents: React.FunctionComponent = () => {
       headerName: 'Name',
       width: 200,
       cellClassName: (params: GridCellClassParams) =>
-        params.value === undefined ? classes.error : '',
+        params.value === undefined ||
+        duplicatedStudents.has(params.value as string)
+          ? classes.error
+          : '',
     },
     {
       field: 'gender',
@@ -165,6 +171,8 @@ const UploadStudents: React.FunctionComponent = () => {
             undefined
           );
         } else {
+          const namesSet: Set<string> = new Set<string>();
+          const duplicatedNamesSet: Set<string> = new Set<string>();
           setRows(
             response.rows.slice(1).map((row: any, index: any) => {
               const student = {
@@ -179,9 +187,18 @@ const UploadStudents: React.FunctionComponent = () => {
               if (!validateInfo(student)) {
                 setHasError(true);
               }
+              if (
+                namesSet.has(student.name) &&
+                !duplicatedNamesSet.has(student.name)
+              ) {
+                duplicatedNamesSet.add(student.name);
+              } else {
+                namesSet.add(student.name);
+              }
               return student;
             })
           );
+          setDuplicatedStudents(duplicatedNamesSet);
         }
       });
     }
