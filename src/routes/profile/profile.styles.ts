@@ -66,7 +66,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: '0 1rem',
     },
     programmeBarText: {
-      fontSize: '1rem',
+      fontSize: '1.4rem',
       padding: '0.3rem 0',
     },
     programmeClassCardContainer: {
