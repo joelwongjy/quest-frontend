@@ -30,11 +30,14 @@ const ProgrammeClassPicker: React.FC<ProgrammeClassPickerProps> = (props) => {
   ): void => {
     if (checked && !_class) {
       const newProgrammes = [...selectedProgrammes, programme];
+      const additionalClasses = programmes
+        .find((p) => p.id === programme.id)!
+        .classes.map((c) => ({ id: c.id, name: c.name }));
       const newClasses = [
-        ...selectedClasses,
-        ...programmes
-          .find((p) => p.id === programme.id)!
-          .classes.map((c) => ({ id: c.id, name: c.name })),
+        ...selectedClasses.filter(
+          (c) => additionalClasses.findIndex((c2) => c2.id === c.id) === -1
+        ),
+        ...additionalClasses,
       ];
       programmeCallback(newProgrammes);
       classCallback(newClasses);
