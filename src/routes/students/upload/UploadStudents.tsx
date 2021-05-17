@@ -17,6 +17,10 @@ import PageHeader from 'components/pageHeader';
 import QuestButton from 'componentWrappers/questButton';
 import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
+import { getAlertCallback } from 'utils/alertUtils';
+import { useError } from 'contexts/ErrorContext';
+import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
+import { PersonPostData } from 'interfaces/models/persons';
 
 import { useStyles } from './uploadStudents.styles';
 
@@ -25,11 +29,10 @@ type UploadStudentsState = RouteState;
 const UploadStudents: React.FunctionComponent = () => {
   const classes = useStyles();
   // const history = useHistory();
-  // const { setHasError } = useError();
+  const { hasError, setHasError } = useError();
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
   const excelRenderer = require('react-excel-renderer');
-
   const breadcrumbs = [
     { text: 'Students', href: STUDENTS },
     { text: 'Upload', href: `${STUDENTS}/${ADD}` },
@@ -58,67 +61,123 @@ const UploadStudents: React.FunctionComponent = () => {
       },
     }
   );
+  const alertCallback = getAlertCallback(setState);
 
-  const [selectedFile, setSelectedFile] = useState<File>();
-  const [columns, setColumns] = useState<GridColDef[]>([
+  const isValidGender = (gender: string): boolean => {
+    return gender === 'M' || gender === 'F';
+  };
+
+  const isValidDate = (birthday: Date): boolean => {
+    return !Number.isNaN(birthday.valueOf());
+  };
+
+  const validateInfo = (
+    student: Omit<PersonPostData, 'programmes'>
+  ): boolean => {
+    const { name, gender, birthday, mobileNumber, homeNumber, email } = student;
+    return (
+      name !== undefined &&
+      isValidGender(gender) &&
+      isValidDate(birthday) &&
+      isValidMobileNumber(mobileNumber as string) &&
+      isValidMobileNumber(homeNumber as string) &&
+      isValidEmail(email as string)
+    );
+  };
+
+  const ExcelDateToJSDate = (date: number): Date => {
+    return new Date(Math.round((date - 25569) * 86400 * 1000));
+  };
+
+  // const [selectedFile, setSelectedFile] = useState<File>();
+  const columns: GridColDef[] = [
     { field: 'id', headerName: 'id', width: 70 },
-    { field: 'name', headerName: 'Name', width: 200 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+      cellClassName: (params: GridCellClassParams) =>
+        params.value === undefined ? classes.error : '',
+    },
     {
       field: 'gender',
       headerName: 'Gender',
       width: 100,
       cellClassName: (params: GridCellClassParams) =>
-        (params.value as string) !== 'M' && (params.value as string) !== 'F'
-          ? classes.error
-          : '',
+        !isValidGender(params.value as string) ? classes.error : '',
     },
     {
       field: 'birthday',
       headerName: 'Birthday',
       width: 130,
-      // valueFormatter: (params: GridValueFormatterParams) =>
-      //   (params.value as Date).toDateString(),
+      cellClassName: (params: GridCellClassParams) =>
+        !isValidDate(params.value as Date) ? classes.error : '',
     },
-    { field: 'mobile', headerName: 'Mobile Number', width: 200 },
+    {
+      field: 'mobile',
+      headerName: 'Mobile Number',
+      width: 200,
+      cellClassName: (params: GridCellClassParams) =>
+        params.value !== undefined &&
+        !isValidMobileNumber(params.value as string)
+          ? classes.error
+          : '',
+    },
     {
       field: 'home',
       headerName: 'Home Number',
       width: 200,
-      // cellClassName: (params: GridCellClassParams) =>
-      //   (params.value as string).length !== 8 ? classes.error : '',
+      cellClassName: (params: GridCellClassParams) =>
+        params.value !== undefined &&
+        !isValidMobileNumber(params.value as string)
+          ? classes.error
+          : '',
     },
-    { field: 'email', headerName: 'Email', width: 200 },
-  ]);
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+      cellClassName: (params: GridCellClassParams) =>
+        params.value !== undefined && !isValidEmail(params.value as string)
+          ? classes.error
+          : '',
+    },
+  ];
   const [rows, setRows] = useState([]);
 
   const fileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
     if (fileList) {
-      setSelectedFile(fileList[0]);
-    }
-  };
-
-  const handleSubmission = () => {
-    if (selectedFile) {
+      setHasError(false);
+      const selectedFile = fileList[0];
       const formData = new FormData();
       formData.append('File', selectedFile);
-      console.log(formData);
       excelRenderer.ExcelRenderer(selectedFile, (error: any, response: any) => {
         if (error) {
-          console.log(error);
+          alertCallback(
+            true,
+            false,
+            'Something went wrong',
+            'Something went wrong with uploading the file',
+            undefined,
+            undefined
+          );
         } else {
-          console.log(response.rows);
           setRows(
             response.rows.slice(1).map((row: any, index: any) => {
-              return {
+              const student = {
                 id: index,
                 name: row[0],
                 gender: row[1],
-                birthday: row[2],
+                birthday: ExcelDateToJSDate(row[2]),
                 mobile: row[3],
                 home: row[4],
                 email: row[5],
               };
+              if (!validateInfo(student)) {
+                setHasError(true);
+              }
+              return student;
             })
           );
         }
@@ -126,7 +185,20 @@ const UploadStudents: React.FunctionComponent = () => {
     }
   };
 
-  // const alertCallback = getAlertCallback(setState);
+  const handleSubmission = () => {
+    if (hasError) {
+      alertCallback(
+        true,
+        false,
+        'Invalid data',
+        'There are some errors or missing fields in the data. Please edit and try submitting again.',
+        undefined,
+        undefined
+      );
+    }
+    // normal successful submission code that idk how to write
+  };
+
   function ExportTool() {
     return (
       <GridToolbarContainer>
@@ -148,17 +220,27 @@ const UploadStudents: React.FunctionComponent = () => {
         cancelHandler={state.cancelHandler}
       />
       <div>
-        <input type="file" name="file" onChange={fileHandler} />
         <div>
-          <QuestButton onClick={handleSubmission}>Upload</QuestButton>
+          <a href="/Empty.csv" download>
+            <QuestButton>Download Empty Excel</QuestButton>
+          </a>
         </div>
+        <input
+          type="file"
+          name="file"
+          accept=".csv, .xlsx"
+          onChange={fileHandler}
+        />
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={5}
+            pageSize={20}
             components={{ Toolbar: ExportTool }}
           />
+        </div>
+        <div>
+          <QuestButton onClick={handleSubmission}>Submit</QuestButton>
         </div>
       </div>
     </PageContainer>
