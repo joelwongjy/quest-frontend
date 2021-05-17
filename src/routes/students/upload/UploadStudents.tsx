@@ -80,6 +80,7 @@ const UploadStudents: React.FunctionComponent = () => {
     const { name, gender, birthday, mobileNumber, homeNumber, email } = student;
     return (
       name !== undefined &&
+      !duplicatedStudents.has(name) &&
       isValidGender(gender) &&
       isValidDate(birthday) &&
       isValidMobileNumber(mobileNumber as string) &&
