@@ -198,7 +198,6 @@ const UploadStudents: React.FunctionComponent = () => {
 
             setRows(
               response.rows.slice(1).map((row: any) => {
-                console.log(row);
                 const student: PersonPostData = {
                   name: row[0],
                   gender: parseGender(row[1]),
