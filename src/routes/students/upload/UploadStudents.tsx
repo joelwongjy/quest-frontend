@@ -61,6 +61,26 @@ const UploadStudents: React.FunctionComponent = () => {
     new Set<string>()
   );
 
+  const parseGender = (gender: string): string => {
+    const maleValues = ['m', 'ma', 'mal', 'male', 'males'];
+    if (maleValues.includes(gender.toLowerCase())) {
+      return 'M';
+    }
+    const femaleValues = [
+      'f',
+      'fe',
+      'fem',
+      'fema',
+      'femal',
+      'female',
+      'females',
+    ];
+    if (femaleValues.includes(gender.toLowerCase())) {
+      return 'F';
+    }
+    return gender;
+  };
+
   const isValidGender = (gender: string): boolean => {
     return gender === 'M' || gender === 'F';
   };
@@ -114,16 +134,15 @@ const UploadStudents: React.FunctionComponent = () => {
       width: 130,
       cellClassName: (params: GridCellClassParams) =>
         // eslint-disable-next-line no-nested-ternary
-        (params.value as Date) === undefined
-          ? classes.error
-          : !isValidDate(params.value as Date)
+        (params.value as Date) === undefined ||
+        !isValidDate(params.value as Date)
           ? classes.error
           : '',
       valueFormatter: (params: GridValueFormatterParams) =>
         (params.value as Date)?.toLocaleDateString() ?? '',
     },
     {
-      field: 'mobile',
+      field: 'mobileNumber',
       headerName: 'Mobile Number',
       width: 200,
       cellClassName: (params: GridCellClassParams) =>
@@ -133,7 +152,7 @@ const UploadStudents: React.FunctionComponent = () => {
           : '',
     },
     {
-      field: 'home',
+      field: 'homeNumber',
       headerName: 'Home Number',
       width: 200,
       cellClassName: (params: GridCellClassParams) =>
@@ -179,9 +198,10 @@ const UploadStudents: React.FunctionComponent = () => {
 
             setRows(
               response.rows.slice(1).map((row: any) => {
+                console.log(row);
                 const student: PersonPostData = {
                   name: row[0],
-                  gender: row[1],
+                  gender: parseGender(row[1]),
                   birthday: convertExcelDateToJSDate(row[2]),
                   mobileNumber: row[3],
                   homeNumber: row[4],
