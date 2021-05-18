@@ -28,6 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     error: {
       backgroundColor: '#d47483',
       color: '#1a3e72',
+      fontWeight: 'bold',
     },
   })
 );

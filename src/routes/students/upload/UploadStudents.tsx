@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useReducer, useState } from 'react';
+import { Button } from '@material-ui/core';
 import {
   DataGrid,
   GridCellClassParams,
   GridColDef,
-  // GridToolbarContainer,
-  // GridToolbarExport,
   GridValueFormatterParams,
 } from '@material-ui/data-grid';
 
@@ -114,9 +113,14 @@ const UploadStudents: React.FunctionComponent = () => {
       headerName: 'Birthday',
       width: 130,
       cellClassName: (params: GridCellClassParams) =>
-        !isValidDate(params.value as Date) ? classes.error : '',
+        // eslint-disable-next-line no-nested-ternary
+        (params.value as Date) === undefined
+          ? classes.error
+          : !isValidDate(params.value as Date)
+          ? classes.error
+          : '',
       valueFormatter: (params: GridValueFormatterParams) =>
-        (params.value as Date).toLocaleDateString(),
+        (params.value as Date)?.toLocaleDateString() ?? '',
     },
     {
       field: 'mobile',
@@ -219,14 +223,6 @@ const UploadStudents: React.FunctionComponent = () => {
     // normal successful submission code that idk how to write
   };
 
-  // function ExportTool() {
-  //   return (
-  //     <GridToolbarContainer>
-  //       <GridToolbarExport />
-  //     </GridToolbarContainer>
-  //   );
-  // }
-
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
@@ -240,23 +236,38 @@ const UploadStudents: React.FunctionComponent = () => {
         cancelHandler={state.cancelHandler}
       />
       <div>
-        <div>
-          <a href="/Empty.csv" download>
-            <QuestButton>Download Empty Excel</QuestButton>
-          </a>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '1rem',
+          }}
+        >
+          <div>
+            <a href="/template.csv" download>
+              <QuestButton style={{ margin: 0, marginRight: '1rem' }}>
+                Download Empty Excel
+              </QuestButton>
+            </a>
+          </div>
+          <label htmlFor="contained-button-file">
+            <input
+              style={{ display: 'none' }}
+              accept=".csv, .xlsx"
+              id="contained-button-file"
+              type="file"
+              onChange={fileHandler}
+            />
+            <Button variant="contained" component="span">
+              Upload Filled File
+            </Button>
+          </label>
         </div>
-        <input
-          type="file"
-          name="file"
-          accept=".csv, .xlsx"
-          onChange={fileHandler}
-        />
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={rows}
+            rows={rows.map((row, id) => ({ ...row, id: id + 1 }))}
             columns={columns}
             pageSize={20}
-            // components={{ Toolbar: ExportTool }}
           />
         </div>
         <div>
