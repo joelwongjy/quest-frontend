@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
 import React, { useReducer, useState } from 'react';
 import {
   DataGrid,
-  GridColDef,
-  GridToolbarContainer,
-  GridToolbarExport,
   GridCellClassParams,
+  GridColDef,
+  // GridToolbarContainer,
+  // GridToolbarExport,
   GridValueFormatterParams,
 } from '@material-ui/data-grid';
-// import { useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
-import { ADD, STUDENTS } from 'constants/routes';
 import PageHeader from 'components/pageHeader';
-import QuestButton from 'componentWrappers/questButton';
-import { RouteState } from 'interfaces/routes/common';
 import QuestAlert from 'componentWrappers/questAlert';
-import { getAlertCallback } from 'utils/alertUtils';
+import QuestButton from 'componentWrappers/questButton';
+import { ADD, STUDENTS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
-import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
 import { PersonPostData } from 'interfaces/models/persons';
+import { RouteState } from 'interfaces/routes/common';
+import { getAlertCallback } from 'utils/alertUtils';
+import { ExcelData, excelRenderer } from 'utils/excelUtils';
+import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
 
 import { useStyles } from './uploadStudents.styles';
 
@@ -28,11 +27,8 @@ type UploadStudentsState = RouteState;
 
 const UploadStudents: React.FunctionComponent = () => {
   const classes = useStyles();
-  // const history = useHistory();
   const { hasError, setHasError } = useError();
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
-  const excelRenderer = require('react-excel-renderer');
   const breadcrumbs = [
     { text: 'Students', href: STUDENTS },
     { text: 'Upload', href: `${STUDENTS}/${ADD}` },
@@ -89,7 +85,7 @@ const UploadStudents: React.FunctionComponent = () => {
     );
   };
 
-  const ExcelDateToJSDate = (date: number): Date => {
+  const convertExcelDateToJSDate = (date: number): Date => {
     return new Date(Math.round((date - 25569) * 86400 * 1000));
   };
 
@@ -152,7 +148,7 @@ const UploadStudents: React.FunctionComponent = () => {
           : '',
     },
   ];
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState<PersonPostData[]>([]);
 
   const fileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
@@ -161,47 +157,51 @@ const UploadStudents: React.FunctionComponent = () => {
       const selectedFile = fileList[0];
       const formData = new FormData();
       formData.append('File', selectedFile);
-      excelRenderer.ExcelRenderer(selectedFile, (error: any, response: any) => {
-        if (error) {
-          alertCallback(
-            true,
-            false,
-            'Something went wrong',
-            'Something went wrong with uploading the file',
-            undefined,
-            undefined
-          );
-        } else {
-          const namesSet: Set<string> = new Set<string>();
-          const duplicatedNamesSet: Set<string> = new Set<string>();
-          setRows(
-            response.rows.slice(1).map((row: any, index: any) => {
-              const student = {
-                id: index,
-                name: row[0],
-                gender: row[1],
-                birthday: ExcelDateToJSDate(row[2]),
-                mobile: row[3],
-                home: row[4],
-                email: row[5],
-              };
-              if (!validateInfo(student)) {
-                setHasError(true);
-              }
-              if (
-                namesSet.has(student.name) &&
-                !duplicatedNamesSet.has(student.name)
-              ) {
-                duplicatedNamesSet.add(student.name);
-              } else {
-                namesSet.add(student.name);
-              }
-              return student;
-            })
-          );
-          setDuplicatedStudents(duplicatedNamesSet);
+      excelRenderer(
+        selectedFile,
+        (error: Error | null, response: ExcelData | null) => {
+          if (error || !response) {
+            alertCallback(
+              true,
+              false,
+              'Something went wrong',
+              'Something went wrong with uploading the file',
+              undefined,
+              undefined
+            );
+          } else {
+            const namesSet: Set<string> = new Set<string>();
+            const duplicatedNamesSet: Set<string> = new Set<string>();
+
+            setRows(
+              response.rows.slice(1).map((row: any) => {
+                const student: PersonPostData = {
+                  name: row[0],
+                  gender: row[1],
+                  birthday: convertExcelDateToJSDate(row[2]),
+                  mobileNumber: row[3],
+                  homeNumber: row[4],
+                  email: row[5],
+                  programmes: [],
+                };
+                if (!validateInfo(student)) {
+                  setHasError(true);
+                }
+                if (
+                  namesSet.has(student.name) &&
+                  !duplicatedNamesSet.has(student.name)
+                ) {
+                  duplicatedNamesSet.add(student.name);
+                } else {
+                  namesSet.add(student.name);
+                }
+                return student;
+              })
+            );
+            setDuplicatedStudents(duplicatedNamesSet);
+          }
         }
-      });
+      );
     }
   };
 
@@ -219,13 +219,13 @@ const UploadStudents: React.FunctionComponent = () => {
     // normal successful submission code that idk how to write
   };
 
-  function ExportTool() {
-    return (
-      <GridToolbarContainer>
-        <GridToolbarExport />
-      </GridToolbarContainer>
-    );
-  }
+  // function ExportTool() {
+  //   return (
+  //     <GridToolbarContainer>
+  //       <GridToolbarExport />
+  //     </GridToolbarContainer>
+  //   );
+  // }
 
   return (
     <PageContainer>
