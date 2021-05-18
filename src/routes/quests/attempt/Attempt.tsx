@@ -1,33 +1,34 @@
 import React, { Dispatch, useEffect, useReducer } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { Button, Grid, Typography } from '@material-ui/core';
 
-import { QUESTS } from 'constants/routes';
-import { RouteState, WindowRouteParams } from 'interfaces/routes/common';
-import ApiService from 'services/apiService';
+import medalImage from 'assets/images/student/medal.png';
 import PageContainer from 'components/pageContainer';
-import { RootState } from 'reducers/rootReducer';
+import AttemptQuestionCard from 'components/questionCard/attempt';
+import StudentBoard from 'components/studentBoard';
+import QuestAlert from 'componentWrappers/questAlert';
+import { QUESTS } from 'constants/routes';
+import { useError } from 'contexts/ErrorContext';
+import { AnswerPostData } from 'interfaces/models/answers';
+import { RouteState, WindowRouteParams } from 'interfaces/routes/common';
 import {
   AttemptDux,
   clearAttempt,
+  nextQuestion,
+  previousQuestion,
   setAttempt,
   updateAnswer,
-  previousQuestion,
-  nextQuestion,
 } from 'reducers/attemptDux';
-import AttemptQuestionCard from 'components/questionCard/attempt';
-import { sortByOrder } from 'utils/sortingUtils';
-import { AnswerPostData } from 'interfaces/models/answers';
-import { isQuestComplete, isQuestionComplete } from 'utils/questUtils';
-import { useError } from 'contexts/ErrorContext';
-import StudentBoard from 'components/studentBoard';
-import QuestAlert from 'componentWrappers/questAlert';
+import { RootState } from 'reducers/rootReducer';
+import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
-import medalImage from 'assets/images/student/medal.png';
+import { isQuestComplete, isQuestionComplete } from 'utils/questUtils';
+import { sortByOrder } from 'utils/sortingUtils';
 
-import ProgressBar from './ProgressBar';
 import AttemptGhost from './AttemptGhost';
+import ProgressBar from './ProgressBar';
+
 import { useStyles } from './attempt.styles';
 
 interface AttemptState extends RouteState {

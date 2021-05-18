@@ -2,14 +2,14 @@
 import React from 'react';
 import { createMuiTheme, Grid, MuiThemeProvider } from '@material-ui/core';
 
+import AttemptLongAnswerQuestion from 'components/longAnswerQuestion/attempt';
+import AttemptMcqQuestion from 'components/mcqQuestion/attempt';
+import AttemptMoodQuestion from 'components/moodQuestion/attempt';
+import AttemptScaleQuestion from 'components/scaleQuestion/attempt';
+import AttemptShortAnswerQuestion from 'components/shortAnswerQuestion/attempt';
 import { QuestComponentProps } from 'interfaces/components/common';
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData, QuestionType } from 'interfaces/models/questions';
-import AttemptShortAnswerQuestion from 'components/shortAnswerQuestion/attempt';
-import AttemptLongAnswerQuestion from 'components/longAnswerQuestion/attempt';
-import AttemptMoodQuestion from 'components/moodQuestion/attempt';
-import AttemptScaleQuestion from 'components/scaleQuestion/attempt';
-import AttemptMcqQuestion from 'components/mcqQuestion/attempt';
 
 import { useStyles } from './attemptQuestionCard.styles';
 

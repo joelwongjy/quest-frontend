@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Button,
   ButtonGroup,
@@ -13,37 +13,47 @@ import {
 import FilterIcon from '@material-ui/icons/FilterList';
 
 import PageContainer from 'components/pageContainer';
-import { CREATE, DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
-import QuestionnaireCard from 'components/questionnaireCard';
 import PageHeader from 'components/pageHeader';
-import { MenuOption } from 'interfaces/components/questionnaireCard';
-import ApiService from 'services/apiService';
-import { QuestionnaireListData } from 'interfaces/models/questionnaires';
-
+import ProgrammeClassPicker from 'components/programmeClassPicker';
+import QuestionnaireCard from 'components/questionnaireCard';
+import QuestionnaireTabs from 'components/questionnaireTabs';
 import QuestAlert from 'componentWrappers/questAlert';
-import { RootState } from 'reducers/rootReducer';
+import QuestBanner from 'componentWrappers/questBanner';
+import {
+  CLASSES,
+  CREATE,
+  DUPLICATE,
+  EDIT,
+  PROGRAMMES,
+  QUESTIONNAIRES,
+  STUDENTS,
+} from 'constants/routes';
+import { useUser } from 'contexts/UserContext';
+import { MenuOption } from 'interfaces/components/questionnaireCard';
+import { ProgrammeData } from 'interfaces/models/programmes';
+import { QuestionnaireListData } from 'interfaces/models/questionnaires';
+import { ClassRouteParams } from 'interfaces/routes/common';
 import {
   clearQuestionnaire,
   QuestionnaireDux,
 } from 'reducers/questionnaireDux';
-import QuestBanner from 'componentWrappers/questBanner';
+import { RootState } from 'reducers/rootReducer';
+import ApiService from 'services/apiService';
+import { getAlertCallback } from 'utils/alertUtils';
 import {
-  isEmptyQuestionnaire,
   convertDateOfQuestionnaires,
+  isEmptyQuestionnaire,
 } from 'utils/questionnaireUtils';
-import QuestionnaireTabs from 'components/questionnaireTabs';
 
-import ProgrammeClassPicker from 'components/programmeClassPicker';
-import { useUser } from 'contexts/UserContext';
 import {
-  getQuestionnairesToRender,
-  breadcrumbs,
-  tabs,
-  QuestionnairesState,
   getMenuOptions,
+  getQuestionnairesToRender,
+  QuestionnairesState,
+  tabs,
 } from './helpers';
-import { useStyles } from './questionnaires.styles';
 import QuestionnairesGhost from './QuestionnairesGhost';
+
+import { useStyles } from './questionnaires.styles';
 
 const Questionnaires: React.FunctionComponent = () => {
   const { user } = useUser();
@@ -72,17 +82,17 @@ const Questionnaires: React.FunctionComponent = () => {
       },
     }
   );
+  const { id, classId } = useParams<ClassRouteParams>();
   const dispatch = useDispatch();
   const history = useHistory();
 
   const selectQuestionnaire = (state: RootState): QuestionnaireDux =>
     state.questionnaire;
   const questionnaire: QuestionnaireDux = useSelector(selectQuestionnaire);
-  const [
-    hasIncompleteQuestionnaire,
-    setHasIncompleteQuestionnare,
-  ] = useState<boolean>(!isEmptyQuestionnaire(questionnaire));
+  const [hasIncompleteQuestionnaire, setHasIncompleteQuestionnare] =
+    useState<boolean>(!isEmptyQuestionnaire(questionnaire));
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [programme, setProgramme] = useState<{ id: number; name: string }>();
   const [selectedProgrammes, setSelectedProgrammes] = useState<
     { id: number; name: string }[]
   >([]);
@@ -101,6 +111,26 @@ const Questionnaires: React.FunctionComponent = () => {
         const questionnaires = convertDateOfQuestionnaires(
           response.data.questionnaires as QuestionnaireListData[]
         );
+        if (id) {
+          const programmeResponse = await ApiService.get(`programmes/${id}`);
+          const programme = programmeResponse.data as ProgrammeData;
+          if (!didCancel) {
+            if (!classId) {
+              setSelectedProgrammes([{ id: Number(id), name: programme.name }]);
+            }
+            setProgramme({ id: Number(id), name: programme.name });
+            const questClasses = classId
+              ? programme.classes
+                  .filter((c) => c.id === Number(classId))
+                  .map((c) => {
+                    return { id: c.id, name: c.name };
+                  })
+              : programme.classes.map((c) => {
+                  return { id: c.id, name: c.name };
+                });
+            setSelectedClasses(questClasses);
+          }
+        }
         if (!didCancel) {
           setState({
             questionnaires,
@@ -127,9 +157,41 @@ const Questionnaires: React.FunctionComponent = () => {
     };
   }, []);
 
+  const breadcrumbs = id
+    ? [
+        { text: 'Programmes', href: `${PROGRAMMES}` },
+        {
+          text:
+            state.isLoading || programme == null ? 'Loading' : programme.name,
+          href: `${PROGRAMMES}/${id}${CLASSES}`,
+        },
+        ...(classId
+          ? [
+              {
+                text: 'Classes',
+                href: `${PROGRAMMES}/${id}${CLASSES}`,
+              },
+              {
+                text:
+                  state.isLoading || selectedClasses[0] == null
+                    ? 'Loading'
+                    : selectedClasses[0].name,
+                href: `${PROGRAMMES}/${id}${CLASSES}/${classId}${STUDENTS}`,
+              },
+            ]
+          : []),
+        {
+          text: 'Questionnaires',
+          href: `${PROGRAMMES}/${id}${QUESTIONNAIRES}`,
+        },
+      ]
+    : [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
+
   if (state.isLoading) {
     return <QuestionnairesGhost />;
   }
+
+  const alertCallback = getAlertCallback(setState);
 
   const renderedQuestionnaires = getQuestionnairesToRender(
     state.questionnaires,
@@ -179,20 +241,34 @@ const Questionnaires: React.FunctionComponent = () => {
     }
   };
 
+  const handleDiscard = (): void => {
+    alertCallback(
+      true,
+      true,
+      'Warning',
+      'Are you sure you wish to discard the ongoing questionnaire?',
+      () => {
+        setHasIncompleteQuestionnare(false);
+        dispatch(clearQuestionnaire());
+      }
+    );
+  };
+
   const handleCreate = (): void => {
     if (hasIncompleteQuestionnaire) {
-      setState({
-        isAlertOpen: true,
-        alertHeader: 'You have an incomplete questionnaire',
-        alertMessage:
-          'Are you sure you would like to start a new questionnaire?',
-        hasConfirm: true,
-        confirmHandler: () => {
+      alertCallback(
+        true,
+        true,
+        'Warning',
+        'You have an incomplete questionnaire. By creating a new questionnaire, ' +
+          'the previous incomplete questionnaire will be discarded. ' +
+          'Are you sure you want to create a new questionnaire?',
+        () => {
           setHasIncompleteQuestionnare(false);
           dispatch(clearQuestionnaire());
           history.push(`${QUESTIONNAIRES}${CREATE}`);
-        },
-      });
+        }
+      );
     } else {
       history.push(`${QUESTIONNAIRES}${CREATE}`);
     }
@@ -214,6 +290,8 @@ const Questionnaires: React.FunctionComponent = () => {
           hasAction
           action={handleContinue}
           actionMessage="Continue"
+          discard={handleDiscard}
+          discardMessage="Discard"
           alertMessage={renderBannerMessage()}
         />
       )}

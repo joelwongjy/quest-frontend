@@ -1,4 +1,5 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
 import backgroundImage from 'assets/images/student/background.png';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -58,6 +59,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: 0,
       height: '100%',
       overflow: 'scroll',
+      '-ms-overflow-style': 'none', // IE and Edge
+      scrollbarWidth: 'none', // Firefox
+      '&::-webkit-scrollbar': {
+        // Chrome, Safari and Opera
+        display: 'none',
+      },
     },
     mascotContainer: {
       position: 'absolute',

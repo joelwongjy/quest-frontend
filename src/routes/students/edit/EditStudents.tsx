@@ -1,33 +1,44 @@
 import React, { useEffect, useReducer } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
-import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
+import StudentForm from 'components/studentForm';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CLASSES, CREATE, PROGRAMMES } from 'constants/routes';
-import { ClassMode } from 'interfaces/components/classForm';
-import { ProgrammeData } from 'interfaces/models/programmes';
+import { EDIT, PERSONS, STUDENTS } from 'constants/routes';
+import { PersonData } from 'interfaces/models/persons';
+import { StudentMode } from 'interfaces/models/users';
+// import { useError } from 'contexts/ErrorContext';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
+// import { useStyles } from './createStudent.styles';
 
-interface CreateClassState extends RouteState {
-  programme: ProgrammeData | null;
+interface EditStudentsState extends RouteState {
+  student?: PersonData;
 }
 
-const CreateClass: React.FunctionComponent = () => {
+const EditStudents: React.FunctionComponent = () => {
+  // const classes = useStyles();
   const history = useHistory();
-  const { id } = useParams<RouteParams>();
-  const programmeId = parseInt(id, 10);
+  // const { setHasError } = useError();
+
+  const { id } = useRouteMatch<RouteParams>({
+    path: `${STUDENTS}/:id${EDIT}`,
+  })!.params;
+
+  const breadcrumbs = [
+    { text: 'Students', href: STUDENTS },
+    { text: 'Edit', href: `${STUDENTS}/${id}${EDIT}` },
+  ];
 
   const [state, setState] = useReducer(
-    (s: CreateClassState, a: Partial<CreateClassState>) => ({
+    (s: EditStudentsState, a: Partial<EditStudentsState>) => ({
       ...s,
       ...a,
     }),
     {
-      programme: null,
       isLoading: true,
       isError: false,
       isAlertOpen: false,
@@ -43,20 +54,23 @@ const CreateClass: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
+      student: undefined,
     }
   );
+
+  const dispatch = useDispatch();
+  const alertCallback = getAlertCallback(setState);
 
   useEffect(() => {
     let didCancel = false;
 
     const fetchData = async () => {
+      setState({ isLoading: true });
       try {
-        const response = await ApiService.get(`programmes/${id}`);
+        const response = await ApiService.get(`${PERSONS}/${id}`);
+
         if (!didCancel) {
-          setState({
-            programme: response.data as ProgrammeData,
-            isLoading: false,
-          });
+          setState({ student: response.data.person, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -77,37 +91,18 @@ const CreateClass: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, []);
-
-  const breadcrumbs = [
-    { text: 'Programmes', href: PROGRAMMES },
-    {
-      text:
-        state.isLoading || state.programme === null
-          ? 'Loading'
-          : state.programme.name,
-      href: `${PROGRAMMES}/${programmeId}${CLASSES}`,
-    },
-    { text: 'Classes', href: `${PROGRAMMES}/${programmeId}${CLASSES}` },
-    {
-      text: 'Create',
-      href: `${PROGRAMMES}/${programmeId}${CLASSES}/${CREATE}`,
-    },
-  ];
-
-  const alertCallback = getAlertCallback(setState);
+  }, [dispatch]);
 
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      {state.programme !== null && (
-        <ClassForm
-          mode={ClassMode.NEW}
-          programme={state.programme}
-          alertCallback={alertCallback}
-          cancelCallback={() => history.push(`${PROGRAMMES}/${id}${CLASSES}`)}
-        />
-      )}
+      <StudentForm
+        mode={StudentMode.EDIT}
+        student={state.student}
+        alertCallback={alertCallback}
+        cancelCallback={() => history.push(STUDENTS)}
+        key={`${state.student?.id ?? 'fetching-student'}`}
+      />
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm!}
@@ -121,4 +116,4 @@ const CreateClass: React.FunctionComponent = () => {
   );
 };
 
-export default CreateClass;
+export default EditStudents;

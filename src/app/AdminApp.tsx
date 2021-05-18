@@ -1,52 +1,62 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
   Redirect,
+  Route,
+  Switch,
+  useLocation,
 } from 'react-router-dom';
 
 import {
-  UNAUTHED_ROUTES,
-  ROOT,
-  HOME,
-  QUESTIONNAIRES,
-  PROGRAMMES,
-  CLASSES,
-  STUDENTS,
-  CREATE,
-  RESPONSES,
-  EDIT,
-  DUPLICATE,
   ADD,
-  QUESTS,
+  CLASSES,
+  CREATE,
+  DUPLICATE,
+  EDIT,
+  HOME,
   PROFILE,
+  PROGRAMMES,
+  QUESTIONNAIRES,
+  QUESTS,
+  RESPONSES,
+  ROOT,
+  STUDENTS,
+  UNAUTHED_ROUTES,
 } from 'constants/routes';
+import { useError } from 'contexts/ErrorContext';
 import Home from 'routes/home';
-import Questionnaires from 'routes/questionnaires';
-import CreateQuestionnaires from 'routes/questionnaires/create';
-import EditQuestionnaire from 'routes/questionnaires/edit';
-import Responses from 'routes/questionnaires/responses';
+import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
-import CreateProgrammes from 'routes/programmes/create';
 import Classes from 'routes/programmes/classes';
 import CreateClass from 'routes/programmes/classes/create';
 import ClassStudents from 'routes/programmes/classes/students/';
-import Students from 'routes/students';
-import CreateStudents from 'routes/students/create';
-import UploadStudents from 'routes/students/upload';
+import AddStudents from 'routes/programmes/classes/students/add';
+import CreateProgrammes from 'routes/programmes/create';
+import Questionnaires from 'routes/questionnaires';
+import CreateQuestionnaires from 'routes/questionnaires/create';
+import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
+import EditQuestionnaire from 'routes/questionnaires/edit';
+import Responses from 'routes/questionnaires/responses';
 import Quests from 'routes/quests';
 import QuestAttempt from 'routes/quests/attempt';
-import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
-import AddStudents from 'routes/programmes/classes/students/add';
-import Profile from 'routes/profile';
+import Students from 'routes/students';
+import CreateStudents from 'routes/students/create';
+import EditStudents from 'routes/students/edit';
+import UploadStudents from 'routes/students/upload';
+
 import { useStyles } from './app.styles';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
 
 const AdminApp: React.FunctionComponent = () => {
+  const { pathname } = useLocation();
+  const { setHasError } = useError();
   const classes = useStyles();
+
+  useEffect(() => {
+    setHasError(false);
+  }, [pathname]);
 
   return (
     <Router>
@@ -104,6 +114,11 @@ const AdminApp: React.FunctionComponent = () => {
             component={CreateStudents}
           />
           <Route exact path={`${STUDENTS}${ADD}`} component={UploadStudents} />
+          <Route
+            exact
+            path={`${STUDENTS}/:id${EDIT}`}
+            component={EditStudents}
+          />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />

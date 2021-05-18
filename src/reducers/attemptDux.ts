@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AttemptPostData } from 'interfaces/models/attempts';
+
 import { AnswerPostData } from 'interfaces/models/answers';
+import { AttemptPostData } from 'interfaces/models/attempts';
 import { QuestionnaireOneWindowData } from 'interfaces/models/questionnaires';
 
 export interface AttemptDux {

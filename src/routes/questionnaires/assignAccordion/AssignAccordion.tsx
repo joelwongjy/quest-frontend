@@ -1,7 +1,7 @@
 import React from 'react';
 
-import QuestAccordion from 'componentWrappers/questAccordion';
 import ProgrammeClassPicker from 'components/programmeClassPicker';
+import QuestAccordion from 'componentWrappers/questAccordion';
 import { PersonData } from 'interfaces/models/persons';
 
 interface AssignAccordionProps {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, FormControl, FormHelperText } from '@material-ui/core';
+import { FormControl, FormHelperText, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import QuestButton from 'componentWrappers/questButton';
@@ -107,7 +107,11 @@ const EditMcqQuestion: React.FunctionComponent<EditMcqQuestionProps> = ({
           )}
         </div>
       ))}
-      <QuestButton onClick={addOption} className={classes.optionButton}>
+      <QuestButton
+        onClick={addOption}
+        className={classes.optionButton}
+        disableElevation
+      >
         Add Option
       </QuestButton>
     </div>

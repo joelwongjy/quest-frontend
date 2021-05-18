@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+
 import Splash from 'assets/images/splash.jpg';
 
 export const useStyles = makeStyles((theme) =>

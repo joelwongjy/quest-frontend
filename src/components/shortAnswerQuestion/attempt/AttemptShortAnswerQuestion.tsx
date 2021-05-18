@@ -1,9 +1,9 @@
 import React from 'react';
 
 import QuestTextField from 'componentWrappers/questTextField';
+import { useError } from 'contexts/ErrorContext';
 import { AnswerPostData } from 'interfaces/models/answers';
 import { QuestionData } from 'interfaces/models/questions';
-import { useError } from 'contexts/ErrorContext';
 
 import { useStyles } from './attemptShortAnswerQuestion.styles';
 

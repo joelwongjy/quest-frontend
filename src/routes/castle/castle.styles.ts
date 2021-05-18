@@ -1,4 +1,5 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
 import backgroundImage from 'assets/images/student/background.png';
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -39,6 +40,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       overflow: 'scroll',
       [theme.breakpoints.down('sm')]: {
         padding: 0,
+      },
+      '-ms-overflow-style': 'none', // IE and Edge
+      scrollbarWidth: 'none', // Firefox
+      '&::-webkit-scrollbar': {
+        // Chrome, Safari and Opera
+        display: 'none',
       },
     },
     listItemTop: {

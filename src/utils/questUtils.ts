@@ -1,4 +1,5 @@
 import { isAfter, isBefore } from 'date-fns';
+
 import { AnswerPostData } from 'interfaces/models/answers';
 import { AttemptListData, AttemptPostData } from 'interfaces/models/attempts';
 import { PersonData } from 'interfaces/models/persons';
@@ -7,9 +8,10 @@ import {
   QuestionnaireOneWindowData,
 } from 'interfaces/models/questionnaires';
 import { QuestionData, QuestionType } from 'interfaces/models/questions';
-import sword from '../assets/images/student/sword.png';
+
 import hammer from '../assets/images/student/hammer.png';
 import shield from '../assets/images/student/shield.png';
+import sword from '../assets/images/student/sword.png';
 
 const questImages = [sword, hammer, shield];
 const questHeaderColors = ['#FB6B1D', '#c6c9b3', '#40A2E9'];

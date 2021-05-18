@@ -2,20 +2,20 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { Button, Grid, Typography } from '@material-ui/core';
 
+import PageContainer from 'components/pageContainer';
+import AttemptQuestionCard from 'components/questionCard/attempt';
+import StudentBoard from 'components/studentBoard';
 import { QUESTS } from 'constants/routes';
+import { AnswerData, AnswerPostData } from 'interfaces/models/answers';
+import { AttemptData } from 'interfaces/models/attempts';
+import { QuestionData } from 'interfaces/models/questions';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
-import PageContainer from 'components/pageContainer';
-
-import AttemptQuestionCard from 'components/questionCard/attempt';
 import { sortByOrder } from 'utils/sortingUtils';
-import StudentBoard from 'components/studentBoard';
-import { AttemptData } from 'interfaces/models/attempts';
-import { AnswerData, AnswerPostData } from 'interfaces/models/answers';
-import { QuestionData } from 'interfaces/models/questions';
 
-import ProgressBar from './ProgressBar';
 import AttemptGhost from './AttemptGhost';
+import ProgressBar from './ProgressBar';
+
 import { useStyles } from './attempt.styles';
 
 interface AttemptedState extends RouteState {

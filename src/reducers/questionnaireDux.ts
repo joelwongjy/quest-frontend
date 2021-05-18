@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
 import { addDays } from 'date-fns';
+import { v4 as uuid } from 'uuid';
 
 import {
   QuestionnaireFullData,
+  QuestionnaireMode,
   QuestionnaireStatus,
   QuestionnaireType,
   QuestionnaireWindowData,
-  QuestionnaireMode,
 } from 'interfaces/models/questionnaires';
 import {
   OptionData,

@@ -1,12 +1,13 @@
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { LocalizationProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@material-ui/pickers/adapter/date-fns';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import dateFnsUtils from '@material-ui/pickers/adapter/date-fns';
 
-import { useUser } from 'contexts/UserContext';
 import Loading from 'components/loading';
-import { retryPromise } from 'utils/promiseUtils';
+import { useUser } from 'contexts/UserContext';
 import { adminTheme, studentTheme } from 'styles/theme';
+import { retryPromise } from 'utils/promiseUtils';
 
 // Code splitting with React.lazy and Suspense
 type ModuleType = typeof import('./AdminApp');
@@ -34,7 +35,7 @@ const App: React.FunctionComponent = () => {
     <MuiThemeProvider
       theme={user == null || isStaff ? adminTheme : studentTheme}
     >
-      <LocalizationProvider dateAdapter={DateFnsUtils}>
+      <LocalizationProvider dateAdapter={dateFnsUtils}>
         <React.Suspense fallback={<Loading />}>
           {/* Renders the appropriate app */}
           {/* eslint-disable-next-line no-nested-ternary */}

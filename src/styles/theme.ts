@@ -1,8 +1,9 @@
-import { red, grey } from '@material-ui/core/colors';
+import { grey, red } from '@material-ui/core/colors';
 import {
-  unstable_createMuiStrictModeTheme as createMuiTheme,
   responsiveFontSizes,
+  unstable_createMuiStrictModeTheme as createMuiTheme,
 } from '@material-ui/core/styles';
+
 import fonts from 'assets/fonts';
 
 const fontFamilyRoboto = {
@@ -98,7 +99,7 @@ const adminMuiTheme = createMuiTheme({
     },
     icon: {
       iconColor: '#695F5F',
-      iconBorderColor: '#FFF2E5',
+      iconBorderColor: '#F4F2F2',
       iconHighlight: grey[900],
     },
     questionBackground: {
@@ -173,7 +174,7 @@ const studentMuiTheme = createMuiTheme({
     },
     icon: {
       iconColor: '#695F5F',
-      iconBorderColor: '#FFF2E5',
+      iconBorderColor: '#F4F2F2',
       iconHighlight: grey[900],
     },
     questionBackground: {

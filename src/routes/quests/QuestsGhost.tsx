@@ -3,10 +3,11 @@ import { Button, Grid, Typography } from '@material-ui/core';
 
 import PageContainer from 'components/pageContainer';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
-import { CardMode } from 'interfaces/components/questionnaireCard';
 import StudentBoard from 'components/studentBoard';
+import { CardMode } from 'interfaces/components/questionnaireCard';
 
 import mascotImage from '../../assets/images/student/mascot.png';
+
 import { useStyles } from './quests.styles';
 
 const QuestsGhost: React.FC = () => {

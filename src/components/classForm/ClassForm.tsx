@@ -3,23 +3,23 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  Typography,
+  IconButton,
   List,
   ListItem,
-  IconButton,
+  Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
-import QuestButton from 'componentWrappers/questButton';
-import { ClassListData } from 'interfaces/models/classes';
+import { useError } from 'contexts/ErrorContext';
 import { ClassMode } from 'interfaces/components/classForm';
+import { ClassListData } from 'interfaces/models/classes';
 import {
   ProgrammeData,
   ProgrammePatchData,
 } from 'interfaces/models/programmes';
-import { useError } from 'contexts/ErrorContext';
 import ApiService from 'services/apiService';
 import AuthService from 'services/authService';
 
@@ -214,7 +214,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Class {isSuccessful && ' - Successful'}
+                  Add Class{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               {mode === ClassMode.EDIT && (
@@ -223,7 +223,7 @@ const ClassForm: React.FC<ClassFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Class {isSuccessful && ' - Successful'}
+                  Edit Class{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>

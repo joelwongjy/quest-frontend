@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 
+import attempt, { AttemptDux } from 'reducers/attemptDux';
 import misc, { MiscDux } from 'reducers/miscDux';
 import questionnaire, { QuestionnaireDux } from 'reducers/questionnaireDux';
-import attempt, { AttemptDux } from 'reducers/attemptDux';
 
 export interface RootState {
   misc: MiscDux;

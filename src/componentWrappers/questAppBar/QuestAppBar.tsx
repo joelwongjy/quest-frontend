@@ -1,19 +1,13 @@
 import React, { useRef } from 'react';
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  useScrollTrigger,
-  Button,
-} from '@material-ui/core';
-import { Menu as MenuIcon } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { AppBar, Button, IconButton, Toolbar } from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
 
 import logo from 'assets/images/logo.png';
 import profile from 'assets/images/profile.png';
-import { QuestComponentProps } from 'interfaces/components/common';
 import { PROFILE } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
+import { QuestComponentProps } from 'interfaces/components/common';
 
 import { useStyles } from './questAppBar.styles';
 
@@ -49,14 +43,10 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
   const history = useHistory();
   const { user } = useUser();
   const profileMenuRef = useRef<HTMLButtonElement | null>(null);
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-  });
 
   return (
     <AppBar
-      elevation={trigger ? 4 : 0}
+      elevation={0}
       className={`${classes.appBar} ${hasDrawer ? classes.appBarShorten : ''}`}
       position="fixed"
     >

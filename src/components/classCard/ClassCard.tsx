@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   CardActions,
   CardContent,
   CardHeader,
   IconButton,
+  Link as MuiLink,
   Menu,
   MenuItem,
   Typography,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Link } from 'react-router-dom';
 
 import QuestCard from 'componentWrappers/questCard';
-import { QuestComponentProps } from 'interfaces/components/common';
-import { MenuOption } from 'interfaces/components/programmeCard';
 import {
-  QUESTIONNAIRES,
-  PROGRAMMES,
   CLASSES,
+  PROGRAMMES,
+  QUESTIONNAIRES,
   STUDENTS,
 } from 'constants/routes';
+import { QuestComponentProps } from 'interfaces/components/common';
+import { MenuOption } from 'interfaces/components/programmeCard';
 import { ClassListData } from 'interfaces/models/classes';
 
 import { useStyles } from './classCard.styles';
@@ -49,8 +50,13 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
 
   return (
     <>
-      <QuestCard>
+      <QuestCard hover>
         <CardHeader
+          title={
+            <Typography className={classes.status} color="textSecondary">
+              {`${questClass.studentCount} Students`}
+            </Typography>
+          }
           action={
             menuOptions && (
               <>
@@ -85,34 +91,40 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
             )
           }
         />
-        <CardContent>
-          <Typography
-            className={classes.title}
-            variant="h5"
-            component="h2"
-            noWrap
-          >
-            {questClass.name}
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions}>
-          <Button
-            size="small"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
-          >
-            Students
-          </Button>
-          <Button
-            size="small"
-            className={classes.button}
-            component={Link}
-            to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${QUESTIONNAIRES}`}
-          >
-            Questionnaires
-          </Button>
-        </CardActions>
+        <MuiLink
+          underline="none"
+          component={Link}
+          to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
+        >
+          <CardContent>
+            <Typography
+              className={classes.title}
+              variant="h5"
+              component="h2"
+              noWrap
+            >
+              {questClass.name}
+            </Typography>
+            <Typography
+              className={classes.description}
+              variant="body2"
+              component="p"
+              color="textSecondary"
+            >
+              {questClass.description ?? 'No description'}
+            </Typography>
+          </CardContent>
+          <CardActions className={classes.actions}>
+            <Button
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${QUESTIONNAIRES}`}
+            >
+              Questionnaires
+            </Button>
+          </CardActions>
+        </MuiLink>
       </QuestCard>
     </>
   );

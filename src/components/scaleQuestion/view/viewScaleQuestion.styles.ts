@@ -1,4 +1,5 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+
 import { adminTheme } from 'styles/theme';
 
 const toggleBlueStyles = {
@@ -121,37 +122,47 @@ export const useStyles = makeStyles(() =>
         boxShadow: 'none',
       },
 
-      '&.has-before.is-blue-1:not(.is-red-1) span[role="slider"][aria-valuenow="1"]': {
-        ...beforeLabelStyles,
-      },
-      '&.has-before.is-blue-2:not(.is-red-2) span[role="slider"][aria-valuenow="2"]': {
-        ...beforeLabelStyles,
-      },
-      '&.has-before.is-blue-3:not(.is-red-3) span[role="slider"][aria-valuenow="3"]': {
-        ...beforeLabelStyles,
-      },
-      '&.has-before.is-blue-4:not(.is-red-4) span[role="slider"][aria-valuenow="4"]': {
-        ...beforeLabelStyles,
-      },
-      '&.has-before.is-blue-5:not(.is-red-5) span[role="slider"][aria-valuenow="5"]': {
-        ...beforeLabelStyles,
-      },
+      '&.has-before.is-blue-1:not(.is-red-1) span[role="slider"][aria-valuenow="1"]':
+        {
+          ...beforeLabelStyles,
+        },
+      '&.has-before.is-blue-2:not(.is-red-2) span[role="slider"][aria-valuenow="2"]':
+        {
+          ...beforeLabelStyles,
+        },
+      '&.has-before.is-blue-3:not(.is-red-3) span[role="slider"][aria-valuenow="3"]':
+        {
+          ...beforeLabelStyles,
+        },
+      '&.has-before.is-blue-4:not(.is-red-4) span[role="slider"][aria-valuenow="4"]':
+        {
+          ...beforeLabelStyles,
+        },
+      '&.has-before.is-blue-5:not(.is-red-5) span[role="slider"][aria-valuenow="5"]':
+        {
+          ...beforeLabelStyles,
+        },
 
-      '&.has-after.is-red-1:not(.is-blue-1) span[role="slider"][aria-valuenow="1"]': {
-        ...afterLabelStyles,
-      },
-      '&.has-after.is-red-2:not(.is-blue-1) span[role="slider"][aria-valuenow="2"]': {
-        ...afterLabelStyles,
-      },
-      '&.has-after.is-red-3:not(.is-blue-1) span[role="slider"][aria-valuenow="3"]': {
-        ...afterLabelStyles,
-      },
-      '&.has-after.is-red-4:not(.is-blue-1) span[role="slider"][aria-valuenow="4"]': {
-        ...afterLabelStyles,
-      },
-      '&.has-after.is-red-5:not(.is-blue-1) span[role="slider"][aria-valuenow="5"]': {
-        ...afterLabelStyles,
-      },
+      '&.has-after.is-red-1:not(.is-blue-1) span[role="slider"][aria-valuenow="1"]':
+        {
+          ...afterLabelStyles,
+        },
+      '&.has-after.is-red-2:not(.is-blue-1) span[role="slider"][aria-valuenow="2"]':
+        {
+          ...afterLabelStyles,
+        },
+      '&.has-after.is-red-3:not(.is-blue-1) span[role="slider"][aria-valuenow="3"]':
+        {
+          ...afterLabelStyles,
+        },
+      '&.has-after.is-red-4:not(.is-blue-1) span[role="slider"][aria-valuenow="4"]':
+        {
+          ...afterLabelStyles,
+        },
+      '&.has-after.is-red-5:not(.is-blue-1) span[role="slider"][aria-valuenow="5"]':
+        {
+          ...afterLabelStyles,
+        },
 
       '&.is-blue-1:not(.is-red-1) span[role="slider"][aria-valuenow="1"]': {
         ...toggleBlueStyles,

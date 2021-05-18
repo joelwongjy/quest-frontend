@@ -11,20 +11,26 @@ export const useStyles = makeStyles((theme) =>
       width: '100%',
       marginBottom: '10px',
     },
+    subheading: {
+      fontSize: 18,
+      marginTop: '1rem',
+      marginLeft: '0.5rem',
+    },
     input: {
       '& input': {
         textAlign: 'center',
+        fontWeight: 'bold',
       },
       width: '80%',
       [theme.breakpoints.down('md')]: {
         width: '100%',
       },
+      marginTop: 0,
       backgroundColor: theme.custom.icon.iconBorderColor,
       color: theme.custom.icon.iconColor,
       border: 0,
       outline: 0,
       borderRadius: 12,
-      boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
       '& fieldset': {
         display: 'none',
       },

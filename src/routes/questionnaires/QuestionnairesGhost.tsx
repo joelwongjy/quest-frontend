@@ -7,6 +7,7 @@ import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCa
 import QuestionnaireTabs from 'components/questionnaireTabs';
 
 import { breadcrumbs, tabs } from './helpers';
+
 import { useStyles } from './questionnaires.styles';
 
 const QuestionnairesGhost: React.FC = () => {

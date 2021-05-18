@@ -1,4 +1,5 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
 import backgroundImage from 'assets/images/student/background.png';
 import programmeBarImage from 'assets/images/student/programme-bar.png';
 
@@ -65,7 +66,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: '0 1rem',
     },
     programmeBarText: {
-      fontSize: '1rem',
+      fontSize: '1.4rem',
       padding: '0.3rem 0',
     },
     programmeClassCardContainer: {
@@ -83,6 +84,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: 0,
       height: '100%',
       overflow: 'scroll',
+      '-ms-overflow-style': 'none', // IE and Edge
+      scrollbarWidth: 'none', // Firefox
+      '&::-webkit-scrollbar': {
+        // Chrome, Safari and Opera
+        display: 'none',
+      },
     },
     list: {
       marginTop: '0.5rem',

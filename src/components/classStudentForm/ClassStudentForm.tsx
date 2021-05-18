@@ -1,28 +1,28 @@
 import React, { useReducer, useState } from 'react';
 import {
+  Avatar,
   Checkbox,
   Grid,
-  Typography,
+  IconButton,
   List,
   ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
   ListItemAvatar,
-  Avatar,
   ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Typography,
 } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
-import QuestCard from 'componentWrappers/questCard';
 import QuestButton from 'componentWrappers/questButton';
-import { PersonListData } from 'interfaces/models/persons';
+import QuestCard from 'componentWrappers/questCard';
+import { CLASSES } from 'constants/routes';
 import { ClassData } from 'interfaces/models/classes';
+import { PersonListData } from 'interfaces/models/persons';
 import ApiService from 'services/apiService';
 import { sortByName } from 'utils/sortingUtils';
-import { CLASSES } from 'constants/routes';
 
 import { useStyles } from './ClassStudentForm.styles';
 

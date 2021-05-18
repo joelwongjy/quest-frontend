@@ -3,27 +3,27 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  Typography,
+  IconButton,
   List,
   ListItem,
-  IconButton,
+  Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
-import QuestButton from 'componentWrappers/questButton';
+import { PROGRAMMES } from 'constants/routes';
+import { useError } from 'contexts/ErrorContext';
+import { ProgrammeMode } from 'interfaces/components/programmeForm';
 import {
-  ProgrammePostData,
   ProgrammeListData,
   ProgrammePatchData,
+  ProgrammePostData,
 } from 'interfaces/models/programmes';
-import { ProgrammeMode } from 'interfaces/components/programmeForm';
-import { useError } from 'contexts/ErrorContext';
-import { programmeFormIsChanged } from 'utils/programmeUtils';
 import ApiService from 'services/apiService';
-import { PROGRAMMES } from 'constants/routes';
 import AuthService from 'services/authService';
+import { programmeFormIsChanged } from 'utils/programmeUtils';
 
 import { useStyles } from './ProgrammeForm.styles';
 
@@ -191,7 +191,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Programme {isSuccessful && ' - Successful'}
+                  Add Programme{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               {mode === ProgrammeMode.EDIT && (
@@ -200,7 +200,7 @@ const ProgrammeForm: React.FC<ProgrammeFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Programme {isSuccessful && ' - Successful'}
+                  Edit Programme{isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>

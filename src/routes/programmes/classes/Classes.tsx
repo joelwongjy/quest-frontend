@@ -1,26 +1,26 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button, Grid } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
+import { Button, Grid } from '@material-ui/core';
 
-import ApiService from 'services/apiService';
-import { MenuOption } from 'interfaces/components/programmeCard';
-import { RouteParams, RouteState } from 'interfaces/routes/common';
-import { ClassListData } from 'interfaces/models/classes';
-import { ClassMode } from 'interfaces/components/classForm';
 import ClassCard from 'components/classCard';
 import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
-import { PROGRAMMES, CREATE, CLASSES } from 'constants/routes';
 import QuestAlert from 'componentWrappers/questAlert';
-import { getAlertCallback } from 'utils/alertUtils';
+import { CLASSES, CREATE, PROGRAMMES } from 'constants/routes';
+import { ClassMode } from 'interfaces/components/classForm';
+import { MenuOption } from 'interfaces/components/programmeCard';
+import { ClassListData } from 'interfaces/models/classes';
 import {
   ProgrammeData,
   ProgrammePatchData,
 } from 'interfaces/models/programmes';
-import { sortByName } from 'utils/sortingUtils';
+import { RouteParams, RouteState } from 'interfaces/routes/common';
+import ApiService from 'services/apiService';
 import AuthService from 'services/authService';
+import { getAlertCallback } from 'utils/alertUtils';
+import { sortByName } from 'utils/sortingUtils';
 
 import { useStyles } from './classes.styles';
 

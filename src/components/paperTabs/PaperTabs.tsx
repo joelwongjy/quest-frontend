@@ -1,8 +1,8 @@
 import React from 'react';
 import { Paper } from '@material-ui/core';
 
-import { QuestTabsProps } from 'componentWrappers/questTabs/QuestTabs';
 import QuestTabs from 'componentWrappers/questTabs';
+import { QuestTabsProps } from 'componentWrappers/questTabs/QuestTabs';
 
 import { useStyles } from './paperTabs.styles';
 

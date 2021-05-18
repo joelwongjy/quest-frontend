@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { useUser } from 'contexts/UserContext';
-import { useAuth } from 'contexts/AuthContext';
 import PageContainer from 'components/pageContainer';
 import QuestBreadcrumbs from 'componentWrappers/questBreadcrumbs';
 import QuestButton from 'componentWrappers/questButton';
 import { HOME } from 'constants/routes';
+import { useAuth } from 'contexts/AuthContext';
+import { useUser } from 'contexts/UserContext';
 import ApiService from 'services/apiService';
 
 import { useStyles } from './home.styles';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Tab, createStyles, Theme } from '@material-ui/core';
+import { createStyles, Tab, Tabs, Theme } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
 import { QuestComponentProps } from 'interfaces/components/common';
@@ -29,15 +29,16 @@ const CustomTab = withStyles((theme: Theme) =>
       textTransform: 'none',
       minWidth: 72,
       fontWeight: theme.typography.fontWeightRegular,
-      paddingLeft: '1rem',
-      paddingRight: '1rem',
+      paddingLeft: '0.9rem',
+      paddingRight: '0.9rem',
+      minHeight: '38px',
       '&:hover': {
         color: '#4B4646',
         opacity: 1,
       },
       '&$selected': {
         color: '#4B4646',
-        fontWeight: theme.typography.fontWeightMedium,
+        fontWeight: theme.typography.fontWeightBold,
         backgroundColor: '#FFDC6E',
         borderRadius: '25% 25% 0 0',
         textDecoration: 'underline',

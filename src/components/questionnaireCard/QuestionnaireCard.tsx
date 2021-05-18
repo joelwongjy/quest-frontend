@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   CardActions,
@@ -10,21 +11,20 @@ import {
   MenuItem,
   Typography,
 } from '@material-ui/core';
-import { format, formatDistanceToNow } from 'date-fns';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Link } from 'react-router-dom';
+import { format, formatDistanceToNow } from 'date-fns';
 
-import { QuestComponentProps } from 'interfaces/components/common';
 import QuestCard from 'componentWrappers/questCard';
-import { CardMode, MenuOption } from 'interfaces/components/questionnaireCard';
 import { QUESTIONNAIRES, QUESTS, RESPONSES } from 'constants/routes';
+import { QuestComponentProps } from 'interfaces/components/common';
+import { CardMode, MenuOption } from 'interfaces/components/questionnaireCard';
 import {
   QuestionnaireListData,
   QuestionnaireListDataType,
   QuestionnaireStatus,
 } from 'interfaces/models/questionnaires';
-
 import { getQuestStyle } from 'utils/questUtils';
+
 import { useStyles } from './questionnaireCard.styles';
 
 interface QuestionnaireCardProps extends QuestComponentProps {
