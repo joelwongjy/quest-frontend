@@ -27,6 +27,10 @@ type UploadStudentsState = RouteState;
 const UploadStudents: React.FunctionComponent = () => {
   const classes = useStyles();
   const { hasError, setHasError } = useError();
+  const [rows, setRows] = useState<Omit<PersonPostData, 'programmes'>[]>([]);
+  const [duplicatedStudents, setDuplicatedStudents] = useState<Set<string>>(
+    new Set<string>()
+  );
 
   const breadcrumbs = [
     { text: 'Students', href: STUDENTS },
@@ -57,29 +61,6 @@ const UploadStudents: React.FunctionComponent = () => {
     }
   );
   const alertCallback = getAlertCallback(setState);
-  const [duplicatedStudents, setDuplicatedStudents] = useState<Set<string>>(
-    new Set<string>()
-  );
-
-  const parseGender = (gender: string): string => {
-    const maleValues = ['m', 'ma', 'mal', 'male', 'males'];
-    if (maleValues.includes(gender.toLowerCase())) {
-      return 'M';
-    }
-    const femaleValues = [
-      'f',
-      'fe',
-      'fem',
-      'fema',
-      'femal',
-      'female',
-      'females',
-    ];
-    if (femaleValues.includes(gender.toLowerCase())) {
-      return 'F';
-    }
-    return gender;
-  };
 
   const isValidGender = (gender: string): boolean => {
     return gender === 'M' || gender === 'F';
@@ -104,7 +85,27 @@ const UploadStudents: React.FunctionComponent = () => {
     );
   };
 
-  const convertExcelDateToJSDate = (date: number): Date => {
+  const parseGender = (gender: string): string => {
+    const maleValues = ['m', 'ma', 'mal', 'male', 'males'];
+    if (maleValues.includes(gender.toLowerCase())) {
+      return 'M';
+    }
+    const femaleValues = [
+      'f',
+      'fe',
+      'fem',
+      'fema',
+      'femal',
+      'female',
+      'females',
+    ];
+    if (femaleValues.includes(gender.toLowerCase())) {
+      return 'F';
+    }
+    return gender;
+  };
+
+  const parseExcelDateToJSDate = (date: number): Date => {
     return new Date(Math.round((date - 25569) * 86400 * 1000));
   };
 
@@ -171,7 +172,6 @@ const UploadStudents: React.FunctionComponent = () => {
           : '',
     },
   ];
-  const [rows, setRows] = useState<PersonPostData[]>([]);
 
   const fileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
@@ -198,14 +198,13 @@ const UploadStudents: React.FunctionComponent = () => {
 
             setRows(
               response.rows.slice(1).map((row: any) => {
-                const student: PersonPostData = {
+                const student: Omit<PersonPostData, 'programmes'> = {
                   name: row[0],
                   gender: parseGender(row[1]),
-                  birthday: convertExcelDateToJSDate(row[2]),
+                  birthday: parseExcelDateToJSDate(row[2]),
                   mobileNumber: row[3],
                   homeNumber: row[4],
                   email: row[5],
-                  programmes: [],
                 };
                 if (!validateInfo(student)) {
                   setHasError(true);
