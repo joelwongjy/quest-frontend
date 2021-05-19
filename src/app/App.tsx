@@ -1,7 +1,8 @@
 import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { LocalizationProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@material-ui/pickers/adapter/date-fns';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import dateFnsUtils from '@material-ui/pickers/adapter/date-fns';
 
 import Loading from 'components/loading';
 import { useUser } from 'contexts/UserContext';
@@ -34,7 +35,7 @@ const App: React.FunctionComponent = () => {
     <MuiThemeProvider
       theme={user == null || isStaff ? adminTheme : studentTheme}
     >
-      <LocalizationProvider dateAdapter={DateFnsUtils}>
+      <LocalizationProvider dateAdapter={dateFnsUtils}>
         <React.Suspense fallback={<Loading />}>
           {/* Renders the appropriate app */}
           {/* eslint-disable-next-line no-nested-ternary */}
