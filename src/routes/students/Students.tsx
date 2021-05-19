@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
+import { DataGrid, GridCellParams, GridColDef } from '@material-ui/data-grid';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import StudentList from 'components/studentList';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, EDIT, STUDENTS } from 'constants/routes';
+import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
+import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
@@ -57,7 +60,7 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${STUDENTS}`);
+        const response = await ApiService.get(`${STUDENTS}/details`);
         if (!didCancel) {
           setState({ students: response.data.persons, isLoading: false });
         }
@@ -86,11 +89,11 @@ const Students: React.FunctionComponent = () => {
 
   const alertCallback = getAlertCallback(setState);
 
-  const handleEdit = async (student: PersonListData) => {
+  const handleEdit = async (student: PersonData) => {
     history.push(`${STUDENTS}/${student.id}${EDIT}`);
   };
 
-  const handleDelete = (student: PersonListData) => {
+  const handleDelete = (student: PersonData) => {
     alertCallback(
       true,
       true,
@@ -112,6 +115,74 @@ const Students: React.FunctionComponent = () => {
     );
   };
 
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'id', width: 70 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+    },
+    {
+      field: 'gender',
+      headerName: 'Gender',
+      width: 100,
+    },
+    {
+      field: 'birthday',
+      headerName: 'Birthday',
+      width: 130,
+    },
+    {
+      field: 'mobileNumber',
+      headerName: 'Mobile Number',
+      width: 200,
+    },
+    {
+      field: 'homeNumber',
+      headerName: 'Home Number',
+      width: 200,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+    },
+    {
+      field: 'programmes',
+      headerName: 'Programmes',
+      width: 200,
+      renderCell: (params: GridCellParams) =>
+        params.row.programmes.map((p: ProgrammeListData) => {
+          return (
+            <div key={p.name}>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                component={Link}
+                to={`${PROGRAMMES}/${p.id}${CLASSES}`}
+              >
+                {p.name}
+              </Button>
+            </div>
+          );
+        }),
+    },
+    {
+      field: '',
+      headerName: 'Actions',
+      sortable: false,
+      // eslint-disable-next-line react/display-name
+      renderCell: () => {
+        return (
+          <IconButton edge="end" aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+    },
+  ];
+
   return (
     <PageContainer>
       <PageHeader
@@ -128,11 +199,20 @@ const Students: React.FunctionComponent = () => {
           </Button>
         }
       />
-      <StudentList
-        students={state.students}
-        editCallback={handleEdit}
-        deleteCallback={handleDelete}
-      />
+      <div className={classes.dataGrid}>
+        <div style={{ flexGrow: 1 }}>
+          <DataGrid
+            loading={state.isLoading}
+            rows={state.students}
+            columns={columns}
+            pageSize={20}
+            autoHeight
+            checkboxSelection
+            disableColumnMenu
+            disableSelectionOnClick
+          />
+        </div>
+      </div>
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm}

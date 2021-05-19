@@ -6,5 +6,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1.5, 0),
       color: theme.palette.primary.main,
     },
+    dataGrid: {
+      display: 'flex',
+      height: '100%',
+    },
   })
 );
