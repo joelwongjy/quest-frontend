@@ -46,6 +46,7 @@ import CreateStudents from 'routes/students/create';
 import EditStudents from 'routes/students/edit';
 import UploadStudents from 'routes/students/upload';
 import Teachers from 'routes/teachers';
+import CreateTeacher from 'routes/teachers/create';
 
 import { useStyles } from './app.styles';
 
@@ -126,7 +127,7 @@ const AdminApp: React.FunctionComponent = () => {
           <Route
             exact
             path={`${TEACHERS}${CREATE}`}
-            component={CreateStudents}
+            component={CreateTeacher}
           />
           <Route exact path={ADMINS} />
           <Route path={HOME} component={Home} />

@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, EDIT, STUDENTS } from 'constants/routes';
+import { CREATE, EDIT, STUDENTS, TEACHERS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -15,7 +15,7 @@ import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './teachers.styles';
 
 interface TeachersState extends RouteState {
-  students: PersonListData[];
+  teachers: PersonListData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -30,7 +30,7 @@ const Teachers: React.FunctionComponent = () => {
       ...a,
     }),
     {
-      students: [],
+      teachers: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -56,9 +56,9 @@ const Teachers: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${STUDENTS}`);
+        const response = await ApiService.get(`${TEACHERS}`);
         if (!didCancel) {
-          setState({ students: response.data.persons, isLoading: false });
+          setState({ teachers: response.data.persons, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -81,7 +81,7 @@ const Teachers: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Teachers', href: STUDENTS }];
+  const breadcrumbs = [{ text: 'Teachers', href: TEACHERS }];
 
   const alertCallback = getAlertCallback(setState);
 
@@ -97,15 +97,15 @@ const Teachers: React.FunctionComponent = () => {
       'You will not be able to retrieve deleted students.',
       () => {
         // TODO: Add error handling to deletion
-        ApiService.delete(`${STUDENTS}`, {
+        ApiService.delete(`${TEACHERS}`, {
           data: {
             persons: [student.id],
           },
         });
-        const index = state.students.indexOf(student);
-        const newTeachers = state.students.slice();
+        const index = state.teachers.indexOf(student);
+        const newTeachers = state.teachers.slice();
         newTeachers.splice(index, 1);
-        setState({ students: newTeachers });
+        setState({ teachers: newTeachers });
       },
       undefined
     );
@@ -121,7 +121,7 @@ const Teachers: React.FunctionComponent = () => {
             color="secondary"
             className={classes.button}
             component={Link}
-            to={`${STUDENTS}${CREATE}`}
+            to={`${TEACHERS}${CREATE}`}
           >
             Create Teacher
           </Button>
