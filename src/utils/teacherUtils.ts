@@ -1,6 +1,6 @@
-import { StudentFormState } from 'components/studentForm/StudentForm';
+import { TeacherFormState } from 'components/teacherForm/TeacherForm';
 
-export const validateStudentInfo = (student: StudentFormState): boolean => {
+export const validateTeacherInfo = (student: TeacherFormState): boolean => {
   const { name, gender, birthday, programmes } = student;
   if (name === '') {
     return false;
@@ -17,7 +17,7 @@ export const validateStudentInfo = (student: StudentFormState): boolean => {
   return true;
 };
 
-export const isEmptyStudent = (student: StudentFormState): boolean => {
+export const isEmptyTeacher = (student: TeacherFormState): boolean => {
   const { name, gender, birthday, programmes } = student;
   return name === '' && gender === '' && !birthday && programmes.length <= 0;
 };

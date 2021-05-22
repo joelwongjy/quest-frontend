@@ -20,24 +20,24 @@ import { DatePicker } from '@material-ui/pickers';
 import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
-import { STUDENTS } from 'constants/routes';
+import { TEACHERS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { ClassUserRole } from 'interfaces/models/classUsers';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
-import { StudentMode } from 'interfaces/models/users';
+import { TeacherMode } from 'interfaces/models/users';
 import { MiscDux } from 'reducers/miscDux';
 import { RootState } from 'reducers/rootReducer';
 import ApiService from 'services/apiService';
 import { isValidEmail, isValidMobileNumber } from 'utils/personUtils';
 import { sortByName } from 'utils/sortingUtils';
-import { validateStudentInfo } from 'utils/studentUtils';
+import { validateTeacherInfo } from 'utils/teacherUtils';
 
-import { useStyles } from './StudentForm.styles';
+import { useStyles } from './teacherForm.styles';
 
-interface StudentFormProps {
-  mode: StudentMode;
-  student?: PersonData;
-  studentCallback?: (newStudent: PersonData) => void;
+interface TeacherFormProps {
+  mode: TeacherMode;
+  teacher?: PersonData;
+  teacherCallback?: (newTeacher: PersonData) => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -49,13 +49,13 @@ interface StudentFormProps {
   ) => void;
 }
 
-export interface StudentFormState extends Omit<PersonPostData, 'birthday'> {
+export interface TeacherFormState extends Omit<PersonPostData, 'birthday'> {
   birthday: Date | null;
 }
 
-const StudentForm: React.FunctionComponent<StudentFormProps> = ({
+const TeacherForm: React.FunctionComponent<TeacherFormProps> = ({
   mode,
-  student,
+  teacher,
   cancelCallback,
   alertCallback,
 }) => {
@@ -106,19 +106,19 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   };
 
   const [state, setState] = useReducer(
-    (s: StudentFormState, a: Partial<StudentFormState>) => ({
+    (s: TeacherFormState, a: Partial<TeacherFormState>) => ({
       ...s,
       ...a,
     }),
     {
-      name: student?.name ?? '',
-      gender: student?.gender ?? Gender.MALE,
-      birthday: student?.birthday ? new Date(student.birthday) : null,
-      mobileNumber: student?.mobileNumber ?? '',
-      homeNumber: student?.homeNumber ?? '',
-      email: student?.email ?? '',
-      programmes: student?.programmes
-        ? spreadProgrammes(student.programmes)
+      name: teacher?.name ?? '',
+      gender: teacher?.gender ?? Gender.MALE,
+      birthday: teacher?.birthday ? new Date(teacher.birthday) : null,
+      mobileNumber: teacher?.mobileNumber ?? '',
+      homeNumber: teacher?.homeNumber ?? '',
+      email: teacher?.email ?? '',
+      programmes: teacher?.programmes
+        ? spreadProgrammes(teacher.programmes)
         : [],
     }
   );
@@ -162,14 +162,14 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   };
 
   const handleAdd = async () => {
-    if (!validateStudentInfo(state)) {
+    if (!validateTeacherInfo(state)) {
       setHasError(true);
       return;
     }
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(`${STUDENTS}`, {
+      const response = await ApiService.post(`${TEACHERS}`, {
         ...state,
         classIds: condenseProgrammes(state.programmes),
       });
@@ -188,14 +188,14 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   };
 
   const handleEdit = async () => {
-    if (!validateStudentInfo(state) || !student) {
+    if (!validateTeacherInfo(state) || !teacher) {
       setHasError(true);
       return;
     }
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.patch(`persons/${student.id}`, {
+      const response = await ApiService.patch(`persons/${teacher.id}`, {
         ...state,
         programmes: condenseProgrammes(state.programmes),
       });
@@ -230,7 +230,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
 
   const renderButtons = () => {
     switch (mode) {
-      case StudentMode.NEW:
+      case TeacherMode.NEW:
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
@@ -241,11 +241,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
               Cancel
             </QuestButton>
             <QuestButton className={classes.button} onClick={handleAdd}>
-              Add Student
+              Add Teacher
             </QuestButton>
           </Grid>
         );
-      case StudentMode.EDIT:
+      case TeacherMode.EDIT:
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
@@ -281,22 +281,22 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
             className={isSuccessful ? classes.headerSuccess : classes.header}
           >
             <Grid container alignItems="center" justify="space-between">
-              {mode === StudentMode.NEW && (
+              {mode === TeacherMode.NEW && (
                 <Typography
                   component="h1"
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Student Info {isSuccessful && ' - Successful'}
+                  Add Teacher Info {isSuccessful && ' - Successful'}
                 </Typography>
               )}
-              {mode === StudentMode.EDIT && (
+              {mode === TeacherMode.EDIT && (
                 <Typography
                   component="h1"
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Student Info {isSuccessful && ' - Successful'}
+                  Edit Teacher Info {isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>
@@ -696,7 +696,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           true,
                           false,
                           'You cannot add activities!',
-                          'You need to be part of a programme to add students to it.',
+                          'You need to be part of a programme to add teachers to it.',
                           undefined,
                           undefined
                         );
@@ -711,7 +711,7 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                           true,
                           false,
                           'You cannot add activities!',
-                          'You need to create classes first for the student to join.',
+                          'You need to create classes first for the teacher to join.',
                           undefined,
                           undefined
                         );
@@ -760,4 +760,4 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   );
 };
 
-export default StudentForm;
+export default TeacherForm;

@@ -10,6 +10,11 @@ export enum StudentMode {
   NEW = 'NEW',
 }
 
+export enum TeacherMode {
+  EDIT = 'EDIT',
+  NEW = 'NEW',
+}
+
 export interface UserPostData {
   username: string;
   name?: string;

@@ -18,7 +18,7 @@ import { PersonPostData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import { getAlertCallback } from 'utils/alertUtils';
 import { ExcelData, excelRenderer } from 'utils/excelUtils';
-import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
+import { isValidEmail, isValidMobileNumber } from 'utils/personUtils';
 
 import { useStyles } from './uploadStudents.styles';
 

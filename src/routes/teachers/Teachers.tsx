@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { Button } from '@material-ui/core';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, EDIT, STUDENTS, TEACHERS } from 'constants/routes';
+import { CREATE, EDIT, TEACHERS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -85,8 +86,8 @@ const Teachers: React.FunctionComponent = () => {
 
   const alertCallback = getAlertCallback(setState);
 
-  const handleEdit = async (student: PersonListData) => {
-    history.push(`${STUDENTS}/${student.id}${EDIT}`);
+  const handleEdit = async (teacher: PersonListData) => {
+    history.push(`${TEACHERS}/${teacher.id}${EDIT}`);
   };
 
   const handleDelete = (student: PersonListData) => {

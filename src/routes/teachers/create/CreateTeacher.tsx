@@ -3,10 +3,10 @@ import { useHistory } from 'react-router-dom';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import StudentForm from 'components/studentForm';
+import TeacherForm from 'components/teacherForm';
 import QuestAlert from 'componentWrappers/questAlert';
 import { CREATE, TEACHERS } from 'constants/routes';
-import { StudentMode } from 'interfaces/models/users';
+import { TeacherMode } from 'interfaces/models/users';
 // import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
 import { getAlertCallback } from 'utils/alertUtils';
@@ -53,8 +53,8 @@ const CreateTeacher: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <StudentForm
-        mode={StudentMode.NEW}
+      <TeacherForm
+        mode={TeacherMode.NEW}
         alertCallback={alertCallback}
         cancelCallback={() => history.push(TEACHERS)}
       />

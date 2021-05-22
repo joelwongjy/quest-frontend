@@ -26,8 +26,11 @@ import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import { Gender, PersonPostData } from 'interfaces/models/persons';
 import { DefaultUserRole } from 'interfaces/models/users';
-import { validatePersonInfo } from 'utils/personUtils';
-import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
+import {
+  isValidEmail,
+  isValidMobileNumber,
+  validatePersonInfo,
+} from 'utils/personUtils';
 
 import { useStyles } from './profile.styles';
 
