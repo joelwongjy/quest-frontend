@@ -9,6 +9,7 @@ import {
 
 import {
   ADD,
+  ADMINS,
   CLASSES,
   CREATE,
   DUPLICATE,
@@ -21,6 +22,7 @@ import {
   RESPONSES,
   ROOT,
   STUDENTS,
+  TEACHERS,
   UNAUTHED_ROUTES,
 } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
@@ -43,6 +45,7 @@ import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
 import EditStudents from 'routes/students/edit';
 import UploadStudents from 'routes/students/upload';
+import Teachers from 'routes/teachers';
 
 import { useStyles } from './app.styles';
 
@@ -119,6 +122,13 @@ const AdminApp: React.FunctionComponent = () => {
             path={`${STUDENTS}/:id${EDIT}`}
             component={EditStudents}
           />
+          <Route exact path={TEACHERS} component={Teachers} />
+          <Route
+            exact
+            path={`${TEACHERS}${CREATE}`}
+            component={CreateStudents}
+          />
+          <Route exact path={ADMINS} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />

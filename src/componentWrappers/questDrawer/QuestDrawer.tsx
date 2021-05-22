@@ -173,7 +173,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
               key="Teachers"
               selected={pathname === TEACHERS}
               component={Link}
-              to={STUDENTS}
+              to={TEACHERS}
               className={listItemClasses}
             >
               <ListItemIcon>
@@ -186,7 +186,7 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
               key="Admins"
               selected={pathname === ADMINS}
               component={Link}
-              to={STUDENTS}
+              to={ADMINS}
               className={listItemClasses}
             >
               <ListItemIcon>
