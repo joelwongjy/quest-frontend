@@ -138,7 +138,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           </Grid>
           <Grid container justify="center">
             <Typography
-              className={classes.dates}
+              className={`${classes.dates} is-student`}
               color="textSecondary"
               gutterBottom
             >
@@ -151,7 +151,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             </Typography>
           </Grid>
         </CardContent>
-        <CardActions className={classes.actions}>
+        <CardActions className={`${classes.actions} is-student`}>
           {isAttempted ? (
             <Button
               size="small"
