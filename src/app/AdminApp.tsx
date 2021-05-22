@@ -26,6 +26,8 @@ import {
   UNAUTHED_ROUTES,
 } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
+import Admins from 'routes/admins';
+import CreateAdmin from 'routes/admins/create';
 import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
@@ -129,7 +131,8 @@ const AdminApp: React.FunctionComponent = () => {
             path={`${TEACHERS}${CREATE}`}
             component={CreateTeacher}
           />
-          <Route exact path={ADMINS} />
+          <Route exact path={ADMINS} component={Admins} />
+          <Route exact path={`${ADMINS}${CREATE}`} component={CreateAdmin} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />

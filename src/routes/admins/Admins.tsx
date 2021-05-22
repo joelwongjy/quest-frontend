@@ -7,31 +7,31 @@ import { Button } from '@material-ui/core';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, EDIT, TEACHERS } from 'constants/routes';
+import { ADMINS, CREATE, EDIT } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
 
-import { useStyles } from './teachers.styles';
+import { useStyles } from './admins.styles';
 
-interface TeachersState extends RouteState {
-  teachers: PersonListData[];
+interface AdminsState extends RouteState {
+  admins: PersonListData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
-  selectedStudent: PersonData | undefined;
+  selectedAdmin: PersonData | undefined;
 }
 
-const Teachers: React.FunctionComponent = () => {
+const Admins: React.FunctionComponent = () => {
   const [state, setState] = useReducer(
-    (s: TeachersState, a: Partial<TeachersState>) => ({
+    (s: AdminsState, a: Partial<AdminsState>) => ({
       ...s,
       ...a,
     }),
     {
-      teachers: [],
+      admins: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -45,7 +45,7 @@ const Teachers: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
-      selectedStudent: undefined,
+      selectedAdmin: undefined,
     }
   );
   const dispatch = useDispatch();
@@ -57,9 +57,9 @@ const Teachers: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${TEACHERS}`);
+        const response = await ApiService.get(`${ADMINS}`);
         if (!didCancel) {
-          setState({ teachers: response.data.persons, isLoading: false });
+          setState({ admins: response.data.persons, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -82,15 +82,15 @@ const Teachers: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Teachers', href: TEACHERS }];
+  const breadcrumbs = [{ text: 'Admins', href: ADMINS }];
 
   const alertCallback = getAlertCallback(setState);
 
-  const handleEdit = async (teacher: PersonListData) => {
-    history.push(`${TEACHERS}/${teacher.id}${EDIT}`);
+  const handleEdit = async (admin: PersonListData) => {
+    history.push(`${ADMINS}/${admin.id}${EDIT}`);
   };
 
-  const handleDelete = (teacher: PersonListData) => {
+  const handleDelete = (admin: PersonListData) => {
     alertCallback(
       true,
       true,
@@ -98,15 +98,15 @@ const Teachers: React.FunctionComponent = () => {
       'You will not be able to retrieve deleted students.',
       () => {
         // TODO: Add error handling to deletion
-        ApiService.delete(`${TEACHERS}`, {
+        ApiService.delete(`${ADMINS}`, {
           data: {
-            persons: [teacher.id],
+            persons: [admin.id],
           },
         });
-        const index = state.teachers.indexOf(teacher);
-        const newTeachers = state.teachers.slice();
-        newTeachers.splice(index, 1);
-        setState({ teachers: newTeachers });
+        const index = state.admins.indexOf(admin);
+        const newAdmins = state.admins.slice();
+        newAdmins.splice(index, 1);
+        setState({ admins: newAdmins });
       },
       undefined
     );
@@ -122,9 +122,9 @@ const Teachers: React.FunctionComponent = () => {
             color="secondary"
             className={classes.button}
             component={Link}
-            to={`${TEACHERS}${CREATE}`}
+            to={`${ADMINS}${CREATE}`}
           >
-            Create Teacher
+            Create Admin
           </Button>
         }
       />
@@ -141,4 +141,4 @@ const Teachers: React.FunctionComponent = () => {
   );
 };
 
-export default Teachers;
+export default Admins;
