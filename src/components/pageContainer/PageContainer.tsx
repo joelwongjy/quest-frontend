@@ -3,6 +3,7 @@ import { useTheme } from '@material-ui/core';
 
 import QuestAppBar from 'componentWrappers/questAppBar/QuestAppBar';
 import QuestDrawer from 'componentWrappers/questDrawer';
+import { useUser } from 'contexts/UserContext';
 
 import { useStyles } from './pageContainer.styles';
 
@@ -22,6 +23,7 @@ const PageContainer: React.FunctionComponent<PageContainerProps> = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const { isStaff } = useUser();
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   const toggleDrawer = () => setIsDrawerOpen((state: boolean) => !state);
@@ -47,7 +49,11 @@ const PageContainer: React.FunctionComponent<PageContainerProps> = ({
         />
       )}
       <main className={contentClassName}>
-        {hasToolbarPadding && <div className={classes.toolbar} />}
+        {hasToolbarPadding && (
+          <div
+            className={`${classes.toolbar} ${isStaff ? '' : 'is-student'}`}
+          />
+        )}
         {children}
       </main>
     </div>

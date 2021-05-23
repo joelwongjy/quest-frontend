@@ -9,6 +9,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: drawerWidth,
         flexShrink: 0,
       },
+      '&.is-student': {
+        [theme.breakpoints.up('md')]: {
+          width: 200,
+        },
+      },
     },
     drawerPaper: {
       width: drawerWidth,
@@ -17,6 +22,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     studentDrawerPaper: {
       backgroundColor: '#394F57',
+      width: 200,
     },
     listItem: {
       '&.Mui-selected': {
