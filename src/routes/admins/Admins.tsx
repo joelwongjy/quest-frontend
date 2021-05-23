@@ -2,7 +2,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
+import { DataGrid, GridCellParams, GridColDef } from '@material-ui/data-grid';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
@@ -16,7 +18,7 @@ import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './admins.styles';
 
 interface AdminsState extends RouteState {
-  admins: PersonListData[];
+  admins: PersonData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -86,11 +88,11 @@ const Admins: React.FunctionComponent = () => {
 
   const alertCallback = getAlertCallback(setState);
 
-  const handleEdit = async (admin: PersonListData) => {
+  const handleEdit = async (admin: PersonData) => {
     history.push(`${ADMINS}/${admin.id}${EDIT}`);
   };
 
-  const handleDelete = (admin: PersonListData) => {
+  const handleDelete = (admin: PersonData) => {
     alertCallback(
       true,
       true,
@@ -112,6 +114,53 @@ const Admins: React.FunctionComponent = () => {
     );
   };
 
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'id', width: 70 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+    },
+    {
+      field: 'gender',
+      headerName: 'Gender',
+      width: 100,
+    },
+    {
+      field: 'birthday',
+      headerName: 'Birthday',
+      width: 130,
+    },
+    {
+      field: 'mobileNumber',
+      headerName: 'Mobile Number',
+      width: 200,
+    },
+    {
+      field: 'homeNumber',
+      headerName: 'Home Number',
+      width: 200,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+    },
+    {
+      field: '',
+      headerName: 'Actions',
+      sortable: false,
+      // eslint-disable-next-line react/display-name
+      renderCell: () => {
+        return (
+          <IconButton edge="end" aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+    },
+  ];
+
   return (
     <PageContainer>
       <PageHeader
@@ -128,6 +177,20 @@ const Admins: React.FunctionComponent = () => {
           </Button>
         }
       />
+      <div className={classes.dataGrid}>
+        <div style={{ flexGrow: 1 }}>
+          <DataGrid
+            loading={state.isLoading}
+            rows={state.admins}
+            columns={columns}
+            pageSize={20}
+            autoHeight
+            checkboxSelection
+            disableColumnMenu
+            disableSelectionOnClick
+          />
+        </div>
+      </div>
       <QuestAlert
         isAlertOpen={state.isAlertOpen!}
         hasConfirm={state.hasConfirm}
