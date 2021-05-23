@@ -41,16 +41,18 @@ const QuestAppBar: React.FunctionComponent<QuestAppBarProps> = ({
   const menuId = 'primary-search-account-menu';
   const classes = useStyles();
   const history = useHistory();
-  const { user } = useUser();
+  const { user, isStaff } = useUser();
   const profileMenuRef = useRef<HTMLButtonElement | null>(null);
 
   return (
     <AppBar
       elevation={0}
-      className={`${classes.appBar} ${hasDrawer ? classes.appBarShorten : ''}`}
+      className={`${classes.appBar} ${hasDrawer ? classes.appBarShorten : ''} ${
+        isStaff ? '' : 'is-student'
+      }`}
       position="fixed"
     >
-      <Toolbar>
+      <Toolbar className={`${isStaff ? '' : classes.studentToolbar}`}>
         {hasDrawer && (
           <IconButton
             edge="start"

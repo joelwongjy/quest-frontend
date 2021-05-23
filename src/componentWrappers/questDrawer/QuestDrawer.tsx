@@ -186,7 +186,10 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
     window !== undefined ? () => window.document.body : undefined;
 
   return (
-    <nav className={classes.drawer} aria-label="mailbox folders">
+    <nav
+      className={`${classes.drawer}${isStaff ? '' : ' is-student'}`}
+      aria-label="mailbox folders"
+    >
       <Hidden mdUp implementation="css">
         <Drawer
           container={container}

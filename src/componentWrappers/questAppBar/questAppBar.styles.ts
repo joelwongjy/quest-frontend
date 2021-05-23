@@ -16,7 +16,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
+        '&.is-student': {
+          width: `calc(100% - 200px)`,
+          marginLeft: 200,
+          height: 48,
+        },
       },
+    },
+    studentToolbar: {
+      minHeight: 48,
+      height: 48,
     },
     menuButton: {
       [theme.breakpoints.up('md')]: {
