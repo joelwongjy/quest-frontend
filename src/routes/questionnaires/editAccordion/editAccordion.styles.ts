@@ -49,9 +49,9 @@ export const useStyles = makeStyles((theme) =>
       alignItems: 'center',
       boxShadow: 'none',
       borderStyle: 'dashed',
-      borderColor: theme.custom.icon.iconColor,
-      color: theme.custom.icon.iconColor,
-      fontSize: '1.5rem',
+      borderColor: '#cccccc',
+      color: '#cccccc',
+      fontSize: '1.15rem',
       '&:hover': {
         cursor: 'pointer',
       },
