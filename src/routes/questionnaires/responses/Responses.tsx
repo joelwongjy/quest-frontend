@@ -14,7 +14,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
@@ -32,6 +31,7 @@ import {
   QuestionnaireFullData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
+import { QuestionData } from 'interfaces/models/questions';
 import { UserData } from 'interfaces/models/users';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -348,7 +348,29 @@ const Responses: React.FunctionComponent = () => {
   const handleClose = () => {
     setAnchorEle(null);
   };
+
   const renderDownloadMenu = () => {
+    const questions: QuestionData[] = state.questionnaire?.questionWindows[0]
+      ? state.questionnaire?.questionWindows[0].questions
+      : [];
+
+    const headers = [
+      'student',
+      ...questions.map((q: QuestionData) => q.questionText),
+    ];
+
+    const data = [
+      headers,
+      ...state.attempts.map((att: AttemptFullData) => {
+        return [
+          att.user.username,
+          ...(att.answers as AnswerData[]).map((ans: AnswerData) =>
+            ans.textResponse ? ans.textResponse : ans.option?.optionText
+          ),
+        ];
+      }),
+    ];
+
     return (
       <>
         <IconButton
@@ -366,7 +388,12 @@ const Responses: React.FunctionComponent = () => {
           onClose={handleClose}
         >
           <MenuItem>
-            <CSVLink data={state.attempts}>Download responses as excel</CSVLink>
+            <CSVLink
+              data={data}
+              filename={`${state.questionnaire?.title}_responses.csv`}
+            >
+              Download responses as excel
+            </CSVLink>
           </MenuItem>
         </Menu>
       </>
