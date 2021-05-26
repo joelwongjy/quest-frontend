@@ -1,15 +1,20 @@
 import React, { useEffect, useReducer, useState } from 'react';
+import { CSVLink } from 'react-csv';
 import { useRouteMatch } from 'react-router-dom';
 import {
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
+  Menu,
   MenuItem,
   Paper,
   Select,
   Switch,
   Typography,
 } from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
@@ -334,6 +339,40 @@ const Responses: React.FunctionComponent = () => {
     return <>{result}</>;
   };
 
+  const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEle(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEle(null);
+  };
+  const renderDownloadMenu = () => {
+    return (
+      <>
+        <IconButton
+          aria-label="export options"
+          aria-controls="export options"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <GetAppIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEle}
+          keepMounted
+          open={Boolean(anchorEle)}
+          onClose={handleClose}
+        >
+          <MenuItem>
+            <CSVLink data={state.attempts}>Download responses as excel</CSVLink>
+          </MenuItem>
+        </Menu>
+      </>
+    );
+  };
+
   if (state.attempts.length <= 0) {
     return (
       <PageContainer>
@@ -361,6 +400,7 @@ const Responses: React.FunctionComponent = () => {
             ? `${state.questionnaire?.title} - Responses`
             : 'Loading...'}
         </Typography>
+        <>{renderDownloadMenu()}</>
       </Grid>
       <Grid container justify="center">
         <Grid item>
