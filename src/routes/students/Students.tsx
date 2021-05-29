@@ -1,15 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/display-name */
+/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
-import { DataGrid, GridCellParams, GridColDef } from '@material-ui/data-grid';
+import { GridCellParams, GridColDef, GridRowId } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
+import TablePopup from 'components/tablePopup';
+import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePopup';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
+import QuestDataGrid from 'componentWrappers/questDataGrid';
+import { CREATE, EDIT, STUDENTS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
@@ -20,11 +25,11 @@ import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
   students: PersonListData[];
+  selectedStudents: GridRowId[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
-  selectedStudent: PersonData | undefined;
 }
 
 const Students: React.FunctionComponent = () => {
@@ -35,6 +40,7 @@ const Students: React.FunctionComponent = () => {
     }),
     {
       students: [],
+      selectedStudents: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -48,7 +54,6 @@ const Students: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
-      selectedStudent: undefined,
     }
   );
   const dispatch = useDispatch();
@@ -60,7 +65,7 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${STUDENTS}/details`);
+        const response = await ApiService.get(`${STUDENTS}`);
         if (!didCancel) {
           setState({ students: response.data.persons, isLoading: false });
         }
@@ -89,6 +94,10 @@ const Students: React.FunctionComponent = () => {
 
   const alertCallback = getAlertCallback(setState);
 
+  const handleSelection = (e: GridRowId[]) => {
+    setState({ selectedStudents: e });
+  };
+
   const handleEdit = async (student: PersonData) => {
     history.push(`${STUDENTS}/${student.id}${EDIT}`);
   };
@@ -115,69 +124,104 @@ const Students: React.FunctionComponent = () => {
     );
   };
 
+  const handleDeleteMultiple = (ids: GridRowId[]) => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to retrieve deleted students.',
+      () => {
+        let newStudents = state.students.slice();
+        ApiService.delete(`${STUDENTS}`, {
+          data: {
+            persons: ids as number[],
+          },
+        });
+        ids.forEach((id: GridRowId) => {
+          newStudents = newStudents.filter((s: PersonListData) => {
+            return s.id !== (id as number);
+          });
+        });
+        setState({ students: newStudents });
+      },
+      undefined
+    );
+  };
+
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'id', width: 70 },
     {
       field: 'name',
       headerName: 'Name',
       width: 200,
+      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'gender',
       headerName: 'Gender',
       width: 100,
-    },
-    {
-      field: 'birthday',
-      headerName: 'Birthday',
-      width: 130,
-    },
-    {
-      field: 'mobileNumber',
-      headerName: 'Mobile Number',
-      width: 200,
-    },
-    {
-      field: 'homeNumber',
-      headerName: 'Home Number',
-      width: 200,
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 200,
+      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'programmes',
       headerName: 'Programmes',
       width: 200,
-      renderCell: (params: GridCellParams) =>
-        params.row.programmes.map((p: ProgrammeListData) => {
-          return (
-            <div key={p.name}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                component={Link}
-                to={`${PROGRAMMES}/${p.id}${CLASSES}`}
-              >
-                {p.name}
-              </Button>
-            </div>
-          );
-        }),
+      renderCell: (params: GridCellParams) => {
+        return (
+          <TablePopup
+            value={params.row.programmes
+              .map((p: ProgrammeListData) => p.name)
+              .join(', ')}
+            width={params.colDef.width}
+          />
+        );
+      },
+    },
+    {
+      field: 'birthday',
+      headerName: 'Birthday',
+      width: 130,
+      renderCell: renderDefaultTablePopup,
+    },
+    {
+      field: 'mobileNumber',
+      headerName: 'Mobile No.',
+      width: 130,
+      renderCell: renderDefaultTablePopup,
+    },
+    {
+      field: 'homeNumber',
+      headerName: 'Home No.',
+      width: 130,
+      renderCell: renderDefaultTablePopup,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+      renderCell: renderDefaultTablePopup,
     },
     {
       field: '',
       headerName: 'Actions',
       sortable: false,
-      // eslint-disable-next-line react/display-name
-      renderCell: () => {
+      renderCell: (params: GridCellParams) => {
         return (
-          <IconButton edge="end" aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
+          <div>
+            <IconButton
+              edge="end"
+              aria-label="edit"
+              onClick={() => handleEdit(params.row as PersonData)}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={() => handleDelete(params.row as PersonData)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
         );
       },
     },
@@ -199,17 +243,24 @@ const Students: React.FunctionComponent = () => {
           </Button>
         }
       />
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        onClick={() => handleDeleteMultiple(state.selectedStudents)}
+      >
+        Delete
+      </Button>
       <div className={classes.dataGrid}>
         <div style={{ flexGrow: 1 }}>
-          <DataGrid
+          <QuestDataGrid
             loading={state.isLoading}
             rows={state.students}
             columns={columns}
-            pageSize={20}
-            autoHeight
-            checkboxSelection
-            disableColumnMenu
-            disableSelectionOnClick
+            onSelectionModelChange={(newSelection) => {
+              handleSelection(newSelection.selectionModel);
+            }}
+            selectionModel={state.selectedStudents}
           />
         </div>
       </div>
