@@ -113,7 +113,9 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
             component="p"
             color="textSecondary"
           >
-            {programme.description ?? 'No description'}
+            {programme.description === '' || programme.description === undefined
+              ? 'No description'
+              : programme.description}
           </Typography>
         </CardContent>
 

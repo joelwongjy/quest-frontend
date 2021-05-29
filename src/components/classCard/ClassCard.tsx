@@ -118,7 +118,10 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
               component="p"
               color="textSecondary"
             >
-              {questClass.description ?? 'No description'}
+              {questClass.description === '' ||
+              questClass.description === undefined
+                ? 'No description'
+                : questClass.description}
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
