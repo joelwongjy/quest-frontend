@@ -14,7 +14,7 @@ import TablePopup from 'components/tablePopup';
 import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePopup';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
-import { CREATE, EDIT, STUDENTS } from 'constants/routes';
+import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
@@ -169,8 +169,18 @@ const Students: React.FunctionComponent = () => {
         return (
           <TablePopup
             value={params.row.programmes
-              .map((p: ProgrammeListData) => p.name)
-              .join(', ')}
+              .map((p: ProgrammeListData) => {
+                return (
+                  <Link key={p.id} to={`${PROGRAMMES}/${p.id}${CLASSES}`}>
+                    {p.name}
+                  </Link>
+                );
+              })
+              .reduce((prev: React.ReactElement, curr: React.ReactElement) => [
+                prev,
+                ', ',
+                curr,
+              ])}
             width={params.colDef.width}
           />
         );
