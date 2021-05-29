@@ -8,11 +8,6 @@ export const useStyles = makeStyles(() =>
       fontWeight: 600,
       color: 'black',
     },
-    status: {
-      marginLeft: 10,
-      textAlign: 'left',
-      fontSize: 14,
-    },
     actions: {
       display: 'flex',
       justifyContent: 'center',
