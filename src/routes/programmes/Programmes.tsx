@@ -61,35 +61,25 @@ const Programme: React.FunctionComponent = () => {
 
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    try {
+      const response = await ApiService.get(`${PROGRAMMES}`);
+      const programmes = response.data.programmes as ProgrammeListData[];
+      setState({ programmes, isLoading: false });
+    } catch (error) {
+      setState({
+        isError: true,
+        isLoading: false,
+        isAlertOpen: true,
+        hasConfirm: false,
+        alertHeader: 'Something went wrong',
+        alertMessage: 'Please refresh the page and try again',
+      });
+    }
+  };
+
   useEffect(() => {
-    let didCancel = false;
-
-    const fetchData = async () => {
-      try {
-        const response = await ApiService.get(`${PROGRAMMES}`);
-        const programmes = response.data.programmes as ProgrammeListData[];
-        if (!didCancel) {
-          setState({ programmes, isLoading: false });
-        }
-      } catch (error) {
-        if (!didCancel) {
-          setState({
-            isError: true,
-            isLoading: false,
-            isAlertOpen: true,
-            hasConfirm: false,
-            alertHeader: 'Something went wrong',
-            alertMessage: 'Please refresh the page and try again',
-          });
-        }
-      }
-    };
-
     fetchData();
-
-    return () => {
-      didCancel = true;
-    };
   }, [dispatch]);
 
   const breadcrumbs = [{ text: 'Programmes', href: `${PROGRAMMES}` }];
@@ -179,7 +169,10 @@ const Programme: React.FunctionComponent = () => {
           mode={ProgrammeMode.EDIT}
           programme={state.selectedProgramme}
           alertCallback={alertCallback}
-          cancelCallback={() => setState({ isEditing: false })}
+          cancelCallback={() => {
+            fetchData();
+            setState({ isEditing: false });
+          }}
         />
       ) : (
         <div style={{ padding: '1rem' }}>
