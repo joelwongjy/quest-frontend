@@ -390,9 +390,15 @@ const Profile: React.FC = () => {
                 justify="center"
                 className={classes.programmeClassCardContainer}
               >
-                {user?.programmes.map((p) => {
-                  return (
-                    <Grid item xs={12} md={10} lg={6} key={p.id}>
+                {user?.programmes.map((p) =>
+                  p.classes.map((c) => (
+                    <Grid
+                      item
+                      xs={12}
+                      md={10}
+                      lg={6}
+                      key={`card-${p.id}-${c.id}`}
+                    >
                       <QuestCard className={classes.programmeClassCard}>
                         <Grid
                           container
@@ -409,21 +415,15 @@ const Profile: React.FC = () => {
                             />
                           </Grid>
                           <Grid item xs={10}>
-                            <List key={p.id}>
-                              {p.classes.map((c) => {
-                                return (
-                                  <ListItem
-                                    key={c.id}
-                                  >{`${p.name} - ${c.name}`}</ListItem>
-                                );
-                              })}
+                            <List>
+                              <ListItem>{`${p.name} - ${c.name}`}</ListItem>
                             </List>
                           </Grid>
                         </Grid>
                       </QuestCard>
                     </Grid>
-                  );
-                })}
+                  ))
+                )}
               </Grid>
             </ul>
           </StudentBoard>

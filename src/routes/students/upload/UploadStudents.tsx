@@ -86,20 +86,10 @@ const UploadStudents: React.FunctionComponent = () => {
   };
 
   const parseGender = (gender: string): string => {
-    const maleValues = ['m', 'ma', 'mal', 'male', 'males'];
-    if (maleValues.includes(gender.toLowerCase())) {
+    if ('males'.startsWith(gender.toLowerCase())) {
       return 'M';
     }
-    const femaleValues = [
-      'f',
-      'fe',
-      'fem',
-      'fema',
-      'femal',
-      'female',
-      'females',
-    ];
-    if (femaleValues.includes(gender.toLowerCase())) {
+    if ('females'.startsWith(gender.toLowerCase())) {
       return 'F';
     }
     return gender;
