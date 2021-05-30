@@ -9,7 +9,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
-import { ADMINS, CREATE, EDIT } from 'constants/routes';
+import { ADMINS, CLASSES, CREATE, EDIT } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -59,7 +59,7 @@ const Admins: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${ADMINS}`);
+        const response = await ApiService.get(`${CLASSES}${ADMINS}`);
         if (!didCancel) {
           setState({ admins: response.data.persons, isLoading: false });
         }

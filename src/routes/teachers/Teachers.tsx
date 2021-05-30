@@ -60,7 +60,7 @@ const Teachers: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${TEACHERS}`);
+        const response = await ApiService.get(`${CLASSES}${TEACHERS}`);
         if (!didCancel) {
           setState({ teachers: response.data.persons, isLoading: false });
         }
