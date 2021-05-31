@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
@@ -59,28 +58,28 @@ const Programme: React.FunctionComponent = () => {
 
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
-  const fetchData = async () => {
-    try {
-      const response = await ApiService.get(`${PROGRAMMES}`);
-      const programmes = response.data.programmes as ProgrammeListData[];
-      setState({ programmes, isLoading: false });
-    } catch (error) {
-      setState({
-        isError: true,
-        isLoading: false,
-        isAlertOpen: true,
-        hasConfirm: false,
-        alertHeader: 'Something went wrong',
-        alertMessage: 'Please refresh the page and try again',
-      });
-    }
-  };
-
   useEffect(() => {
-    fetchData();
-  }, [dispatch]);
+    const fetchData = async () => {
+      try {
+        const response = await ApiService.get(`${PROGRAMMES}`);
+        const programmes = response.data.programmes as ProgrammeListData[];
+        setState({ programmes, isLoading: false });
+      } catch (error) {
+        setState({
+          isError: true,
+          isLoading: false,
+          isAlertOpen: true,
+          hasConfirm: false,
+          alertHeader: 'Something went wrong',
+          alertMessage: 'Please refresh the page and try again',
+        });
+      }
+    };
+
+    if (!state.isEditing) {
+      fetchData();
+    }
+  }, [state.isEditing]);
 
   const breadcrumbs = [{ text: 'Programmes', href: `${PROGRAMMES}` }];
 
@@ -169,10 +168,7 @@ const Programme: React.FunctionComponent = () => {
           mode={ProgrammeMode.EDIT}
           programme={state.selectedProgramme}
           alertCallback={alertCallback}
-          cancelCallback={() => {
-            fetchData();
-            setState({ isEditing: false });
-          }}
+          cancelCallback={() => setState({ isEditing: false })}
         />
       ) : (
         <div style={{ padding: '1rem' }}>
