@@ -53,9 +53,16 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
       <QuestCard hover>
         <CardHeader
           title={
-            <Typography className={classes.status} color="textSecondary">
-              {`${questClass.studentCount} Students`}
-            </Typography>
+            <Button
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={`${PROGRAMMES}/${programmeId}${CLASSES}/${questClass.id}${STUDENTS}`}
+            >
+              {`${questClass.studentCount} ${
+                questClass.studentCount !== 1 ? 'Students' : 'Student'
+              }`}
+            </Button>
           }
           action={
             menuOptions && (
@@ -111,7 +118,10 @@ const ClassCard: React.FunctionComponent<ClassCardProps> = ({
               component="p"
               color="textSecondary"
             >
-              {questClass.description ?? 'No description'}
+              {questClass.description === '' ||
+              questClass.description === undefined
+                ? 'No description'
+                : questClass.description}
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
