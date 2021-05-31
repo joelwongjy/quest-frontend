@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
@@ -59,38 +58,28 @@ const Programme: React.FunctionComponent = () => {
 
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    let didCancel = false;
-
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`${PROGRAMMES}`);
         const programmes = response.data.programmes as ProgrammeListData[];
-        if (!didCancel) {
-          setState({ programmes, isLoading: false });
-        }
+        setState({ programmes, isLoading: false });
       } catch (error) {
-        if (!didCancel) {
-          setState({
-            isError: true,
-            isLoading: false,
-            isAlertOpen: true,
-            hasConfirm: false,
-            alertHeader: 'Something went wrong',
-            alertMessage: 'Please refresh the page and try again',
-          });
-        }
+        setState({
+          isError: true,
+          isLoading: false,
+          isAlertOpen: true,
+          hasConfirm: false,
+          alertHeader: 'Something went wrong',
+          alertMessage: 'Please refresh the page and try again',
+        });
       }
     };
 
-    fetchData();
-
-    return () => {
-      didCancel = true;
-    };
-  }, [dispatch]);
+    if (!state.isEditing) {
+      fetchData();
+    }
+  }, [state.isEditing]);
 
   const breadcrumbs = [{ text: 'Programmes', href: `${PROGRAMMES}` }];
 

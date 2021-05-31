@@ -45,9 +45,18 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
     <QuestCard hover>
       <CardHeader
         title={
-          <Typography className={classes.status} color="textSecondary">
-            {`${programme.classCount} Classes`}
-          </Typography>
+          <Button
+            size="small"
+            className={classes.button}
+            component={Link}
+            to={{
+              pathname: `${PROGRAMMES}/${programme.id}${CLASSES}`,
+            }}
+          >
+            {`${programme.classCount} ${
+              programme.classCount !== 1 ? 'Classes' : 'Class'
+            }`}
+          </Button>
         }
         action={
           menuOptions && (
@@ -104,7 +113,9 @@ const ProgrammeCard: React.FunctionComponent<ProgrammeCardProps> = ({
             component="p"
             color="textSecondary"
           >
-            {programme.description ?? 'No description'}
+            {programme.description === '' || programme.description === undefined
+              ? 'No description'
+              : programme.description}
           </Typography>
         </CardContent>
 
