@@ -3,12 +3,13 @@ import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
-import { DataGrid, GridCellParams, GridColDef } from '@material-ui/data-grid';
+import { GridColDef } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
+import QuestDataGrid from 'componentWrappers/questDataGrid';
 import { ADMINS, CLASSES, CREATE, EDIT } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
@@ -179,7 +180,7 @@ const Admins: React.FunctionComponent = () => {
       />
       <div className={classes.dataGrid}>
         <div style={{ flexGrow: 1 }}>
-          <DataGrid
+          <QuestDataGrid
             loading={state.isLoading}
             rows={state.admins}
             columns={columns}
