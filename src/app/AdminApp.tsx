@@ -28,6 +28,7 @@ import {
 import { useError } from 'contexts/ErrorContext';
 import Admins from 'routes/admins';
 import CreateAdmin from 'routes/admins/create';
+import EditAdmins from 'routes/admins/edit';
 import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
@@ -139,6 +140,7 @@ const AdminApp: React.FunctionComponent = () => {
           />
           <Route exact path={ADMINS} component={Admins} />
           <Route exact path={`${ADMINS}${CREATE}`} component={CreateAdmin} />
+          <Route exact path={`${ADMINS}/:id${EDIT}`} component={EditAdmins} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />

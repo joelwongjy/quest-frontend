@@ -3,8 +3,9 @@ import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
-import { GridColDef } from '@material-ui/data-grid';
+import { GridCellParams, GridColDef } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
@@ -115,7 +116,7 @@ const Admins: React.FunctionComponent = () => {
       true,
       true,
       'Are you sure?',
-      'You will not be able to retrieve deleted students.',
+      'You will not be able to retrieve deleted admins.',
       () => {
         // TODO: Add error handling to deletion
         ApiService.delete(`${ADMINS}`, {
@@ -129,6 +130,27 @@ const Admins: React.FunctionComponent = () => {
         setState({ admins: newAdmins });
       },
       undefined
+    );
+  };
+
+  const actionCell = (params: GridCellParams) => {
+    return (
+      <div>
+        <IconButton
+          edge="end"
+          aria-label="edit"
+          onClick={() => handleEdit(params.row as PersonData)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={() => handleDelete(params.row as PersonData)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </div>
     );
   };
 
@@ -168,14 +190,7 @@ const Admins: React.FunctionComponent = () => {
       field: 'actions',
       headerName: 'Actions',
       sortable: false,
-      // eslint-disable-next-line react/display-name
-      renderCell: () => {
-        return (
-          <IconButton edge="end" aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        );
-      },
+      renderCell: actionCell,
     },
   ];
 

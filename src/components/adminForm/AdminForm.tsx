@@ -29,8 +29,8 @@ import { useStyles } from './adminForm.styles';
 
 interface AdminFormProps {
   mode: AdminMode;
-  teacher?: PersonData;
-  teacherCallback?: (newAdmin: PersonData) => void;
+  admin?: PersonData;
+  adminCallback?: (newAdmin: PersonData) => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -48,7 +48,7 @@ export interface AdminFormState extends Omit<PersonPostData, 'birthday'> {
 
 const AdminForm: React.FunctionComponent<AdminFormProps> = ({
   mode,
-  teacher,
+  admin,
   cancelCallback,
   alertCallback,
 }) => {
@@ -63,12 +63,12 @@ const AdminForm: React.FunctionComponent<AdminFormProps> = ({
       ...a,
     }),
     {
-      name: teacher?.name ?? '',
-      gender: teacher?.gender ?? Gender.MALE,
-      birthday: teacher?.birthday ? new Date(teacher.birthday) : null,
-      mobileNumber: teacher?.mobileNumber ?? '',
-      homeNumber: teacher?.homeNumber ?? '',
-      email: teacher?.email ?? '',
+      name: admin?.name ?? '',
+      gender: admin?.gender ?? Gender.MALE,
+      birthday: admin?.birthday ? new Date(admin.birthday) : null,
+      mobileNumber: admin?.mobileNumber ?? '',
+      homeNumber: admin?.homeNumber ?? '',
+      email: admin?.email ?? '',
       programmes: [],
     }
   );
@@ -114,14 +114,14 @@ const AdminForm: React.FunctionComponent<AdminFormProps> = ({
   };
 
   const handleEdit = async () => {
-    if (!validateAdminInfo(state) || !teacher) {
+    if (!validateAdminInfo(state) || !admin) {
       setHasError(true);
       return;
     }
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.patch(`persons/${teacher.id}`, {
+      const response = await ApiService.patch(`persons/${admin.id}`, {
         ...state,
       });
       if (response.status === 200) {
