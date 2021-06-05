@@ -3,7 +3,11 @@ import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
-import { GridCellParams, GridColDef } from '@material-ui/data-grid';
+import {
+  GridCellParams,
+  GridCellValue,
+  GridColDef,
+} from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -178,7 +182,6 @@ const Teachers: React.FunctionComponent = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'id', width: 70 },
     {
       field: 'name',
       headerName: 'Name',
@@ -214,6 +217,15 @@ const Teachers: React.FunctionComponent = () => {
       headerName: 'Programmes',
       width: 200,
       renderCell: programmeCell,
+      sortComparator: (a: GridCellValue, b: GridCellValue) => {
+        const aProgrammes = a as ProgrammeListData[];
+        const bProgrammes = b as ProgrammeListData[];
+
+        const aNames = aProgrammes.map((p) => p.name.toLowerCase()).join(',');
+        const bNames = bProgrammes.map((p) => p.name.toLowerCase()).join(',');
+
+        return aNames.localeCompare(bNames);
+      },
     },
     {
       field: 'actions',
