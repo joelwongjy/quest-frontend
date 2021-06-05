@@ -31,6 +31,17 @@ export interface PersonPostData {
 export interface PersonListData extends DiscardableData {
   name: string;
   mobileNumber?: string;
+  gender?: string;
+  programmes: {
+    id: number;
+    name: string;
+    classes: {
+      id: number;
+      name: string;
+      role: ClassUserRole;
+    }[];
+  }[];
+  highestClassRole: ClassUserRole;
 }
 
 export interface PersonData extends PersonListData {
@@ -40,19 +51,9 @@ export interface PersonData extends PersonListData {
   mobileNumber?: string;
   homeNumber?: string;
   email?: string;
-  highestClassRole: ClassUserRole;
   relatives: {
     person: PersonListData;
     relationship: RelationshipType;
-  }[];
-  programmes: {
-    id: number;
-    name: string;
-    classes: {
-      id: number;
-      name: string;
-      role: ClassUserRole;
-    }[];
   }[];
   user?: UserData;
 }
