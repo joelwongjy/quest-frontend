@@ -290,7 +290,7 @@ const Students: React.FunctionComponent = () => {
         className={classes.button}
         onClick={() => handleDeleteMultiple(state.selectedStudents)}
       >
-        Delete
+        Delete Selected
       </Button>
       <div className={classes.dataGrid}>
         <div style={{ flexGrow: 1 }}>
