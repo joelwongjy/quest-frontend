@@ -155,7 +155,6 @@ const Admins: React.FunctionComponent = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'id', width: 70 },
     {
       field: 'name',
       headerName: 'Name',
