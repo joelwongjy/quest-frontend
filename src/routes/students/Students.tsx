@@ -2,7 +2,12 @@ import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
-import { GridCellParams, GridColDef, GridRowId } from '@material-ui/data-grid';
+import {
+  GridCellParams,
+  GridCellValue,
+  GridColDef,
+  GridRowId,
+} from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -223,16 +228,14 @@ const Students: React.FunctionComponent = () => {
       headerName: 'Programmes',
       width: 200,
       filterable: false,
-      sortComparator: (v1, v2) => {
-        const lhs = v1 as ProgrammeListData[];
-        const rhs = v2 as ProgrammeListData[];
-        if (lhs.length === 0) {
-          return -1;
-        }
-        if (rhs.length === 0) {
-          return 1;
-        }
-        return lhs[0].name < rhs[0].name ? -1 : 1;
+      sortComparator: (a: GridCellValue, b: GridCellValue) => {
+        const aProgrammes = a as ProgrammeListData[];
+        const bProgrammes = b as ProgrammeListData[];
+
+        const aNames = aProgrammes.map((p) => p.name.toLowerCase()).join(',');
+        const bNames = bProgrammes.map((p) => p.name.toLowerCase()).join(',');
+
+        return aNames.localeCompare(bNames);
       },
       renderCell: programmeCell,
     },
