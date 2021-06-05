@@ -17,6 +17,7 @@ import TablePopup from 'components/tablePopup';
 import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePopup';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
+import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
 import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
@@ -227,7 +228,6 @@ const Students: React.FunctionComponent = () => {
       field: 'programmes',
       headerName: 'Programmes',
       width: 200,
-      filterable: false,
       sortComparator: (a: GridCellValue, b: GridCellValue) => {
         const aProgrammes = a as ProgrammeListData[];
         const bProgrammes = b as ProgrammeListData[];
@@ -238,6 +238,8 @@ const Students: React.FunctionComponent = () => {
         return aNames.localeCompare(bNames);
       },
       renderCell: programmeCell,
+      type: 'programme',
+      headerAlign: 'left',
     },
     {
       field: 'birthday',
@@ -301,6 +303,7 @@ const Students: React.FunctionComponent = () => {
             loading={state.isLoading}
             rows={state.students}
             columns={columns}
+            columnTypes={{ programme: programmeColumnType }}
             onSelectionModelChange={(newSelection) => {
               handleSelection(newSelection.selectionModel);
             }}
