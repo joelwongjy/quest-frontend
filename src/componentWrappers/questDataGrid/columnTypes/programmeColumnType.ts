@@ -8,7 +8,6 @@ import {
 import { ProgrammeListData } from 'interfaces/models/programmes';
 
 export const programmeColumnType: GridColTypeDef = {
-  extendType: 'number',
   filterOperators: getGridStringOperators()
     .filter((operator) => operator.value === 'contains')
     .map((operator) => {
