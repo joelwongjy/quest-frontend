@@ -1,5 +1,3 @@
-/* eslint-disable react/display-name */
-/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -67,7 +65,24 @@ const Students: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`${STUDENTS}`);
         if (!didCancel) {
-          setState({ students: response.data.persons, isLoading: false });
+          const students = response.data.persons as PersonListData[];
+          const mappedStudents = students.map((x) => {
+            return {
+              name: x.name,
+              mobileNumber: x.mobileNumber ?? '-',
+              homeNumber: x.homeNumber ?? '-',
+              gender: x.gender ?? '-',
+              birthday: x.birthday ?? '-',
+              programmes: x.programmes,
+              email: x.email ?? '-',
+              highestClassRole: x.highestClassRole,
+              discardedAt: x.discardedAt,
+              id: x.id,
+              createdAt: x.createdAt,
+              updatedAt: x.updatedAt,
+            };
+          }) as PersonListData[];
+          setState({ students: mappedStudents, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -148,6 +163,48 @@ const Students: React.FunctionComponent = () => {
     );
   };
 
+  const programmeCell = (params: GridCellParams) => {
+    return (
+      <TablePopup
+        value={params.row.programmes
+          .map((p: ProgrammeListData) => {
+            return (
+              <Link key={p.id} to={`${PROGRAMMES}/${p.id}${CLASSES}`}>
+                {p.name}
+              </Link>
+            );
+          })
+          .reduce((prev: React.ReactElement, curr: React.ReactElement) => [
+            prev,
+            ', ',
+            curr,
+          ])}
+        width={params.colDef.width}
+      />
+    );
+  };
+
+  const actionCell = (params: GridCellParams) => {
+    return (
+      <div>
+        <IconButton
+          edge="end"
+          aria-label="edit"
+          onClick={() => handleEdit(params.row as PersonData)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={() => handleDelete(params.row as PersonData)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </div>
+    );
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'name',
@@ -177,26 +234,7 @@ const Students: React.FunctionComponent = () => {
         }
         return lhs[0].name < rhs[0].name ? -1 : 1;
       },
-      renderCell: (params: GridCellParams) => {
-        return (
-          <TablePopup
-            value={params.row.programmes
-              .map((p: ProgrammeListData) => {
-                return (
-                  <Link key={p.id} to={`${PROGRAMMES}/${p.id}${CLASSES}`}>
-                    {p.name}
-                  </Link>
-                );
-              })
-              .reduce((prev: React.ReactElement, curr: React.ReactElement) => [
-                prev,
-                ', ',
-                curr,
-              ])}
-            width={params.colDef.width}
-          />
-        );
-      },
+      renderCell: programmeCell,
     },
     {
       field: 'birthday',
@@ -226,26 +264,7 @@ const Students: React.FunctionComponent = () => {
       field: 'actions',
       headerName: 'Actions',
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div>
-            <IconButton
-              edge="end"
-              aria-label="edit"
-              onClick={() => handleEdit(params.row as PersonData)}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={() => handleDelete(params.row as PersonData)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </div>
-        );
-      },
+      renderCell: actionCell,
     },
   ];
 

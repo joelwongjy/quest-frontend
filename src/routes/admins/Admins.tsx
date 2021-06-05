@@ -19,7 +19,7 @@ import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './admins.styles';
 
 interface AdminsState extends RouteState {
-  admins: PersonData[];
+  admins: PersonListData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -62,7 +62,24 @@ const Admins: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`${CLASSES}${ADMINS}`);
         if (!didCancel) {
-          setState({ admins: response.data.persons, isLoading: false });
+          const admins = response.data.persons as PersonListData[];
+          const mappedAdmins = admins.map((x) => {
+            return {
+              name: x.name,
+              mobileNumber: x.mobileNumber ?? '-',
+              homeNumber: x.homeNumber ?? '-',
+              gender: x.gender ?? '-',
+              birthday: x.birthday ?? '-',
+              programmes: x.programmes,
+              email: x.email ?? '-',
+              highestClassRole: x.highestClassRole,
+              discardedAt: x.discardedAt,
+              id: x.id,
+              createdAt: x.createdAt,
+              updatedAt: x.updatedAt,
+            };
+          }) as PersonListData[];
+          setState({ admins: mappedAdmins, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -148,7 +165,7 @@ const Admins: React.FunctionComponent = () => {
       width: 200,
     },
     {
-      field: '',
+      field: 'actions',
       headerName: 'Actions',
       sortable: false,
       // eslint-disable-next-line react/display-name

@@ -30,8 +30,11 @@ export interface PersonPostData {
 
 export interface PersonListData extends DiscardableData {
   name: string;
-  mobileNumber?: string;
+  birthday?: Date | string;
   gender?: string;
+  email?: string;
+  mobileNumber?: string;
+  homeNumber?: string;
   programmes: {
     id: number;
     name: string;
@@ -46,11 +49,6 @@ export interface PersonListData extends DiscardableData {
 
 export interface PersonData extends PersonListData {
   // imageUrl: string // not in backend yet
-  birthday?: Date | string;
-  gender: Gender;
-  mobileNumber?: string;
-  homeNumber?: string;
-  email?: string;
   relatives: {
     person: PersonListData;
     relationship: RelationshipType;

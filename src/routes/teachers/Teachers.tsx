@@ -5,9 +5,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
 import { GridCellParams, GridColDef } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
+import TablePopup from 'components/tablePopup';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
 import { CLASSES, CREATE, EDIT, PROGRAMMES, TEACHERS } from 'constants/routes';
@@ -63,7 +65,24 @@ const Teachers: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`${CLASSES}${TEACHERS}`);
         if (!didCancel) {
-          setState({ teachers: response.data.persons, isLoading: false });
+          const teachers = response.data.persons as PersonListData[];
+          const mappedTeachers = teachers.map((x) => {
+            return {
+              name: x.name,
+              mobileNumber: x.mobileNumber ?? '-',
+              homeNumber: x.homeNumber ?? '-',
+              gender: x.gender ?? '-',
+              birthday: x.birthday ?? '-',
+              programmes: x.programmes,
+              email: x.email ?? '-',
+              highestClassRole: x.highestClassRole,
+              discardedAt: x.discardedAt,
+              id: x.id,
+              createdAt: x.createdAt,
+              updatedAt: x.updatedAt,
+            };
+          }) as PersonListData[];
+          setState({ teachers: mappedTeachers, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -99,7 +118,7 @@ const Teachers: React.FunctionComponent = () => {
       true,
       true,
       'Are you sure?',
-      'You will not be able to retrieve deleted students.',
+      'You will not be able to retrieve deleted teachers.',
       () => {
         // TODO: Add error handling to deletion
         ApiService.delete(`${TEACHERS}`, {
@@ -113,6 +132,48 @@ const Teachers: React.FunctionComponent = () => {
         setState({ teachers: newTeachers });
       },
       undefined
+    );
+  };
+
+  const programmeCell = (params: GridCellParams) => {
+    return (
+      <TablePopup
+        value={params.row.programmes
+          .map((p: ProgrammeListData) => {
+            return (
+              <Link key={p.id} to={`${PROGRAMMES}/${p.id}${CLASSES}`}>
+                {p.name}
+              </Link>
+            );
+          })
+          .reduce((prev: React.ReactElement, curr: React.ReactElement) => [
+            prev,
+            ', ',
+            curr,
+          ])}
+        width={params.colDef.width}
+      />
+    );
+  };
+
+  const actionCell = (params: GridCellParams) => {
+    return (
+      <div>
+        <IconButton
+          edge="end"
+          aria-label="edit"
+          onClick={() => handleEdit(params.row as PersonData)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={() => handleDelete(params.row as PersonData)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </div>
     );
   };
 
@@ -152,35 +213,13 @@ const Teachers: React.FunctionComponent = () => {
       field: 'programmes',
       headerName: 'Programmes',
       width: 200,
-      renderCell: (params: GridCellParams) =>
-        params.row.programmes.map((p: ProgrammeListData) => {
-          return (
-            <div key={p.name}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                component={Link}
-                to={`${PROGRAMMES}/${p.id}${CLASSES}`}
-              >
-                {p.name}
-              </Button>
-            </div>
-          );
-        }),
+      renderCell: programmeCell,
     },
     {
-      field: '',
+      field: 'actions',
       headerName: 'Actions',
       sortable: false,
-      // eslint-disable-next-line react/display-name
-      renderCell: () => {
-        return (
-          <IconButton edge="end" aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        );
-      },
+      renderCell: actionCell,
     },
   ];
 
