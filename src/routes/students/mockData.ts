@@ -1,5 +1,6 @@
 import { DiscardableData } from 'interfaces/models/base';
-import { PersonListData } from 'interfaces/models/persons';
+import { ClassPersonRole } from 'interfaces/models/classUsers';
+import { Gender, PersonData } from 'interfaces/models/persons';
 
 const mockBaseData: DiscardableData = {
   id: 0,
@@ -8,64 +9,71 @@ const mockBaseData: DiscardableData = {
   discardedAt: null,
 };
 
-export const students: PersonListData[] = [
+export const students: PersonData[] = [
   {
     ...mockBaseData,
     id: 0,
     name: 'Nick Fury',
-    // gender: 'M',
-    // birthday: new Date(1979, 12, 12),
-    // email: 'nick.fury@gmail.com',
+    gender: Gender.MALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 1,
     name: 'Steve Rogers',
-    // gender: 'M',
-    // birthday: new Date(1928, 12, 6),
-    // email: 'steve.rogers@gmail.com',
+    gender: Gender.MALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 2,
     name: 'Natasha Romanoff',
-    // gender: 'F',
-    // birthday: new Date(1988, 5, 12),
-    // email: 'nat.romanoff@gmail.com',
+    gender: Gender.FEMALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 3,
     name: 'Stephen Strange',
-    // gender: 'M',
-    // birthday: new Date(1982, 5, 12),
-    // email: 'dr.strange@gmail.com',
+    gender: Gender.MALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 4,
     name: 'Tony Stark',
-    // gender: 'M',
-    // birthday: new Date(1983, 5, 12),
-    // email: 'tony.stark@gmail.com',
+    gender: Gender.MALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
 ];
 
-export const teachers: PersonListData[] = [
+export const teachers: PersonData[] = [
   {
     ...mockBaseData,
     id: 0,
     name: 'Rick Stoner',
-    // gender: 'M',
-    // birthday: new Date(1979, 12, 12),
-    // email: 'rick.stoner@gmail.com',
+    gender: Gender.MALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.TEACHER,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 1,
     name: 'Timothy Dugan',
-    // gender: 'M',
-    // birthday: new Date(1928, 12, 6),
-    // email: 'timothy.dugan@gmail.com',
+    gender: Gender.MALE,
+    programmes: [],
+    highestClassRole: ClassPersonRole.TEACHER,
+    relatives: [],
   },
 ];

@@ -11,6 +11,8 @@ export const PROGRAMMES = '/programmes';
 export const CLASSES = '/classes';
 export const STUDENTS = '/students';
 export const PERSONS = '/persons';
+export const TEACHERS = '/teachers';
+export const ADMINS = '/admins';
 
 // Authed student routes
 export const CASTLE = '/castle';
