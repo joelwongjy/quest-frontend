@@ -22,7 +22,7 @@ import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import { STUDENTS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
-import { ClassUserRole } from 'interfaces/models/classUsers';
+import { ClassPersonRole } from 'interfaces/models/classUsers';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
 import { StudentMode } from 'interfaces/models/users';
 import { MiscDux } from 'reducers/miscDux';
@@ -69,14 +69,14 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   const availableProgrammes =
     user?.programmes.filter(
       (p) =>
-        p.classes.filter((c) => c.role !== ClassUserRole.STUDENT).length > 0
+        p.classes.filter((c) => c.role !== ClassPersonRole.STUDENT).length > 0
     ) ?? [];
 
   const availableClasses =
     user?.programmes
       .map((p) => p.classes)
       .reduce((a, b) => [...a, ...b], [])
-      .filter((c) => c.role !== ClassUserRole.STUDENT) ?? [];
+      .filter((c) => c.role !== ClassPersonRole.STUDENT) ?? [];
 
   const spreadProgrammes = (
     programmes: PersonPostData['programmes']
@@ -147,7 +147,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     newProgrammes[index] = {
       id: newProgramme.id,
       classes: [
-        newProgramme.classes.filter((c) => c.role !== ClassUserRole.STUDENT)[0],
+        newProgramme.classes.filter(
+          (c) => c.role !== ClassPersonRole.STUDENT
+        )[0],
       ],
     };
     setState({ programmes: newProgrammes });

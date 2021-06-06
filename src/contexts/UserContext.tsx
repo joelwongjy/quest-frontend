@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UserContextInterface from 'interfaces/contexts/userContext';
-import { ClassUserRole } from 'interfaces/models/classUsers';
+import { ClassPersonRole } from 'interfaces/models/classUsers';
 
 import { useAuth } from './AuthContext';
 
@@ -13,8 +13,8 @@ const UserProvider: React.FunctionComponent = (props) => {
   const { data } = useAuth();
   const isStaff =
     data !== null &&
-    (data.highestClassRole === ClassUserRole.ADMIN ||
-      data.highestClassRole === ClassUserRole.TEACHER);
+    (data.highestClassRole === ClassPersonRole.ADMIN ||
+      data.highestClassRole === ClassPersonRole.TEACHER);
 
   return <UserContext.Provider value={{ user: data, isStaff }} {...props} />;
 };

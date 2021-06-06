@@ -19,7 +19,7 @@ import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
 import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
 import { CLASSES, CREATE, EDIT, PROGRAMMES, TEACHERS } from 'constants/routes';
-import { PersonData, PersonListData } from 'interfaces/models/persons';
+import { PersonData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -28,7 +28,7 @@ import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './teachers.styles';
 
 interface TeachersState extends RouteState {
-  teachers: PersonListData[];
+  teachers: PersonData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -71,7 +71,7 @@ const Teachers: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`${CLASSES}${TEACHERS}`);
         if (!didCancel) {
-          const teachers = response.data.persons as PersonListData[];
+          const teachers = response.data.persons as PersonData[];
           const mappedTeachers = teachers.map((x) => {
             return {
               name: x.name,
@@ -87,7 +87,7 @@ const Teachers: React.FunctionComponent = () => {
               createdAt: x.createdAt,
               updatedAt: x.updatedAt,
             };
-          }) as PersonListData[];
+          }) as PersonData[];
           setState({ teachers: mappedTeachers, isLoading: false });
         }
       } catch (error) {

@@ -1,6 +1,6 @@
 import { DiscardableData } from 'interfaces/models/base';
-import { ClassUserRole } from 'interfaces/models/classUsers';
-import { PersonListData } from 'interfaces/models/persons';
+import { ClassPersonRole } from 'interfaces/models/classUsers';
+import { Gender, PersonData } from 'interfaces/models/persons';
 
 const mockBaseData: DiscardableData = {
   id: 0,
@@ -9,64 +9,71 @@ const mockBaseData: DiscardableData = {
   discardedAt: null,
 };
 
-export const students: PersonListData[] = [
+export const students: PersonData[] = [
   {
     ...mockBaseData,
     id: 0,
     name: 'Nick Fury',
-    gender: 'M',
+    gender: Gender.MALE,
     programmes: [],
-    highestClassRole: ClassUserRole.STUDENT,
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 1,
     name: 'Steve Rogers',
-    gender: 'M',
+    gender: Gender.MALE,
     programmes: [],
-    highestClassRole: ClassUserRole.STUDENT,
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 2,
     name: 'Natasha Romanoff',
-    gender: 'F',
+    gender: Gender.FEMALE,
     programmes: [],
-    highestClassRole: ClassUserRole.STUDENT,
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 3,
     name: 'Stephen Strange',
-    gender: 'M',
+    gender: Gender.MALE,
     programmes: [],
-    highestClassRole: ClassUserRole.STUDENT,
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 4,
     name: 'Tony Stark',
-    gender: 'M',
+    gender: Gender.MALE,
     programmes: [],
-    highestClassRole: ClassUserRole.STUDENT,
+    highestClassRole: ClassPersonRole.STUDENT,
+    relatives: [],
   },
 ];
 
-export const teachers: PersonListData[] = [
+export const teachers: PersonData[] = [
   {
     ...mockBaseData,
     id: 0,
     name: 'Rick Stoner',
-    gender: 'M',
+    gender: Gender.MALE,
     programmes: [],
-    highestClassRole: ClassUserRole.TEACHER,
+    highestClassRole: ClassPersonRole.TEACHER,
+    relatives: [],
   },
   {
     ...mockBaseData,
     id: 1,
     name: 'Timothy Dugan',
-    gender: 'M',
+    gender: Gender.MALE,
     programmes: [],
-    highestClassRole: ClassUserRole.TEACHER,
+    highestClassRole: ClassPersonRole.TEACHER,
+    relatives: [],
   },
 ];

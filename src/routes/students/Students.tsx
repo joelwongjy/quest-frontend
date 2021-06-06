@@ -19,7 +19,7 @@ import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
 import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
 import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
-import { PersonData, PersonListData } from 'interfaces/models/persons';
+import { PersonData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -28,7 +28,7 @@ import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './students.styles';
 
 interface StudentsState extends RouteState {
-  students: PersonListData[];
+  students: PersonData[];
   selectedStudents: GridRowId[];
   hasConfirm: boolean;
   closeHandler: () => void;
@@ -71,7 +71,7 @@ const Students: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`${STUDENTS}`);
         if (!didCancel) {
-          const students = response.data.persons as PersonListData[];
+          const students = response.data.persons as PersonData[];
           const mappedStudents = students.map((x) => {
             return {
               name: x.name,
@@ -87,7 +87,7 @@ const Students: React.FunctionComponent = () => {
               createdAt: x.createdAt,
               updatedAt: x.updatedAt,
             };
-          }) as PersonListData[];
+          }) as PersonData[];
           setState({ students: mappedStudents, isLoading: false });
         }
       } catch (error) {
@@ -159,7 +159,7 @@ const Students: React.FunctionComponent = () => {
           },
         });
         ids.forEach((id: GridRowId) => {
-          newStudents = newStudents.filter((s: PersonListData) => {
+          newStudents = newStudents.filter((s: PersonData) => {
             return s.id !== (id as number);
           });
         });

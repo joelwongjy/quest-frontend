@@ -11,9 +11,8 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
-import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
 import { ADMINS, CLASSES, CREATE, EDIT } from 'constants/routes';
-import { PersonData, PersonListData } from 'interfaces/models/persons';
+import { PersonData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
@@ -21,7 +20,7 @@ import { getAlertCallback } from 'utils/alertUtils';
 import { useStyles } from './admins.styles';
 
 interface AdminsState extends RouteState {
-  admins: PersonListData[];
+  admins: PersonData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
@@ -64,7 +63,7 @@ const Admins: React.FunctionComponent = () => {
       try {
         const response = await ApiService.get(`${CLASSES}${ADMINS}`);
         if (!didCancel) {
-          const admins = response.data.persons as PersonListData[];
+          const admins = response.data.persons as PersonData[];
           const mappedAdmins = admins.map((x) => {
             return {
               name: x.name,
@@ -80,7 +79,7 @@ const Admins: React.FunctionComponent = () => {
               createdAt: x.createdAt,
               updatedAt: x.updatedAt,
             };
-          }) as PersonListData[];
+          }) as PersonData[];
           setState({ admins: mappedAdmins, isLoading: false });
         }
       } catch (error) {

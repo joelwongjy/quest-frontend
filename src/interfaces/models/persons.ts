@@ -1,5 +1,5 @@
 import { DiscardableData } from './base';
-import { ClassUserRole } from './classUsers';
+import { ClassPersonRole } from './classUsers';
 import { RelationshipType } from './relationships';
 import { UserData } from './users';
 
@@ -23,35 +23,40 @@ export interface PersonPostData {
     id: number;
     classes: {
       id: number;
-      role: ClassUserRole;
+      role: ClassPersonRole;
     }[];
   }[];
 }
 
 export interface PersonListData extends DiscardableData {
   name: string;
+  mobileNumber?: string;
+}
+
+export interface PersonData extends PersonListData {
+  // imageUrl: string // not in backend yet
   birthday?: Date | string;
-  gender?: string;
-  email?: string;
+  gender: Gender;
   mobileNumber?: string;
   homeNumber?: string;
+  email?: string;
+  highestClassRole: ClassPersonRole;
+  relatives: {
+    person: PersonListData;
+    relationship: RelationshipType;
+  }[];
   programmes: {
     id: number;
     name: string;
     classes: {
       id: number;
       name: string;
-      role: ClassUserRole;
+      role: ClassPersonRole;
     }[];
   }[];
-  highestClassRole: ClassUserRole;
+  user?: UserData;
 }
 
-export interface PersonData extends PersonListData {
-  // imageUrl: string // not in backend yet
-  relatives: {
-    person: PersonListData;
-    relationship: RelationshipType;
-  }[];
-  user?: UserData;
+export interface PersonDeleteData {
+  persons: number[];
 }
