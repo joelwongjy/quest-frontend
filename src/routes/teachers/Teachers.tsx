@@ -14,8 +14,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import TablePopup from 'components/tablePopup';
+import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePopup';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
+import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
 import { CLASSES, CREATE, EDIT, PROGRAMMES, TEACHERS } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
@@ -186,37 +188,18 @@ const Teachers: React.FunctionComponent = () => {
       field: 'name',
       headerName: 'Name',
       width: 200,
+      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'gender',
       headerName: 'Gender',
       width: 100,
-    },
-    {
-      field: 'birthday',
-      headerName: 'Birthday',
-      width: 130,
-    },
-    {
-      field: 'mobileNumber',
-      headerName: 'Mobile Number',
-      width: 200,
-    },
-    {
-      field: 'homeNumber',
-      headerName: 'Home Number',
-      width: 200,
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 200,
+      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'programmes',
       headerName: 'Programmes',
       width: 200,
-      renderCell: programmeCell,
       sortComparator: (a: GridCellValue, b: GridCellValue) => {
         const aProgrammes = a as ProgrammeListData[];
         const bProgrammes = b as ProgrammeListData[];
@@ -226,6 +209,33 @@ const Teachers: React.FunctionComponent = () => {
 
         return aNames.localeCompare(bNames);
       },
+      renderCell: programmeCell,
+      type: 'programme',
+      headerAlign: 'left',
+    },
+    {
+      field: 'birthday',
+      headerName: 'Birthday',
+      width: 130,
+      renderCell: renderDefaultTablePopup,
+    },
+    {
+      field: 'mobileNumber',
+      headerName: 'Mobile No.',
+      width: 130,
+      renderCell: renderDefaultTablePopup,
+    },
+    {
+      field: 'homeNumber',
+      headerName: 'Home No.',
+      width: 130,
+      renderCell: renderDefaultTablePopup,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 200,
+      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'actions',
@@ -256,12 +266,10 @@ const Teachers: React.FunctionComponent = () => {
           <QuestDataGrid
             loading={state.isLoading}
             rows={state.teachers}
-            columns={columns}
             pageSize={20}
             autoHeight
-            checkboxSelection
-            disableColumnMenu
-            disableSelectionOnClick
+            columns={columns}
+            columnTypes={{ programme: programmeColumnType }}
           />
         </div>
       </div>

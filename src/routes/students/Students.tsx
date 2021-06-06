@@ -304,6 +304,8 @@ const Students: React.FunctionComponent = () => {
             rows={state.students}
             columns={columns}
             columnTypes={{ programme: programmeColumnType }}
+            pageSize={20}
+            autoHeight
             onSelectionModelChange={(newSelection) => {
               handleSelection(newSelection.selectionModel);
             }}

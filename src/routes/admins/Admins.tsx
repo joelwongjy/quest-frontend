@@ -11,6 +11,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
+import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
 import { ADMINS, CLASSES, CREATE, EDIT } from 'constants/routes';
 import { PersonData, PersonListData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
@@ -214,12 +215,9 @@ const Admins: React.FunctionComponent = () => {
           <QuestDataGrid
             loading={state.isLoading}
             rows={state.admins}
-            columns={columns}
             pageSize={20}
             autoHeight
-            checkboxSelection
-            disableColumnMenu
-            disableSelectionOnClick
+            columns={columns}
           />
         </div>
       </div>
