@@ -341,35 +341,87 @@ const Responses: React.FunctionComponent = () => {
 
   const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEle(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEle(null);
-  };
-
   const renderDownloadMenu = () => {
-    const questions: QuestionData[] = state.questionnaire?.questionWindows[0]
-      ? state.questionnaire?.questionWindows[0].questions
-      : [];
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEle(event.currentTarget);
+    };
 
-    const headers = [
-      'student',
-      ...questions.map((q: QuestionData) => q.questionText),
-    ];
+    const handleClose = () => {
+      setAnchorEle(null);
+    };
 
-    const data = [
-      headers,
-      ...state.attempts.map((att: AttemptFullData) => {
-        return [
-          att.user.username,
-          ...(att.answers as AnswerData[]).map((ans: AnswerData) =>
-            ans.textResponse ? ans.textResponse : ans.option?.optionText
-          ),
-        ];
-      }),
-    ];
+    const ansDataToText = (ans: AnswerData): string | undefined => {
+      return ans.textResponse ? ans.textResponse : ans.option?.optionText;
+    };
+
+    const constructPrePostAnswersRow = (
+      ans: AnswerData[],
+      qns: QuestionData[]
+    ): (string | undefined)[] => {
+      return ans.length > 0
+        ? ans.map(ansDataToText)
+        : qns.map(() => 'No attempt');
+    };
+
+    let data: (string | undefined)[][] = [];
+
+    if (state.questionnaire?.type === QuestionnaireType.ONE_TIME) {
+      const questions: QuestionData[] = state.questionnaire?.questionWindows[0]
+        ? state.questionnaire?.questionWindows[0].questions
+        : [];
+      const attempts: AttemptFullData[] = state.attempts ? state.attempts : [];
+      const headers = [
+        'student',
+        ...questions.map((q: QuestionData) => q.questionText),
+      ];
+      data = [
+        headers,
+        ...attempts.map((a: AttemptFullData) => {
+          return [
+            a.user.username,
+            ...(a.answers as AnswerData[]).map(ansDataToText),
+          ];
+        }),
+      ];
+    }
+    if (state.questionnaire?.type === QuestionnaireType.PRE_POST) {
+      const sharedQns: QuestionData[] = state.questionnaire?.sharedQuestions
+        ? state.questionnaire?.sharedQuestions.questions
+        : [];
+      const beforeQns: QuestionData[] = state.questionnaire?.questionWindows[0]
+        ? state.questionnaire?.questionWindows[0].questions
+        : [];
+      const afterQns: QuestionData[] = state.questionnaire?.questionWindows[0]
+        ? state.questionnaire?.questionWindows[1].questions
+        : [];
+      const qns: string[] = sharedQns
+        .concat(beforeQns)
+        .concat(afterQns)
+        .map((qns: QuestionData) => qns.questionText);
+      const headers = ['student', 'Before/After', ...qns];
+      const answers: (string | undefined)[][] = [];
+      const attempts: AttemptFullData[] = state.attempts ? state.attempts : [];
+      attempts.forEach((attempt: AttemptFullData) => {
+        const studentName = attempt.user.username;
+        const ans: SharedQnnaireAnswerData =
+          attempt.answers as SharedQnnaireAnswerData;
+        answers.push([
+          `${studentName}`,
+          'Before',
+          ...constructPrePostAnswersRow(ans.sharedAnswersBefore, sharedQns),
+          ...constructPrePostAnswersRow(ans.answersBefore, beforeQns),
+          ...afterQns.map(() => 'NA'),
+        ]);
+        answers.push([
+          `${studentName} (AFTER)`,
+          'After',
+          ...constructPrePostAnswersRow(ans.sharedAnswersAfter, sharedQns),
+          ...beforeQns.map(() => 'NA'),
+          ...constructPrePostAnswersRow(ans.answersAfter, afterQns),
+        ]);
+      });
+      data = [headers, ...answers];
+    }
 
     return (
       <>
