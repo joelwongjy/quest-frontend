@@ -9,6 +9,7 @@ import {
 
 import {
   ADD,
+  ADMINS,
   CLASSES,
   CREATE,
   DUPLICATE,
@@ -21,9 +22,13 @@ import {
   RESPONSES,
   ROOT,
   STUDENTS,
+  TEACHERS,
   UNAUTHED_ROUTES,
 } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
+import Admins from 'routes/admins';
+import CreateAdmin from 'routes/admins/create';
+import EditAdmins from 'routes/admins/edit';
 import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
@@ -43,6 +48,9 @@ import Students from 'routes/students';
 import CreateStudents from 'routes/students/create';
 import EditStudents from 'routes/students/edit';
 import UploadStudents from 'routes/students/upload';
+import Teachers from 'routes/teachers';
+import CreateTeacher from 'routes/teachers/create';
+import EditTeachers from 'routes/teachers/edit';
 
 import { useStyles } from './app.styles';
 
@@ -119,6 +127,20 @@ const AdminApp: React.FunctionComponent = () => {
             path={`${STUDENTS}/:id${EDIT}`}
             component={EditStudents}
           />
+          <Route exact path={TEACHERS} component={Teachers} />
+          <Route
+            exact
+            path={`${TEACHERS}${CREATE}`}
+            component={CreateTeacher}
+          />
+          <Route
+            exact
+            path={`${TEACHERS}/:id${EDIT}`}
+            component={EditTeachers}
+          />
+          <Route exact path={ADMINS} component={Admins} />
+          <Route exact path={`${ADMINS}${CREATE}`} component={CreateAdmin} />
+          <Route exact path={`${ADMINS}/:id${EDIT}`} component={EditAdmins} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />

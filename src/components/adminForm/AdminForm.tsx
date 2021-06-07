@@ -1,5 +1,4 @@
 import React, { useReducer, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
   FormControl,
   FormHelperText,
@@ -12,32 +11,26 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { DatePicker } from '@material-ui/pickers';
 
 import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
-import { STUDENTS } from 'constants/routes';
+import { TEACHERS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
-import { ClassPersonRole } from 'interfaces/models/classUsers';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
-import { StudentMode } from 'interfaces/models/users';
-import { MiscDux } from 'reducers/miscDux';
-import { RootState } from 'reducers/rootReducer';
+import { AdminMode } from 'interfaces/models/users';
 import ApiService from 'services/apiService';
+import { validateAdminInfo } from 'utils/adminUtils';
 import { isValidEmail, isValidMobileNumber } from 'utils/personUtils';
-import { sortByName } from 'utils/sortingUtils';
-import { validateStudentInfo } from 'utils/studentUtils';
 
-import { useStyles } from './StudentForm.styles';
+import { useStyles } from './adminForm.styles';
 
-interface StudentFormProps {
-  mode: StudentMode;
-  student?: PersonData;
-  studentCallback?: (newStudent: PersonData) => void;
+interface AdminFormProps {
+  mode: AdminMode;
+  admin?: PersonData;
+  adminCallback?: (newAdmin: PersonData) => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -49,77 +42,34 @@ interface StudentFormProps {
   ) => void;
 }
 
-export interface StudentFormState extends Omit<PersonPostData, 'birthday'> {
+export interface AdminFormState extends Omit<PersonPostData, 'birthday'> {
   birthday: Date | null;
 }
 
-const StudentForm: React.FunctionComponent<StudentFormProps> = ({
+const AdminForm: React.FunctionComponent<AdminFormProps> = ({
   mode,
-  student,
+  admin,
   cancelCallback,
   alertCallback,
 }) => {
   const classes = useStyles();
   const { hasError, setHasError } = useError();
-  const selectMisc = (state: RootState): MiscDux => state.misc;
-  const { user } = useSelector(selectMisc);
 
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
-  const availableProgrammes =
-    user?.programmes.filter(
-      (p) =>
-        p.classes.filter((c) => c.role !== ClassPersonRole.STUDENT).length > 0
-    ) ?? [];
-
-  const availableClasses =
-    user?.programmes
-      .map((p) => p.classes)
-      .reduce((a, b) => [...a, ...b], [])
-      .filter((c) => c.role !== ClassPersonRole.STUDENT) ?? [];
-
-  const spreadProgrammes = (
-    programmes: PersonPostData['programmes']
-  ): PersonPostData['programmes'] => {
-    const result: PersonPostData['programmes'] = [];
-    programmes.forEach((p) => {
-      p.classes.forEach((c) => {
-        result.push({
-          ...p,
-          classes: [c],
-        });
-      });
-    });
-    return result;
-  };
-
-  const condenseProgrammes = (
-    programmes: PersonPostData['programmes']
-  ): number[] => {
-    const result: number[] = [];
-    programmes.forEach((p) => {
-      p.classes.forEach((c) => {
-        result.push(c.id);
-      });
-    });
-    return result;
-  };
-
   const [state, setState] = useReducer(
-    (s: StudentFormState, a: Partial<StudentFormState>) => ({
+    (s: AdminFormState, a: Partial<AdminFormState>) => ({
       ...s,
       ...a,
     }),
     {
-      name: student?.name ?? '',
-      gender: student?.gender ?? Gender.MALE,
-      birthday: student?.birthday ? new Date(student.birthday) : null,
-      mobileNumber: student?.mobileNumber ?? '',
-      homeNumber: student?.homeNumber ?? '',
-      email: student?.email ?? '',
-      programmes: student?.programmes
-        ? spreadProgrammes(student.programmes)
-        : [],
+      name: admin?.name ?? '',
+      gender: admin?.gender ?? Gender.MALE,
+      birthday: admin?.birthday ? new Date(admin.birthday) : null,
+      mobileNumber: admin?.mobileNumber ?? '',
+      homeNumber: admin?.homeNumber ?? '',
+      email: admin?.email ?? '',
+      programmes: [],
     }
   );
 
@@ -138,42 +88,16 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }
   };
 
-  const handleProgrammeChange = (
-    index: number,
-    newProgrammeId: number
-  ): void => {
-    const newProgrammes = state.programmes.slice();
-    const newProgramme = user!.programmes.find((p) => p.id === newProgrammeId)!;
-    newProgrammes[index] = {
-      id: newProgramme.id,
-      classes: [
-        newProgramme.classes.filter(
-          (c) => c.role !== ClassPersonRole.STUDENT
-        )[0],
-      ],
-    };
-    setState({ programmes: newProgrammes });
-  };
-
-  const handleClassChange = (index: number, newClassId: number): void => {
-    const newProgrammes = state.programmes.slice();
-    newProgrammes[index].classes = availableClasses.filter(
-      (c) => c.id === newClassId
-    );
-    setState({ programmes: newProgrammes });
-  };
-
   const handleAdd = async () => {
-    if (!validateStudentInfo(state)) {
+    if (!validateAdminInfo(state)) {
       setHasError(true);
       return;
     }
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.post(`${STUDENTS}`, {
+      const response = await ApiService.post(`${TEACHERS}`, {
         ...state,
-        classIds: condenseProgrammes(state.programmes),
       });
       if (response.status === 200) {
         setIsSuccessful(true);
@@ -190,16 +114,15 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   };
 
   const handleEdit = async () => {
-    if (!validateStudentInfo(state) || !student) {
+    if (!validateAdminInfo(state) || !admin) {
       setHasError(true);
       return;
     }
     setHasError(false);
     // TODO: Add loading
     try {
-      const response = await ApiService.patch(`persons/${student.id}`, {
+      const response = await ApiService.patch(`persons/${admin.id}`, {
         ...state,
-        programmes: condenseProgrammes(state.programmes),
       });
       if (response.status === 200) {
         setIsSuccessful(true);
@@ -215,24 +138,9 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }
   };
 
-  const handleDeleteActivity = (index: number) => {
-    alertCallback(
-      true,
-      true,
-      'Are you sure?',
-      'You will not be able to retrieve the deleted activity.',
-      () => {
-        const newProgrammes = state.programmes.slice();
-        newProgrammes.splice(index, 1);
-        setState({ programmes: newProgrammes });
-      },
-      undefined
-    );
-  };
-
   const renderButtons = () => {
     switch (mode) {
-      case StudentMode.NEW:
+      case AdminMode.NEW:
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
@@ -243,11 +151,11 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
               Cancel
             </QuestButton>
             <QuestButton className={classes.button} onClick={handleAdd}>
-              Add Student
+              Add Admin
             </QuestButton>
           </Grid>
         );
-      case StudentMode.EDIT:
+      case AdminMode.EDIT:
         return (
           <Grid container spacing={2} justify="flex-end">
             <QuestButton
@@ -283,22 +191,22 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
             className={isSuccessful ? classes.headerSuccess : classes.header}
           >
             <Grid container alignItems="center" justify="space-between">
-              {mode === StudentMode.NEW && (
+              {mode === AdminMode.NEW && (
                 <Typography
                   component="h1"
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Student Info {isSuccessful && ' - Successful'}
+                  Add Admin Info {isSuccessful && ' - Successful'}
                 </Typography>
               )}
-              {mode === StudentMode.EDIT && (
+              {mode === AdminMode.EDIT && (
                 <Typography
                   component="h1"
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Edit Student Info {isSuccessful && ' - Successful'}
+                  Edit Admin Info {isSuccessful && ' - Successful'}
                 </Typography>
               )}
               <IconButton onClick={handleCancel}>
@@ -519,228 +427,6 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   </Grid>
                 </Grid>
               </ListItem>
-              <ListItem>
-                <Typography
-                  variant="h6"
-                  className={classes.subheader}
-                  style={{ marginTop: '0.5rem' }}
-                >
-                  Activities:
-                </Typography>
-              </ListItem>
-              {state.programmes
-                .filter((p) =>
-                  user!.programmes.map((p2) => p2.id).includes(p.id)
-                )
-                .map((p, index) => {
-                  return p.classes.map((c) => {
-                    return (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <Grid container key={`${p}-${index}`}>
-                        <ListItem>
-                          <Grid
-                            container
-                            justify="space-between"
-                            alignItems="center"
-                          >
-                            <Grid item xs={4}>
-                              <Typography variant="subtitle1">
-                                Programme:
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={8}>
-                              <FormControl
-                                variant="outlined"
-                                size="small"
-                                className={classes.textfieldContainer}
-                                color="secondary"
-                              >
-                                <Select
-                                  id="select-programmes"
-                                  value={p.id}
-                                  onChange={(
-                                    event: React.ChangeEvent<{ value: unknown }>
-                                  ) =>
-                                    handleProgrammeChange(
-                                      index,
-                                      Number(event.target.value)
-                                    )
-                                  }
-                                  disabled={isSuccessful}
-                                >
-                                  {user!.programmes
-                                    .slice()
-                                    .sort(sortByName)
-                                    .map((p) => {
-                                      return (
-                                        <MenuItem
-                                          value={p.id}
-                                          key={`programme-${p.id}`}
-                                        >
-                                          {p.name}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                </Select>
-                              </FormControl>
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-                        <ListItem>
-                          <Grid
-                            container
-                            justify="space-between"
-                            alignItems="center"
-                          >
-                            <Grid item xs={4}>
-                              <Typography variant="subtitle1">
-                                Class:
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={8}>
-                              <FormControl
-                                variant="outlined"
-                                size="small"
-                                className={classes.textfieldContainer}
-                                color="secondary"
-                              >
-                                <Select
-                                  id="select-classes"
-                                  value={c.id}
-                                  onChange={(
-                                    event: React.ChangeEvent<{ value: unknown }>
-                                  ) =>
-                                    handleClassChange(
-                                      index,
-                                      Number(event.target.value)
-                                    )
-                                  }
-                                  disabled={isSuccessful}
-                                >
-                                  {user!.programmes
-                                    .find((p2) => p2.id === p.id)!
-                                    .classes.map((c2) => {
-                                      return (
-                                        <MenuItem
-                                          value={c2.id}
-                                          key={`class-${c2.id}`}
-                                        >
-                                          {c2.name}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                </Select>
-                              </FormControl>
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-                        {!isSuccessful && (
-                          <Grid container alignItems="center">
-                            <Grid
-                              item
-                              xs={8}
-                              style={{
-                                paddingLeft: '1rem',
-                                marginBottom: '0.75rem',
-                              }}
-                            >
-                              {hasError &&
-                                state.programmes.filter(
-                                  (x) =>
-                                    x.id === p.id &&
-                                    x.classes[0].id === p.classes[0].id
-                                ).length > 1 && (
-                                  <FormHelperText style={{ color: 'red' }}>
-                                    This activity is duplicated!
-                                  </FormHelperText>
-                                )}
-                            </Grid>
-                            <Grid item xs={4}>
-                              <Grid container justify="flex-end">
-                                <IconButton
-                                  aria-label="delete"
-                                  style={{
-                                    color: 'red',
-                                    marginBottom: '0.5rem',
-                                  }}
-                                  onClick={() => handleDeleteActivity(index)}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        )}
-                      </Grid>
-                    );
-                  });
-                })}
-              {!isSuccessful && (
-                <FormControl
-                  style={{
-                    width: '100%',
-                  }}
-                  error={hasError && state.programmes.length === 0}
-                >
-                  {hasError && state.programmes.length === 0 && (
-                    <FormHelperText style={{ textAlign: 'center' }}>
-                      You need to add at least one activity!
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              )}
-              {!isSuccessful && (
-                <ListItem>
-                  <QuestCard
-                    onClick={() => {
-                      if (user!.programmes.length === 0) {
-                        alertCallback(
-                          true,
-                          false,
-                          'You cannot add activities!',
-                          'You need to be part of a programme to add students to it.',
-                          undefined,
-                          undefined
-                        );
-                        return;
-                      }
-                      if (
-                        user!.programmes
-                          .map((p) => p.classes.length)
-                          .reduce((a, b) => a + b, 0) === 0
-                      ) {
-                        alertCallback(
-                          true,
-                          false,
-                          'You cannot add activities!',
-                          'You need to create classes first for the student to join.',
-                          undefined,
-                          undefined
-                        );
-                        return;
-                      }
-                      const newProgrammes = state.programmes.slice();
-                      newProgrammes.push({
-                        ...availableProgrammes[0],
-                        classes: [availableProgrammes[0].classes[0]],
-                      });
-                      setState({ programmes: newProgrammes });
-                    }}
-                    className={classes.addCard}
-                  >
-                    <AddCircleIcon className={classes.addIcon} />
-                    Add an activity
-                  </QuestCard>
-                </ListItem>
-              )}
-              {!isSuccessful && (
-                <ListItem>
-                  <p style={{ textAlign: 'center', width: '100%', margin: 0 }}>
-                    If your programme is not showing up, that means you need to
-                    create classes for it first!
-                  </p>
-                </ListItem>
-              )}
               {isSuccessful ? (
                 <Grid container spacing={2} justify="flex-end">
                   <QuestButton
@@ -762,4 +448,4 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
   );
 };
 
-export default StudentForm;
+export default AdminForm;

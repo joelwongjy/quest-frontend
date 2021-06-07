@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -6,7 +7,6 @@ import {
   GridCellParams,
   GridCellValue,
   GridColDef,
-  GridRowId,
 } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,33 +18,32 @@ import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePop
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
 import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
-import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
+import { CLASSES, CREATE, EDIT, PROGRAMMES, TEACHERS } from 'constants/routes';
 import { PersonData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
 
-import { useStyles } from './students.styles';
+import { useStyles } from './teachers.styles';
 
-interface StudentsState extends RouteState {
-  students: PersonData[];
-  selectedStudents: GridRowId[];
+interface TeachersState extends RouteState {
+  teachers: PersonData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
+  selectedStudent: PersonData | undefined;
 }
 
-const Students: React.FunctionComponent = () => {
+const Teachers: React.FunctionComponent = () => {
   const [state, setState] = useReducer(
-    (s: StudentsState, a: Partial<StudentsState>) => ({
+    (s: TeachersState, a: Partial<TeachersState>) => ({
       ...s,
       ...a,
     }),
     {
-      students: [],
-      selectedStudents: [],
+      teachers: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -58,6 +57,7 @@ const Students: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
+      selectedStudent: undefined,
     }
   );
   const dispatch = useDispatch();
@@ -69,10 +69,10 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${STUDENTS}`);
+        const response = await ApiService.get(`${CLASSES}${TEACHERS}`);
         if (!didCancel) {
-          const students = response.data.persons as PersonData[];
-          const mappedStudents = students.map((x) => {
+          const teachers = response.data.persons as PersonData[];
+          const mappedTeachers = teachers.map((x) => {
             return {
               name: x.name,
               mobileNumber: x.mobileNumber ?? '-',
@@ -88,7 +88,7 @@ const Students: React.FunctionComponent = () => {
               updatedAt: x.updatedAt,
             };
           }) as PersonData[];
-          setState({ students: mappedStudents, isLoading: false });
+          setState({ teachers: mappedTeachers, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -111,59 +111,31 @@ const Students: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Students', href: STUDENTS }];
+  const breadcrumbs = [{ text: 'Teachers', href: TEACHERS }];
 
   const alertCallback = getAlertCallback(setState);
 
-  const handleSelection = (e: GridRowId[]) => {
-    setState({ selectedStudents: e });
+  const handleEdit = async (teacher: PersonData) => {
+    history.push(`${TEACHERS}/${teacher.id}${EDIT}`);
   };
 
-  const handleEdit = async (student: PersonData) => {
-    history.push(`${STUDENTS}/${student.id}${EDIT}`);
-  };
-
-  const handleDelete = (student: PersonData) => {
+  const handleDelete = (teacher: PersonData) => {
     alertCallback(
       true,
       true,
       'Are you sure?',
-      'You will not be able to retrieve deleted students.',
+      'You will not be able to retrieve deleted teachers.',
       () => {
         // TODO: Add error handling to deletion
-        ApiService.delete(`${STUDENTS}`, {
+        ApiService.delete(`${TEACHERS}`, {
           data: {
-            persons: [student.id],
+            persons: [teacher.id],
           },
         });
-        const index = state.students.indexOf(student);
-        const newStudents = state.students.slice();
-        newStudents.splice(index, 1);
-        setState({ students: newStudents });
-      },
-      undefined
-    );
-  };
-
-  const handleDeleteMultiple = (ids: GridRowId[]) => {
-    alertCallback(
-      true,
-      true,
-      'Are you sure?',
-      'You will not be able to retrieve deleted students.',
-      () => {
-        let newStudents = state.students.slice();
-        ApiService.delete(`${STUDENTS}`, {
-          data: {
-            persons: ids as number[],
-          },
-        });
-        ids.forEach((id: GridRowId) => {
-          newStudents = newStudents.filter((s: PersonData) => {
-            return s.id !== (id as number);
-          });
-        });
-        setState({ students: newStudents });
+        const index = state.teachers.indexOf(teacher);
+        const newTeachers = state.teachers.slice();
+        newTeachers.splice(index, 1);
+        setState({ teachers: newTeachers });
       },
       undefined
     );
@@ -283,33 +255,21 @@ const Students: React.FunctionComponent = () => {
             color="secondary"
             className={classes.button}
             component={Link}
-            to={`${STUDENTS}${CREATE}`}
+            to={`${TEACHERS}${CREATE}`}
           >
-            Create Student
+            Create Teacher
           </Button>
         }
       />
-      <Button
-        variant="contained"
-        color="secondary"
-        className={classes.button}
-        onClick={() => handleDeleteMultiple(state.selectedStudents)}
-      >
-        Delete Selected
-      </Button>
       <div className={classes.dataGrid}>
         <div style={{ flexGrow: 1 }}>
           <QuestDataGrid
             loading={state.isLoading}
-            rows={state.students}
-            columns={columns}
-            columnTypes={{ programme: programmeColumnType }}
+            rows={state.teachers}
             pageSize={20}
             autoHeight
-            onSelectionModelChange={(newSelection) => {
-              handleSelection(newSelection.selectionModel);
-            }}
-            selectionModel={state.selectedStudents}
+            columns={columns}
+            columnTypes={{ programme: programmeColumnType }}
           />
         </div>
       </div>
@@ -326,4 +286,4 @@ const Students: React.FunctionComponent = () => {
   );
 };
 
-export default Students;
+export default Teachers;

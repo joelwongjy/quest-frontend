@@ -12,18 +12,22 @@ import PersonIcon from '@material-ui/icons/EmojiPeopleRounded';
 import ExitIcon from '@material-ui/icons/ExitToAppRounded';
 import HomeIcon from '@material-ui/icons/HomeRounded';
 import QuestionIcon from '@material-ui/icons/QuestionAnswerRounded';
+import SchoolIcon from '@material-ui/icons/SchoolRounded';
+import SettingIcon from '@material-ui/icons/SettingsRounded';
 import StarIcon from '@material-ui/icons/StarsRounded';
 
 import homeIcon from 'assets/images/student/house.png';
 import swordIcon from 'assets/images/student/sword-white.png';
 import QuestAlert from 'componentWrappers/questAlert';
 import {
+  ADMINS,
   CASTLE,
   HOME,
   PROGRAMMES,
   QUESTIONNAIRES,
   QUESTS,
   STUDENTS,
+  TEACHERS,
 } from 'constants/routes';
 import { useAuth } from 'contexts/AuthContext';
 import { useUser } from 'contexts/UserContext';
@@ -151,7 +155,6 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
               </ListItemIcon>
               <ListItemText primary="Programmes" />
             </ListItem>
-
             <ListItem
               button
               key="Students"
@@ -164,6 +167,32 @@ const QuestDrawer: React.FunctionComponent<QuestDrawerProps> = ({
                 <PersonIcon className={classes.icon} />
               </ListItemIcon>
               <ListItemText primary="Students" />
+            </ListItem>
+            <ListItem
+              button
+              key="Teachers"
+              selected={pathname === TEACHERS}
+              component={Link}
+              to={TEACHERS}
+              className={listItemClasses}
+            >
+              <ListItemIcon>
+                <SchoolIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Teachers" />
+            </ListItem>
+            <ListItem
+              button
+              key="Admins"
+              selected={pathname === ADMINS}
+              component={Link}
+              to={ADMINS}
+              className={listItemClasses}
+            >
+              <ListItemIcon>
+                <SettingIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary="Admins" />
             </ListItem>
           </>
         )}

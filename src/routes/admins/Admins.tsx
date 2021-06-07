@@ -1,50 +1,41 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, IconButton } from '@material-ui/core';
-import {
-  GridCellParams,
-  GridCellValue,
-  GridColDef,
-  GridRowId,
-} from '@material-ui/data-grid';
+import { GridCellParams, GridColDef } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
-import TablePopup from 'components/tablePopup';
-import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePopup';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
-import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
-import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
+import { ADMINS, CLASSES, CREATE, EDIT } from 'constants/routes';
 import { PersonData } from 'interfaces/models/persons';
-import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
 
-import { useStyles } from './students.styles';
+import { useStyles } from './admins.styles';
 
-interface StudentsState extends RouteState {
-  students: PersonData[];
-  selectedStudents: GridRowId[];
+interface AdminsState extends RouteState {
+  admins: PersonData[];
   hasConfirm: boolean;
   closeHandler: () => void;
   confirmHandler: () => void;
   cancelHandler: undefined | (() => void);
+  selectedAdmin: PersonData | undefined;
 }
 
-const Students: React.FunctionComponent = () => {
+const Admins: React.FunctionComponent = () => {
   const [state, setState] = useReducer(
-    (s: StudentsState, a: Partial<StudentsState>) => ({
+    (s: AdminsState, a: Partial<AdminsState>) => ({
       ...s,
       ...a,
     }),
     {
-      students: [],
-      selectedStudents: [],
+      admins: [],
       isAlertOpen: false,
       isLoading: true,
       isError: false,
@@ -58,6 +49,7 @@ const Students: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
+      selectedAdmin: undefined,
     }
   );
   const dispatch = useDispatch();
@@ -69,10 +61,10 @@ const Students: React.FunctionComponent = () => {
 
     const fetchData = async () => {
       try {
-        const response = await ApiService.get(`${STUDENTS}`);
+        const response = await ApiService.get(`${CLASSES}${ADMINS}`);
         if (!didCancel) {
-          const students = response.data.persons as PersonData[];
-          const mappedStudents = students.map((x) => {
+          const admins = response.data.persons as PersonData[];
+          const mappedAdmins = admins.map((x) => {
             return {
               name: x.name,
               mobileNumber: x.mobileNumber ?? '-',
@@ -88,7 +80,7 @@ const Students: React.FunctionComponent = () => {
               updatedAt: x.updatedAt,
             };
           }) as PersonData[];
-          setState({ students: mappedStudents, isLoading: false });
+          setState({ admins: mappedAdmins, isLoading: false });
         }
       } catch (error) {
         if (!didCancel) {
@@ -111,82 +103,33 @@ const Students: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Students', href: STUDENTS }];
+  const breadcrumbs = [{ text: 'Admins', href: ADMINS }];
 
   const alertCallback = getAlertCallback(setState);
 
-  const handleSelection = (e: GridRowId[]) => {
-    setState({ selectedStudents: e });
+  const handleEdit = async (admin: PersonData) => {
+    history.push(`${ADMINS}/${admin.id}${EDIT}`);
   };
 
-  const handleEdit = async (student: PersonData) => {
-    history.push(`${STUDENTS}/${student.id}${EDIT}`);
-  };
-
-  const handleDelete = (student: PersonData) => {
+  const handleDelete = (admin: PersonData) => {
     alertCallback(
       true,
       true,
       'Are you sure?',
-      'You will not be able to retrieve deleted students.',
+      'You will not be able to retrieve deleted admins.',
       () => {
         // TODO: Add error handling to deletion
-        ApiService.delete(`${STUDENTS}`, {
+        ApiService.delete(`${ADMINS}`, {
           data: {
-            persons: [student.id],
+            persons: [admin.id],
           },
         });
-        const index = state.students.indexOf(student);
-        const newStudents = state.students.slice();
-        newStudents.splice(index, 1);
-        setState({ students: newStudents });
+        const index = state.admins.indexOf(admin);
+        const newAdmins = state.admins.slice();
+        newAdmins.splice(index, 1);
+        setState({ admins: newAdmins });
       },
       undefined
-    );
-  };
-
-  const handleDeleteMultiple = (ids: GridRowId[]) => {
-    alertCallback(
-      true,
-      true,
-      'Are you sure?',
-      'You will not be able to retrieve deleted students.',
-      () => {
-        let newStudents = state.students.slice();
-        ApiService.delete(`${STUDENTS}`, {
-          data: {
-            persons: ids as number[],
-          },
-        });
-        ids.forEach((id: GridRowId) => {
-          newStudents = newStudents.filter((s: PersonData) => {
-            return s.id !== (id as number);
-          });
-        });
-        setState({ students: newStudents });
-      },
-      undefined
-    );
-  };
-
-  const programmeCell = (params: GridCellParams) => {
-    return (
-      <TablePopup
-        value={params.row.programmes
-          .map((p: ProgrammeListData) => {
-            return (
-              <Link key={p.id} to={`${PROGRAMMES}/${p.id}${CLASSES}`}>
-                {p.name}
-              </Link>
-            );
-          })
-          .reduce((prev: React.ReactElement, curr: React.ReactElement) => [
-            prev,
-            ', ',
-            curr,
-          ])}
-        width={params.colDef.width}
-      />
     );
   };
 
@@ -216,54 +159,31 @@ const Students: React.FunctionComponent = () => {
       field: 'name',
       headerName: 'Name',
       width: 200,
-      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'gender',
       headerName: 'Gender',
       width: 100,
-      renderCell: renderDefaultTablePopup,
-    },
-    {
-      field: 'programmes',
-      headerName: 'Programmes',
-      width: 200,
-      sortComparator: (a: GridCellValue, b: GridCellValue) => {
-        const aProgrammes = a as ProgrammeListData[];
-        const bProgrammes = b as ProgrammeListData[];
-
-        const aNames = aProgrammes.map((p) => p.name.toLowerCase()).join(',');
-        const bNames = bProgrammes.map((p) => p.name.toLowerCase()).join(',');
-
-        return aNames.localeCompare(bNames);
-      },
-      renderCell: programmeCell,
-      type: 'programme',
-      headerAlign: 'left',
     },
     {
       field: 'birthday',
       headerName: 'Birthday',
       width: 130,
-      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'mobileNumber',
-      headerName: 'Mobile No.',
-      width: 130,
-      renderCell: renderDefaultTablePopup,
+      headerName: 'Mobile Number',
+      width: 200,
     },
     {
       field: 'homeNumber',
-      headerName: 'Home No.',
-      width: 130,
-      renderCell: renderDefaultTablePopup,
+      headerName: 'Home Number',
+      width: 200,
     },
     {
       field: 'email',
       headerName: 'Email',
       width: 200,
-      renderCell: renderDefaultTablePopup,
     },
     {
       field: 'actions',
@@ -283,33 +203,20 @@ const Students: React.FunctionComponent = () => {
             color="secondary"
             className={classes.button}
             component={Link}
-            to={`${STUDENTS}${CREATE}`}
+            to={`${ADMINS}${CREATE}`}
           >
-            Create Student
+            Create Admin
           </Button>
         }
       />
-      <Button
-        variant="contained"
-        color="secondary"
-        className={classes.button}
-        onClick={() => handleDeleteMultiple(state.selectedStudents)}
-      >
-        Delete Selected
-      </Button>
       <div className={classes.dataGrid}>
         <div style={{ flexGrow: 1 }}>
           <QuestDataGrid
             loading={state.isLoading}
-            rows={state.students}
-            columns={columns}
-            columnTypes={{ programme: programmeColumnType }}
+            rows={state.admins}
             pageSize={20}
             autoHeight
-            onSelectionModelChange={(newSelection) => {
-              handleSelection(newSelection.selectionModel);
-            }}
-            selectionModel={state.selectedStudents}
+            columns={columns}
           />
         </div>
       </div>
@@ -326,4 +233,4 @@ const Students: React.FunctionComponent = () => {
   );
 };
 
-export default Students;
+export default Admins;

@@ -1,7 +1,6 @@
 import { addDays, subDays } from 'date-fns';
 
 import { DiscardableData } from 'interfaces/models/base';
-import { PersonListData } from 'interfaces/models/persons';
 import {
   QuestionnaireListData,
   QuestionnaireListDataType,
@@ -140,33 +139,5 @@ export const questionnaires: QuestionnaireListData[] = [
     type: QuestionnaireListDataType.ONE_TIME,
     programmes: [],
     classes: [],
-  },
-];
-
-export const students: PersonListData[] = [
-  {
-    ...mockBaseData,
-    id: 0,
-    name: 'Nick Fury',
-  },
-  {
-    ...mockBaseData,
-    id: 1,
-    name: 'Steve Rogers',
-  },
-  {
-    ...mockBaseData,
-    id: 2,
-    name: 'Natasha Romanoff',
-  },
-  {
-    ...mockBaseData,
-    id: 3,
-    name: 'Stephen Strange',
-  },
-  {
-    ...mockBaseData,
-    id: 4,
-    name: 'Tony Stark',
   },
 ];

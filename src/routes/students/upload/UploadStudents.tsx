@@ -18,7 +18,7 @@ import { PersonPostData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import { getAlertCallback } from 'utils/alertUtils';
 import { ExcelData, excelRenderer } from 'utils/excelUtils';
-import { isValidEmail, isValidMobileNumber } from 'utils/studentUtils';
+import { isValidEmail, isValidMobileNumber } from 'utils/personUtils';
 
 import { useStyles } from './uploadStudents.styles';
 
@@ -86,20 +86,10 @@ const UploadStudents: React.FunctionComponent = () => {
   };
 
   const parseGender = (gender: string): string => {
-    const maleValues = ['m', 'ma', 'mal', 'male', 'males'];
-    if (maleValues.includes(gender.toLowerCase())) {
+    if ('males'.startsWith(gender.toLowerCase())) {
       return 'M';
     }
-    const femaleValues = [
-      'f',
-      'fe',
-      'fem',
-      'fema',
-      'femal',
-      'female',
-      'females',
-    ];
-    if (femaleValues.includes(gender.toLowerCase())) {
+    if ('females'.startsWith(gender.toLowerCase())) {
       return 'F';
     }
     return gender;
