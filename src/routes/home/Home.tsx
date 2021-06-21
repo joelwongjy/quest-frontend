@@ -7,17 +7,14 @@ import {
   CardContent,
   CardHeader,
   Grid,
-  List,
-  ListItem,
-  ListItemText,
   Typography,
 } from '@material-ui/core';
 
 import AnnouncementTabs from 'components/announcementTabs';
 import PageContainer from 'components/pageContainer';
-import QuestBreadcrumbs from 'componentWrappers/questBreadcrumbs';
+import PageHeader from 'components/pageHeader';
 import QuestCard from 'componentWrappers/questCard';
-import { ANNOUNCEMENTS, HOME } from 'constants/routes';
+import { ANNOUNCEMENTS, CREATE, HOME } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
 import ApiService from 'services/apiService';
 
@@ -60,7 +57,20 @@ const Home: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <QuestBreadcrumbs breadcrumbs={breadcrumbs} />
+      <PageHeader
+        breadcrumbs={breadcrumbs}
+        action={
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            component={Link}
+            to={`${ANNOUNCEMENTS}${CREATE}`}
+          >
+            New Announcement
+          </Button>
+        }
+      />
       <div>You&apos;re logged in, {name}!</div>
       <br />
       <Grid container className={classes.main}>

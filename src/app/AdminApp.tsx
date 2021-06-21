@@ -10,6 +10,7 @@ import {
 import {
   ADD,
   ADMINS,
+  ANNOUNCEMENTS,
   CLASSES,
   CREATE,
   DUPLICATE,
@@ -141,6 +142,7 @@ const AdminApp: React.FunctionComponent = () => {
           <Route exact path={ADMINS} component={Admins} />
           <Route exact path={`${ADMINS}${CREATE}`} component={CreateAdmin} />
           <Route exact path={`${ADMINS}/:id${EDIT}`} component={EditAdmins} />
+          <Route exact path={`${ANNOUNCEMENTS}${CREATE}`} />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />
