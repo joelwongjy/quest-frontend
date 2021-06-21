@@ -13,6 +13,7 @@ export const STUDENTS = '/students';
 export const PERSONS = '/persons';
 export const TEACHERS = '/teachers';
 export const ADMINS = '/admins';
+export const ANNOUNCEMENTS = './announcements';
 
 // Authed student routes
 export const CASTLE = '/castle';
