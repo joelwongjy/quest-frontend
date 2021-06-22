@@ -12,11 +12,13 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import { DatePicker } from '@material-ui/pickers';
 
+import ProgrammeClassPicker from 'components/programmeClassPicker';
 import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
 import QuestTextField from 'componentWrappers/questTextField';
 import { ANNOUNCEMENTS, TEACHERS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
+import { useUser } from 'contexts/UserContext';
 import {
   AnnouncementListData,
   AnnouncementMode,
@@ -50,10 +52,17 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
   cancelCallback,
   alertCallback,
 }) => {
+  const { user } = useUser();
   const classes = useStyles();
   const { hasError, setHasError } = useError();
 
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
+  const [selectedProgrammes, setSelectedProgrammes] = useState<
+    { id: number; name: string }[]
+  >([]);
+  const [selectedClasses, setSelectedClasses] = useState<
+    { id: number; name: string }[]
+  >([]);
 
   const [state, setState] = useReducer(
     (s: AnnouncementFormState, a: Partial<AnnouncementFormState>) => ({
@@ -138,6 +147,14 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
     }
   };
 
+  const programmeCallback = (newProgrammes: { id: number; name: string }[]) => {
+    setSelectedProgrammes(newProgrammes);
+  };
+
+  const classCallback = (newClasses: { id: number; name: string }[]) => {
+    setSelectedClasses(newClasses);
+  };
+
   const renderButtons = () => {
     switch (mode) {
       case AnnouncementMode.NEW:
@@ -151,7 +168,7 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
               Cancel
             </QuestButton>
             <QuestButton className={classes.button} onClick={handleAdd}>
-              Add Announcement
+              Create Announcement
             </QuestButton>
           </Grid>
         );
@@ -197,7 +214,7 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
                   variant="h5"
                   style={{ color: 'white' }}
                 >
-                  Add Announcement Info {isSuccessful && ' - Successful'}
+                  New Announcement Info {isSuccessful && ' - Successful'}
                 </Typography>
               )}
               {mode === AnnouncementMode.EDIT && (
@@ -218,13 +235,13 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
             <List className={classes.list}>
               <ListItem>
                 <Typography variant="h6" className={classes.subheader}>
-                  Particulars:
+                  Details:
                 </Typography>
               </ListItem>
               <ListItem>
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={4}>
-                    <Typography variant="subtitle1">Name: </Typography>
+                    <Typography variant="subtitle1">Title: </Typography>
                   </Grid>
                   <Grid item xs={8}>
                     <div className={classes.textfieldContainer}>
@@ -237,7 +254,7 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
                           size="small"
                           value={state.title}
                           className={classes.textfield}
-                          label="Name"
+                          label="Title"
                           variant="outlined"
                           disabled={isSuccessful}
                           onChange={(e) => setState({ title: e.target.value })}
@@ -340,9 +357,11 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
                         <QuestTextField
                           size="small"
                           className={classes.textfield}
-                          label="Email"
+                          label="Body"
                           variant="outlined"
                           disabled={isSuccessful}
+                          multiline
+                          rows={3}
                           onChange={(e) => setState({ body: e.target.value })}
                         />
                         {hasError && state.body && state.body?.length === 0 && (
@@ -354,6 +373,20 @@ const AnnouncementForm: React.FunctionComponent<AnnouncementFormProps> = ({
                     </div>
                   </Grid>
                 </Grid>
+              </ListItem>
+              <ListItem>
+                <Typography variant="h6" className={classes.subheader}>
+                  Assign the announcement:
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <ProgrammeClassPicker
+                  programmes={user!.programmes}
+                  selectedClasses={selectedClasses}
+                  selectedProgrammes={selectedProgrammes}
+                  programmeCallback={programmeCallback}
+                  classCallback={classCallback}
+                />
               </ListItem>
               {isSuccessful ? (
                 <Grid container spacing={2} justify="flex-end">
