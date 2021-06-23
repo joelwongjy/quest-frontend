@@ -27,9 +27,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       marginTop: '1rem',
-      marginBottom: '1.5rem',
+      marginBottom: '2.75rem',
     },
     errorMessage: {
+      color: 'red',
       position: 'absolute',
       top: '100%',
     },
@@ -66,7 +67,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingTop: '1rem',
       paddingLeft: '0.5rem',
       paddingRight: '0.5rem',
-      borderRadius: 12,
     },
     body: {
       width: '100%',
@@ -76,6 +76,22 @@ export const useStyles = makeStyles((theme: Theme) =>
       border: 1,
       outline: 1,
       borderRadius: 12,
+    },
+    header: {
+      backgroundColor: '#044682',
+      height: '5rem',
+      alignItems: 'center',
+      paddingLeft: '2rem',
+      paddingRight: '1rem',
+    },
+    list: {
+      marginTop: '0.5rem',
+      marginBottom: '0.5rem',
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
+    },
+    button: {
+      margin: theme.spacing(3, 1, 2),
     },
   })
 );

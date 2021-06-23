@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Button,
   CardActions,
@@ -13,12 +13,16 @@ import {
 import AnnouncementTabs from 'components/announcementTabs';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
+import QuestAlert from 'componentWrappers/questAlert';
 import QuestCard from 'componentWrappers/questCard';
 import { ANNOUNCEMENTS, CREATE, HOME } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
+import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 
 import { useStyles } from './home.styles';
+
+type HomeState = RouteState;
 
 export const tabs = ['Active', 'Upcoming', 'Past'];
 
@@ -31,8 +35,31 @@ const Home: React.FunctionComponent = () => {
   const [tabValue, setTabValue] = useState<number>(0);
 
   const dispatch = useDispatch();
-  const history = useHistory();
   const classes = useStyles();
+
+  const [state, setState] = useReducer(
+    (s: HomeState, a: Partial<HomeState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      isLoading: true,
+      isError: false,
+      isAlertOpen: false,
+      alertHeader: '',
+      alertMessage: '',
+      hasConfirm: false,
+      closeHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      confirmHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+      cancelHandler: () => {
+        setState({ isAlertOpen: false });
+      },
+    }
+  );
 
   useEffect(() => {
     let didCancel = false;
@@ -40,9 +67,11 @@ const Home: React.FunctionComponent = () => {
     const fetchData = async () => {
       try {
         const response = await ApiService.get(`${ANNOUNCEMENTS}`);
+        // eslint-disable-next-line no-console
         console.log(response.data);
       } catch (error) {
         if (!didCancel) {
+          // eslint-disable-next-line no-console
           console.log(`Error ${error}`);
         }
       }
@@ -122,6 +151,15 @@ const Home: React.FunctionComponent = () => {
           </Grid>
         </Grid>
       </Grid>
+      <QuestAlert
+        isAlertOpen={state.isAlertOpen!}
+        hasConfirm={state.hasConfirm!}
+        alertHeader={state.alertHeader!}
+        alertMessage={state.alertMessage!}
+        closeHandler={state.closeHandler!}
+        confirmHandler={state.confirmHandler}
+        cancelHandler={state.cancelHandler}
+      />
     </PageContainer>
   );
 };
