@@ -3,12 +3,13 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   Button,
-  CardActions,
   CardContent,
   CardHeader,
+  Chip,
   Grid,
   Typography,
 } from '@material-ui/core';
+import { format } from 'date-fns';
 
 import AnnouncementTabs from 'components/announcementTabs';
 import PageContainer from 'components/pageContainer';
@@ -17,12 +18,15 @@ import QuestAlert from 'componentWrappers/questAlert';
 import QuestCard from 'componentWrappers/questCard';
 import { ANNOUNCEMENTS, CREATE, HOME } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
+import { AnnouncementListData } from 'interfaces/models/announcements';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 
 import { useStyles } from './home.styles';
 
-type HomeState = RouteState;
+interface HomeState extends RouteState {
+  announcements: AnnouncementListData[];
+}
 
 export const tabs = ['Active', 'Upcoming', 'Past'];
 
@@ -58,6 +62,7 @@ const Home: React.FunctionComponent = () => {
       cancelHandler: () => {
         setState({ isAlertOpen: false });
       },
+      announcements: [],
     }
   );
 
@@ -69,6 +74,9 @@ const Home: React.FunctionComponent = () => {
         const response = await ApiService.get(`${ANNOUNCEMENTS}`);
         // eslint-disable-next-line no-console
         console.log(response.data);
+        if (!didCancel) {
+          setState({ announcements: response.data.announcements });
+        }
       } catch (error) {
         if (!didCancel) {
           // eslint-disable-next-line no-console
@@ -110,44 +118,78 @@ const Home: React.FunctionComponent = () => {
         />
         <Grid container alignContent="center" justify="center">
           <Grid item xs={12} sm={12} lg={12}>
-            <QuestCard>
-              <CardHeader
-                title={
-                  <Grid container justify="space-between">
-                    <Typography className={classes.dates} color="textSecondary">
-                      Start: 01 07 2021
-                    </Typography>
-                    <Typography
-                      className={classes.dates}
-                      color="textSecondary"
-                      gutterBottom
+            {state.announcements.map((x) => {
+              return (
+                <QuestCard key={x.id} style={{ marginBottom: '2rem' }}>
+                  <CardHeader
+                    title={
+                      <Grid container justify="space-between">
+                        <Typography
+                          className={classes.dates}
+                          color="textSecondary"
+                        >
+                          {format(
+                            new Date(x.startDate),
+                            "d MMM y, hh:mm aaaaa'm'"
+                          )}
+                        </Typography>
+                        <Typography
+                          className={classes.dates}
+                          color="textSecondary"
+                          gutterBottom
+                        >
+                          {format(
+                            new Date(x.endDate),
+                            "d MMM y, hh:mm aaaaa'm'"
+                          )}
+                        </Typography>
+                      </Grid>
+                    }
+                  />
+                  <CardContent>
+                    <Grid container justify="center">
+                      <Typography
+                        className="This is an announcement"
+                        variant="h5"
+                        component="h2"
+                        style={{ fontWeight: 'bold' }}
+                      >
+                        {x.title}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      container
+                      justify="center"
+                      style={{ padding: '1rem', textAlign: 'center' }}
                     >
-                      End: 03 07 2021
-                    </Typography>
-                  </Grid>
-                }
-              />
-              <CardContent>
-                <Typography
-                  className="This is an announcement"
-                  variant="h6"
-                  component="h2"
-                >
-                  Welcome to Quest, this is an announcement for you, please do
-                  all your quests by 23:59 today
-                </Typography>
-              </CardContent>
-              <CardActions className={classes.actions}>
-                <Button
-                  size="small"
-                  className={classes.button}
-                  component={Link}
-                  to={`${ANNOUNCEMENTS}`}
-                >
-                  Programme
-                </Button>
-              </CardActions>
-            </QuestCard>
+                      <Typography className="This is an announcement">
+                        {x.body}
+                      </Typography>
+                    </Grid>
+                    <div className={classes.chipContainer}>
+                      {user?.programmes.map((p) =>
+                        p.classes
+                          .filter(
+                            (y) =>
+                              x.classesData.map((z) => z.id).indexOf(y.id) !==
+                              -1
+                          )
+                          .map((c) => (
+                            <Chip
+                              label={`${p.name} - ${c.name}`}
+                              key={`${p.id}-${c.id}`}
+                              style={{
+                                margin: '5px',
+                              }}
+                              color="secondary"
+                            />
+                          ))
+                      )}
+                    </div>
+                  </CardContent>
+                </QuestCard>
+              );
+            })}
           </Grid>
         </Grid>
       </Grid>

@@ -133,21 +133,18 @@ const CreateAnnouncements: React.FunctionComponent = () => {
   };
 
   const handleSubmit = async () => {
-    const announcementPostData: AnnouncementPostData = {
+    const data: AnnouncementPostData = {
       title,
       body,
       startDate,
       endDate,
-      programmeIds: selectedProgrammes.map((p) => p.id),
+      programmeIds: [],
       classIds: selectedClasses.map((c) => c.id),
     };
-    if (!validateAnnouncementInfo(announcementPostData)) {
+    if (!validateAnnouncementInfo(data)) {
       setHasError(true);
     }
-    const response = await ApiService.post(
-      `announcements`,
-      announcementPostData
-    );
+    const response = await ApiService.post(`announcements`, data);
     if (response.status === 200) {
       history.push(HOME);
     }
