@@ -3,7 +3,7 @@ import React, { useReducer, useState } from 'react';
 import { Button } from '@material-ui/core';
 import {
   DataGrid,
-  GridCellClassParams,
+  GridCellParams,
   GridColDef,
   GridValueFormatterParams,
 } from '@material-ui/data-grid';
@@ -106,7 +106,7 @@ const UploadStudents: React.FunctionComponent = () => {
       field: 'name',
       headerName: 'Name',
       width: 200,
-      cellClassName: (params: GridCellClassParams) =>
+      cellClassName: (params: GridCellParams) =>
         params.value === undefined ||
         duplicatedStudents.has(params.value as string)
           ? classes.error
@@ -116,14 +116,14 @@ const UploadStudents: React.FunctionComponent = () => {
       field: 'gender',
       headerName: 'Gender',
       width: 100,
-      cellClassName: (params: GridCellClassParams) =>
+      cellClassName: (params: GridCellParams) =>
         !isValidGender(params.value as string) ? classes.error : '',
     },
     {
       field: 'birthday',
       headerName: 'Birthday',
       width: 130,
-      cellClassName: (params: GridCellClassParams) =>
+      cellClassName: (params: GridCellParams) =>
         // eslint-disable-next-line no-nested-ternary
         (params.value as Date) === undefined ||
         !isValidDate(params.value as Date)
@@ -136,7 +136,7 @@ const UploadStudents: React.FunctionComponent = () => {
       field: 'mobileNumber',
       headerName: 'Mobile Number',
       width: 200,
-      cellClassName: (params: GridCellClassParams) =>
+      cellClassName: (params: GridCellParams) =>
         params.value !== undefined &&
         !isValidMobileNumber(params.value as string)
           ? classes.error
@@ -146,7 +146,7 @@ const UploadStudents: React.FunctionComponent = () => {
       field: 'homeNumber',
       headerName: 'Home Number',
       width: 200,
-      cellClassName: (params: GridCellClassParams) =>
+      cellClassName: (params: GridCellParams) =>
         params.value !== undefined &&
         !isValidMobileNumber(params.value as string)
           ? classes.error
@@ -156,7 +156,7 @@ const UploadStudents: React.FunctionComponent = () => {
       field: 'email',
       headerName: 'Email',
       width: 200,
-      cellClassName: (params: GridCellClassParams) =>
+      cellClassName: (params: GridCellParams) =>
         params.value !== undefined && !isValidEmail(params.value as string)
           ? classes.error
           : '',
