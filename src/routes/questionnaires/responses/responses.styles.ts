@@ -49,5 +49,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     modeSwitch: {
       marginRight: '1rem',
     },
+    downloadButton: {
+      width: '3rem',
+      height: '3rem',
+      marginLeft: '0.5rem',
+    },
   })
 );
