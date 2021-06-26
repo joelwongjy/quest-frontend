@@ -6,7 +6,6 @@ import {
   Grid,
   IconButton,
   InputLabel,
-  Menu,
   MenuItem,
   Paper,
   Select,
@@ -339,17 +338,7 @@ const Responses: React.FunctionComponent = () => {
     return <>{result}</>;
   };
 
-  const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
-
-  const renderDownloadMenu = () => {
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEle(event.currentTarget);
-    };
-
-    const handleClose = () => {
-      setAnchorEle(null);
-    };
-
+  const renderDownloadButton = () => {
     const ansDataToText = (ans: AnswerData): string | undefined => {
       return ans.textResponse ? ans.textResponse : ans.option?.optionText;
     };
@@ -424,31 +413,19 @@ const Responses: React.FunctionComponent = () => {
     }
 
     return (
-      <>
+      <CSVLink
+        data={data}
+        filename={`${state.questionnaire?.title}_responses.csv`}
+      >
         <IconButton
           aria-label="export options"
           aria-controls="export options"
           aria-haspopup="true"
-          onClick={handleClick}
+          className={classes.downloadButton}
         >
           <GetAppIcon />
         </IconButton>
-        <Menu
-          anchorEl={anchorEle}
-          keepMounted
-          open={Boolean(anchorEle)}
-          onClose={handleClose}
-        >
-          <MenuItem>
-            <CSVLink
-              data={data}
-              filename={`${state.questionnaire?.title}_responses.csv`}
-            >
-              Download responses as excel
-            </CSVLink>
-          </MenuItem>
-        </Menu>
-      </>
+      </CSVLink>
     );
   };
 
@@ -473,13 +450,13 @@ const Responses: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container justify="center">
+      <Grid container justify="center" alignItems="center">
         <Typography variant="h5" className={classes.title}>
           {state.questionnaire?.title
             ? `${state.questionnaire?.title} - Responses`
             : 'Loading...'}
         </Typography>
-        <>{renderDownloadMenu()}</>
+        <>{renderDownloadButton()}</>
       </Grid>
       <Grid container justify="center">
         <Grid item>
