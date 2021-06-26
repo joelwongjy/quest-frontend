@@ -30,11 +30,11 @@ import {
   QuestionnaireFullData,
   QuestionnaireType,
 } from 'interfaces/models/questionnaires';
-import { QuestionData } from 'interfaces/models/questions';
 import { UserData } from 'interfaces/models/users';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
+import { convertAttemptsToCsv } from 'utils/responseUtils';
 
 import { useStyles } from './responses.styles';
 
@@ -339,79 +339,11 @@ const Responses: React.FunctionComponent = () => {
   };
 
   const renderDownloadButton = () => {
-    const ansDataToText = (ans: AnswerData): string | undefined => {
-      return ans.textResponse ? ans.textResponse : ans.option?.optionText;
-    };
-
-    const constructPrePostAnswersRow = (
-      ans: AnswerData[],
-      qns: QuestionData[]
-    ): (string | undefined)[] => {
-      return ans.length > 0
-        ? ans.map(ansDataToText)
-        : qns.map(() => 'No attempt');
-    };
-
-    let data: (string | undefined)[][] = [];
-
-    if (state.questionnaire?.type === QuestionnaireType.ONE_TIME) {
-      const questions: QuestionData[] = state.questionnaire?.questionWindows[0]
-        ? state.questionnaire?.questionWindows[0].questions
-        : [];
-      const attempts: AttemptFullData[] = state.attempts ? state.attempts : [];
-      const headers = [
-        'student',
-        ...questions.map((q: QuestionData) => q.questionText),
-      ];
-      data = [
-        headers,
-        ...attempts.map((a: AttemptFullData) => {
-          return [
-            a.user.username,
-            ...(a.answers as AnswerData[]).map(ansDataToText),
-          ];
-        }),
-      ];
-    }
-    if (state.questionnaire?.type === QuestionnaireType.PRE_POST) {
-      const sharedQns: QuestionData[] = state.questionnaire?.sharedQuestions
-        ? state.questionnaire?.sharedQuestions.questions
-        : [];
-      const beforeQns: QuestionData[] = state.questionnaire?.questionWindows[0]
-        ? state.questionnaire?.questionWindows[0].questions
-        : [];
-      const afterQns: QuestionData[] = state.questionnaire?.questionWindows[0]
-        ? state.questionnaire?.questionWindows[1].questions
-        : [];
-      const qns: string[] = sharedQns
-        .concat(beforeQns)
-        .concat(afterQns)
-        .map((qns: QuestionData) => qns.questionText);
-      const headers = ['student', 'Before/After', ...qns];
-      const answers: (string | undefined)[][] = [];
-      const attempts: AttemptFullData[] = state.attempts ? state.attempts : [];
-      attempts.forEach((attempt: AttemptFullData) => {
-        const studentName = attempt.user.username;
-        const ans: SharedQnnaireAnswerData =
-          attempt.answers as SharedQnnaireAnswerData;
-        answers.push([
-          `${studentName}`,
-          'Before',
-          ...constructPrePostAnswersRow(ans.sharedAnswersBefore, sharedQns),
-          ...constructPrePostAnswersRow(ans.answersBefore, beforeQns),
-          ...afterQns.map(() => 'NA'),
-        ]);
-        answers.push([
-          `${studentName} (AFTER)`,
-          'After',
-          ...constructPrePostAnswersRow(ans.sharedAnswersAfter, sharedQns),
-          ...beforeQns.map(() => 'NA'),
-          ...constructPrePostAnswersRow(ans.answersAfter, afterQns),
-        ]);
-      });
-      data = [headers, ...answers];
+    if (state.questionnaire == null || state.attempts == null) {
+      return null;
     }
 
+    const data = convertAttemptsToCsv(state.questionnaire, state.attempts);
     return (
       <CSVLink
         data={data}
