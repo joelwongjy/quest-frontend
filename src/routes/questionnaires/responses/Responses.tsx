@@ -388,7 +388,7 @@ const Responses: React.FunctionComponent = () => {
             ? `${state.questionnaire?.title} - Responses`
             : 'Loading...'}
         </Typography>
-        <>{renderDownloadButton()}</>
+        {renderDownloadButton()}
       </Grid>
       <Grid container justify="center">
         <Grid item>
