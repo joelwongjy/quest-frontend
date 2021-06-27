@@ -1,8 +1,10 @@
 import React, { useEffect, useReducer, useState } from 'react';
+import { CSVLink } from 'react-csv';
 import { useRouteMatch } from 'react-router-dom';
 import {
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -10,6 +12,7 @@ import {
   Switch,
   Typography,
 } from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
@@ -31,6 +34,7 @@ import { UserData } from 'interfaces/models/users';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
+import { convertAttemptsToCsv } from 'utils/responseUtils';
 
 import { useStyles } from './responses.styles';
 
@@ -334,6 +338,29 @@ const Responses: React.FunctionComponent = () => {
     return <>{result}</>;
   };
 
+  const renderDownloadButton = () => {
+    if (state.questionnaire == null || state.attempts == null) {
+      return null;
+    }
+
+    const data = convertAttemptsToCsv(state.questionnaire, state.attempts);
+    return (
+      <CSVLink
+        data={data}
+        filename={`${state.questionnaire?.title}_responses.csv`}
+      >
+        <IconButton
+          aria-label="export options"
+          aria-controls="export options"
+          aria-haspopup="true"
+          className={classes.downloadButton}
+        >
+          <GetAppIcon />
+        </IconButton>
+      </CSVLink>
+    );
+  };
+
   if (state.attempts.length <= 0) {
     return (
       <PageContainer>
@@ -355,12 +382,13 @@ const Responses: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <Grid container justify="center">
+      <Grid container justify="center" alignItems="center">
         <Typography variant="h5" className={classes.title}>
           {state.questionnaire?.title
             ? `${state.questionnaire?.title} - Responses`
             : 'Loading...'}
         </Typography>
+        {renderDownloadButton()}
       </Grid>
       <Grid container justify="center">
         <Grid item>
