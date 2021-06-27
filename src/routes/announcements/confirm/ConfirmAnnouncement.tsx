@@ -86,19 +86,23 @@ const ConfirmAnnouncement: React.FC<ConfirmAnnouncementProps> = ({
                               classes?.findIndex((c2) => c2.id === c.id) !== -1
                           );
                           return (
-                            <>
+                            <React.Fragment
+                              key={`announcement-programme-${p.id}`}
+                            >
                               {filteredClasses.map((c, index) => {
                                 return (
-                                  <>
+                                  <React.Fragment
+                                    key={`announcement-programme-class-${p.id}-${c.id}`}
+                                  >
                                     {`${p.name} - ${c.name}`}
                                     {index === filteredClasses.length - 1
                                       ? '.'
                                       : ','}
                                     &nbsp;
-                                  </>
+                                  </React.Fragment>
                                 );
                               })}
-                            </>
+                            </React.Fragment>
                           );
                         })}
                       </span>

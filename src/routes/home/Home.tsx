@@ -7,8 +7,12 @@ import {
   CardHeader,
   Chip,
   Grid,
+  IconButton,
+  Menu,
+  MenuItem,
   Typography,
 } from '@material-ui/core';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { format } from 'date-fns';
 
 import AnnouncementTabs from 'components/announcementTabs';
@@ -21,6 +25,7 @@ import { useUser } from 'contexts/UserContext';
 import { AnnouncementListData } from 'interfaces/models/announcements';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
+import { getAlertCallback } from 'utils/alertUtils';
 
 import { useStyles } from './home.styles';
 
@@ -65,6 +70,18 @@ const Home: React.FunctionComponent = () => {
       announcements: [],
     }
   );
+
+  const [anchorEle, setAnchorEle] = useState<null | HTMLElement>(null);
+
+  const alertCallback = getAlertCallback(setState);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEle(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEle(null);
+  };
 
   useEffect(() => {
     let didCancel = false;
@@ -123,27 +140,81 @@ const Home: React.FunctionComponent = () => {
                 <QuestCard key={x.id} style={{ marginBottom: '2rem' }}>
                   <CardHeader
                     title={
-                      <Grid container justify="space-between">
+                      <>
                         <Typography
                           className={classes.dates}
                           color="textSecondary"
                         >
-                          {format(
+                          {`Start: ${format(
                             new Date(x.startDate),
-                            "d MMM y, hh:mm aaaaa'm'"
-                          )}
+                            'd MMM y, h:mm a'
+                          )}`}
                         </Typography>
                         <Typography
                           className={classes.dates}
                           color="textSecondary"
                           gutterBottom
                         >
-                          {format(
+                          {`End: ${format(
                             new Date(x.endDate),
-                            "d MMM y, hh:mm aaaaa'm'"
-                          )}
+                            "d MMM y, h:mm a'"
+                          )}`}
                         </Typography>
-                      </Grid>
+                      </>
+                    }
+                    action={
+                      <>
+                        <IconButton
+                          aria-label="more options"
+                          aria-controls="more options"
+                          aria-haspopup="true"
+                          onClick={handleClick}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id={`announcement-menu-${x.id}`}
+                          anchorEl={anchorEle}
+                          keepMounted
+                          open={Boolean(anchorEle)}
+                          onClose={handleClose}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              handleClose();
+                            }}
+                          >
+                            Edit
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              handleClose();
+                              alertCallback(
+                                true,
+                                true,
+                                'Are you sure?',
+                                'You will not be able to retrieve the deleted announcement',
+                                async () => {
+                                  ApiService.delete(
+                                    `${ANNOUNCEMENTS}/${x.id}`
+                                  ).then(() => {
+                                    const newAnnouncements =
+                                      state.announcements.filter(
+                                        (announcement) =>
+                                          announcement.id !== x.id
+                                      );
+                                    setState({
+                                      announcements: newAnnouncements,
+                                    });
+                                  });
+                                }
+                              );
+                            }}
+                          >
+                            Delete
+                          </MenuItem>
+                        </Menu>
+                      </>
                     }
                   />
                   <CardContent>
