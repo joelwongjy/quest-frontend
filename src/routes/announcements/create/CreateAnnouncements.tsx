@@ -121,6 +121,8 @@ const CreateAnnouncements: React.FunctionComponent = () => {
       return;
     }
     setHasError(false);
+    setHasEndError(false);
+    setHasStartError(false);
     setState({ isCompleted: true });
   };
 

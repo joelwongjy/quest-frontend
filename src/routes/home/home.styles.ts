@@ -32,13 +32,5 @@ export const useStyles = makeStyles((theme: Theme) =>
     programmeClassCard: {
       margin: '0.5rem',
     },
-    chipContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      flexWrap: 'wrap',
-      '& > *': {
-        margin: theme.spacing(0.5),
-      },
-    },
   })
 );
