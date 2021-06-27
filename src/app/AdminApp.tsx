@@ -31,6 +31,7 @@ import Admins from 'routes/admins';
 import CreateAdmin from 'routes/admins/create';
 import EditAdmins from 'routes/admins/edit';
 import CreateAnnouncements from 'routes/announcements/create';
+import EditAnnouncements from 'routes/announcements/edit';
 import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
@@ -147,6 +148,11 @@ const AdminApp: React.FunctionComponent = () => {
             exact
             path={`${ANNOUNCEMENTS}${CREATE}`}
             component={CreateAnnouncements}
+          />
+          <Route
+            exact
+            path={`${ANNOUNCEMENTS}/:id${EDIT}`}
+            component={EditAnnouncements}
           />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />

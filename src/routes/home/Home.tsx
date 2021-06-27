@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Button,
   CardContent,
@@ -20,7 +20,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestCard from 'componentWrappers/questCard';
-import { ANNOUNCEMENTS, CREATE, HOME } from 'constants/routes';
+import { ANNOUNCEMENTS, CREATE, EDIT, HOME } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
 import { AnnouncementListData } from 'interfaces/models/announcements';
 import { RouteState } from 'interfaces/routes/common';
@@ -38,6 +38,7 @@ export const tabs = ['Active', 'Upcoming', 'Past'];
 const Home: React.FunctionComponent = () => {
   const { user } = useUser();
   const { name } = user!;
+  const history = useHistory();
 
   const breadcrumbs = [{ text: 'Home', href: HOME }];
 
@@ -182,6 +183,7 @@ const Home: React.FunctionComponent = () => {
                           <MenuItem
                             onClick={() => {
                               handleClose();
+                              history.push(`${ANNOUNCEMENTS}/${x.id}${EDIT}`);
                             }}
                           >
                             Edit
