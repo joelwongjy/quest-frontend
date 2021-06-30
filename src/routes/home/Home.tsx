@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
+import { isAfter, isBefore } from 'date-fns';
 
 import AnnouncementCard from 'components/announcementCard';
 import AnnouncementTabs from 'components/announcementTabs';
@@ -32,7 +32,6 @@ const Home: React.FunctionComponent = () => {
 
   const [tabValue, setTabValue] = useState<number>(0);
 
-  const dispatch = useDispatch();
   const classes = useStyles();
 
   const [state, setState] = useReducer(
@@ -88,7 +87,31 @@ const Home: React.FunctionComponent = () => {
     return () => {
       didCancel = true;
     };
-  }, [dispatch]);
+  }, []);
+
+  const filterAnnouncements = () => {
+    const now = new Date();
+    switch (tabValue) {
+      case 1:
+        return state.announcements.filter((x) => {
+          return isAfter(new Date(x.startDate), now);
+        });
+      case 2:
+        return state.announcements.filter((x) => {
+          return isBefore(new Date(x.endDate), now);
+        });
+      case 0:
+      default:
+        return state.announcements.filter((x) => {
+          return (
+            isBefore(new Date(x.startDate), now) &&
+            isAfter(new Date(x.endDate), now)
+          );
+        });
+    }
+  };
+
+  const renderedAnnouncements = filterAnnouncements();
 
   return (
     <PageContainer>
@@ -116,7 +139,7 @@ const Home: React.FunctionComponent = () => {
         />
         <Grid container alignContent="center" justify="center">
           <Grid item xs={12} sm={12} lg={12}>
-            {state.announcements.map((x) => {
+            {renderedAnnouncements.map((x) => {
               return (
                 <AnnouncementCard
                   key={`announcement-card-${x.id}`}
