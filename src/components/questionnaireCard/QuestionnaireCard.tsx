@@ -155,6 +155,8 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           {isAttempted ? (
             <Button
               size="small"
+              variant="contained"
+              color="primary"
               component={Link}
               to={`${QUESTS}/attempt/${attemptId}`}
             >
@@ -163,6 +165,8 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           ) : (
             <Button
               size="small"
+              variant="contained"
+              color="primary"
               component={Link}
               to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
             >
