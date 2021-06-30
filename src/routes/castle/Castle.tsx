@@ -51,16 +51,7 @@ const Castle: React.FunctionComponent = () => {
           <StudentBoard title="Announcements" className={classes.announcements}>
             <ul className={classes.announcementList}>
               {announcements.map((x) => {
-                return (
-                  <AnnouncementListItem
-                    programmeName="Programme X"
-                    studentClassName="Class X1"
-                    date={new Date()}
-                    title={x.title}
-                    body={x.body ?? ''}
-                    key={x.id}
-                  />
-                );
+                return <AnnouncementListItem announcement={x} key={x.id} />;
               })}
             </ul>
           </StudentBoard>

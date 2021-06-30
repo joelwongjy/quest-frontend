@@ -157,5 +157,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         transform: 'rotate(-35deg)',
       },
     },
+    chipContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      '& > *': {
+        margin: theme.spacing(0.5),
+      },
+    },
   })
 );

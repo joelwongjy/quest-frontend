@@ -18,7 +18,6 @@ import {
   AnnouncementMode,
   AnnouncementPostData,
 } from 'interfaces/models/announcements';
-// import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
