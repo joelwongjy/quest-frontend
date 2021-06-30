@@ -13,7 +13,6 @@ import QuestButton from 'componentWrappers/questButton';
 import QuestDateTimePicker from 'componentWrappers/questDateTimePicker';
 import QuestTextField from 'componentWrappers/questTextField';
 import { ANNOUNCEMENTS, CREATE, HOME } from 'constants/routes';
-import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import {
   AnnouncementMode,
@@ -37,7 +36,6 @@ const CreateAnnouncements: React.FunctionComponent = () => {
   const muiClasses = useStyles();
   const history = useHistory();
   const { user } = useUser();
-  const { hasError, setHasError } = useError();
 
   const breadcrumbs = [
     { text: 'Announcements', href: HOME },
@@ -82,7 +80,7 @@ const CreateAnnouncements: React.FunctionComponent = () => {
 
   const [hasStartError, setHasStartError] = useState<boolean>(false);
   const [hasEndError, setHasEndError] = useState<boolean>(false);
-  const hasTitleError = hasError && title === '';
+  const [hasError, setHasError] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const alertCallback = getAlertCallback(setState);
@@ -208,7 +206,7 @@ const CreateAnnouncements: React.FunctionComponent = () => {
             <QuestAccordion heading="Step 3: Create the announcement">
               <Grid container>
                 <FormControl
-                  error={hasTitleError}
+                  error={hasError && title === ''}
                   className={muiClasses.inputContainer}
                 >
                   <QuestTextField
@@ -220,12 +218,12 @@ const CreateAnnouncements: React.FunctionComponent = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     error={hasError && title === ''}
                   />
-                  {hasTitleError && (
+                  {hasError && title === '' && (
                     <FormHelperText>The title cannot be empty!</FormHelperText>
                   )}
                 </FormControl>
                 <FormControl
-                  error={hasTitleError}
+                  error={hasError && body === ''}
                   className={muiClasses.bodyContainer}
                 >
                   <QuestTextField
