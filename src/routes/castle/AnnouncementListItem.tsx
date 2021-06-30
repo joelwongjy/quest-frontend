@@ -76,8 +76,9 @@ const AnnouncementListItem: React.FC<AnnouncementListItemProps> = ({
                 label={`${p.name} - ${c.name}`}
                 key={`${p.id}-${c.id}`}
                 style={{
-                  margin: '5px',
+                  margin: '4px',
                   backgroundColor: '#d3b488',
+                  fontSize: '10px',
                 }}
               />
             ))
