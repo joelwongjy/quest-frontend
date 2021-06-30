@@ -6,7 +6,7 @@ export const useStyles = makeStyles(() =>
       padding: '0.6rem',
       textAlign: 'left',
       fontWeight: 600,
-      color: 'black',
+      color: '#424242',
     },
     status: {
       marginLeft: 10,
