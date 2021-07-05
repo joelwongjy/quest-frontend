@@ -161,7 +161,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
           <div style={{ marginTop: '1rem' }}>
             <Grid container justify="center">
               <Typography
-                style={{ fontSize: 24, fontWeight: 'bold', color: 'grey' }}
+                style={{ fontSize: 24, color: 'grey' }}
                 align="center"
               >
                 What type of questionnaire would you like to create?
