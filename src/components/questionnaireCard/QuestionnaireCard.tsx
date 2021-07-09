@@ -7,6 +7,7 @@ import {
   CardHeader,
   Grid,
   IconButton,
+  Link as MuiLink,
   Menu,
   MenuItem,
   Typography,
@@ -117,7 +118,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
   if (mode === CardMode.STUDENT) {
     const questCardStyle = getQuestStyle();
     return (
-      <QuestCard className={className}>
+      <QuestCard hover className={className}>
         <CardHeader
           title={
             <Grid container justify="center">
@@ -131,49 +132,52 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             padding: '0.5rem',
           }}
         />
-        <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
-          {renderProgramme()}
-          <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
-            <img src={questCardStyle[0]} alt="icon" />
-          </Grid>
-          <Grid container justify="center">
-            <Typography
-              className={`${classes.dates} is-student`}
-              color="textSecondary"
-              gutterBottom
-            >
-              {isAttempted
-                ? 'Completed'
-                : `Complete by: ${format(
-                    questionnaire.endAt as Date,
-                    'd MMM y'
-                  )}`}
-            </Typography>
-          </Grid>
-        </CardContent>
-        <CardActions className={`${classes.actions} is-student`}>
-          {isAttempted ? (
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              component={Link}
-              to={`${QUESTS}/attempt/${attemptId}`}
-            >
-              View Attempt
-            </Button>
-          ) : (
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              component={Link}
-              to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
-            >
-              Do Quest
-            </Button>
-          )}
-        </CardActions>
+
+        <MuiLink
+          underline="none"
+          component={Link}
+          to={`${QUESTS}/attempt/${attemptId}`}
+        >
+          <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
+            {renderProgramme()}
+            <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
+              <img src={questCardStyle[0]} alt="icon" />
+            </Grid>
+            <Grid container justify="center">
+              <Typography
+                className={`${classes.dates} is-student`}
+                color="textSecondary"
+                gutterBottom
+              >
+                {isAttempted
+                  ? 'Completed'
+                  : `Complete by: ${format(
+                      questionnaire.endAt as Date,
+                      'd MMM y'
+                    )}`}
+              </Typography>
+            </Grid>
+          </CardContent>
+          <CardActions className={`${classes.actions} is-student`}>
+            {isAttempted ? (
+              <Button
+                size="small"
+                component={Link}
+                to={`${QUESTS}/attempt/${attemptId}`}
+              >
+                View Attempt
+              </Button>
+            ) : (
+              <Button
+                size="small"
+                component={Link}
+                to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
+              >
+                Do Quest
+              </Button>
+            )}
+          </CardActions>
+        </MuiLink>
       </QuestCard>
     );
   }
@@ -184,7 +188,7 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
         Last edited:{' '}
         {formatDistanceToNow(questionnaire.updatedAt, { addSuffix: true })}
       </Typography>
-      <QuestCard>
+      <QuestCard hover>
         <CardHeader
           title={
             <>
@@ -234,28 +238,34 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             )
           }
         />
-        <CardContent>
-          <Typography
-            className={classes.title}
-            variant="h5"
-            component="h2"
-            noWrap
-          >
-            {questionnaire.name}
-          </Typography>
-          {renderStatus(questionnaire.status)}
-          <Typography>{renderType(questionnaire.type)}</Typography>
-        </CardContent>
-        <CardActions className={classes.actions}>
-          <Button
-            size="small"
-            className={classes.button}
-            component={Link}
-            to={`${QUESTIONNAIRES}/${questionnaire.id}${RESPONSES}`}
-          >
-            View Responses
-          </Button>
-        </CardActions>
+        <MuiLink
+          underline="none"
+          component={Link}
+          to={`${QUESTIONNAIRES}/${questionnaire.id}${RESPONSES}`}
+        >
+          <CardContent>
+            <Typography
+              className={classes.title}
+              variant="h5"
+              component="h2"
+              noWrap
+            >
+              {questionnaire.name}
+            </Typography>
+            {renderStatus(questionnaire.status)}
+            <Typography>{renderType(questionnaire.type)}</Typography>
+          </CardContent>
+          <CardActions className={classes.actions}>
+            <Button
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={`${QUESTIONNAIRES}/${questionnaire.id}${RESPONSES}`}
+            >
+              View Responses
+            </Button>
+          </CardActions>
+        </MuiLink>
       </QuestCard>
     </>
   );
