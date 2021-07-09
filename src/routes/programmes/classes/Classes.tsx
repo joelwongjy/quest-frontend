@@ -135,7 +135,7 @@ const Classes: React.FunctionComponent = () => {
       true,
       true,
       'Are you sure?',
-      'You will not be able to recover the deleted programme.',
+      'You will not be able to recover the deleted class.',
       async () => {
         if (state.programme == null) {
           return;
