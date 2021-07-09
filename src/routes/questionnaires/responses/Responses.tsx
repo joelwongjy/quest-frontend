@@ -18,7 +18,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import ViewQuestionCard from 'components/questionCard/view';
 import QuestAlert from 'componentWrappers/questAlert';
-import { QUESTIONNAIRES, RESPONSES, SUBMISSIONS } from 'constants/routes';
+import { HOME, QUESTIONNAIRES, RESPONSES, SUBMISSIONS } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
 import { AnswerData } from 'interfaces/models/answers';
 import {
@@ -175,9 +175,10 @@ const Responses: React.FunctionComponent = () => {
   const alertCallback = getAlertCallback(setState);
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     {
-      text: `Viewing Responses for ${state.questionnaire?.title}`,
+      text: `Responses for ${state.questionnaire?.title}`,
       href: `${QUESTIONNAIRES}/${id}${RESPONSES}`,
     },
   ];

@@ -5,7 +5,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import StudentForm from 'components/studentForm';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, STUDENTS } from 'constants/routes';
+import { CREATE, HOME, STUDENTS } from 'constants/routes';
 import { StudentMode } from 'interfaces/models/users';
 // import { useError } from 'contexts/ErrorContext';
 import { RouteState } from 'interfaces/routes/common';
@@ -20,6 +20,7 @@ const CreateStudent: React.FunctionComponent = () => {
   // const { setHasError } = useError();
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Students', href: STUDENTS },
     { text: 'Create', href: `${STUDENTS}/${CREATE}` },
   ];

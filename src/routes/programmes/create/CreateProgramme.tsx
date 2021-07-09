@@ -10,7 +10,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import ProgrammeForm from 'components/programmeForm';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, PROGRAMMES } from 'constants/routes';
+import { CREATE, HOME, PROGRAMMES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import { ProgrammeMode } from 'interfaces/components/programmeForm';
@@ -29,6 +29,7 @@ const CreateProgramme: React.FunctionComponent = () => {
   const { setHasError } = useError();
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Programmes', href: PROGRAMMES },
     { text: 'Create', href: `${PROGRAMMES}/${CREATE}` },
   ];

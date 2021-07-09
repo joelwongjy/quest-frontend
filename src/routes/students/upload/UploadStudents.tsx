@@ -12,7 +12,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestButton from 'componentWrappers/questButton';
-import { ADD, STUDENTS } from 'constants/routes';
+import { ADD, HOME, STUDENTS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { PersonPostData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
@@ -33,6 +33,7 @@ const UploadStudents: React.FunctionComponent = () => {
   );
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Students', href: STUDENTS },
     { text: 'Upload', href: `${STUDENTS}/${ADD}` },
   ];

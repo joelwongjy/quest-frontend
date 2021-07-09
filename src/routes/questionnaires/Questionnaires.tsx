@@ -24,6 +24,7 @@ import {
   CREATE,
   DUPLICATE,
   EDIT,
+  HOME,
   PROGRAMMES,
   QUESTIONNAIRES,
   STUDENTS,
@@ -159,6 +160,7 @@ const Questionnaires: React.FunctionComponent = () => {
 
   const breadcrumbs = id
     ? [
+        { text: 'Home', href: HOME },
         { text: 'Programmes', href: `${PROGRAMMES}` },
         {
           text:
@@ -185,7 +187,10 @@ const Questionnaires: React.FunctionComponent = () => {
           href: `${PROGRAMMES}/${id}${QUESTIONNAIRES}`,
         },
       ]
-    : [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
+    : [
+        { text: 'Home', href: HOME },
+        { text: 'Questionnaires', href: QUESTIONNAIRES },
+      ];
 
   if (state.isLoading) {
     return <QuestionnairesGhost />;

@@ -11,7 +11,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
-import { ADMINS, CLASSES, CREATE, EDIT } from 'constants/routes';
+import { ADMINS, CLASSES, CREATE, EDIT, HOME } from 'constants/routes';
 import { PersonData } from 'interfaces/models/persons';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -103,7 +103,10 @@ const Admins: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Admins', href: ADMINS }];
+  const breadcrumbs = [
+    { text: 'Home', href: HOME },
+    { text: 'Admins', href: ADMINS },
+  ];
 
   const alertCallback = getAlertCallback(setState);
 
