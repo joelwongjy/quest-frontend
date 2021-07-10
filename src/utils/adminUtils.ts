@@ -1,7 +1,7 @@
 import { AdminFormState } from 'components/adminForm/AdminForm';
 
-export const validateAdminInfo = (student: AdminFormState): boolean => {
-  const { name, gender, birthday, programmes } = student;
+export const validateAdminInfo = (admin: AdminFormState): boolean => {
+  const { name, gender, birthday, programmes } = admin;
   if (name === '') {
     return false;
   }
@@ -17,7 +17,7 @@ export const validateAdminInfo = (student: AdminFormState): boolean => {
   return true;
 };
 
-export const isEmptyAdmin = (student: AdminFormState): boolean => {
-  const { name, gender, birthday, programmes } = student;
+export const isEmptyAdmin = (admin: AdminFormState): boolean => {
+  const { name, gender, birthday, programmes } = admin;
   return name === '' && gender === '' && !birthday && programmes.length <= 0;
 };

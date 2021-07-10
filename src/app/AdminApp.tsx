@@ -10,6 +10,7 @@ import {
 import {
   ADD,
   ADMINS,
+  ANNOUNCEMENTS,
   CLASSES,
   CREATE,
   DUPLICATE,
@@ -29,6 +30,8 @@ import { useError } from 'contexts/ErrorContext';
 import Admins from 'routes/admins';
 import CreateAdmin from 'routes/admins/create';
 import EditAdmins from 'routes/admins/edit';
+import CreateAnnouncements from 'routes/announcements/create';
+import EditAnnouncements from 'routes/announcements/edit';
 import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
@@ -141,6 +144,16 @@ const AdminApp: React.FunctionComponent = () => {
           <Route exact path={ADMINS} component={Admins} />
           <Route exact path={`${ADMINS}${CREATE}`} component={CreateAdmin} />
           <Route exact path={`${ADMINS}/:id${EDIT}`} component={EditAdmins} />
+          <Route
+            exact
+            path={`${ANNOUNCEMENTS}${CREATE}`}
+            component={CreateAnnouncements}
+          />
+          <Route
+            exact
+            path={`${ANNOUNCEMENTS}/:id${EDIT}`}
+            component={EditAnnouncements}
+          />
           <Route path={HOME} component={Home} />
           <Route exact path={QUESTS} component={Quests} />
           <Route exact path={PROFILE} component={Profile} />

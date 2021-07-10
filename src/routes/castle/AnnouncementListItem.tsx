@@ -1,25 +1,21 @@
 import React from 'react';
+import { Chip } from '@material-ui/core';
 import { format } from 'date-fns';
 
+import { useUser } from 'contexts/UserContext';
 import { QuestComponentProps } from 'interfaces/components/common';
+import { AnnouncementListData } from 'interfaces/models/announcements';
 
 import { useStyles } from './castle.styles';
 
 interface AnnouncementListItemProps extends QuestComponentProps {
-  programmeName: string;
-  studentClassName: string;
-  date: Date;
-  title: string;
-  body: string;
+  announcement: AnnouncementListData;
 }
 
 const AnnouncementListItem: React.FC<AnnouncementListItemProps> = ({
-  programmeName,
-  studentClassName,
-  date,
-  title,
-  body,
+  announcement,
 }: AnnouncementListItemProps) => {
+  const { user } = useUser();
   const classes = useStyles();
   return (
     <li className={classes.listItem}>
@@ -64,13 +60,30 @@ const AnnouncementListItem: React.FC<AnnouncementListItemProps> = ({
         <div className={classes.listItemSquare}>&nbsp;</div>
       </div>
       <div className={classes.listItemTop}>
-        <div>
-          {programmeName} - {studentClassName}
-        </div>
-        <div>{format(date, 'dd MMM yyyy')}</div>
+        <div>{format(new Date(announcement.startDate), 'dd MMM yyyy')}</div>
       </div>
-      <div className={classes.listItemTitle}>{title}</div>
-      <div className={classes.listItemBody}>{body}</div>
+      <div className={classes.listItemTitle}>{announcement.title}</div>
+      <div className={classes.listItemBody}>{announcement.body}</div>
+      <div className={classes.chipContainer}>
+        {user?.programmes.map((p) =>
+          p.classes
+            .filter(
+              (y) =>
+                announcement.classesData.map((z) => z.id).indexOf(y.id) !== -1
+            )
+            .map((c) => (
+              <Chip
+                label={`${p.name} - ${c.name}`}
+                key={`${p.id}-${c.id}`}
+                style={{
+                  margin: '4px',
+                  backgroundColor: '#d3b488',
+                  fontSize: '10px',
+                }}
+              />
+            ))
+        )}
+      </div>
     </li>
   );
 };
