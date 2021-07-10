@@ -8,7 +8,7 @@ import PageHeader from 'components/pageHeader';
 import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestButton from 'componentWrappers/questButton';
-import { DUPLICATE, QUESTIONNAIRES } from 'constants/routes';
+import { DUPLICATE, HOME, QUESTIONNAIRES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import {
@@ -134,6 +134,7 @@ const DuplicateQuestionnaire: React.FunctionComponent = () => {
   }, [dispatch]);
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     {
       text: `Duplicate ${title}`,

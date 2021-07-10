@@ -8,7 +8,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CLASSES, CREATE, PROGRAMMES } from 'constants/routes';
+import { CLASSES, CREATE, HOME, PROGRAMMES } from 'constants/routes';
 import { ClassMode } from 'interfaces/components/classForm';
 import { MenuOption } from 'interfaces/components/programmeCard';
 import { ClassListData } from 'interfaces/models/classes';
@@ -97,6 +97,7 @@ const Classes: React.FunctionComponent = () => {
   }, []);
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
       text:

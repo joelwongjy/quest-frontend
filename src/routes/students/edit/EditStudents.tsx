@@ -6,7 +6,7 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import StudentForm from 'components/studentForm';
 import QuestAlert from 'componentWrappers/questAlert';
-import { EDIT, PERSONS, STUDENTS } from 'constants/routes';
+import { EDIT, HOME, PERSONS, STUDENTS } from 'constants/routes';
 import { PersonData } from 'interfaces/models/persons';
 import { StudentMode } from 'interfaces/models/users';
 // import { useError } from 'contexts/ErrorContext';
@@ -29,6 +29,7 @@ const EditStudents: React.FunctionComponent = () => {
   })!.params;
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Students', href: STUDENTS },
     { text: 'Edit', href: `${STUDENTS}/${id}${EDIT}` },
   ];

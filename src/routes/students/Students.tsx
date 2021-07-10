@@ -18,7 +18,14 @@ import renderDefaultTablePopup from 'components/tablePopup/renderDefaultTablePop
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestDataGrid from 'componentWrappers/questDataGrid';
 import { programmeColumnType } from 'componentWrappers/questDataGrid/columnTypes/programmeColumnType';
-import { CLASSES, CREATE, EDIT, PROGRAMMES, STUDENTS } from 'constants/routes';
+import {
+  CLASSES,
+  CREATE,
+  EDIT,
+  HOME,
+  PROGRAMMES,
+  STUDENTS,
+} from 'constants/routes';
 import { PersonData } from 'interfaces/models/persons';
 import { ProgrammeListData } from 'interfaces/models/programmes';
 import { RouteState } from 'interfaces/routes/common';
@@ -111,7 +118,10 @@ const Students: React.FunctionComponent = () => {
     };
   }, [dispatch]);
 
-  const breadcrumbs = [{ text: 'Students', href: STUDENTS }];
+  const breadcrumbs = [
+    { text: 'Home', href: HOME },
+    { text: 'Students', href: STUDENTS },
+  ];
 
   const alertCallback = getAlertCallback(setState);
 

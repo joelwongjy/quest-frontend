@@ -11,7 +11,7 @@ import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestButton from 'componentWrappers/questButton';
 import QuestCard from 'componentWrappers/questCard';
-import { CREATE, QUESTIONNAIRES } from 'constants/routes';
+import { CREATE, HOME, QUESTIONNAIRES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import {
@@ -67,6 +67,7 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
   const { type, questionWindows, programmes, classes } = questionnaire;
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     { text: 'Create', href: `${QUESTIONNAIRES}/${CREATE}` },
   ];

@@ -5,7 +5,7 @@ import ClassStudentForm from 'components/classStudentForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CLASSES, PROGRAMMES, STUDENTS } from 'constants/routes';
+import { CLASSES, HOME, PROGRAMMES, STUDENTS } from 'constants/routes';
 import { ClassData } from 'interfaces/models/classes';
 import { PersonListData } from 'interfaces/models/persons';
 import { ClassRouteParams, RouteState } from 'interfaces/routes/common';
@@ -84,6 +84,7 @@ const AddStudents: React.FunctionComponent = () => {
   }, []);
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Programmes', href: `${PROGRAMMES}` },
     {
       text:

@@ -8,7 +8,7 @@ import ProgrammeCard from 'components/programmeCard';
 import ProgrammeForm from 'components/programmeForm';
 import QuestionnaireCardGhost from 'components/questionnaireCard/QuestionnaireCardGhost';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CREATE, PROGRAMMES } from 'constants/routes';
+import { CREATE, HOME, PROGRAMMES } from 'constants/routes';
 import { MenuOption } from 'interfaces/components/programmeCard';
 import { ProgrammeMode } from 'interfaces/components/programmeForm';
 import { ProgrammeListData } from 'interfaces/models/programmes';
@@ -81,7 +81,10 @@ const Programme: React.FunctionComponent = () => {
     }
   }, [state.isEditing]);
 
-  const breadcrumbs = [{ text: 'Programmes', href: `${PROGRAMMES}` }];
+  const breadcrumbs = [
+    { text: 'Home', href: HOME },
+    { text: 'Programmes', href: `${PROGRAMMES}` },
+  ];
 
   const alertCallback = getAlertCallback(setState);
 

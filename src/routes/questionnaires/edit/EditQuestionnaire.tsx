@@ -8,7 +8,7 @@ import PageHeader from 'components/pageHeader';
 import SampleQuestionMenu from 'components/sampleQuestionMenu';
 import QuestAlert from 'componentWrappers/questAlert';
 import QuestButton from 'componentWrappers/questButton';
-import { EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { EDIT, HOME, QUESTIONNAIRES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import {
@@ -146,6 +146,7 @@ const EditQuestionnaire: React.FunctionComponent = () => {
   }, [dispatch, questionnaireId]);
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Questionnaires', href: QUESTIONNAIRES },
     {
       text: `Edit ${title}`,

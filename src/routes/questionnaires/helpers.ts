@@ -2,7 +2,7 @@ import { isAfter, isBefore } from 'date-fns';
 import { History } from 'history';
 
 import store from 'app/store';
-import { DUPLICATE, EDIT, QUESTIONNAIRES } from 'constants/routes';
+import { DUPLICATE, EDIT, HOME, QUESTIONNAIRES } from 'constants/routes';
 import { MenuOption } from 'interfaces/components/questionnaireCard';
 import {
   QuestionnaireListData,
@@ -12,7 +12,10 @@ import { RouteState } from 'interfaces/routes/common';
 import { QuestionnaireDux, setMode } from 'reducers/questionnaireDux';
 
 export const tabs = ['Current', 'Upcoming', 'Past'];
-export const breadcrumbs = [{ text: 'Questionnaires', href: QUESTIONNAIRES }];
+export const breadcrumbs = [
+  { text: 'Home', href: HOME },
+  { text: 'Questionnaires', href: QUESTIONNAIRES },
+];
 export interface QuestionnairesState extends RouteState {
   questionnaires: QuestionnaireListData[];
 }

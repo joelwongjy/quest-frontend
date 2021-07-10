@@ -5,7 +5,7 @@ import ClassForm from 'components/classForm';
 import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
-import { CLASSES, CREATE, PROGRAMMES } from 'constants/routes';
+import { CLASSES, CREATE, HOME, PROGRAMMES } from 'constants/routes';
 import { ClassMode } from 'interfaces/components/classForm';
 import { ProgrammeData } from 'interfaces/models/programmes';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
@@ -80,6 +80,7 @@ const CreateClass: React.FunctionComponent = () => {
   }, []);
 
   const breadcrumbs = [
+    { text: 'Home', href: HOME },
     { text: 'Programmes', href: PROGRAMMES },
     {
       text:
