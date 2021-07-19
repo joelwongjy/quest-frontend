@@ -9,7 +9,6 @@ import PageContainer from 'components/pageContainer';
 import PageHeader from 'components/pageHeader';
 import QuestAlert from 'componentWrappers/questAlert';
 import { ANNOUNCEMENTS, CREATE, EDIT, HOME } from 'constants/routes';
-import { useUser } from 'contexts/UserContext';
 import { AnnouncementListData } from 'interfaces/models/announcements';
 import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
@@ -24,8 +23,6 @@ interface HomeState extends RouteState {
 export const tabs = ['Active', 'Upcoming', 'Past'];
 
 const Home: React.FunctionComponent = () => {
-  const { user } = useUser();
-  const { name } = user!;
   const history = useHistory();
 
   const breadcrumbs = [{ text: 'Home', href: HOME }];
@@ -129,7 +126,6 @@ const Home: React.FunctionComponent = () => {
           </Button>
         }
       />
-      <div>You&apos;re logged in, {name}!</div>
       <br />
       <Grid container className={classes.main}>
         <AnnouncementTabs
