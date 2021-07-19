@@ -18,12 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: '1.4rem',
       color: 'white',
     },
-    statusDraft: {
-      textAlign: 'center',
-      color: '#FF6500',
-      fontWeight: 500,
-    },
-    statusPublished: {
+    progammeName: {
       textAlign: 'center',
       color: theme.palette.secondary.main,
       fontWeight: 500,

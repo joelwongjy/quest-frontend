@@ -22,7 +22,6 @@ import { CardMode, MenuOption } from 'interfaces/components/questionnaireCard';
 import {
   QuestionnaireListData,
   QuestionnaireListDataType,
-  QuestionnaireStatus,
 } from 'interfaces/models/questionnaires';
 import { getQuestStyle } from 'utils/questUtils';
 
@@ -58,37 +57,10 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
     setAnchorEle(null);
   };
 
-  const renderStatus = (status: QuestionnaireStatus) => {
-    switch (status) {
-      case QuestionnaireStatus.DRAFT:
-        return (
-          <Typography
-            className={classes.statusDraft}
-            variant="body2"
-            component="p"
-          >
-            Saved As Draft
-          </Typography>
-        );
-      case QuestionnaireStatus.PUBLISHED:
-        return (
-          <Typography
-            className={classes.statusPublished}
-            variant="body2"
-            component="p"
-          >
-            Published
-          </Typography>
-        );
-      default:
-        return null;
-    }
-  };
-
   const renderProgramme = () => {
     return (
       <Typography
-        className={classes.statusPublished}
+        className={classes.progammeName}
         variant="body1"
         component="p"
       >
@@ -252,7 +224,6 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
             >
               {questionnaire.name}
             </Typography>
-            {renderStatus(questionnaire.status)}
             <Typography>{renderType(questionnaire.type)}</Typography>
           </CardContent>
           <CardActions className={classes.actions}>
