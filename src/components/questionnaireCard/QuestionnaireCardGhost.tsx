@@ -103,7 +103,7 @@ const QuestionnaireCardGhost: React.FC<QuestionnaireCardGhostProps> = ({
             <Skeleton />
           </Typography>
           <Typography
-            className={classes.statusDraft}
+            className={classes.progammeName}
             color="textSecondary"
             variant="body2"
             component="p"
