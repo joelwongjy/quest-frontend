@@ -267,6 +267,65 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
     }
   };
 
+  interface InputNamedParameters {
+    label: string;
+    data: string | undefined;
+    validationMethod: (data: string) => boolean;
+    errorMessage: string;
+    onChange?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+    isRequired?: boolean;
+    inputElement?: JSX.Element;
+  }
+
+  const renderInputComponent = ({
+    label,
+    data,
+    validationMethod,
+    errorMessage,
+    onChange,
+    isRequired = false,
+    inputElement,
+  }: InputNamedParameters) => {
+    const input = inputElement ?? (
+      <QuestTextField
+        required={isRequired}
+        size="small"
+        className={classes.textfield}
+        value={data}
+        label={label}
+        variant="outlined"
+        disabled={isSuccessful}
+        onChange={onChange}
+      />
+    );
+    return (
+      <ListItem>
+        <Grid container justify="space-between" alignItems="center">
+          <Grid item xs={4}>
+            <Typography variant="subtitle1">{label.concat(': ')}</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <div className={classes.textfieldContainer}>
+              <FormControl
+                style={{ width: '100%' }}
+                variant="outlined"
+                size="small"
+                error={hasError && !validationMethod(data!)}
+              >
+                {input}
+                {hasError &&
+                  (data || isRequired) &&
+                  !validationMethod(data!) && (
+                    <FormHelperText>{errorMessage}</FormHelperText>
+                  )}
+              </FormControl>
+            </div>
+          </Grid>
+        </Grid>
+      </ListItem>
+    );
+  };
+
   return (
     <Grid
       container
@@ -308,217 +367,84 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
           </Grid>
           <Grid item xs={12}>
             <List className={classes.list}>
-              <ListItem>
-                <Typography variant="h6" className={classes.subheader}>
-                  Particulars:
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Name: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <FormControl
-                        style={{ width: '100%' }}
-                        error={hasError && state.name === ''}
-                      >
-                        <QuestTextField
-                          required
-                          size="small"
-                          value={state.name}
-                          className={classes.textfield}
-                          label="Name"
-                          variant="outlined"
-                          disabled={isSuccessful}
-                          onChange={(e) => setState({ name: e.target.value })}
-                        />
-                        {hasError && state.name === '' && (
-                          <FormHelperText>
-                            The name cannot be blank!
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                    </div>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Gender: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <FormControl
-                      variant="outlined"
-                      size="small"
-                      className={classes.textfieldContainer}
-                      color="secondary"
-                      error={hasError && state.gender === ''}
-                    >
-                      <Select
-                        id="gender-select"
-                        value={state.gender}
-                        disabled={isSuccessful}
-                        onChange={(
-                          event: React.ChangeEvent<{ value: unknown }>
-                        ) => {
-                          setState({ gender: event.target.value as string });
-                        }}
-                      >
-                        <MenuItem value={Gender.MALE}>Male</MenuItem>
-                        <MenuItem value={Gender.FEMALE}>Female</MenuItem>
-                      </Select>
-                      {hasError && state.gender === '' && (
-                        <FormHelperText>
-                          The gender cannot be blank!
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Birthday: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <FormControl
-                      style={{ width: '100%' }}
-                      error={hasError && state.birthday === null}
-                    >
-                      <DatePicker
-                        disableFuture
-                        allowKeyboardControl={false}
-                        disabled={isSuccessful}
-                        renderInput={(props) => (
-                          <TextField
-                            variant="outlined"
-                            style={{ display: 'flex' }}
-                            size="small"
-                            color="secondary"
-                            {...props}
-                          />
-                        )}
-                        value={state.birthday}
-                        onChange={(newDate: Date | null) => {
-                          setState({ birthday: newDate });
-                        }}
+              {renderInputComponent({
+                label: 'Name',
+                data: state.name,
+                validationMethod: (name: string) => name !== '',
+                errorMessage: 'The name cannot be blank!',
+                onChange: (e) => setState({ name: e.target.value }),
+                isRequired: true,
+              })}
+              {renderInputComponent({
+                label: 'Gender',
+                data: state.gender,
+                validationMethod: (gender: string) => gender !== '',
+                errorMessage: 'The gender cannot be blank!',
+                isRequired: true,
+                inputElement: (
+                  <Select
+                    id="gender-select"
+                    value={state.gender}
+                    disabled={isSuccessful}
+                    onChange={(
+                      event: React.ChangeEvent<{ value: unknown }>
+                    ) => {
+                      setState({ gender: event.target.value as string });
+                    }}
+                  >
+                    <MenuItem value={Gender.MALE}>Male</MenuItem>
+                    <MenuItem value={Gender.FEMALE}>Female</MenuItem>
+                  </Select>
+                ),
+              })}
+              {renderInputComponent({
+                label: 'Birthday',
+                data: state.birthday?.toLocaleString(),
+                validationMethod: (birthday: string) => birthday !== undefined,
+                errorMessage: 'The birthday cannot be blank!',
+                isRequired: true,
+                inputElement: (
+                  <DatePicker
+                    disableFuture
+                    allowKeyboardControl={false}
+                    disabled={isSuccessful}
+                    renderInput={(props) => (
+                      <TextField
+                        variant="outlined"
+                        style={{ display: 'flex' }}
+                        size="small"
+                        color="secondary"
+                        {...props}
                       />
-                      {hasError && state.birthday === null && (
-                        <FormHelperText>
-                          The birthday cannot be blank!
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Mobile Number: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <FormControl
-                        style={{ width: '100%' }}
-                        error={
-                          hasError &&
-                          state.mobileNumber !== undefined &&
-                          !isValidMobileNumber(state.mobileNumber)
-                        }
-                      >
-                        <QuestTextField
-                          size="small"
-                          className={classes.textfield}
-                          label="Mobile Number"
-                          variant="outlined"
-                          disabled={isSuccessful}
-                          onChange={(e) =>
-                            setState({ mobileNumber: e.target.value })
-                          }
-                        />
-                        {hasError &&
-                          state.mobileNumber &&
-                          !isValidMobileNumber(state.mobileNumber!) && (
-                            <FormHelperText>
-                              The name cannot be blank!
-                            </FormHelperText>
-                          )}
-                      </FormControl>
-                    </div>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Home Number: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <FormControl
-                        style={{ width: '100%' }}
-                        error={
-                          hasError && !isValidMobileNumber(state.homeNumber!)
-                        }
-                      >
-                        <QuestTextField
-                          size="small"
-                          className={classes.textfield}
-                          label="Home Number"
-                          variant="outlined"
-                          disabled={isSuccessful}
-                          onChange={(e) =>
-                            setState({ homeNumber: e.target.value })
-                          }
-                        />
-                        {hasError &&
-                          state.homeNumber &&
-                          !isValidMobileNumber(state.homeNumber!) && (
-                            <FormHelperText>
-                              Please enter a valid home number!
-                            </FormHelperText>
-                          )}
-                      </FormControl>
-                    </div>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={4}>
-                    <Typography variant="subtitle1">Email: </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <div className={classes.textfieldContainer}>
-                      <FormControl
-                        style={{ width: '100%' }}
-                        error={hasError && !isValidEmail(state.email!)}
-                      >
-                        <QuestTextField
-                          size="small"
-                          className={classes.textfield}
-                          label="Email"
-                          variant="outlined"
-                          disabled={isSuccessful}
-                          onChange={(e) => setState({ email: e.target.value })}
-                        />
-                        {hasError &&
-                          state.email &&
-                          !isValidEmail(state.email) && (
-                            <FormHelperText>
-                              Please enter a valid email address!
-                            </FormHelperText>
-                          )}
-                      </FormControl>
-                    </div>
-                  </Grid>
-                </Grid>
-              </ListItem>
+                    )}
+                    value={state.birthday}
+                    onChange={(newDate: Date | null) => {
+                      setState({ birthday: newDate });
+                    }}
+                  />
+                ),
+              })}
+              {renderInputComponent({
+                label: 'Mobile Number',
+                data: state.mobileNumber,
+                validationMethod: isValidMobileNumber,
+                errorMessage: 'Please enter a valid mobile number!',
+                onChange: (e) => setState({ mobileNumber: e.target.value }),
+              })}
+              {renderInputComponent({
+                label: 'Home Number',
+                data: state.homeNumber,
+                validationMethod: isValidMobileNumber,
+                errorMessage: 'Please enter a valid home number!',
+                onChange: (e) => setState({ homeNumber: e.target.value }),
+              })}
+              {renderInputComponent({
+                label: 'Email',
+                data: state.email,
+                validationMethod: isValidEmail,
+                errorMessage: 'Please enter a valid email address!',
+                onChange: (e) => setState({ email: e.target.value }),
+              })}
               <ListItem>
                 <Typography
                   variant="h6"
