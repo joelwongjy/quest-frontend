@@ -36,10 +36,8 @@ import Home from 'routes/home';
 import Profile from 'routes/profile';
 import Programmes from 'routes/programmes';
 import Classes from 'routes/programmes/classes';
-import CreateClass from 'routes/programmes/classes/create';
 import ClassStudents from 'routes/programmes/classes/students/';
 import AddStudents from 'routes/programmes/classes/students/add';
-import CreateProgrammes from 'routes/programmes/create';
 import Questionnaires from 'routes/questionnaires';
 import CreateQuestionnaires from 'routes/questionnaires/create';
 import DuplicateQuestionnaire from 'routes/questionnaires/duplicate';
@@ -92,19 +90,11 @@ const AdminApp: React.FunctionComponent = () => {
           <Route exact path={PROGRAMMES} component={Programmes} />
           <Route
             exact
-            path={`${PROGRAMMES}${CREATE}`}
-            component={CreateProgrammes}
-          />
-          <Route
-            exact
             path={`${PROGRAMMES}/:id${QUESTIONNAIRES}`}
             component={Questionnaires}
           />
           <Route exact path={`${PROGRAMMES}/:id${CLASSES}`}>
             <Classes />
-          </Route>
-          <Route path={`${PROGRAMMES}/:id${CLASSES}${CREATE}`}>
-            <CreateClass />
           </Route>
           <Route
             exact
