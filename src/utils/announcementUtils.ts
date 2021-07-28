@@ -43,8 +43,8 @@ export const getAnnouncementsFromQuestionnaire = (
   switch (questionnaireData.type) {
     case QuestionnaireType.ONE_TIME:
       const announcementData = {
-        title: questionnaireData.title,
-        body: `A new quest ${questionnaireData.title} has been released! Check it out`,
+        title: `New Quest - ${questionnaireData.title}`,
+        body: 'Calling all knights! You have a new quest to complete. Earn yourself a medal by completing it now!',
         startDate: questionnaireData.questionWindows[0].startAt,
         endDate: questionnaireData.questionWindows[0].endAt,
         programmeIds: questionnaireData.programmes,
@@ -54,16 +54,16 @@ export const getAnnouncementsFromQuestionnaire = (
       break;
     case QuestionnaireType.PRE_POST:
       const preAnnouncementData = {
-        title: questionnaireData.title,
-        body: `A new pre quest ${questionnaireData.title} has been released! Check it out`,
+        title: `New Quest - ${questionnaireData.title}`,
+        body: `Calling all knights! You have a quest to complete before your adventure. Check it out!`,
         startDate: questionnaireData.questionWindows[0].startAt,
         endDate: questionnaireData.questionWindows[0].endAt,
         programmeIds: questionnaireData.programmes,
         classIds: questionnaireData.classes,
       };
       const postAnnouncementData = {
-        title: questionnaireData.title,
-        body: `A new post quest ${questionnaireData.title} has been released! Check it out`,
+        title: `New Quest - ${questionnaireData.title}`,
+        body: `Calling all knights! Congratulations for conquering your adventure, complete your last quest to win a medal!`,
         startDate: questionnaireData.questionWindows[1].startAt,
         endDate: questionnaireData.questionWindows[1].endAt,
         programmeIds: questionnaireData.programmes,

@@ -13,7 +13,6 @@ import QuestButton from 'componentWrappers/questButton';
 import QuestDateTimePicker from 'componentWrappers/questDateTimePicker';
 import QuestTextField from 'componentWrappers/questTextField';
 import { ANNOUNCEMENTS, EDIT, HOME } from 'constants/routes';
-import { useError } from 'contexts/ErrorContext';
 import { useUser } from 'contexts/UserContext';
 import {
   AnnouncementData,
@@ -38,7 +37,6 @@ const EditAnnouncements: React.FunctionComponent = () => {
   const muiClasses = useStyles();
   const history = useHistory();
   const { user } = useUser();
-  const { hasError, setHasError } = useError();
   const { id } = useRouteMatch<RouteParams>({
     path: `${ANNOUNCEMENTS}/:id${EDIT}`,
   })!.params;
@@ -81,6 +79,7 @@ const EditAnnouncements: React.FunctionComponent = () => {
 
   const [hasStartError, setHasStartError] = useState<boolean>(false);
   const [hasEndError, setHasEndError] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const hasTitleError = hasError && title === '';
 
   const breadcrumbs = [
@@ -109,10 +108,11 @@ const EditAnnouncements: React.FunctionComponent = () => {
       const difference = differenceInMinutes(start, startDate);
       setEndDate(addMinutes(endDate, difference));
       setHasStartError(false);
-    } else if (isBefore(start, endDate)) {
-      setHasStartError(false);
+    } else if (!isBefore(start, endDate)) {
+      setHasStartError(true);
     }
     setStartDate(start);
+    setEndDate(endDate);
   };
 
   const handleComplete = async () => {
@@ -216,7 +216,7 @@ const EditAnnouncements: React.FunctionComponent = () => {
                         </FormControl>
                       </div>
                       <div className={muiClasses.container}>
-                        <FormControl error={hasEndError}>
+                        <FormControl>
                           <QuestDateTimePicker
                             date={endDate}
                             callback={handleEndDate}
