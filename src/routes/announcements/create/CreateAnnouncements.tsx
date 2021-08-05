@@ -100,10 +100,11 @@ const CreateAnnouncements: React.FunctionComponent = () => {
       const difference = differenceInMinutes(start, startDate);
       setEndDate(addMinutes(endDate, difference));
       setHasStartError(false);
-    } else if (isBefore(start, endDate)) {
-      setHasStartError(false);
+    } else if (!isBefore(start, endDate)) {
+      setHasStartError(true);
     }
     setStartDate(start);
+    setEndDate(endDate);
   };
 
   const handleComplete = async () => {
