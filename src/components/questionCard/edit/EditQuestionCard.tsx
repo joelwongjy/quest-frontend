@@ -187,6 +187,7 @@ const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
             disabled
             id={`disabled-${question.duxId}`}
             defaultValue="Short Answer"
+            key={`quest-short-text-field-${question.duxId}`}
           />
         );
       case QuestionType.LONG_ANSWER:
@@ -196,6 +197,7 @@ const EditQuestionCard: React.FC<EditQuestionCardProps> = ({
             id={`disabled-${question.duxId}`}
             defaultValue="Long Answer"
             rows={3}
+            key={`quest-long-text-field-${question.duxId}`}
           />
         );
       case QuestionType.MOOD:
