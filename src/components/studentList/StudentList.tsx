@@ -1,5 +1,14 @@
 import React from 'react';
-import { List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import {
+  IconButton,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Paper,
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import { QuestComponentProps } from 'interfaces/components/common';
@@ -10,10 +19,14 @@ import { useStyles } from './studentList.styles';
 
 interface StudentListProps extends QuestComponentProps {
   students: PersonListData[];
+  editCallback: (student: PersonListData) => void;
+  deleteCallback: (student: PersonListData) => void;
 }
 
 const StudentList: React.FunctionComponent<StudentListProps> = ({
   students,
+  editCallback,
+  deleteCallback,
 }) => {
   const classes = useStyles();
 
@@ -55,6 +68,22 @@ const StudentList: React.FunctionComponent<StudentListProps> = ({
                     //   </List>
                     // }
                   />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => editCallback(s)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => deleteCallback(s)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
                 </ListItem>
               );
             })}
