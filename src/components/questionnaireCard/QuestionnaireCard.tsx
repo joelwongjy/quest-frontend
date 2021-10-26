@@ -105,51 +105,45 @@ const QuestionnaireCard: React.FunctionComponent<QuestionnaireCardProps> = ({
           }}
         />
 
-        <MuiLink
-          underline="none"
-          component={Link}
-          to={`${QUESTS}/attempt/${attemptId}`}
-        >
-          <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
-            {renderProgramme()}
-            <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
-              <img src={questCardStyle[0]} alt="icon" />
-            </Grid>
-            <Grid container justify="center">
-              <Typography
-                className={`${classes.dates} is-student`}
-                color="textSecondary"
-                gutterBottom
-              >
-                {isAttempted
-                  ? 'Completed'
-                  : `Complete by: ${format(
-                      questionnaire.endAt as Date,
-                      'd MMM y'
-                    )}`}
-              </Typography>
-            </Grid>
-          </CardContent>
-          <CardActions className={`${classes.actions} is-student`}>
-            {isAttempted ? (
-              <Button
-                size="small"
-                component={Link}
-                to={`${QUESTS}/attempt/${attemptId}`}
-              >
-                View Attempt
-              </Button>
-            ) : (
-              <Button
-                size="small"
-                component={Link}
-                to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
-              >
-                Do Quest
-              </Button>
-            )}
-          </CardActions>
-        </MuiLink>
+        <CardContent style={{ padding: 0, paddingTop: '0.5rem' }}>
+          {renderProgramme()}
+          <Grid container justify="center" style={{ marginBottom: '0.5rem' }}>
+            <img src={questCardStyle[0]} alt="icon" />
+          </Grid>
+          <Grid container justify="center">
+            <Typography
+              className={`${classes.dates} is-student`}
+              color="textSecondary"
+              gutterBottom
+            >
+              {isAttempted
+                ? 'Completed'
+                : `Complete by: ${format(
+                    questionnaire.endAt as Date,
+                    'd MMM y'
+                  )}`}
+            </Typography>
+          </Grid>
+        </CardContent>
+        <CardActions className={`${classes.actions} is-student`}>
+          {isAttempted ? (
+            <Button
+              size="small"
+              component={Link}
+              to={`${QUESTS}/attempt/${attemptId}`}
+            >
+              View Attempt
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              component={Link}
+              to={`${QUESTS}/${questionnaire.id}/window/${questionnaire.windowId}`}
+            >
+              Do Quest
+            </Button>
+          )}
+        </CardActions>
       </QuestCard>
     );
   }
