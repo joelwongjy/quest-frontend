@@ -44,7 +44,8 @@ const getUser = async (): Promise<PersonData | null> => {
       return user;
     }
     throw new Error(response.statusText);
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     logout();
     return Promise.reject(new Error(error));
   }
