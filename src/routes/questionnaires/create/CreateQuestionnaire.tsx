@@ -34,7 +34,6 @@ import {
 import { RootState } from 'reducers/rootReducer';
 import ApiService from 'services/apiService';
 import { getAlertCallback } from 'utils/alertUtils';
-import { getAnnouncementsFromQuestionnaire } from 'utils/announcementUtils';
 import {
   isEmptyQuestionnaire,
   isValidQuestionnaire,
@@ -144,22 +143,10 @@ const CreateQuestionnaire: React.FunctionComponent = () => {
       data.sharedQuestions = { questions: [] };
       data.questionWindows = [data.questionWindows[0]];
     }
-    const response = await ApiService.post('questionnaires/create', data);
-    if (response.status === 200) {
-      const announcements = getAnnouncementsFromQuestionnaire(data);
-      const promises = announcements.map((x) => {
-        return new Promise<void>((resolve, reject) => {
-          ApiService.post(`announcements`, x)
-            .then(() => resolve())
-            .catch(() => reject());
-        });
-      });
-      await Promise.all(promises).then(() => {
-        clearQuestionnairePromise(dispatch).then(() =>
-          history.push(QUESTIONNAIRES)
-        );
-      });
-    }
+    await ApiService.post('questionnaires/create', data);
+    clearQuestionnairePromise(dispatch).then(() => {
+      history.push(QUESTIONNAIRES);
+    });
   };
 
   const renderQuestionnaire = () => {
