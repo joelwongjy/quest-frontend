@@ -243,7 +243,6 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       return;
     }
     try {
-      console.log(student);
       const response = await ApiService.post(`persons/${student.id}/user`, {
         username: state.username,
         password: state.password,
