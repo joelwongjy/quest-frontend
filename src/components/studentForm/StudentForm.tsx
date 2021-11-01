@@ -24,7 +24,11 @@ import { STUDENTS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import { ClassPersonRole } from 'interfaces/models/classUsers';
 import { Gender, PersonData, PersonPostData } from 'interfaces/models/persons';
-import { StudentMode } from 'interfaces/models/users';
+import {
+  DefaultUserRole,
+  StudentMode,
+  UserPostData,
+} from 'interfaces/models/users';
 import { MiscDux } from 'reducers/miscDux';
 import { RootState } from 'reducers/rootReducer';
 import ApiService from 'services/apiService';
@@ -49,7 +53,8 @@ interface StudentFormProps {
   ) => void;
 }
 
-export interface StudentFormState extends Omit<PersonPostData, 'birthday'> {
+export interface StudentFormState
+  extends Omit<PersonPostData & UserPostData, 'birthday'> {
   birthday: Date | null;
 }
 
@@ -120,6 +125,8 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       programmes: student?.programmes
         ? spreadProgrammes(student.programmes)
         : [],
+      username: student?.user?.username ?? '',
+      password: '',
     }
   );
 
@@ -228,6 +235,53 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
       },
       undefined
     );
+  };
+
+  const handleCreateAccount = async () => {
+    if (!student) {
+      setHasError(true);
+      return;
+    }
+    try {
+      const response = await ApiService.post(`persons/${student.id}/user`, {
+        username: state.username,
+        password: state.password,
+        name: state.name,
+        defaultUserRole: DefaultUserRole.USER,
+      });
+      if (response.status === 200) {
+        setIsSuccessful(true);
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      // TODO: Add error handling here
+    }
+  };
+
+  const handleUpdateAccount = async () => {
+    // TODO: update with real call
+    // try {
+    //   const response = await ApiService.patch(`users/`, {
+    //     username: state.username,
+    //     password: state.password,
+    //   });
+    //   if (response.status === 200) {
+    //     setIsSuccessful(true);
+    //     window.scrollTo({
+    //       top: 0,
+    //       behavior: 'auto',
+    //     });
+    //   }
+    // } catch (e) {
+    //   // eslint-disable-next-line no-console
+    //   console.log(e);
+    //   // TODO: Add error handling here
+    // }
   };
 
   const renderButtons = () => {
@@ -667,6 +721,44 @@ const StudentForm: React.FunctionComponent<StudentFormProps> = ({
                   </p>
                 </ListItem>
               )}
+              {student ? (
+                <>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <QuestTextField
+                        className={classes.textfield}
+                        value={state.username}
+                        label="Username"
+                        variant="outlined"
+                        disabled={isSuccessful}
+                        onChange={(e) => setState({ username: e.target.value })}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <QuestTextField
+                        className={classes.textfield}
+                        value={state.password}
+                        label="Password"
+                        variant="outlined"
+                        disabled={isSuccessful}
+                        onChange={(e) => setState({ password: e.target.value })}
+                      />
+                    </Grid>
+                  </Grid>
+                  {student.user ? (
+                    <QuestButton fullWidth onClick={handleUpdateAccount}>
+                      Update Account
+                    </QuestButton>
+                  ) : (
+                    <QuestButton fullWidth onClick={handleCreateAccount}>
+                      Create Account
+                    </QuestButton>
+                  )}
+                </>
+              ) : (
+                <div />
+              )}
+
               {isSuccessful ? (
                 <Grid container spacing={2} justify="flex-end">
                   <QuestButton
